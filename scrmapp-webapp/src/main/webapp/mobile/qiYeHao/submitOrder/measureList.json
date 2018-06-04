@@ -1,0 +1,50 @@
+{
+    "returnCode": 1,
+    "returnMsg": null,
+    "data": [{
+        "id": 1,
+        "measureName": "下水位浮球有水垢或损坏1"
+    },{
+        "id": 2,
+        "measureName": "下水位浮球有水垢或损坏2"
+    },{
+        "id": 3,
+        "measureName": "下水位浮球有水垢或损坏3"
+    },{
+        "id": 4,
+        "measureName": "下水位浮球有水垢或损坏4"
+    },{
+        "id": 5,
+        "measureName": "下水位浮球有水垢或损坏5"
+    },{
+        "id": 6,
+        "measureName": "下水位浮球有水垢或损坏6"
+    },{
+        "id": 7,
+        "measureName": "下水位浮球有水垢或损坏7"
+    },{
+        "id": 8,
+        "measureName": "下水位浮球有水垢或损坏8"
+    },{
+        "id": 9,
+        "measureName": "下水位浮球有水垢或损坏9"
+    },{
+        "id": 10,
+        "measureName": "下水位浮球有水垢或损坏10"
+    },{
+        "id": 11,
+        "measureName": "下水位浮球有水垢或损坏11"
+    },{
+        "id": 12,
+        "measureName": "下水位浮球有水垢或损坏12"
+    },{
+        "id": 13,
+        "measureName": "下水位浮球有水垢或损坏13"
+    },{
+        "id": 14,
+        "measureName": "下水位浮球有水垢或损坏14"
+    },{
+        "id": 15,
+        "measureName": "下水位浮球有水垢或损坏15"
+    }]
+}

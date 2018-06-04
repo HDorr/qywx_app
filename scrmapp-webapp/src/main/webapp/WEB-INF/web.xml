@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://java.sun.com/xml/ns/javaee" xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
+	version="3.0">
+	<display-name>scrmapp</display-name>
+	<servlet>
+		<servlet-name>appServlet</servlet-name>
+		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+		<init-param>
+			<param-name>contextConfigLocation</param-name>
+			<param-value>classpath*:springmvc/*.xml</param-value>
+		</init-param>
+		<load-on-startup>0</load-on-startup>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>appServlet</servlet-name>
+		<url-pattern>/</url-pattern>
+	</servlet-mapping>
+	<context-param>
+		<param-name>contextConfigLocation</param-name>
+		<param-value>classpath*:spring/*.xml</param-value>
+	</context-param>
+	<filter>
+		<filter-name>encodingFilter</filter-name>
+		<filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+		<init-param>
+			<param-name>encoding</param-name>
+			<param-value>UTF-8</param-value>
+		</init-param>
+	</filter>
+	<filter-mapping>
+		<filter-name>encodingFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+	<listener>
+		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+	</listener>
+	<listener>
+ 		<listener-class>com.ziwow.scrmapp.web.listener.AppContextListener</listener-class>
+ 	</listener>
+	<!-- 微信服务号 -->
+	<servlet>  
+		<servlet-name>weChatServlet</servlet-name>  
+		<servlet-class>com.ziwow.scrmapp.wechat.servlet.WeChatServlet</servlet-class>  
+		<load-on-startup>0</load-on-startup>
+	</servlet> 
+	<servlet-mapping>  
+		<servlet-name>weChatServlet</servlet-name>  
+		<url-pattern>/wechat/*</url-pattern>  
+	</servlet-mapping>
+	<!-- 服务号三方授权  -->
+	<servlet>
+		<servlet-name>openWeChatServlet</servlet-name>
+		<servlet-class>com.ziwow.scrmapp.wechat.servlet.OpenWeChatServlet</servlet-class>
+		<load-on-startup>0</load-on-startup>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>openWeChatServlet</servlet-name>
+		<url-pattern>/openwechat/event/*</url-pattern>
+	</servlet-mapping>
+	<servlet>
+		<servlet-name>ticketServlet</servlet-name>
+		<servlet-class>com.ziwow.scrmapp.wechat.servlet.TicketServlet</servlet-class>
+		 <load-on-startup>0</load-on-startup>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>ticketServlet</servlet-name>
+		<url-pattern>/openwechat/ticket</url-pattern>
+	</servlet-mapping>
+	
+	<!-- 微信企业号功能 --> 
+	<servlet>  
+		<servlet-name>qyhWeixinServlet</servlet-name>
+	  	<servlet-class>com.ziwow.scrmapp.qyh.servlet.QyhWeixinServlet</servlet-class>  
+	  	<load-on-startup>0</load-on-startup>
+	</servlet> 
+	<servlet-mapping>  
+	    <servlet-name>qyhWeixinServlet</servlet-name>  
+	    <url-pattern>/wxqyh/*</url-pattern>  
+	</servlet-mapping>
+	
+	<!-- 微信小程序功能 -->
+	<servlet>  
+		<servlet-name>wxAppServlet</servlet-name>  
+		<servlet-class>com.ziwow.scrmapp.miniapp.servlet.WxAppServlet</servlet-class>  
+		<load-on-startup>0</load-on-startup>
+	</servlet>
+	<servlet-mapping>  
+	    <servlet-name>wxAppServlet</servlet-name>  
+	    <url-pattern>/wxapp/*</url-pattern>  
+	</servlet-mapping>
+	
+	<welcome-file-list>
+		<welcome-file></welcome-file>
+	</welcome-file-list>
+
+	<session-config>
+		<session-timeout>1440</session-timeout>
+	</session-config>
+
+	<!-- 错误页面 （by-hogen） -->
+	<error-page>
+		<error-code>404</error-code>
+		<location>/WEB-INF/pages/404.jsp</location>
+	</error-page>
+	<error-page>
+		<error-code>500</error-code>
+		<location>/WEB-INF/pages/404.jsp</location>
+	</error-page>
+</web-app>

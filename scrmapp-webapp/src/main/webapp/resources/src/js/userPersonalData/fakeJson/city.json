@@ -1,0 +1,21 @@
+{
+    "returnCode": "1",
+    "returnMst": "msg",
+    "data": [{
+        "cityId": "01",
+        "cityName": "test01",
+        "provinceId": "1"
+    }, {
+        "cityId": "02",
+        "cityName": "test02",
+        "provinceId": "2"
+    }, {
+        "cityId": "03",
+        "cityName": "test03",
+        "provinceId": "3"
+    }, {
+        "cityId": "04",
+        "cityName": "test04",
+        "provinceId": "4"
+    }]
+}

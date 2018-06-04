@@ -1,0 +1,679 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ziwow.scrmapp.qyh.persistence.mapper.QyhNoticeMapper" >
+  <resultMap id="BaseResultMap" type="com.ziwow.scrmapp.qyh.persistence.entity.QyhNotice" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="notice_id" property="noticeId" jdbcType="VARCHAR" />
+    <result column="notice_title" property="noticeTitle" jdbcType="VARCHAR" />
+    <result column="notice_type" property="noticeType" jdbcType="INTEGER" />
+    <result column="is_secrecy" property="isSecrecy" jdbcType="INTEGER" />
+    <result column="is_release" property="isRelease" jdbcType="INTEGER" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="notice_abstract" property="noticeAbstract" jdbcType="VARCHAR" />
+    <result column="cover_img_url" property="coverImgUrl" jdbcType="VARCHAR" />
+    <result column="notice_content" property="noticeContent" jdbcType="VARCHAR" />
+    <result column="notice_author" property="noticeAuthor" jdbcType="VARCHAR" />
+    <result column="notice_publisher" property="noticePublisher" jdbcType="VARCHAR" />
+    <result column="notice_read_auth" property="noticeReadAuth" jdbcType="INTEGER" />
+    <result column="is_comment" property="isComment" jdbcType="INTEGER" />
+    <result column="is_fabulous" property="isFabulous" jdbcType="INTEGER" />
+    <result column="is_preview" property="isPreview" jdbcType="INTEGER" />
+    <result column="preview_explain" property="previewExplain" jdbcType="VARCHAR" />
+    <result column="preview_personnel" property="previewPersonnel" jdbcType="VARCHAR" />
+    <result column="send_count" property="sendCount" jdbcType="INTEGER" />
+    <result column="is_push" property="isPush" jdbcType="INTEGER" />
+    <result column="departments" property="departments" jdbcType="VARCHAR" />
+    <result column="userIds" property="userids" jdbcType="VARCHAR" />
+    <result column="notice_status" property="noticeStatus" jdbcType="INTEGER" />
+    <result column="notice_url" property="noticeUrl" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <trim prefix="where" prefixOverrides="and|or" >
+      <if test="condition.noticeId != null" >
+         and notice_id = #{condition.noticeId,jdbcType=VARCHAR}
+      </if>
+      <if test="condition.noticeTitle != null" >
+         and notice_title = #{condition.noticeTitle,jdbcType=VARCHAR}
+      </if>
+      <if test="condition.noticeType != null" >
+         and notice_type = #{condition.noticeType,jdbcType=INTEGER}
+      </if>
+      <if test="condition.isSecrecy != null" >
+         and is_secrecy = #{condition.isSecrecy,jdbcType=INTEGER}
+      </if>
+      <if test="condition.isRelease != null" >
+         and is_release = #{condition.isRelease,jdbcType=INTEGER}
+      </if>
+      <if test="condition.updateTime != null" >
+         and update_time = #{condition.updateTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="condition.createTime != null" >
+         and create_time = #{condition.createTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="condition.noticeAbstract != null" >
+         and notice_abstract = #{condition.noticeAbstract,jdbcType=VARCHAR}
+      </if>
+      <if test="condition.coverImgUrl != null" >
+         and cover_img_url = #{condition.coverImgUrl,jdbcType=VARCHAR}
+      </if>
+      <if test="condition.noticeContent != null" >
+         and notice_content = #{condition.noticeContent,jdbcType=VARCHAR}
+      </if>
+      <if test="condition.noticeAuthor != null" >
+         and notice_author = #{condition.noticeAuthor,jdbcType=VARCHAR}
+      </if>
+      <if test="condition.noticePublisher != null" >
+         and notice_publisher = #{condition.noticePublisher,jdbcType=VARCHAR}
+      </if>
+      <if test="condition.noticeReadAuth != null" >
+         and notice_read_auth = #{condition.noticeReadAuth,jdbcType=INTEGER}
+      </if>
+      <if test="condition.isComment != null" >
+         and is_comment = #{condition.isComment,jdbcType=INTEGER}
+      </if>
+      <if test="condition.isFabulous != null" >
+         and is_fabulous = #{condition.isFabulous,jdbcType=INTEGER}
+      </if>
+      <if test="condition.isPreview != null" >
+         and is_preview = #{condition.isPreview,jdbcType=INTEGER}
+      </if>
+      <if test="condition.previewExplain != null" >
+         and preview_explain = #{condition.previewExplain,jdbcType=VARCHAR}
+      </if>
+      <if test="condition.previewPersonnel != null" >
+         and preview_personnel = #{condition.previewPersonnel,jdbcType=VARCHAR}
+      </if>
+      <if test="condition.sendCount != null" >
+         and send_count = #{condition.sendCount,jdbcType=INTEGER}
+      </if>
+      <if test="condition.isPush != null" >
+         and is_push = #{condition.isPush,jdbcType=INTEGER}
+      </if>
+      <if test="condition.departments != null" >
+         and departments = #{condition.departments,jdbcType=VARCHAR}
+      </if>
+      <if test="condition.userids != null" >
+         and userIds = #{condition.userids,jdbcType=VARCHAR}
+      </if>
+      <if test="condition.noticeStatus != null" >
+         and notice_status = #{condition.noticeStatus,jdbcType=INTEGER}
+      </if>
+      <if test="condition.noticeUrl != null" >
+         and notice_url = #{condition.noticeUrl,jdbcType=VARCHAR}
+      </if>
+    </trim>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <trim prefix="where" prefixOverrides="and|or" >
+      <if test="example.condition.noticeId != null" >
+         and notice_id = #{example.condition.noticeId,jdbcType=VARCHAR}
+      </if>
+      <if test="example.condition.noticeTitle != null" >
+         and notice_title = #{example.condition.noticeTitle,jdbcType=VARCHAR}
+      </if>
+      <if test="example.condition.noticeType != null" >
+         and notice_type = #{example.condition.noticeType,jdbcType=INTEGER}
+      </if>
+      <if test="example.condition.isSecrecy != null" >
+         and is_secrecy = #{example.condition.isSecrecy,jdbcType=INTEGER}
+      </if>
+      <if test="example.condition.isRelease != null" >
+         and is_release = #{example.condition.isRelease,jdbcType=INTEGER}
+      </if>
+      <if test="example.condition.updateTime != null" >
+         and update_time = #{example.condition.updateTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="example.condition.createTime != null" >
+         and create_time = #{example.condition.createTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="example.condition.noticeAbstract != null" >
+         and notice_abstract = #{example.condition.noticeAbstract,jdbcType=VARCHAR}
+      </if>
+      <if test="example.condition.coverImgUrl != null" >
+         and cover_img_url = #{example.condition.coverImgUrl,jdbcType=VARCHAR}
+      </if>
+      <if test="example.condition.noticeContent != null" >
+         and notice_content = #{example.condition.noticeContent,jdbcType=VARCHAR}
+      </if>
+      <if test="example.condition.noticeAuthor != null" >
+         and notice_author = #{example.condition.noticeAuthor,jdbcType=VARCHAR}
+      </if>
+      <if test="example.condition.noticePublisher != null" >
+         and notice_publisher = #{example.condition.noticePublisher,jdbcType=VARCHAR}
+      </if>
+      <if test="example.condition.noticeReadAuth != null" >
+         and notice_read_auth = #{example.condition.noticeReadAuth,jdbcType=INTEGER}
+      </if>
+      <if test="example.condition.isComment != null" >
+         and is_comment = #{example.condition.isComment,jdbcType=INTEGER}
+      </if>
+      <if test="example.condition.isFabulous != null" >
+         and is_fabulous = #{example.condition.isFabulous,jdbcType=INTEGER}
+      </if>
+      <if test="example.condition.isPreview != null" >
+         and is_preview = #{example.condition.isPreview,jdbcType=INTEGER}
+      </if>
+      <if test="example.condition.previewExplain != null" >
+         and preview_explain = #{example.condition.previewExplain,jdbcType=VARCHAR}
+      </if>
+      <if test="example.condition.previewPersonnel != null" >
+         and preview_personnel = #{example.condition.previewPersonnel,jdbcType=VARCHAR}
+      </if>
+      <if test="example.condition.sendCount != null" >
+         and send_count = #{example.condition.sendCount,jdbcType=INTEGER}
+      </if>
+      <if test="example.condition.isPush != null" >
+         and is_push = #{example.condition.isPush,jdbcType=INTEGER}
+      </if>
+      <if test="example.condition.departments != null" >
+         and departments = #{example.condition.departments,jdbcType=VARCHAR}
+      </if>
+      <if test="example.condition.userids != null" >
+         and userIds = #{example.condition.userids,jdbcType=VARCHAR}
+      </if>
+      <if test="example.condition.noticeStatus != null" >
+         and notice_status = #{example.condition.noticeStatus,jdbcType=INTEGER}
+      </if>
+      <if test="example.condition.noticeUrl != null" >
+         and notice_url = #{example.condition.noticeUrl,jdbcType=VARCHAR}
+      </if>
+    </trim>
+  </sql>
+  <sql id="Base_Column_List" >
+    id, notice_id, notice_title, notice_type, is_secrecy, is_release, update_time, create_time, 
+    notice_abstract, cover_img_url, notice_content, notice_author, notice_publisher, 
+    notice_read_auth, is_comment, is_fabulous, is_preview, preview_explain, preview_personnel, 
+    send_count, is_push, departments, userIds, notice_status, notice_url
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.ziwow.scrmapp.common.bean.Criteria" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from t_qyh_notice
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_qyh_notice
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from t_qyh_notice
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.ziwow.scrmapp.common.bean.Criteria" >
+    delete from t_qyh_notice
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.ziwow.scrmapp.qyh.persistence.entity.QyhNotice" >
+    <selectKey resultType="java.lang.Long" keyProperty="id" order="BEFORE" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_qyh_notice (id, notice_id, notice_title, 
+      notice_type, is_secrecy, is_release, 
+      update_time, create_time, notice_abstract, 
+      cover_img_url, notice_content, notice_author, 
+      notice_publisher, notice_read_auth, is_comment, 
+      is_fabulous, is_preview, preview_explain, 
+      preview_personnel, send_count, is_push, 
+      departments, userIds, notice_status, 
+      notice_url)
+    values (#{id,jdbcType=BIGINT}, #{noticeId,jdbcType=VARCHAR}, #{noticeTitle,jdbcType=VARCHAR}, 
+      #{noticeType,jdbcType=INTEGER}, #{isSecrecy,jdbcType=INTEGER}, #{isRelease,jdbcType=INTEGER}, 
+      #{updateTime,jdbcType=TIMESTAMP}, #{createTime,jdbcType=TIMESTAMP}, #{noticeAbstract,jdbcType=VARCHAR}, 
+      #{coverImgUrl,jdbcType=VARCHAR}, #{noticeContent,jdbcType=VARCHAR}, #{noticeAuthor,jdbcType=VARCHAR}, 
+      #{noticePublisher,jdbcType=VARCHAR}, #{noticeReadAuth,jdbcType=INTEGER}, #{isComment,jdbcType=INTEGER}, 
+      #{isFabulous,jdbcType=INTEGER}, #{isPreview,jdbcType=INTEGER}, #{previewExplain,jdbcType=VARCHAR}, 
+      #{previewPersonnel,jdbcType=VARCHAR}, #{sendCount,jdbcType=INTEGER}, #{isPush,jdbcType=INTEGER}, 
+      #{departments,jdbcType=VARCHAR}, #{userids,jdbcType=VARCHAR}, #{noticeStatus,jdbcType=INTEGER}, 
+      #{noticeUrl,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.ziwow.scrmapp.qyh.persistence.entity.QyhNotice" >
+    <selectKey resultType="java.lang.Long" keyProperty="id" order="BEFORE" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_qyh_notice
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      id,
+      <if test="noticeId != null" >
+        notice_id,
+      </if>
+      <if test="noticeTitle != null" >
+        notice_title,
+      </if>
+      <if test="noticeType != null" >
+        notice_type,
+      </if>
+      <if test="isSecrecy != null" >
+        is_secrecy,
+      </if>
+      <if test="isRelease != null" >
+        is_release,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="noticeAbstract != null" >
+        notice_abstract,
+      </if>
+      <if test="coverImgUrl != null" >
+        cover_img_url,
+      </if>
+      <if test="noticeContent != null" >
+        notice_content,
+      </if>
+      <if test="noticeAuthor != null" >
+        notice_author,
+      </if>
+      <if test="noticePublisher != null" >
+        notice_publisher,
+      </if>
+      <if test="noticeReadAuth != null" >
+        notice_read_auth,
+      </if>
+      <if test="isComment != null" >
+        is_comment,
+      </if>
+      <if test="isFabulous != null" >
+        is_fabulous,
+      </if>
+      <if test="isPreview != null" >
+        is_preview,
+      </if>
+      <if test="previewExplain != null" >
+        preview_explain,
+      </if>
+      <if test="previewPersonnel != null" >
+        preview_personnel,
+      </if>
+      <if test="sendCount != null" >
+        send_count,
+      </if>
+      <if test="isPush != null" >
+        is_push,
+      </if>
+      <if test="departments != null" >
+        departments,
+      </if>
+      <if test="userids != null" >
+        userIds,
+      </if>
+      <if test="noticeStatus != null" >
+        notice_status,
+      </if>
+      <if test="noticeUrl != null" >
+        notice_url,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      #{id,jdbcType=BIGINT},
+      <if test="noticeId != null" >
+        #{noticeId,jdbcType=VARCHAR},
+      </if>
+      <if test="noticeTitle != null" >
+        #{noticeTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="noticeType != null" >
+        #{noticeType,jdbcType=INTEGER},
+      </if>
+      <if test="isSecrecy != null" >
+        #{isSecrecy,jdbcType=INTEGER},
+      </if>
+      <if test="isRelease != null" >
+        #{isRelease,jdbcType=INTEGER},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="noticeAbstract != null" >
+        #{noticeAbstract,jdbcType=VARCHAR},
+      </if>
+      <if test="coverImgUrl != null" >
+        #{coverImgUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="noticeContent != null" >
+        #{noticeContent,jdbcType=VARCHAR},
+      </if>
+      <if test="noticeAuthor != null" >
+        #{noticeAuthor,jdbcType=VARCHAR},
+      </if>
+      <if test="noticePublisher != null" >
+        #{noticePublisher,jdbcType=VARCHAR},
+      </if>
+      <if test="noticeReadAuth != null" >
+        #{noticeReadAuth,jdbcType=INTEGER},
+      </if>
+      <if test="isComment != null" >
+        #{isComment,jdbcType=INTEGER},
+      </if>
+      <if test="isFabulous != null" >
+        #{isFabulous,jdbcType=INTEGER},
+      </if>
+      <if test="isPreview != null" >
+        #{isPreview,jdbcType=INTEGER},
+      </if>
+      <if test="previewExplain != null" >
+        #{previewExplain,jdbcType=VARCHAR},
+      </if>
+      <if test="previewPersonnel != null" >
+        #{previewPersonnel,jdbcType=VARCHAR},
+      </if>
+      <if test="sendCount != null" >
+        #{sendCount,jdbcType=INTEGER},
+      </if>
+      <if test="isPush != null" >
+        #{isPush,jdbcType=INTEGER},
+      </if>
+      <if test="departments != null" >
+        #{departments,jdbcType=VARCHAR},
+      </if>
+      <if test="userids != null" >
+        #{userids,jdbcType=VARCHAR},
+      </if>
+      <if test="noticeStatus != null" >
+        #{noticeStatus,jdbcType=INTEGER},
+      </if>
+      <if test="noticeUrl != null" >
+        #{noticeUrl,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.ziwow.scrmapp.common.bean.Criteria" resultType="java.lang.Integer" >
+    select count(*) from t_qyh_notice
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update t_qyh_notice
+    <set >
+      <if test="record.id != null" >
+        id = #{record.id,jdbcType=BIGINT},
+      </if>
+      <if test="record.noticeId != null" >
+        notice_id = #{record.noticeId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.noticeTitle != null" >
+        notice_title = #{record.noticeTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="record.noticeType != null" >
+        notice_type = #{record.noticeType,jdbcType=INTEGER},
+      </if>
+      <if test="record.isSecrecy != null" >
+        is_secrecy = #{record.isSecrecy,jdbcType=INTEGER},
+      </if>
+      <if test="record.isRelease != null" >
+        is_release = #{record.isRelease,jdbcType=INTEGER},
+      </if>
+      <if test="record.updateTime != null" >
+        update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.createTime != null" >
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.noticeAbstract != null" >
+        notice_abstract = #{record.noticeAbstract,jdbcType=VARCHAR},
+      </if>
+      <if test="record.coverImgUrl != null" >
+        cover_img_url = #{record.coverImgUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="record.noticeContent != null" >
+        notice_content = #{record.noticeContent,jdbcType=VARCHAR},
+      </if>
+      <if test="record.noticeAuthor != null" >
+        notice_author = #{record.noticeAuthor,jdbcType=VARCHAR},
+      </if>
+      <if test="record.noticePublisher != null" >
+        notice_publisher = #{record.noticePublisher,jdbcType=VARCHAR},
+      </if>
+      <if test="record.noticeReadAuth != null" >
+        notice_read_auth = #{record.noticeReadAuth,jdbcType=INTEGER},
+      </if>
+      <if test="record.isComment != null" >
+        is_comment = #{record.isComment,jdbcType=INTEGER},
+      </if>
+      <if test="record.isFabulous != null" >
+        is_fabulous = #{record.isFabulous,jdbcType=INTEGER},
+      </if>
+      <if test="record.isPreview != null" >
+        is_preview = #{record.isPreview,jdbcType=INTEGER},
+      </if>
+      <if test="record.previewExplain != null" >
+        preview_explain = #{record.previewExplain,jdbcType=VARCHAR},
+      </if>
+      <if test="record.previewPersonnel != null" >
+        preview_personnel = #{record.previewPersonnel,jdbcType=VARCHAR},
+      </if>
+      <if test="record.sendCount != null" >
+        send_count = #{record.sendCount,jdbcType=INTEGER},
+      </if>
+      <if test="record.isPush != null" >
+        is_push = #{record.isPush,jdbcType=INTEGER},
+      </if>
+      <if test="record.departments != null" >
+        departments = #{record.departments,jdbcType=VARCHAR},
+      </if>
+      <if test="record.userids != null" >
+        userIds = #{record.userids,jdbcType=VARCHAR},
+      </if>
+      <if test="record.noticeStatus != null" >
+        notice_status = #{record.noticeStatus,jdbcType=INTEGER},
+      </if>
+      <if test="record.noticeUrl != null" >
+        notice_url = #{record.noticeUrl,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update t_qyh_notice
+    set id = #{record.id,jdbcType=BIGINT},
+      notice_id = #{record.noticeId,jdbcType=VARCHAR},
+      notice_title = #{record.noticeTitle,jdbcType=VARCHAR},
+      notice_type = #{record.noticeType,jdbcType=INTEGER},
+      is_secrecy = #{record.isSecrecy,jdbcType=INTEGER},
+      is_release = #{record.isRelease,jdbcType=INTEGER},
+      update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      notice_abstract = #{record.noticeAbstract,jdbcType=VARCHAR},
+      cover_img_url = #{record.coverImgUrl,jdbcType=VARCHAR},
+      notice_content = #{record.noticeContent,jdbcType=VARCHAR},
+      notice_author = #{record.noticeAuthor,jdbcType=VARCHAR},
+      notice_publisher = #{record.noticePublisher,jdbcType=VARCHAR},
+      notice_read_auth = #{record.noticeReadAuth,jdbcType=INTEGER},
+      is_comment = #{record.isComment,jdbcType=INTEGER},
+      is_fabulous = #{record.isFabulous,jdbcType=INTEGER},
+      is_preview = #{record.isPreview,jdbcType=INTEGER},
+      preview_explain = #{record.previewExplain,jdbcType=VARCHAR},
+      preview_personnel = #{record.previewPersonnel,jdbcType=VARCHAR},
+      send_count = #{record.sendCount,jdbcType=INTEGER},
+      is_push = #{record.isPush,jdbcType=INTEGER},
+      departments = #{record.departments,jdbcType=VARCHAR},
+      userIds = #{record.userids,jdbcType=VARCHAR},
+      notice_status = #{record.noticeStatus,jdbcType=INTEGER},
+      notice_url = #{record.noticeUrl,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.ziwow.scrmapp.qyh.persistence.entity.QyhNotice" >
+    update t_qyh_notice
+    <set >
+      <if test="noticeId != null" >
+        notice_id = #{noticeId,jdbcType=VARCHAR},
+      </if>
+      <if test="noticeTitle != null" >
+        notice_title = #{noticeTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="noticeType != null" >
+        notice_type = #{noticeType,jdbcType=INTEGER},
+      </if>
+      <if test="isSecrecy != null" >
+        is_secrecy = #{isSecrecy,jdbcType=INTEGER},
+      </if>
+      <if test="isRelease != null" >
+        is_release = #{isRelease,jdbcType=INTEGER},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="noticeAbstract != null" >
+        notice_abstract = #{noticeAbstract,jdbcType=VARCHAR},
+      </if>
+      <if test="coverImgUrl != null" >
+        cover_img_url = #{coverImgUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="noticeContent != null" >
+        notice_content = #{noticeContent,jdbcType=VARCHAR},
+      </if>
+      <if test="noticeAuthor != null" >
+        notice_author = #{noticeAuthor,jdbcType=VARCHAR},
+      </if>
+      <if test="noticePublisher != null" >
+        notice_publisher = #{noticePublisher,jdbcType=VARCHAR},
+      </if>
+      <if test="noticeReadAuth != null" >
+        notice_read_auth = #{noticeReadAuth,jdbcType=INTEGER},
+      </if>
+      <if test="isComment != null" >
+        is_comment = #{isComment,jdbcType=INTEGER},
+      </if>
+      <if test="isFabulous != null" >
+        is_fabulous = #{isFabulous,jdbcType=INTEGER},
+      </if>
+      <if test="isPreview != null" >
+        is_preview = #{isPreview,jdbcType=INTEGER},
+      </if>
+      <if test="previewExplain != null" >
+        preview_explain = #{previewExplain,jdbcType=VARCHAR},
+      </if>
+      <if test="previewPersonnel != null" >
+        preview_personnel = #{previewPersonnel,jdbcType=VARCHAR},
+      </if>
+      <if test="sendCount != null" >
+        send_count = #{sendCount,jdbcType=INTEGER},
+      </if>
+      <if test="isPush != null" >
+        is_push = #{isPush,jdbcType=INTEGER},
+      </if>
+      <if test="departments != null" >
+        departments = #{departments,jdbcType=VARCHAR},
+      </if>
+      <if test="userids != null" >
+        userIds = #{userids,jdbcType=VARCHAR},
+      </if>
+      <if test="noticeStatus != null" >
+        notice_status = #{noticeStatus,jdbcType=INTEGER},
+      </if>
+      <if test="noticeUrl != null" >
+        notice_url = #{noticeUrl,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.ziwow.scrmapp.qyh.persistence.entity.QyhNotice" >
+    update t_qyh_notice
+    set notice_id = #{noticeId,jdbcType=VARCHAR},
+      notice_title = #{noticeTitle,jdbcType=VARCHAR},
+      notice_type = #{noticeType,jdbcType=INTEGER},
+      is_secrecy = #{isSecrecy,jdbcType=INTEGER},
+      is_release = #{isRelease,jdbcType=INTEGER},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      notice_abstract = #{noticeAbstract,jdbcType=VARCHAR},
+      cover_img_url = #{coverImgUrl,jdbcType=VARCHAR},
+      notice_content = #{noticeContent,jdbcType=VARCHAR},
+      notice_author = #{noticeAuthor,jdbcType=VARCHAR},
+      notice_publisher = #{noticePublisher,jdbcType=VARCHAR},
+      notice_read_auth = #{noticeReadAuth,jdbcType=INTEGER},
+      is_comment = #{isComment,jdbcType=INTEGER},
+      is_fabulous = #{isFabulous,jdbcType=INTEGER},
+      is_preview = #{isPreview,jdbcType=INTEGER},
+      preview_explain = #{previewExplain,jdbcType=VARCHAR},
+      preview_personnel = #{previewPersonnel,jdbcType=VARCHAR},
+      send_count = #{sendCount,jdbcType=INTEGER},
+      is_push = #{isPush,jdbcType=INTEGER},
+      departments = #{departments,jdbcType=VARCHAR},
+      userIds = #{userids,jdbcType=VARCHAR},
+      notice_status = #{noticeStatus,jdbcType=INTEGER},
+      notice_url = #{noticeUrl,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update> 
+  
+  <select id="getQyhNoticeByNoticeId" resultMap="BaseResultMap">
+ 		select <include refid="Base_Column_List"/> from t_qyh_notice where notice_id = #{noticeId}
+  </select>
+  
+  <select id="getQyhNoticeByType" resultType="com.ziwow.scrmapp.qyh.vo.QyhNoticeVo">
+	  SELECT
+		notice_id AS noticeId,
+		notice_title AS noticeTitle,
+		update_time AS updateTime,
+		notice_url as url
+	FROM
+		t_qyh_notice
+	WHERE
+		is_release = 1
+	AND notice_status = 0
+	AND FIND_IN_SET(notice_type,#{noticeTypeId}) 
+	<if test="noticeTitle !=null">
+		AND  INSTR(notice_title,#{noticeTitle})   
+	</if>
+	ORDER BY update_time DESC
+  </select>
+  
+  
+   <select id="getAllNoticeList" resultType="com.ziwow.scrmapp.qyh.vo.QyhNoticeVo">
+	SELECT 
+	notice_id AS noticeId, notice_title AS noticeTitle, update_time AS updateTime,notice_url as url
+	FROM `t_qyh_notice` WHERE is_release = 1 
+	AND notice_status = 0 
+	<if test="noticeTitle !=null">
+		AND  INSTR(notice_title,#{noticeTitle})   
+	</if>
+	ORDER BY update_time DESC
+  </select>
+  
+  <select id="getMyCollectionNotice" resultType="com.ziwow.scrmapp.qyh.vo.QyhNoticeVo">
+	SELECT
+	 qn.notice_id AS noticeId,
+	 qn.notice_title AS noticeTitle,
+	 qn.update_time AS updateTime,
+	 notice_url as url
+	FROM
+		t_qyh_notice_collection qnc
+	LEFT JOIN t_qyh_notice qn ON qnc.notice_id = qn.notice_id
+	WHERE
+		1 = 1
+	AND qnc.user_id = #{userId}
+	AND  qn.is_release = 1
+	AND  qn.notice_status = 0
+	<if test="noticeTitle !=null">
+		AND  INSTR(qn.notice_title,#{noticeTitle})
+	</if>
+	ORDER BY qn.update_time DESC
+  </select>
+  
+</mapper>

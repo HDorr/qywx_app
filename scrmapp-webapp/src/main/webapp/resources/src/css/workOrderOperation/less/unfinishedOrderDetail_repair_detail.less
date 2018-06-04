@@ -1,0 +1,468 @@
+// out: ../unfinishedOrderDetail_repair_detail.css, compress: true, sourceMap: false
+@import (reference) "../../theme.less";
+.main_layer{
+    background-color: #f4f4f4;
+    padding-top: 0.6133rem;
+    .topTip{
+        height:0.6133rem;
+        line-height:0.6133rem;
+        width:100%;
+        font-size: 0.32rem;
+        padding-left: 0.3333rem;
+        color:@mainColor;
+        position: fixed;
+        left:0;
+        top:0;
+        background-color: #fff;
+    }  
+}
+.main_layer .mainPage{
+    .bloque{
+        background-color: #fff;
+        margin-bottom: 0.2667rem;
+        >header{
+            height:1.2rem;
+            padding-left: 0.32rem;
+            border-bottom: 1px solid #d5d5d5;
+            display: flex;
+            align-items: center;
+            >img.icon{
+                width:0.4rem;
+            }
+            >span.title{
+                font-size: 0.3467rem;
+                color:#999;
+                margin-left: 0.1467rem;
+            }
+        }
+        .productInfo{
+            padding:0 0.32rem 0.32rem 0.32rem;
+            .barCode{
+                height:1.0667rem;
+                display: flex;
+                font-size: 0.32rem;
+                align-items: center;
+                >.left-text{
+                    flex:2;
+                    display: flex;
+                    align-items: center;
+                    >i{
+                        color:red;
+                    }
+                }
+                >input{
+                    flex:4;
+                    padding-left: 0.12rem;
+                    height:76%;
+                    border: 1px solid #c9c9c9;
+                    font-size: 0.3467rem;
+                }
+                >.scanBarCode{
+                    flex:1;
+                    height:85%;
+                    background-image: url('../../../../resources/src/images/icons/scanCode.png');
+                    background-repeat: no-repeat;
+                    background-position:center right;
+                    background-size: contain;
+                }
+            }
+            .imageBox{
+                >.image{
+                    height:2.6667rem;
+                    width:2.6667rem;
+                    background-repeat: no-repeat;
+                    background-position: center;
+                    background-size: cover;
+                    position: relative;
+                    .delImgIcon{
+                        position: absolute;
+                        height:0.4533rem;
+                        width:0.4533rem;
+                        top:0.0533rem;
+                        right:0.1067rem;
+                        background-image: url("../../../../resources/src/images/icons/circleCancel.jpg");
+                        background-repeat: no-repeat;
+                        background-size: cover;
+                        background-position: center;
+                    }
+                }
+            }
+            .uploadImage{
+                height:1.2533rem;
+                width:100%;
+                border: 1px dashed @mainColor;
+                margin:0.4rem 0;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                position: relative;
+                .addIcon{
+                    background-image: url('../../../../resources/src/images/icons/add_blue.png');
+                    background-repeat: no-repeat;
+                    background-size: cover;
+                    height:0.4533rem;
+                    width:0.4533rem;
+                }
+                .uploadText{
+                    padding-left: 0.2667rem;
+                    color:@mainColor;
+                    font-size: 0.32rem;
+                }
+                .tip{
+                    position: absolute;
+                    bottom:-.2rem;
+                    height: 0.2rem;
+                    left:0;
+                    color:red;
+                }
+            }
+        }
+        
+    } 
+    .maintainContent{
+        background-color: #ebf6fc;
+        height:1.2rem;
+        width:100%;
+        display:flex;
+        >span{
+            display:flex;
+            height:100%;
+            align-items: center;
+            font-size: 0.3467rem;
+            &:first-child{
+                flex:1
+            }
+            &:last-child{
+                flex:10
+            }
+        }
+        .maintainActivity{
+            position: relative;
+            &:after{
+                content:'>';
+                color:#b4b4bb;
+                font-size: 0.5333rem;
+                position: absolute;
+                right:0.2667rem;
+                top:50%;
+                transform: translateY(-50%)
+            }
+        }
+    }
+    .parts-table{
+        width:100%;
+        background-color: #ebf6fc;
+        border-bottom: 1px solid #e5e5e5;
+        >thead{
+            border-top: 1px solid #e5e5e5;
+            border-bottom: 1px solid #e5e5e5;  
+            >tr{
+                height:0.8rem;
+                line-height:0.8rem;
+                text-align: center;
+            }     
+        }
+        >tbody{
+            font-size: 0.3467rem;
+            tr{
+                >td{
+                    height:1rem;
+                    text-align: center;
+                    &.partNameTd{
+                        max-width: 4rem;
+                    }
+                    >input{
+                        text-align: center;
+                        font-size: 0.3467rem;
+                        height:0.6667rem;
+                        padding:0 0.1067rem;
+                        border: 1px solid #b5b5b5;
+                    }
+                }
+                .priceInput{
+                    width:1.68rem;
+                }
+                .countInput{
+                    width:1.04rem;
+                }
+            }
+        }
+    }
+    .checkBoxContainer{
+        height:1.2rem;
+        width:100%;
+        display:flex;
+        background-color: #fff;
+        >span{
+            display:flex;
+            height:100%;
+            align-items: center;
+            font-size: 0.3467rem;
+            &:first-child{
+                flex:1
+            }
+            &:last-child{
+                flex:10
+            }
+        }
+        .checkBox{
+            justify-content: center;
+            >i{
+                height:0.32rem;
+                width:0.32rem;
+                border: 1px solid #bcbcbc;
+                background-repeat: no-repeat;
+                background-position: center;
+                background-size: contain;
+            }
+         }
+         &.checked{
+             .checkBox{
+                 >i{
+                    background-image: url('../../../../resources/src/images/icons/onCheckIcon.jpg');
+                 }
+             }
+         }
+    }
+    .submitBtn{
+        height:1.3067rem;
+        line-height:1.3067rem;
+        text-align: center;
+        width:93.333%;
+        margin: 0 auto;
+        background-color: @mainColor;
+        color:#fff;
+        font-size: 0.4rem;
+    }
+}
+
+.main_layer .choseMaintainActivityPage{
+    background-color: #fff;
+    min-height: 100%;
+    padding-top: 1.3333rem;
+    .searchBarContainer{
+        height:1.3333rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-bottom: 1px solid #e5e5e5;
+        width:100%;
+        position: fixed;
+        top:0.6133rem;
+        left:0;
+        background-color: #fff;
+        .searchBar{
+            height:0.8rem;
+            width:8.24rem;
+            border-radius: 0.4rem;
+            border: 1px solid @mainColor;
+            display: flex;
+            overflow: hidden;
+            >input{
+                flex:83;
+                padding:0 0.4rem;
+                text-align: center;
+                &::-webkit-input-placeholder{
+                    color:@mainColor;
+                }
+                &:-moz-placeholder { 
+                    color:@mainColor;
+                }
+                &::-moz-placeholder { 
+                    color:@mainColor;
+                }
+                &:-ms-input-placeholder { 
+                    color:@mainColor;
+                }
+           }
+            >.searchIcon{
+                flex:17;
+                background-color: #e6f9ff;
+                border-left: 1px solid @mainColor;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                >img{
+                   height:0.4933rem;
+                   width:0.4933rem;
+                }
+            }
+        }
+    }
+    .maintainActivity{
+        padding:0 0.3333rem 0.4933rem 0.3333rem;
+        border-bottom: 1px solid #e7e7e7;
+        >li{
+            height:0.88rem;
+            display: flex;
+            align-items: center;
+            font-size: 0.32rem;
+            color:#7c7c7c;
+            border-bottom: 1px solid #e7e7e7;
+            &.checked{
+                color:@mainColor;
+            }
+        }
+    }
+    .btn-box{
+        height:2.0533rem;
+        width:100%;
+        position: fixed;
+        left:50%;
+        bottom:0;
+        transform: translateX(-50%);
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        background-color: #f4f4f4;
+        button{
+            width:4.5333rem;
+            height:1.3333rem;
+            font-size: 0.4rem;
+            &.comfirmBtn{
+                background-color: @mainColor;
+                color:#fff;
+            }
+            &.cancelBtn{
+                background-color: #fff;
+                color: @mainColor;
+            }
+        }
+    }
+}
+
+.main_layer .choseMaintainPartPage{
+    background-color: #fff;
+    min-height: 100%;
+    padding-top: 1.3333rem;
+    .searchBarContainer{
+        height:1.3333rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-bottom: 1px solid #e5e5e5;
+        width:100%;
+        position: fixed;
+        top:0.6133rem;
+        left:0;
+        background-color: #fff;
+        .searchBar{
+            height:0.8rem;
+            width:8.24rem;
+            border-radius: 0.4rem;
+            border: 1px solid @mainColor;
+            display: flex;
+            overflow: hidden;
+            >input{
+                flex:83;
+                padding:0 0.4rem;
+                text-align: center;
+                &::-webkit-input-placeholder{
+                    color:@mainColor;
+                }
+                &:-moz-placeholder { 
+                    color:@mainColor;
+                }
+                &::-moz-placeholder { 
+                    color:@mainColor;
+                }
+                &:-ms-input-placeholder { 
+                    color:@mainColor;
+                }
+           }
+            >.searchIcon{
+                flex:17;
+                background-color: #e6f9ff;
+                border-left: 1px solid @mainColor;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                >img{
+                   height:0.4933rem;
+                   width:0.4933rem;
+                }
+            }
+        }
+    }
+    .parts-table{
+        width:100%;
+        border-bottom: 1px solid #e5e5e5;
+        .checkBox{
+            display: inline-block;
+            width:0.2933rem;
+            height:0.2933rem;
+            border: 1px solid #adadad;
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-position: center;
+            &.checked{
+                border:none;
+                background-image: url('data:image/jpeg;base64,/9j/4QAYRXhpZgAASUkqAAgAAAAAAAAAAAAAAP/sABFEdWNreQABAAQAAABkAAD/4QN8aHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wLwA8P3hwYWNrZXQgYmVnaW49Iu+7vyIgaWQ9Ilc1TTBNcENlaGlIenJlU3pOVGN6a2M5ZCI/PiA8eDp4bXBtZXRhIHhtbG5zOng9ImFkb2JlOm5zOm1ldGEvIiB4OnhtcHRrPSJBZG9iZSBYTVAgQ29yZSA1LjYtYzA2NyA3OS4xNTc3NDcsIDIwMTUvMDMvMzAtMjM6NDA6NDIgICAgICAgICI+IDxyZGY6UkRGIHhtbG5zOnJkZj0iaHR0cDovL3d3dy53My5vcmcvMTk5OS8wMi8yMi1yZGYtc3ludGF4LW5zIyI+IDxyZGY6RGVzY3JpcHRpb24gcmRmOmFib3V0PSIiIHhtbG5zOnhtcE1NPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvbW0vIiB4bWxuczpzdFJlZj0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL3NUeXBlL1Jlc291cmNlUmVmIyIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bXBNTTpPcmlnaW5hbERvY3VtZW50SUQ9InhtcC5kaWQ6MDc2MzYxMDktYjQ1OS00NTJjLWIxODItYmFhODA1NDAwYzk0IiB4bXBNTTpEb2N1bWVudElEPSJ4bXAuZGlkOkRFMjY3MDFBNTAxMDExRTdBNjg4OEU5NjkxRUQ1RTM3IiB4bXBNTTpJbnN0YW5jZUlEPSJ4bXAuaWlkOkRFMjY3MDE5NTAxMDExRTdBNjg4OEU5NjkxRUQ1RTM3IiB4bXA6Q3JlYXRvclRvb2w9IkFkb2JlIFBob3Rvc2hvcCBDQyAoTWFjaW50b3NoKSI+IDx4bXBNTTpEZXJpdmVkRnJvbSBzdFJlZjppbnN0YW5jZUlEPSJ4bXAuaWlkOjFlYjVkZGIxLTBhY2UtMGQ0Yi1iMGNkLWI4MmUwOTE0NzlmMyIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDowNzYzNjEwOS1iNDU5LTQ1MmMtYjE4Mi1iYWE4MDU0MDBjOTQiLz4gPC9yZGY6RGVzY3JpcHRpb24+IDwvcmRmOlJERj4gPC94OnhtcG1ldGE+IDw/eHBhY2tldCBlbmQ9InIiPz7/7gAOQWRvYmUAZMAAAAAB/9sAhAABAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAgICAgICAgICAgIDAwMDAwMDAwMDAQEBAQEBAQIBAQICAgECAgMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwP/wAARCAAWABYDAREAAhEBAxEB/8QAhwAAAQUAAAAAAAAAAAAAAAAACAIEBQYHAQACAwEBAAAAAAAAAAAAAAAGBwADBAkKEAABAwMCBAMJAQAAAAAAAAADAgQFAQYHEQgAEhMWIhQVITHSI5M0VHUXtREAAgECBQIFAwUBAAAAAAAAAQIDEgQREwUGBwAWIZEiUhSBMjMxQXOzFQj/2gAMAwEAAhEDEQA/AL55x3+U4+uT4uPQ5kw+xfIdcFs6X3N5npFHB6LqShzUJWnLVdCL56p9ldKq5ta01pxMmH2L5DqZ0vubzPRpSW1q6LVw3bVxy03LKzNlCHmLwtTCjCPI7nRYetlmm5JW/wCfNV6JxEFK1hzGaM+iQjlslVUakQUYkVa8u6TrG+brS7K3hGxdInjtrjVHcLEdSnbIjs4RSRIA0qrJJUqo5FXpZGd1XPFeqaVsy11K7nm701WGS4g01ELSjT4VzpLuU1AxkrGzRx0kugOHqV1V1iLDGNNyGGnVn43alt3dbj6s7caIR/LmPHZ6tBaqPDsbfQ9KlrDXjabQXKFmGiUORJURXU6hCM6d6763XxdvlNb3Q4uuHdSyoDKkYD6Rc/aHmKiqW2uGOLSNiUYhRTSqz27P2VtjkrZbaNtpTbcsafmzCJ5CU1W3+4rEGNMdxAowWNcA6gsaqmaGS224etWwbamt1W4uFNTHOPZg0Nj/AB1KCqykcxZZYEMlrbVGTwXU7att81USWIsahcwFiUkqQuQ8ZeUt76xuPVYOH+MZ17o1OAS3l7Gak03TnAqnqU4Z86MBbqGDYOrgoXifrVxps3Stv6ZPyvyPA3benTGO0s3FL6jfoTTDSwxyYWUmckFcVZCGCSp1ljPdNl82epbc0adQXJLRyOYaqKJRIdtHKk4yLVabdgolVBthVvOSR1QJXQlWpFfM6qqkqXz8RbKj46h4oS3I2s6GNsDhKz5cknyC+HjPnKs1ZGGYB6aAF6FIeVd4Pv8Am5PecHcqMJFxGMapWifHC4+EGSzQ0g40E+qolusSxz3135aH8x9b/ofcMX2b231fXO4fND9N9N6Pj8x5jT3+Dl15vDrwe7n7e7dve7Pj9s/Gk+Tn4ZWTSa68fDCn644YeOHQRtv/AHv9+z7Xz+4vkJ8bJxzc6oUUYfvj9MP18Mei+33zG7Kbu6yHu6C1AWbVFumZ2fEQD2Bf2gVyzcDb3nLND2vNz8Mm5pefRVxJiUejoPOFCkJCkGqU/wCeLLhuw0W/g4lvGvgboNcyTJMlyFYE2sbC4ihlyI4TRAwTLbCRgxcydODnq85bvtXsZuUbRbIi2K28cTRPbllIFzIpglljz5JRXMpatcUUqECdBHHfZz36kP8AuQ3D8uvz2/8AMf6pekfbfhuP4h/bH1//2Q==');
+            }
+        }
+        td{
+            text-align: center;
+        }
+        thead{
+            tr{
+                height:0.7733rem;
+                border-bottom: 1px solid #e5e5e5;
+                td{
+                    .isCheckAll{
+                        margin-right: 0.1333rem;
+                    }
+                }
+            }
+        }
+        tbody{
+            tr{
+                height:0.96rem;
+                >td:nth-of-type(2){
+                    max-width:3.3333rem;
+                }
+            }
+        }
+    }
+    .btn-box{
+        height:2.0533rem;
+        width:100%;
+        position: fixed;
+        left:50%;
+        bottom:0;
+        transform: translateX(-50%);
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        background-color: #f4f4f4;
+        button{
+            width:4.5333rem;
+            height:1.3333rem;
+            font-size: 0.4rem;
+            &.comfirmBtn{
+                background-color: @mainColor;
+                color:#fff;
+            }
+            &.cancelBtn{
+                background-color: #fff;
+                color: @mainColor;
+            }
+        }
+    }
+}
+
+
+.slide-right-enter-active {
+    transition: all .3s ease;
+}
+.slide-right-enter{
+  transform: translate3d(100%,0,0);
+  opacity: 0;
+}
+
+.slide-left-enter-active {
+    transition: all .3s ease;
+}
+.slide-left-enter{
+  transform: translate3d(-100%,0,0);
+  opacity: 0;
+}

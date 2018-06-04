@@ -1,0 +1,11 @@
+共通模块
+scrmapp-common(项目基础模块,包含所有的公共jar包)
+scrmapp-miniapp(微信小程序模块)
+scrmapp-qyh(微信企业号模块)
+scrmapp-wechat(微信服务号模块)
+scrmapp-tools(项目工具库模块)
+
+
+具体到每个项目
+scrmapp-api(各自的controller和各自私有的service)
+scrmapp-webapp(各自的前端文件和web.xml配置,主要引入scrmapp-api模块)

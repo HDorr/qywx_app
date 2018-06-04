@@ -1,0 +1,22 @@
+package com.ziwow.scrmapp.aop.log;
+
+import java.lang.annotation.Documented;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+/**
+ * 
+* @ClassName: SystemLog
+* @author hogen
+* @date 2017-1-17 下午2:51:21
+*
+ */
+@Target({ ElementType.PARAMETER, ElementType.METHOD })
+@Retention(RetentionPolicy.RUNTIME)
+@Documented
+public @interface SystemLog {
+	String module() default "";
+
+	String methods() default "";
+}

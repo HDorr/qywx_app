@@ -1,0 +1,56 @@
+.main_layer .pdtInfo {
+  width: 100%;
+  background-color: #fff;
+  padding-left: 0.333333rem;
+  padding-right: 0.333333rem;
+  position: relative;
+  margin-bottom: 0.266667rem;
+}
+.main_layer .pdtInfo .pdtImg {
+  position: absolute;
+  right: 0.466667rem;
+  top: 0.453333rem;
+  border: 1px solid #dcdcdc;
+  border-radius: 0.04rem;
+  height: 2.133333rem;
+  width: 2.133333rem;
+  background-size: cover;
+  overflow: hidden;
+}
+.main_layer .pdtInfo .pdtInfoForm {
+  height: 0.92rem;
+  line-height: 0.92rem;
+  width: 100%;
+  font-size: 0.306667rem;
+  position: relative;
+}
+.main_layer .pdtInfo .pdtInfoForm > span:first-child {
+  margin-right: 0.64rem;
+}
+.main_layer .pdtInfo .toggleRemind {
+  height: 0.933333rem;
+  width: 100%;
+  text-align: center;
+  margin-top: 0.853333rem;
+}
+.main_layer .pdtInfo .toggleRemind > button {
+  height: 0.933333rem;
+  line-height: 0.933333rem;
+  padding-left: 0.453333rem;
+  padding-right: 0.453333rem;
+  border: 1px solid #8a8a8a;
+  color: #8a8a8a;
+  font-size: 0.346667rem;
+  background-color: #fff;
+}
+.main_layer .pdtInfo:last-of-type {
+  padding-bottom: 0.346667rem;
+}
+.main_layer .qy-btn-all {
+  width: 93%;
+  margin-top: 0.773333rem;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  font-size: 0.4rem;
+}

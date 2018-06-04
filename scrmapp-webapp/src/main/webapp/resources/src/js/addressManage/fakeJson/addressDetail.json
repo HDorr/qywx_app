@@ -1,0 +1,20 @@
+{
+    "returnCode": 1,
+    "returnMsg": null,
+    "data": {
+        "id": 2,
+        "userId": "OrprCjKp",
+        "contacts": "郭敬明150",
+        "contactsMobile": "13888888887",
+        "provinceId": 310000,
+        "provinceName": "上海市",
+        "cityId": 310100,
+        "cityName": "上海市",
+        "areaId": 310104,
+        "areaName": "徐汇区",
+        "streetName": "宜山路地铁站",
+        "isDefault": 1,
+        "type": 1,
+        "fixedTelephone":"021-1234567"
+    }
+}

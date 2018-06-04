@@ -1,0 +1,469 @@
+@import (reference) "../theme.less";
+//预约服务-选择产品
+.conHeader{
+	width: 100%;
+	height: 0.666667rem;
+	line-height: 0.666667rem;
+	color: @tipFontColor;
+	font-size:0.32rem;
+	background: #f4f4f4;
+	position: fixed;
+	top:0;
+	z-index: 99;
+	p{
+		margin-left: 0.333333rem;
+	}
+} 
+
+.conFooter{
+	position: fixed;
+	bottom: 0;
+	background: #f4f4f4;
+	button{
+		width: 9.333333rem;
+		height:1.333333rem ;
+		margin: 0.4rem 0.333333rem;
+		// left:0.333333rem; 
+	}
+}
+
+
+
+.main_layer{
+	.content{
+		width: 100%;
+		//height:100%;
+		//margin-top: 0.666667rem;
+		margin-bottom: 2.0rem;
+		overflow-y: auto;
+		padding-bottom: 0.5rem;
+
+		>ul{
+		    width: 100%;
+		    padding-bottom: 1.333333rem;
+		    >li{
+		        width: 100%;
+		        margin-bottom:0.266667rem;
+		       
+		        background-color: #fff;
+		        .pdtInfo{
+		            width: 100%;
+		            height: 2.8rem;
+		            background-color: #fff;
+	        		padding:0.266667rem 0.333333rem;
+		            .pdtImg{
+		                height: 2.133333rem;
+		                width:2.133333rem;
+		                border: 1px solid #dcdcdc;
+		                border-radius:0.053333rem;
+		                background-size: cover;
+		                overflow:hidden;
+		                margin-left: 0.266667rem
+		            }
+		            .pdtText{
+		                padding-left:0.48rem;
+		                color:#383838;
+		                font-size: 0.32rem;
+		                >p{
+		                	>span{
+	                		width: 4.266667rem;
+	                		height:0.4rem;
+	                		display: inline-block;
+		                	overflow:hidden;
+		                	text-overflow: ellipsis;
+		                	}
+		                }
+		                >p:first-child{
+		                	width: 5.866667rem;
+		                	height: 0.533333rem;
+		                    font-size:0.4rem;
+		                    margin-bottom:0.533333rem;
+							overflow:hidden;
+		                	text-overflow: ellipsis;		                
+		                }
+		                >p:last-child{
+		                    margin-top:0.106667rem;
+		                }
+
+		            }
+		        }
+		    }
+		}	
+	}
+
+}
+	
+
+//预约服务-提交预约信息
+.main_layer{
+	.reserveCon{
+        	margin-bottom: 0.266667rem;
+		.addInfo{
+			width: 9.333333rem;
+			margin: 0 auto;
+			color: #383838;
+			overflow:hidden;
+			border-bottom: 1px solid #eee;
+
+		}
+		.mark{
+			width: 9.2rem;
+			margin-left: 0.266667rem;
+			font-size: 0.32rem;
+			line-height: 1rem;
+			border-bottom: 1px solid #eee;
+		}
+		.noBorder{
+			border-bottom: 0;
+		}
+
+
+		.addProductBtn{
+			width: 8.8rem;
+			height: 2.666667rem;
+			border: 1px dashed  #afafaf;
+			background: #eeeeee;
+			margin: 0 auto;
+
+			div{
+				line-height: 1.733333rem;
+				text-align: center;
+				font-size: 1.2rem;
+				color:#a0a0a0
+				
+			}
+			.pTxt{
+				font-size: 0.32rem;
+				text-align: center;
+				
+			}
+		}
+
+		.addAddressBtn{
+			margin-bottom: 0.4rem
+		}
+		
+		.reserveTime{
+			background: #fff;
+			width: 9.333333rem;
+			// height: 2.266667rem;
+			margin: 0 auto;
+			border-bottom: 1px solid #eee;
+			.mark{
+				width:8.8rem;
+				margin: 0 auto;
+				height: 1.066667rem;
+			}
+			.chooseTime{
+				width: 8.8rem;
+				height: 1.2rem;
+				margin: 0 auto;
+				font-size: 0.32rem;
+				//line-height: 1.2rem;
+
+				>span{
+					line-height: 1.2rem;
+					display: inline-block;
+					float: left;
+				}
+
+				>div{
+					// position: relative;
+					display: inline-block;
+					width:6.933333rem;
+					height: 0.8rem;
+					border: 1px solid #eee;
+					background: url(../../images/icons/calendar.png) no-repeat right top;
+    				background-size: contain;
+    				line-height: 0.8rem;
+				    padding-left: 10px;
+				    margin-top: 0.2rem;
+				    float: left;
+				    color: #b1b1b1;
+					>input{
+						width:100%;
+						height: 100%;
+						font-size:14px;
+						padding-left: 0.133333rem;
+						// border: 1px solid #eee;
+					}
+					.calendarImg{
+						position: absolute;
+						right:0.006667rem;
+						top:0.006667rem;
+						width: 0.773333rem;
+						height:0.773333rem;
+						background: url(../../images/icons/calendar.png);
+						background-size: cover;
+					}
+				}
+
+			}
+			.orderTimeTips{
+				padding-left: 1.9rem;
+			    /* line-height: 0.5rem; */
+			    padding-bottom: 0.2rem;
+			    color: #e81b00;
+			    // font-size: 0.24rem;
+			    // display: none;
+			}
+		}
+
+		.installDescription{
+			width: 9.333333rem;
+			margin: 0 auto;
+			.mark{
+				width:8.8rem;
+				margin: 0 auto;
+				height: 1.066667rem;
+			}
+
+			.textareaBox{
+				width: 8.8rem;
+				margin: 0 auto;
+				border: 1px solid #eee;
+				padding: 0.066667rem;
+					textarea{
+						line-height: 0.4rem;
+						padding:0.133333rem;
+						resize:none;
+						outline: 0;
+						border: none;
+						width: 8.6rem;
+
+					}
+
+
+			}
+
+
+		}
+
+        .pdtInfo{
+            width: 100%;
+            height: 2.8rem;
+            background-color: #fff;
+    		padding:0.266667rem 0.333333rem;
+            .pdtImg{
+                height: 2.133333rem;
+                width:2.133333rem;
+                border: 1px solid #dcdcdc;
+                border-radius:0.053333rem;
+                background-size: cover;
+                overflow:hidden;
+            }
+            .pdtText{
+                padding-left:0.48rem;
+                color:#383838;
+                font-size: 0.32rem;
+                width: 6.4rem;
+                >p{
+                	width: 100%;
+                	>span{
+                		width: 4.266667rem;
+                		height:0.4rem;
+                		display: inline-block;
+	                	overflow:hidden;
+	                	text-overflow: ellipsis;
+                	}
+                }
+                >p:first-child{
+                	width: 5.866667rem;
+                	height: 0.533333rem;
+					overflow:hidden;
+                	text-overflow: ellipsis;		                
+                    font-size:0.4rem;
+                    margin-bottom:0.506667rem;
+                }
+                >p:last-child{
+                    margin-top:0.106667rem;
+                }
+
+            }
+        }
+        .userInfo{
+    		padding:0.266667rem 0.333333rem;
+    		width: 9.333333rem;
+    		height: 2.133333rem;
+			
+			.userImg{
+				width: 1.333333rem;
+				height: 1.333333rem;
+				border-radius: 0.066667rem;
+				background: url(../../../images/myOrder/workerHead.png);
+				background-size: cover;
+			}
+
+			.userDetail{
+				width: 6.666667rem;
+				height: 1.333333rem;
+				margin-left:0.4rem;
+				>div{
+					width: 100%;
+					height: 0.426667rem;
+					line-height: 0.426667rem;
+					font-size: 0.293333rem;
+					span{
+						display: inline-block;
+						margin-right: 0.4rem;
+					}
+
+				}
+				.info{
+					.iconImg{
+						width: 0.346667rem;
+						height: 0.346667rem;
+						background: url(../../../src/images/icons/personInfo.png) top left no-repeat;
+						
+						background-size: cover;
+
+					}
+				}
+				.telephone{
+					.iconImg{
+						width: 0.346667rem;
+						height: 0.346667rem;
+						background: url(../../../src/images/icons/tel.png) top left no-repeat;
+						
+						background-size: cover;
+
+					}
+				}
+				.position{
+					.iconImg{
+						width: 0.346667rem;
+						height: 0.45rem;
+						background: url(../../../src/images/icons/location.png) center center no-repeat;
+						
+						background-size: cover;
+
+					}
+					.txt{
+						margin-top: 0.04rem
+					}
+				}
+
+				
+			}
+        }
+
+        .uploadImg{
+        	width: 9.333333rem;
+        	height: 0.933333rem;
+        	margin: 0 auto;
+        	line-height: 0.933333rem;
+        	margin-top: 0.266667rem;
+
+        	span{
+        		display: inline-block;
+        	}
+			.uploadBtn{
+				width: 2.666667rem;
+				height: 0.8rem;
+				line-height: 0.8rem;
+				text-align: center;
+				background: #e8e8e8;
+				margin-right: 0.133333rem;
+				position: relative;
+
+				input{
+					display: inline-block;
+					width: 2.666667rem;
+					height: 0.8rem;
+					opacity: 0;
+				    position: absolute;
+				    top: 0;
+				    left: 0;
+
+				}
+			}
+			.limit{
+				color:red
+			}
+
+
+        }
+
+        .imgShow{
+        	width: 9.333333rem;
+        	//height: 1.333333rem;
+        	margin: 0 auto;
+        	margin-top: 0.266667rem;
+        	// margin-bottom: 0.266667rem;
+        	span{
+        		width: 2.666667rem;
+        		height: 2.666667rem;
+        		display: inline-block;
+        		margin-right: 0.4rem;
+        		font-size: 0.4rem;
+        		line-height: 2.666667rem;
+        		text-align: center;
+        		border: 1px solid #eee;
+
+        		img{
+        			width: 2.666667rem;
+	        		height: 2.666667rem;
+
+        		}
+        		
+        	}
+        }
+	}
+}
+
+//预约服务-预约成功提示
+.main_layer{
+	overflow: hidden;
+	.promptImg{
+		width: 100%;
+		margin-top: 1.533333rem;
+		display: -webkit-flex;
+		display: flex;
+		justify-content:center;
+		span{
+			width: 2.0rem;
+			height: 2.0rem;
+			background: url(../../../images/reserveService/success.png);
+			background-size: cover;			
+		}
+
+
+		
+	}
+	.successTxt{
+		line-height: 1.333333rem;
+		text-align: center;
+		font-size: 0.32rem;
+	}
+
+	.reserveInfoBox{
+		width: 100%;
+		height: 3.866667rem;
+		font-size: 0.32rem;
+		.reserveInfo{
+			margin: 0 auto;
+			width: 8.8rem;
+			// height: 3.733333rem;
+			border-radius: 0.133333rem;
+			border: 1px solid @mainColor;
+			padding: 0.4rem 0.666667rem;
+			background: #fff;
+			overflow:hidden;
+			p{
+				display: flex;
+				justify-content: flex-start;
+				align-items: center;
+				min-height: .8rem;
+				.title{
+					flex:1;
+				}
+				.con{
+					flex:2;
+				}
+
+			}
+		}
+	}
+
+}
+;

@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ziwow.scrmapp.common.persistence.mapper.LevelFilterRelationsMapper" >
+  <resultMap id="BaseResultMap" type="com.ziwow.scrmapp.common.persistence.entity.LevelFilterRelations" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="levelId" property="levelId" jdbcType="BIGINT" />
+    <result column="filterId" property="filterId" jdbcType="BIGINT" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, levelId, filterId
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_level_filter_relations
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from t_level_filter_relations
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.ziwow.scrmapp.common.persistence.entity.LevelFilterRelations" >
+    insert into t_level_filter_relations (levelId, filterId
+      )
+    values (#{levelId,jdbcType=BIGINT}, #{filterId,jdbcType=BIGINT})
+  </insert>
+  <insert id="batchSave" parameterType="java.util.List">
+    insert into t_level_filter_relations (levelId, filterId)
+    values
+    <foreach collection="list" item="item" index="index" separator=",">
+      (#{item.levelId,jdbcType=BIGINT}, #{item.filterId,jdbcType=BIGINT})
+    </foreach>
+  </insert>
+  <insert id="insertSelective" parameterType="com.ziwow.scrmapp.common.persistence.entity.LevelFilterRelations" >
+    insert into t_level_filter_relations
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="levelId != null" >
+        levelId,
+      </if>
+      <if test="filterId != null" >
+        filterId,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="levelId != null" >
+        #{levelId,jdbcType=BIGINT},
+      </if>
+      <if test="filterId != null" >
+        #{filterId,jdbcType=BIGINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.ziwow.scrmapp.common.persistence.entity.LevelFilterRelations" >
+    update t_level_filter_relations
+    <set >
+      <if test="levelId != null" >
+        levelId = #{levelId,jdbcType=BIGINT},
+      </if>
+      <if test="filterId != null" >
+        filterId = #{filterId,jdbcType=BIGINT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.ziwow.scrmapp.common.persistence.entity.LevelFilterRelations" >
+    update t_level_filter_relations
+    set levelId = #{levelId,jdbcType=BIGINT},
+      filterId = #{filterId,jdbcType=BIGINT}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

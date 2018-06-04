@@ -1,0 +1,92 @@
+{{if isEdit==1}}
+<div class="weui-cells weui-cells_form addressEditCells">
+    <div class="weui-cell">
+        <div class="weui-cell__hd"><label class="weui-label">联系人</label></div>
+        <div class="weui-cell__bd">
+            <input class="weui-input"  id="userContacts" value={{data.contacts}} type="text">
+        </div>
+    </div>
+    <div class="weui-cell">
+        <div class="weui-cell__hd">
+            <label class="weui-label">联系电话</label>
+        </div>
+        <div class="weui-cell__bd">
+            <input class="weui-input"   value={{data.contactsMobile}} id="userContactsMobile" type="tel">
+        </div>
+    </div>
+    <a class="weui-cell weui-cell_access" id="select_contact" href="javascript:;">
+        <div class="weui-cell__bd">
+            <p>所在地区</p>
+        </div>
+        <div class="weui-cell__bd" data-provinceid={{data.provinceId}} data-cityid={{data.cityId}} data-areaid={{data.areaId}} data-provincename={{data.provinceName}} data-cityname={{data.cityName}} data-areaname={{data.areaName}} id="show_contact">{{data.provinceName+data.cityName+data.areaName}}</div>
+        <div class="weui-cell__ft">
+        </div>
+    </a>
+    <div class="weui-cell">
+        <div class="weui-cell__bd">
+            <textarea class="weui-textarea" id="userStreetName" placeholder="请输入文本"   rows="3">{{data.streetName}}</textarea>
+        </div>
+    </div>
+</div>
+{{if data.isDefault != 1}}
+<div class="weui-cells weui-cells_form">
+    <div class="weui-cell weui-cell_switch">
+        <div class="weui-cell__bd">设为默认</div>
+        <div class="weui-cell__ft">
+            <input class="weui-switch" id="userSetDefault" type="checkbox">
+        </div>
+    </div>
+</div>
+{{/if}}
+<div class="weui-cells weui-cells_form">
+    <a class="weui-cell weui-cell_access" data-id="{{data.id}}" data-userid="{{data.userId}}" onclick="confirmDelet(this)" id="addressEditDelBtn" href="javascript:;">
+        <div class="weui-cell__bd">
+            <p style="color:red;">删除地址</p>
+        </div>
+    </a>
+</div>
+<div id="saveAddressBtn" data-id="{{data.id}}" data-userid="{{data.userId}}" data-faid="{{data.fAid}}" onclick="addressUpdate(this)" class="qyBlue">
+    <p>保存1</p>
+</div>
+{{else}}
+<div class="weui-cells weui-cells_form addressEditCells">
+    <div class="weui-cell">
+        <div class="weui-cell__hd"><label class="weui-label">联系人</label></div>
+        <div class="weui-cell__bd">
+            <input class="weui-input"   type="text" id="userContacts">
+        </div>
+    </div>
+    <div class="weui-cell">
+        <div class="weui-cell__hd">
+            <label class="weui-label">联系电话</label>
+        </div>
+        <div class="weui-cell__bd">
+            <input class="weui-input"   type="tel" id="userContactsMobile">
+        </div>
+    </div>
+    <a class="weui-cell weui-cell_access" id="select_contact" href="javascript:;">
+        <div class="weui-cell__bd">
+            <p>所在地区</p>
+        </div>
+        <div class="weui-cell__bd" data-provinceid="" data-cityid="" data-areaid="" data-provincename="" data-cityname="" data-areaname="" id="show_contact"></div>
+        <div class="weui-cell__ft">
+        </div>
+    </a>
+    <div class="weui-cell">
+        <div class="weui-cell__bd">
+            <textarea class="weui-textarea" id="userStreetName" placeholder="请输入详细地址"   rows="3"></textarea>
+        </div>
+    </div>
+</div>
+<div class="weui-cells weui-cells_form">
+    <div class="weui-cell weui-cell_switch">
+        <div class="weui-cell__bd">设为默认</div>
+        <div class="weui-cell__ft">
+            <input class="weui-switch" id="userSetDefault" type="checkbox">
+        </div>
+    </div>
+</div>
+<div id="saveAddressBtn" onclick="addressAddSave(this)" class="qyBlue">
+    <p>保存2</p>
+</div>
+{{/if}}

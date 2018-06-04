@@ -1,0 +1,484 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ziwow.scrmapp.common.persistence.mapper.QyhUserMapper">
+    <resultMap id="BaseResultMap" type="com.ziwow.scrmapp.common.persistence.entity.QyhUser">
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="userId" property="userid" jdbcType="VARCHAR"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="departments" property="departments" jdbcType="VARCHAR"/>
+        <result column="position" property="position" jdbcType="VARCHAR"/>
+        <result column="mobile" property="mobile" jdbcType="VARCHAR"/>
+        <result column="gender" property="gender" jdbcType="INTEGER"/>
+        <result column="email" property="email" jdbcType="VARCHAR"/>
+        <result column="weixinId" property="weixinid" jdbcType="VARCHAR"/>
+        <result column="avatar" property="avatar" jdbcType="VARCHAR"/>
+        <result column="status" property="status" jdbcType="INTEGER"/>
+        <result column="extattr" property="extattr" jdbcType="VARCHAR"/>
+        <result column="corpId" property="corpid" jdbcType="VARCHAR"/>
+    </resultMap>
+    <sql id="Example_Where_Clause">
+        <trim prefix="where" prefixOverrides="and|or">
+            <if test="condition.userid != null">
+                and userId = #{condition.userid,jdbcType=VARCHAR}
+            </if>
+            <if test="condition.name != null">
+                and name = #{condition.name,jdbcType=VARCHAR}
+            </if>
+            <if test="condition.departments != null">
+                and departments = #{condition.departments,jdbcType=VARCHAR}
+            </if>
+            <if test="condition.position != null">
+                and position = #{condition.position,jdbcType=VARCHAR}
+            </if>
+            <if test="condition.mobile != null">
+                and mobile = #{condition.mobile,jdbcType=VARCHAR}
+            </if>
+            <if test="condition.gender != null">
+                and gender = #{condition.gender,jdbcType=INTEGER}
+            </if>
+            <if test="condition.email != null">
+                and email = #{condition.email,jdbcType=VARCHAR}
+            </if>
+            <if test="condition.weixinid != null">
+                and weixinId = #{condition.weixinid,jdbcType=VARCHAR}
+            </if>
+            <if test="condition.avatar != null">
+                and avatar = #{condition.avatar,jdbcType=VARCHAR}
+            </if>
+            <if test="condition.status != null">
+                and status = #{condition.status,jdbcType=INTEGER}
+            </if>
+            <if test="condition.extattr != null">
+                and extattr = #{condition.extattr,jdbcType=VARCHAR}
+            </if>
+            <if test="condition.corpid != null">
+                and corpId = #{condition.corpid,jdbcType=VARCHAR}
+            </if>
+        </trim>
+    </sql>
+    <sql id="Update_By_Example_Where_Clause">
+        <trim prefix="where" prefixOverrides="and|or">
+            <if test="example.condition.userid != null">
+                and userId = #{example.condition.userid,jdbcType=VARCHAR}
+            </if>
+            <if test="example.condition.name != null">
+                and name = #{example.condition.name,jdbcType=VARCHAR}
+            </if>
+            <if test="example.condition.departments != null">
+                and departments = #{example.condition.departments,jdbcType=VARCHAR}
+            </if>
+            <if test="example.condition.position != null">
+                and position = #{example.condition.position,jdbcType=VARCHAR}
+            </if>
+            <if test="example.condition.mobile != null">
+                and mobile = #{example.condition.mobile,jdbcType=VARCHAR}
+            </if>
+            <if test="example.condition.gender != null">
+                and gender = #{example.condition.gender,jdbcType=INTEGER}
+            </if>
+            <if test="example.condition.email != null">
+                and email = #{example.condition.email,jdbcType=VARCHAR}
+            </if>
+            <if test="example.condition.weixinid != null">
+                and weixinId = #{example.condition.weixinid,jdbcType=VARCHAR}
+            </if>
+            <if test="example.condition.avatar != null">
+                and avatar = #{example.condition.avatar,jdbcType=VARCHAR}
+            </if>
+            <if test="example.condition.status != null">
+                and status = #{example.condition.status,jdbcType=INTEGER}
+            </if>
+            <if test="example.condition.extattr != null">
+                and extattr = #{example.condition.extattr,jdbcType=VARCHAR}
+            </if>
+            <if test="example.condition.corpid != null">
+                and corpId = #{example.condition.corpid,jdbcType=VARCHAR}
+            </if>
+        </trim>
+    </sql>
+    <sql id="Base_Column_List">
+    id, userId, name, departments, position, mobile, gender, email, weixinId, avatar, 
+    status, extattr, corpId
+  </sql>
+    <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.ziwow.scrmapp.common.bean.Criteria">
+        select
+        <if test="distinct">
+            distinct
+        </if>
+        <include refid="Base_Column_List"/>
+        from t_qyh_user
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+        <if test="orderByClause != null">
+            order by ${orderByClause}
+        </if>
+    </select>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long">
+        select
+        <include refid="Base_Column_List"/>
+        from t_qyh_user
+        where id = #{id,jdbcType=BIGINT}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from t_qyh_user
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+    <delete id="deleteByExample" parameterType="com.ziwow.scrmapp.common.bean.Criteria">
+        delete from t_qyh_user
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+    </delete>
+    <insert id="insert" parameterType="com.ziwow.scrmapp.common.persistence.entity.QyhUser">
+        <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into t_qyh_user (userId, name, departments,
+        position, mobile, gender,
+        email, weixinId, avatar,
+        status, extattr, corpId
+        )
+        values (#{userid,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{departments,jdbcType=VARCHAR},
+        #{position,jdbcType=VARCHAR}, #{mobile,jdbcType=VARCHAR}, #{gender,jdbcType=INTEGER},
+        #{email,jdbcType=VARCHAR}, #{weixinid,jdbcType=VARCHAR}, #{avatar,jdbcType=VARCHAR},
+        #{status,jdbcType=INTEGER}, #{extattr,jdbcType=VARCHAR}, #{corpid,jdbcType=VARCHAR}
+        )
+    </insert>
+    <insert id="saveQyhUser" parameterType="com.ziwow.scrmapp.common.persistence.entity.QyhUser">
+        insert into t_qyh_user (userId, name, departments, position, mobile, gender, email, weixinId, avatar, status, extattr, corpId)
+        value (#{userid},#{name},#{departments},#{position},#{mobile},#{gender},#{email},#{weixinid},#{avatar},4,#{extattr},#{corpid})
+        on duplicate key update extattr = #{extattr};
+    </insert>
+
+    <update id="updateQyhUser" parameterType="com.ziwow.scrmapp.common.persistence.entity.QyhUser">
+        update t_qyh_user
+        <set>
+            <if test="name != null">
+                name = #{name, jdbcType=VARCHAR},
+            </if>
+            <if test="gender != null">
+                gender = #{gender, jdbcType = INTEGER},
+            </if>
+            <if test="departments != null">
+                departments = #{departments, jdbcType=VARCHAR},
+            </if>
+            <if test="weixinid != null">
+                weixinId = #{weixinid, jdbcType=VARCHAR},
+            </if>
+            <if test="mobile != null">
+                mobile = #{mobile, jdbcType=VARCHAR},
+            </if>
+            <if test="email != null">
+                email = #{email, jdbcType=VARCHAR},
+            </if>
+            <if test="position != null">
+                position = #{position, jdbcType=VARCHAR},
+            </if>
+            <if test="avatar != null">
+                avatar = #{avatar, jdbcType=VARCHAR},
+            </if>
+            <if test="status != null">
+                status = #{status, jdbcType=INTEGER},
+            </if>
+            <if test="extattr != null">
+                extattr = #{extattr, jdbcType=VARCHAR},
+            </if>
+        </set>
+        where userId = #{userid, jdbcType=VARCHAR} and corpId = #{corpid, jdbcType=VARCHAR}
+    </update>
+
+    <delete id="deleteQyhUser" parameterType="java.lang.String">
+        delete from t_qyh_user where userId = #{userId} and corpId = #{corpId}
+    </delete>
+
+    <insert id="insertSelective" parameterType="com.ziwow.scrmapp.common.persistence.entity.QyhUser">
+        <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into t_qyh_user
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="userid != null">
+                userId,
+            </if>
+            <if test="name != null">
+                name,
+            </if>
+            <if test="departments != null">
+                departments,
+            </if>
+            <if test="position != null">
+                position,
+            </if>
+            <if test="mobile != null">
+                mobile,
+            </if>
+            <if test="gender != null">
+                gender,
+            </if>
+            <if test="email != null">
+                email,
+            </if>
+            <if test="weixinid != null">
+                weixinId,
+            </if>
+            <if test="avatar != null">
+                avatar,
+            </if>
+            <if test="status != null">
+                status,
+            </if>
+            <if test="extattr != null">
+                extattr,
+            </if>
+            <if test="corpid != null">
+                corpId,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="userid != null">
+                #{userid,jdbcType=VARCHAR},
+            </if>
+            <if test="name != null">
+                #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="departments != null">
+                #{departments,jdbcType=VARCHAR},
+            </if>
+            <if test="position != null">
+                #{position,jdbcType=VARCHAR},
+            </if>
+            <if test="mobile != null">
+                #{mobile,jdbcType=VARCHAR},
+            </if>
+            <if test="gender != null">
+                #{gender,jdbcType=INTEGER},
+            </if>
+            <if test="email != null">
+                #{email,jdbcType=VARCHAR},
+            </if>
+            <if test="weixinid != null">
+                #{weixinid,jdbcType=VARCHAR},
+            </if>
+            <if test="avatar != null">
+                #{avatar,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null">
+                #{status,jdbcType=INTEGER},
+            </if>
+            <if test="extattr != null">
+                #{extattr,jdbcType=VARCHAR},
+            </if>
+            <if test="corpid != null">
+                #{corpid,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <select id="countByExample" parameterType="com.ziwow.scrmapp.common.bean.Criteria" resultType="java.lang.Integer">
+        select count(*) from t_qyh_user
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+    </select>
+    <update id="updateByExampleSelective" parameterType="map">
+        update t_qyh_user
+        <set>
+            <if test="record.id != null">
+                id = #{record.id,jdbcType=BIGINT},
+            </if>
+            <if test="record.userid != null">
+                userId = #{record.userid,jdbcType=VARCHAR},
+            </if>
+            <if test="record.name != null">
+                name = #{record.name,jdbcType=VARCHAR},
+            </if>
+            <if test="record.departments != null">
+                departments = #{record.departments,jdbcType=VARCHAR},
+            </if>
+            <if test="record.position != null">
+                position = #{record.position,jdbcType=VARCHAR},
+            </if>
+            <if test="record.mobile != null">
+                mobile = #{record.mobile,jdbcType=VARCHAR},
+            </if>
+            <if test="record.gender != null">
+                gender = #{record.gender,jdbcType=INTEGER},
+            </if>
+            <if test="record.email != null">
+                email = #{record.email,jdbcType=VARCHAR},
+            </if>
+            <if test="record.weixinid != null">
+                weixinId = #{record.weixinid,jdbcType=VARCHAR},
+            </if>
+            <if test="record.avatar != null">
+                avatar = #{record.avatar,jdbcType=VARCHAR},
+            </if>
+            <if test="record.status != null">
+                status = #{record.status,jdbcType=INTEGER},
+            </if>
+            <if test="record.extattr != null">
+                extattr = #{record.extattr,jdbcType=VARCHAR},
+            </if>
+            <if test="record.corpid != null">
+                corpId = #{record.corpid,jdbcType=VARCHAR},
+            </if>
+        </set>
+        <if test="_parameter != null">
+            <include refid="Update_By_Example_Where_Clause"/>
+        </if>
+    </update>
+    <update id="updateByExample" parameterType="map">
+        update t_qyh_user
+        set id = #{record.id,jdbcType=BIGINT},
+        userId = #{record.userid,jdbcType=VARCHAR},
+        name = #{record.name,jdbcType=VARCHAR},
+        departments = #{record.departments,jdbcType=VARCHAR},
+        position = #{record.position,jdbcType=VARCHAR},
+        mobile = #{record.mobile,jdbcType=VARCHAR},
+        gender = #{record.gender,jdbcType=INTEGER},
+        email = #{record.email,jdbcType=VARCHAR},
+        weixinId = #{record.weixinid,jdbcType=VARCHAR},
+        avatar = #{record.avatar,jdbcType=VARCHAR},
+        status = #{record.status,jdbcType=INTEGER},
+        extattr = #{record.extattr,jdbcType=VARCHAR},
+        corpId = #{record.corpid,jdbcType=VARCHAR}
+        <if test="_parameter != null">
+            <include refid="Update_By_Example_Where_Clause"/>
+        </if>
+    </update>
+    <update id="updateByPrimaryKeySelective" parameterType="com.ziwow.scrmapp.common.persistence.entity.QyhUser">
+        update t_qyh_user
+        <set>
+            <if test="userid != null">
+                userId = #{userid,jdbcType=VARCHAR},
+            </if>
+            <if test="name != null">
+                name = #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="departments != null">
+                departments = #{departments,jdbcType=VARCHAR},
+            </if>
+            <if test="position != null">
+                position = #{position,jdbcType=VARCHAR},
+            </if>
+            <if test="mobile != null">
+                mobile = #{mobile,jdbcType=VARCHAR},
+            </if>
+            <if test="gender != null">
+                gender = #{gender,jdbcType=INTEGER},
+            </if>
+            <if test="email != null">
+                email = #{email,jdbcType=VARCHAR},
+            </if>
+            <if test="weixinid != null">
+                weixinId = #{weixinid,jdbcType=VARCHAR},
+            </if>
+            <if test="avatar != null">
+                avatar = #{avatar,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null">
+                status = #{status,jdbcType=INTEGER},
+            </if>
+            <if test="extattr != null">
+                extattr = #{extattr,jdbcType=VARCHAR},
+            </if>
+            <if test="corpid != null">
+                corpId = #{corpid,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.ziwow.scrmapp.common.persistence.entity.QyhUser">
+    update t_qyh_user
+    set userId = #{userid,jdbcType=VARCHAR},
+      name = #{name,jdbcType=VARCHAR},
+      departments = #{departments,jdbcType=VARCHAR},
+      position = #{position,jdbcType=VARCHAR},
+      mobile = #{mobile,jdbcType=VARCHAR},
+      gender = #{gender,jdbcType=INTEGER},
+      email = #{email,jdbcType=VARCHAR},
+      weixinId = #{weixinid,jdbcType=VARCHAR},
+      avatar = #{avatar,jdbcType=VARCHAR},
+      status = #{status,jdbcType=INTEGER},
+      extattr = #{extattr,jdbcType=VARCHAR},
+      corpId = #{corpid,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+
+    <insert id="batchInsertWeiXinUser">
+        insert IGNORE into t_qyh_user (userId, name, departments,position, mobile, gender, email, weixinId,
+        avatar,status, extattr,corpId)
+        values
+        <foreach collection="weixinUsers" index="index" item="item" open="" close="" separator=",">
+            (
+            #{item.userid,jdbcType=VARCHAR}, #{item.name,jdbcType=VARCHAR}, #{item.departments,jdbcType=VARCHAR},
+            #{item.position,jdbcType=VARCHAR}, #{item.mobile,jdbcType=VARCHAR}, #{item.gender,jdbcType=INTEGER},
+            #{item.email,jdbcType=VARCHAR}, #{item.weixinid,jdbcType=VARCHAR}, #{item.avatar,jdbcType=VARCHAR},
+            #{item.status,jdbcType=INTEGER}, #{item.extattr,jdbcType=VARCHAR},#{item.corpid,jdbcType=VARCHAR}
+            )
+        </foreach>
+    </insert>
+
+    <update id="batchUpdateWeiXinUser">
+        <foreach collection="weixinUsers" index="index" item="item" open="" close="" separator=";">
+            update t_qyh_user set
+            name=#{item.name,jdbcType=VARCHAR}, departments=#{item.departments,jdbcType=VARCHAR},
+            position=#{item.position,jdbcType=VARCHAR}, mobile=#{item.mobile,jdbcType=VARCHAR},
+            gender=#{item.gender,jdbcType=INTEGER},
+            email=#{item.email,jdbcType=VARCHAR}, weixinid=#{item.weixinid,jdbcType=VARCHAR},
+            avatar=#{item.avatar,jdbcType=VARCHAR},
+            status=#{item.status,jdbcType=INTEGER}
+            where userid = #{item.userid} and corpId=#{item.corpid}
+        </foreach>
+    </update>
+
+    <delete id="batchDeleteWeiXinUser">
+        delete from t_qyh_user where corpId =#{corpId} and userid in
+        <foreach collection="userId" index="index" item="item" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
+    </delete>
+
+    <select id="getQyhUserByUserIdAndCorpId" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM
+        t_qyh_user WHERE
+        userId=#{userId}
+        AND corpId=#{corpId}
+    </select>
+
+    <select id="getQyhUserVoByUserId" resultType="com.ziwow.scrmapp.common.bean.vo.QyhUserVo"
+            parameterType="java.lang.String">
+        SELECT
+            round(AVG(a.attitude), 2) AS attitude,
+            round(AVG(a.profession), 2) AS profession,
+            round(AVG(a.integrity), 2) AS integrity,
+            u. NAME,
+            u.mobile,
+            u.position,
+            u.avatar AS imageUrl
+        FROM
+            t_qyh_user u
+        LEFT JOIN t_qyh_user_appraisal a ON (
+            u.userId = a.qyhUserId
+            AND a.attitude > 0
+            AND a.integrity > 0
+            AND a.profession > 0
+        )
+        WHERE
+        u.userId = #{userId,jdbcType=VARCHAR}
+    </select>
+
+    <select id="getActiveUser" resultMap="BaseResultMap">
+        SELECT
+        userId,mobile
+        FROM
+            t_qyh_user
+        WHERE
+            STATUS = 1
+        AND NAME NOT LIKE '离职%'
+        AND departments NOT IN (1, 52)
+    </select>
+
+</mapper>

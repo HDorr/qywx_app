@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ziwow.scrmapp.common.persistence.mapper.MaintainRecordMapper">
+    <resultMap id="BaseResultMap" type="com.ziwow.scrmapp.common.persistence.entity.MaintainRecord">
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="orderId" property="orderId" jdbcType="BIGINT"/>
+        <result column="productId" property="productId" jdbcType="BIGINT"/>
+        <result column="maintainItem" property="maintainItem" jdbcType="VARCHAR"/>
+        <result column="maintainCost" property="maintainCost" jdbcType="DECIMAL"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    id, orderId, productId, maintainItem, maintainCost
+  </sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long">
+        select
+        <include refid="Base_Column_List"/>
+        from t_maintain_record
+        where id = #{id,jdbcType=BIGINT}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from t_maintain_record
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+    <insert id="insert" parameterType="com.ziwow.scrmapp.common.persistence.entity.MaintainRecord">
+    insert into t_maintain_record (orderId, productId,
+      maintainItem, maintainCost)
+    values (#{orderId,jdbcType=BIGINT}, #{productId,jdbcType=BIGINT},
+      #{maintainItem,jdbcType=VARCHAR}, #{maintainCost,jdbcType=DECIMAL})
+  </insert>
+    <insert id="batchSave" parameterType="java.util.List">
+        insert into t_maintain_record (orderId, productId,
+        maintainItem, maintainCost)
+        values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (#{item.orderId}, #{item.productId},#{item.maintainItem},#{item.maintainCost})
+        </foreach>
+    </insert>
+    <insert id="insertSelective" parameterType="com.ziwow.scrmapp.common.persistence.entity.MaintainRecord">
+        insert into t_maintain_record
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="orderId != null">
+                orderId,
+            </if>
+            <if test="productId != null">
+                productId,
+            </if>
+            <if test="maintainItem != null">
+                maintainItem,
+            </if>
+            <if test="maintainCost != null">
+                maintainCost,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=BIGINT},
+            </if>
+            <if test="orderId != null">
+                #{orderId,jdbcType=BIGINT},
+            </if>
+            <if test="productId != null">
+                #{productId,jdbcType=BIGINT},
+            </if>
+            <if test="maintainItem != null">
+                #{maintainItem,jdbcType=VARCHAR},
+            </if>
+            <if test="maintainCost != null">
+                #{maintainCost,jdbcType=DECIMAL},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.ziwow.scrmapp.common.persistence.entity.MaintainRecord">
+        update t_maintain_record
+        <set>
+            <if test="orderId != null">
+                orderId = #{orderId,jdbcType=BIGINT},
+            </if>
+            <if test="productId != null">
+                productId = #{productId,jdbcType=BIGINT},
+            </if>
+            <if test="maintainItem != null">
+                maintainItem = #{maintainItem,jdbcType=VARCHAR},
+            </if>
+            <if test="maintainCost != null">
+                maintainCost = #{maintainCost,jdbcType=DECIMAL},
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.ziwow.scrmapp.common.persistence.entity.MaintainRecord">
+    update t_maintain_record
+    set orderId = #{orderId,jdbcType=BIGINT},
+      productId = #{productId,jdbcType=BIGINT},
+      maintainItem = #{maintainItem,jdbcType=VARCHAR},
+      maintainCost = #{maintainCost,jdbcType=DECIMAL}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

@@ -1,0 +1,70 @@
+package com.ziwow.scrmapp.common.persistence.mapper;
+
+import com.ziwow.scrmapp.common.bean.pojo.WechatOrdersParam;
+import com.ziwow.scrmapp.common.bean.vo.*;
+import com.ziwow.scrmapp.common.persistence.entity.WechatOrders;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.Date;
+import java.util.List;
+
+public interface WechatOrdersMapper {
+    int deleteByPrimaryKey(Long id);
+
+    int insert(WechatOrders record);
+
+    int insertSelective(WechatOrders record);
+
+    WechatOrders selectByPrimaryKey(Long id);
+
+    int updateByPrimaryKeySelective(WechatOrders record);
+
+    int updateByPrimaryKey(WechatOrders record);
+
+    WechatOrders getWechatOrdersByCode(@Param("ordersCode") String ordersCode);
+
+    List<WechatOrdersVo> getOrdersByUserId(String userId);
+
+    WechatOrdersVo getByOrdersCode(@Param("ordersCode") String ordersCode);
+
+    int updateStatus(@Param("ordersCode") String ordersCode, @Param("updateTime") Date updateTime, @Param("status") int status);
+
+    WechatOrdersParam getParamByOrdersCode(String ordersCode);
+
+    int updateOrdersTime(@Param("ordersCode") String ordersCode, @Param("updateTime") Date updateTime, @Param("ordersTime") String ordersTime);
+
+    int updateOrdersTimeByEngineer(@Param("ordersCode") String ordersCode, @Param("qyhUserId") String qyhUserId, @Param("updateTime") Date updateTime, @Param("ordersTime") String ordersTime, @Param("reason") String reason);
+
+    QyhUserVo getQyhUserVoByOrdersCode(String ordersCode);
+
+    List<WechatOrderMsgVo> getWechatOrderMsgVo(@Param("mobilePhone") String mobilePhone);
+
+    QyhUserOrdersVo getOrdersCountByUserId(String qyhUserId);
+
+    WechatOrdersVo getFinishedOrdersDetail(String ordersCode);
+
+    List<WechatOrdersVo> getQyhUserOrdersVo(@Param("qyhUserId") String qyhUserId, @Param("condition") String condition);
+
+    List<WechatOrdersVo> getFinishedByQyhUserId(String qyhUserId);
+
+    int updateOrdersStatus(@Param("ordersId") Long ordersId, @Param("qyhUserId") String qyhUserId, @Param("updateTime") Date updateTime, @Param("reason") String reason);
+
+    WechatOrdersVo getUserOrdersInfo(String ordersCode);
+
+    int updateQyhUserIdAndStatus(@Param("ordersCode") String ordersCode, @Param("qyhUserId") String qyhUserId, @Param("updateTime") Date updateTime, @Param("status") int status);
+
+    int updateOrdersNoAndStatus(@Param("ordersCode") String ordersCode, @Param("ordersNo") String ordersNo, @Param("updateTime") Date updateTime, @Param("status") int status);
+
+    CompleteParam getCompleteParamByOrdersCode(String ordersCode);
+
+    List<QyhUserTomorrowOrderVo> getTomorrowHandleOrder();
+
+    WechatOrdersUserInfo getWechatOrdersUserInfo(@Param("ordersCode") String ordersCode);
+
+    AppointmentMsgVo getAppointmentMsgVo(@Param("ordersCode") String ordersCode);
+
+    List<WechatOrders> findBeforeSevenDaysOrders();
+
+    public int getDispatchOrderNumByDate(@Param("orderDate")String orderDate);
+
+}

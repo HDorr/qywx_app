@@ -1,0 +1,112 @@
+@import (reference) "../theme.less";
+.main_layer{
+    .scanArea{
+        height:2.6rem;
+        width: 100%;
+        background-color: #fff;
+        padding-top: 0.853333rem;
+        padding-left: 0.333333rem;
+        padding-right: 0.333333rem;
+        >label{
+            font-size:0.333333rem;
+            color:#393939;
+            position:relative;
+            .qy-input-360{
+                margin-left:0.48rem;
+                padding-left: 5px;
+            }
+            >a{
+                position:absolute;
+                font-size:0.333333rem;
+                right:0;
+                color:@messageFontColor;
+                bottom: -0.8rem;
+                text-decoration:underline;
+            }
+        }
+        .autoChose{
+            margin-top:0.093333rem;
+        }
+    }
+    .nextStep{
+        margin-top:0.586667rem;
+    }
+}
+
+//选型号
+.choseAreaBox{
+    width: 100%;
+    height: 100%;
+    position:fixed;
+    top:0;
+    left:0;
+    display:none;
+    overflow:hidden;
+    .backBar{
+        height:40px;
+        width: 100%;
+        background-color: #666;
+        >span{
+            display:block;
+            width: 10%;
+            font-size:24px;
+            height: 40px;
+            line-height: 40px;
+            padding-left:10px;
+            color:#fff;
+        }
+    }
+    .headerUl{
+        height:50px;
+        width: 100%;
+        display:flex;
+        >li{
+            line-height: 50px;
+            text-align: center;
+            flex:1;
+            height: 100%;
+            font-size: 1em;
+            position:relative;
+            overflow: hidden;
+        }
+        >li.headerLiActive::after{
+            width: 60%;
+            height: 1px;
+            border-bottom: 2px solid #f23030;
+            position: absolute;
+            bottom: 1px;
+            left: 50%;
+            content: '';
+            margin-left: -30%;
+        }
+    }
+}
+/*地址容器*/
+.choseAreaBox{
+    .addressContainer{
+        height: 100%;
+        width: 300%;
+        overflow: hidden;
+        display:flex;
+        transition:transform .2s linear;
+        .wraper{
+            height: 100%;
+            flex:1;
+            position:relative;
+            >ul{
+                width: 100%;
+                position:absolute;
+                >li{
+                    width: 100%;
+                    padding-left:10px;
+                    height:44px;
+                    line-height: 44px;
+                    border-top: 1px solid #e3e5e9;
+                }
+                >li.liChosed{
+                    color:red;
+                }
+        }
+    }
+    }
+}

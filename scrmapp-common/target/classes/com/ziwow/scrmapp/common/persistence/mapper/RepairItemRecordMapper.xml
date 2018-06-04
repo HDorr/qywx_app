@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ziwow.scrmapp.common.persistence.mapper.RepairItemRecordMapper">
+
+    <insert id="save" parameterType="com.ziwow.scrmapp.common.persistence.entity.RepairItemRecord">
+        insert into t_repair_item_record (orderId,productId,record) values
+            (#{orderId,jdbcType=BIGINT}, #{record,jdbcType=VARCHAR})
+    </insert>
+
+    <insert id="batchSave" parameterType="java.util.List">
+        insert into t_repair_item_record (orderId, productId,record)
+        values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (#{item.orderId}, #{item.productId},#{item.record})
+        </foreach>
+    </insert>
+
+</mapper>

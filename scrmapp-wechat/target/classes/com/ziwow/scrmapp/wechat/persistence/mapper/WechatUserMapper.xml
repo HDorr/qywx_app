@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ziwow.scrmapp.wechat.persistence.mapper.WechatUserMapper">
+    <resultMap type="com.ziwow.scrmapp.wechat.persistence.entity.WechatUser" id="wechatUserMap">
+        <result column="id" property="id"/>
+        <result column="userId" property="userId"/>
+        <result column="userName" property="userName"/>
+        <result column="nickName" property="nickName"/>
+        <result column="password" property="password"/>
+        <result column="seed" property="seed"/>
+        <result column="gender" property="gender"/>
+        <result column="mobilePhone" property="mobilePhone"/>
+        <result column="maritalStatus" property="maritalStatus"/>
+        <result column="email" property="email"/>
+        <result column="birthday" property="birthday"/>
+        <result column="educationLevel" property="educationLevel"/>
+        <result column="occupation" property="occupation"/>
+        <result column="monthlyIncome" property="monthlyIncome"/>
+        <result column="communicateChannel" property="communicateChannel"/>
+        <result column="interestedType" property="interestedType"/>
+        <result column="provinceId" property="provinceId"/>
+        <result column="cityId" property="cityId"/>
+        <result column="areaId" property="areaId"/>
+        <result column="status" property="status"/>
+        <result column="wfId" property="wfId"/>
+        <result column="createDate" property="createDate"/>
+    </resultMap>
+
+    <select id="getUserByOpenId" resultMap="wechatUserMap">
+		SELECT u.* FROM t_wechat_user u ,t_wechat_fans wf WHERE
+		u.wfid=wf.id and wf.openid=#{openId} and u.status=0 LIMIT 0,1
+	</select>
+
+    <select id="getUserByUnionId" resultMap="wechatUserMap">
+        SELECT u.* FROM t_wechat_user u ,t_wechat_fans wf WHERE
+        u.wfid=wf.id and wf.unionid=#{unionId} and u.status=0 LIMIT 0,1
+    </select>
+
+    <select id="getUserByUserId" resultMap="wechatUserMap">
+		SELECT u.* FROM t_wechat_user u WHERE userId = #{userId} and u.status=0
+	</select>
+
+    <select id="getBaseUserInfoByUserId" resultType="com.ziwow.scrmapp.wechat.vo.WechatUserVo">
+        SELECT u.mobilePhone,p.province provinceName,u.nickName,c.city cityName FROM t_province p,t_city c,t_wechat_user u WHERE  u.cityId = c.cityid and u.provinceId = p.provinceid and u.status=0 and u.userId = #{userId}
+    </select>
+
+    <select id="getUserByMobilePhone" resultMap="wechatUserMap">
+		SELECT * FROM t_wechat_user u WHERE u.mobilePhone=#{mobilePhone} and u.status=0 LIMIT 0,1
+	</select>
+
+    <insert id="saveUser" parameterType="com.ziwow.scrmapp.wechat.persistence.entity.WechatUser">
+		insert into t_wechat_user(userId,password,seed,mobilePhone,provinceId,cityId,areaId,wfId,createDate,nickName,gender)
+		values(#{userId},#{password},#{seed},#{mobilePhone},#{provinceId},#{cityId},#{areaId},#{wfId},now(),#{nickName},#{gender})
+	</insert>
+
+
+    <insert id="updateUser" parameterType="com.ziwow.scrmapp.wechat.persistence.entity.WechatUser">
+        update t_wechat_user
+        <trim prefix="set" suffixOverrides=",">
+            userName = #{wechatUser.userName},nickName = #{wechatUser.nickName},gender = #{wechatUser.gender},email =
+            #{wechatUser.email},
+            birthday = #{wechatUser.birthday},provinceId = #{wechatUser.provinceId},cityId = #{wechatUser.cityId},
+            areaId=#{wechatUser.areaId},communicateChannel=#{wechatUser.communicateChannel},interestedType =
+            #{wechatUser.interestedType},
+            educationLevel=#{wechatUser.educationLevel},occupation=#{wechatUser.occupation},monthlyIncome=#{wechatUser.monthlyIncome}
+            <if test="wechatUser.maritalStatus!=null">,maritalStatus = #{wechatUser.maritalStatus}</if>
+            <if test="wechatUser.educationLevel!=null">,educationLevel = #{wechatUser.educationLevel}</if>
+            <if test="wechatUser.occupation!=null">,occupation = #{wechatUser.occupation}</if>
+            <if test="wechatUser.monthlyIncome!=null">,monthlyIncome = #{wechatUser.monthlyIncome}</if>
+        </trim>
+        where wfId = #{wfId} and status = 0
+    </insert>
+</mapper>

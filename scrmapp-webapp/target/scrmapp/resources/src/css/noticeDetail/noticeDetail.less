@@ -1,0 +1,271 @@
+@import (reference) "../theme.less";
+.search_head{
+	width:10.0rem;
+	height:1.2rem;
+	background:#2f9cfe;
+	overflow: hidden;
+	line-height: 1.2rem;
+	margin:0 auto;
+	.search_div{
+		width: 8.0rem;
+		height:0.8rem;
+		margin: 0.2rem 0 0 0.6rem;
+		background: #fff;
+		border-radius:0.106667rem;
+		padding: 0.186667rem 0.213333rem;
+		display: inline-block;
+
+		.searchIcon{
+			width: 0.346667rem;
+			height: 0.44rem;
+			background: url('../../images/icons/glass.png') center center no-repeat;
+			background-size: cover;
+			float: left;
+			
+		}
+
+		.searchInput{
+			width: 7.0rem;
+			height: 0.44rem;
+			float: left;
+			margin-left: 0.133333rem;
+		}
+
+	}
+
+	.searchBtn{
+		width: 0.8rem;
+		height: 0.533333rem;
+		display: inline-block;
+		color:#fff;
+		float: right;
+		cursor: pointer;
+		margin-right: 0.266667rem;
+	}
+
+}
+
+.content{
+	width: 10.0rem;
+	min-height:100%;
+	margin:0 auto;
+	margin: 0 auto;
+	.noticeList{
+		width: 100%;
+		height: auto;
+
+		.listCon{
+			width: 100%;
+			height: 1.32rem;
+			background: #fff;
+			border-bottom: 1px solid #8f8f8f;
+			line-height: 1.32rem;
+			position: relative;
+			>a{
+				width: 100%;
+				height: 100%;
+				display: block;
+				position: relative;
+				.noticeTitle{
+					height: 100%;
+					padding-right:0.466667rem;
+					display: inline-block;
+					float: left;
+					margin-left: 0.466667rem;
+					font-size: 0.373333rem;
+					overflow:hidden;
+				}
+
+				.rightArrow{
+					height: auto;
+					display: inline-block;
+					position: absolute;
+					right:2%;
+					font-size: 0.373333rem;
+					font-weight: bold;
+				}
+
+				.noticeTime{
+					position: absolute;
+					top:0.44rem;
+					left: 0.466667rem;
+					color:#a4a4a4;
+				}
+			}
+		}
+		.noticeList.activeList{
+			background: #e8e8e8;
+		}
+	}
+
+	.noData{
+		width: 100%;
+		height: 1.333333rem;
+		line-height: 1.333333rem;
+		text-align: center;
+		
+	}
+
+
+	.contentTop{
+		width: 100%;
+		height: auto;
+		// overflow: hidden;
+		padding: 0.266667rem 0.333333rem  0.066667rem  0.333333rem;
+
+		.title{
+			font-size: 0.586667rem;
+			width: 100%;
+			font-weight: bold;
+			//margin: 0.4rem 0 0.2rem 0.4rem;
+		}
+
+	}
+	.topDown{
+		//margin-left: 0.4rem;
+		overflow: hidden;
+		padding: 0.066667rem 0.333333rem 0.133333rem 0.333333rem;
+		border-bottom: 1px solid #d7d7d7;
+		
+
+		.time{
+			font-size: 0.266667rem;
+			color:#9a9a9a;
+			float: left;
+			line-height: 0.52rem
+		}
+		.readNum{
+			font-size: 0.266667rem;
+			color:#9a9a9a;
+			float: right;
+			line-height: 0.52rem;
+			display: inline-block;
+			margin-right: 0.466667rem;
+		}
+		.starIcon{
+			width: 0.52rem;
+			height: 0.52rem;
+			background: url('../../../src/images/icons/uncollection.png') center center no-repeat;
+			background-size: cover;
+			display: inline-block;
+			float: right;
+			margin-right: 0.266667rem;
+			
+		}
+		.starIcon.active{
+			width: 0.52rem;
+			height: 0.52rem;
+			background: url('../../../src/images/icons/collection.png') center center no-repeat;
+			background-size: cover;
+			display: inline-block;
+			float: right;
+			margin-right: 0.266667rem;
+			
+		}
+
+	}
+
+	.contentCenter{
+		padding:0.426667rem;
+		width: 100%;
+		height: auto;
+		overflow:hidden;
+		
+	}
+	.contentCenter.textCon{
+			font-size: 0.32rem;
+			line-height: 0.64rem;
+			color:#383838;
+			text-align: justify;
+			>p{
+				background-color: transparent!important;
+				width: 100%;
+				img{
+					display:inline-block;
+					width: 100%;
+				}
+			}
+		}
+
+	.personList{
+		width: 100%;
+		height: auto;
+		overflow: hidden;
+		padding: 0.4rem 0 0 0.4rem;
+		box-sizing: border-box;
+		.personListCon{
+			width: 1.466667rem;
+			height: 2.066667rem;
+			float: left;
+			margin-right: 0.453333rem;
+			margin-bottom: 0.533333rem;
+			.personImgBox{
+				width: 1.466667rem;
+				height: 1.466667rem;
+				border: 1px solid #eee;
+				//background: url('../../../images/testHead.png');
+				background-size: cover;
+			}
+			.nameBox{
+				width: 1.466667rem;
+				line-height: 0.586667rem;
+				text-align: center;
+				display: inline-block;
+				
+			}
+		}
+	}
+	.seeMore{
+		border-top: 1px solid #d7d7d7;
+		border-bottom: 1px solid #d7d7d7;
+	}
+
+
+	.imgBox{
+		width: 100%;
+		//height: 2.8rem;
+		padding-top:2.666667rem;
+		display: -webkit-flex;
+		display: flex;
+		justify-content:center;
+		.img{
+			width: 2.8rem;
+			height: 2.8rem;
+			background: url(../../images/icons/warning.png);
+			background-size: cover;
+
+		}
+	}
+	.qrCode{
+		width: 100%;
+		//height: 2.8rem;
+		padding-top:1.333333rem;
+		display: -webkit-flex;
+		display: flex;
+		justify-content:center;
+		display: none;
+		.img{
+			width: 5.0rem;
+			height: 5.0rem;
+			background: url(../../images/qy_QR_code2.jpg);
+			background-size: cover;
+
+		}
+	}
+	.warningTxt{
+		width: 100%;
+		height: 2.666667rem;
+		line-height: 2.666667rem;
+		font-size: 0.4rem;
+		text-align: center;
+		
+	}
+}
+.content.noticeDetailList{
+	height:auto!important;
+}
+.secretCon{
+	//background:url('../../../src/images/markImg.png') center center;
+	background-size: cover;
+}
+

@@ -1,0 +1,126 @@
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>预约维修服务</title>
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1,user-scalable=no,viewport-fit=cover">
+    <meta name="x5-fullscreen" content="true">
+    <meta name="full-screen" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="stylesheet" href="../../../resources/src/css/reset.css">
+    <link rel="stylesheet" href="../../../resources/src/css/index/index.css">
+    <link rel="stylesheet" href="../../../resources/src/css/jqweui/weui.min.css">
+    <link rel="stylesheet" href="../../../resources/src/css/jqweui/jquery-weui.css">
+    <link rel="stylesheet" href="../../../resources/src/css/reserveService/reserveService_maintain.css">
+</head>
+<body>
+    <header class="conHeader">
+        <p>您可以提前预约，享受专业便捷的服务支持！</p>
+    </header>
+    <div class="pdt-info bloque" id="pdtInfoBox"></div>
+    <div class="user-info bloque" id="addressInfoBox"></div>
+    <div class="reserve-info bloque" id="reserveInfoBox"></div>
+    <footer class="conFooter" style="background:#fff">
+        <button class="qy-btn-400" id="submitReserve">提交预约</button>
+    </footer>
+
+
+<!-- 产品信息-template -->
+<script type="text/html" id="pdtInfo_template">
+    <header class="title">
+        <img src="/resources/src/images/icons/pdtInfo.png">
+        产品信息
+    </header>
+    <ul class="productList">
+        {{each list as product}}
+        <li>
+            <div class="pdtInfo">
+                <div class="pdtImg">
+                    <img src="{{product.productImage}}" alt="">
+                </div>
+                <div class="pdtText">
+                    <p>{{product.productName}}</p>
+                    <p>产品条码: {{product.productBarCode}}</p>
+                    <p>产品型号: {{product.modelName}}</p>
+                </div>
+                <div class="delete-product" data-productid="{{product.id}}"></div>
+            </div>
+        </li>
+        {{/each}}
+    </ul>
+    <div class="add-box">
+        <img src="/resources/src/images/icons/add_grey.png" >
+        请点击添加您要预约维修服务的产品哟！
+    </div>
+</script>
+
+<!-- 地址用户信息-template -->
+<script type="text/html" id="addressInfo_template">
+    <header class="title">
+        <img src="/resources/src/images/icons/personInfo.png">
+        用户信息
+    </header>
+    {{if data}}
+    <div class="info-box">
+        <div class="userAvatar">
+            <img src="{{data.headimgurl || '/resources/images/myOrder/workerHead.png'}}">
+        </div>
+        <div class="userText">
+            <p><img src="../../../resources/src/images/icons/personInfo.png">{{data.contacts}}</p>
+            <p><img src="../../../resources/src/images/icons/tel.png"> {{data.contactsMobile}};{{data.fixedTelephone ? data.fixedTelephone : ""}}</p>
+            <p><img src="../../../resources/src/images/icons/location.png">{{data.provinceName}}{{data.cityName}}{{data.areaName}}{{data.streetName}}</p>
+        </div>
+        <div class="edit edit-address"></div>
+     </div>
+    {{else}}
+    <div class="add-box edit-address">
+        <img src="../../../resources/src/images/icons/add_grey.png" >
+        请点击选择您预约服务的地址哟！
+    </div>
+    {{/if}}
+</script>
+
+<!-- 预约信息-template -->
+<script type="text/html" id="reserveInfo_template">
+    <header class="title">
+            <img src="../../../resources/src/images/icons/reserve.png">
+            预约信息
+        </header>
+        <div class="timePickerContainer">
+            <div>上门时间：</div>
+            <div id="changeOrder">请填写上门服务时间</div>
+        </div>
+        <div class="reserveTime-tip tip">预约服务时间,请以工程师确认时间为准!</div>
+        <div class="install-desc">
+            <p>故障描述</p>
+            <textarea id="description" placeholder="如有其他需要特别说明，请填写！"></textarea>
+        </div>
+        <div class="uploadImg">
+            <p>上传图片: <span>(最多上传三张)</span></p>
+            <div class="imgContainer">
+                <div class="imgBox" data-index="0">
+                    <i class="cancelIcon" data-index="0"></i>
+                    <img class="image image_0" src="">
+                </div>
+                <div class="imgBox" data-index="1">
+                    <i class="cancelIcon" data-index="1"></i>
+                    <img class="image image_1" src="">
+                </div>
+                <div class="imgBox" data-index="2">
+                    <i class="cancelIcon" data-index="2"></i>
+                    <img class="image image_2" src="">
+                </div>
+            </div>
+        </div>
+</script>
+
+<script src="../../../resources/src/js/flexible.js"></script>
+<script src="../../../resources/thirdparty/jquery/dist/jquery.min.js"></script>
+<script src="../../../resources/thirdparty/jqweui/jquery-weui.min.js"></script>
+<script src="../../../resources/thirdparty/jweixin/jweixin-1.0.0.js"></script>
+<script src="../../../resources/thirdparty/arttemplate/arttemplate.js"></script>
+<script src="../../../resources/src/js/common.js"></script>
+<script src="../../../resources/src/js/reserveService/reserveService_maintain.js"></script>
+</body>
+</html>

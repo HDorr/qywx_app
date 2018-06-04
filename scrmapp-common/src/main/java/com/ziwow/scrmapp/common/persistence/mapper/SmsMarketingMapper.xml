@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ziwow.scrmapp.common.persistence.mapper.SmsMarketingMapper">
+
+    <select id="getSmsMarketingLst" resultType="com.ziwow.scrmapp.common.persistence.entity.SmsMarketing">
+      SELECT
+        id,
+        sms_title smsTitle,
+        sms_content smsContent,
+        order_type orderType,
+        sms_type smsType,
+        original_type originalType,
+        operator
+    FROM
+        t_sms_marketing
+    ORDER BY
+        original_type
+    </select>
+
+    <select id="getSmsMarketingByType" resultType="com.ziwow.scrmapp.common.persistence.entity.SmsMarketing">
+        select id,sms_title smsTitle, sms_content smsContent,order_type orderType,sms_type smsType,original_type originalType, operator from t_sms_marketing where order_type = #{orderType} and sms_type = #{smsType} limit 0,1
+    </select>
+</mapper>

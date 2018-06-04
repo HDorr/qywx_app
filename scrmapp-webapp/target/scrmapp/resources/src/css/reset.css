@@ -1,0 +1,417 @@
+@charset "utf-8";
+/*======================样式重置========================*/
+sup {
+  color: red;
+}
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+ol,
+ul {
+  list-style: none;
+}
+input,
+select,
+form images,
+button {
+  border-style: none;
+  vertical-align: middle;
+  -webkit-tap-highlight-color: transparent;
+  outline: 0;
+}
+.clearfix:after {
+  content: ".";
+  display: block;
+  height: 0;
+  clear: both;
+  visibility: hidden;
+}
+.clearfix {
+  zoom: 1;
+}
+textarea {
+  width: 95%;
+}
+a {
+  color: #000;
+  text-decoration: none;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}
+* {
+  margin: 0;
+  padding: 0;
+}
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-size: 100%;
+}
+ul,
+ol,
+li {
+  list-style: none;
+}
+em,
+i {
+  font-style: normal;
+}
+img {
+  border: none;
+}
+input,
+img {
+  vertical-align: middle;
+}
+body {
+  color: #000;
+  font-family: "MicroSoft YaHei";
+  overflow-x: hidden;
+}
+input::-webkit-input-placeholder {
+  color: #acacac;
+}
+input:-moz-placeholder {
+  color: #acacac;
+}
+input:-ms-input-placeholder {
+  color: #acacac;
+}
+.muyinBlue {
+  color: #acacac;
+}
+.page {
+  background-color: #fff;
+}
+.pull-left {
+  float: left;
+}
+.pull-right {
+  float: right;
+}
+.clearfix:after {
+  content: ".";
+  display: block;
+  height: 0;
+  clear: both;
+  visibility: hidden;
+}
+.clearfix {
+  zoom: 1;
+}
+.qyBlue {
+  background-color: #8a8a8a;
+}
+.bigBtn {
+  width: 6.933333rem;
+  height: 1.2rem;
+  border-radius: 0.6rem;
+  font-size: 0.48rem;
+  color: #fff;
+}
+.zeroMgBottom {
+  margin-bottom: 0 !important;
+}
+.loadingArea {
+  width: 100%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin-left: -50%;
+  margin-top: -50%;
+}
+.weui-loadmore {
+  margin-top: 0!important;
+}
+.weui-toptips {
+  z-index: 5000!important;
+}
+.weui-cells_checkbox .weui-check:checked + .weui-icon-checked:before {
+  color: #333333 !important;
+}
+@font-face {
+  font-family: "iconfont-sm";
+  src: url('//at.alicdn.com/t/font_1433401008_2229297.woff') format('woff'), /* chrome、firefox */ url('//at.alicdn.com/t/font_1433401008_2229297.ttf') format('truetype'), /* chrome、firefox、opera、Safari, Android, iOS 4.2+*/ url('//at.alicdn.com/t/font_1433401008_2229297.svg#iconfont') format('svg');
+  /* iOS 4.1- */
+}
+.icon {
+  font-family: "iconfont-sm" !important;
+  font-style: normal;
+  display: inline-block;
+  vertical-align: middle;
+  background-size: 100% auto;
+  background-position: center;
+  -webkit-font-smoothing: antialiased;
+  -webkit-text-stroke-width: 0.2px;
+  -moz-osx-font-smoothing: grayscale;
+}
+.icon-app:before {
+  content: "\e605";
+}
+.icon-browser:before {
+  content: "\e606";
+}
+.icon-card:before {
+  content: "\e607";
+}
+.icon-cart:before {
+  content: "\e600";
+}
+.icon-code:before {
+  content: "\e609";
+}
+.icon-computer:before {
+  content: "\e616";
+}
+.icon-remove:before {
+  content: "\e60a";
+}
+.icon-download:before {
+  content: "\e60b";
+}
+.icon-edit:before {
+  content: "\e60c";
+}
+.icon-emoji:before {
+  content: "\e615";
+}
+.icon-star:before {
+  content: "\e60e";
+}
+.icon-friends:before {
+  content: "\e601";
+}
+.icon-gift:before {
+  content: "\e618";
+}
+.icon-phone:before {
+  content: "\e60f";
+}
+.icon-clock:before {
+  content: "\e619";
+}
+.icon-home:before {
+  content: "\e602";
+}
+.icon-menu:before {
+  content: "\e60d";
+}
+.icon-message:before {
+  content: "\e617";
+}
+.icon-me:before {
+  content: "\e603";
+}
+.icon-picture:before {
+  content: "\e61a";
+}
+.icon-share:before {
+  content: "\e61b";
+}
+.icon-settings:before {
+  content: "\e604";
+}
+.icon-refresh:before {
+  content: "\e61c";
+}
+.icon-caret:before {
+  content: "\e610";
+}
+.icon-down:before {
+  content: "\e611";
+}
+.icon-up:before {
+  content: "\e612";
+}
+.icon-right:before {
+  content: "\e613";
+}
+.icon-left:before {
+  content: "\e614";
+}
+.icon-check:before {
+  content: "\e608";
+}
+.icon-search:before {
+  content: "\e61d";
+}
+.icon-new:before {
+  content: "\e61e";
+}
+.icon-next,
+.icon-prev {
+  width: 0.75rem;
+  height: 0.75rem;
+}
+.icon-next {
+  background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20viewBox%3D'0%200%2015%2015'%3E%3Cg%3E%3Cpath%20fill%3D'%23007aff'%20d%3D'M1%2C1.6l11.8%2C5.8L1%2C13.4V1.6%20M0%2C0v15l15-7.6L0%2C0L0%2C0z'%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E");
+}
+.icon-prev {
+  background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20viewBox%3D'0%200%2015%2015'%3E%3Cg%3E%3Cpath%20fill%3D'%23007aff'%20d%3D'M14%2C1.6v11.8L2.2%2C7.6L14%2C1.6%20M15%2C0L0%2C7.6L15%2C15V0L15%2C0z'%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E");
+}
+/*主体*/
+html,
+body {
+  height: 100%;
+  width: 100%;
+}
+.main_layer {
+  width: 100%;
+  min-height: 100%;
+  position: relative;
+  max-width: 750px;
+  margin: 0 auto;
+  background-color: #f4f4f4;
+}
+/*公用组件*/
+.qy-blue {
+  background-color: #8a8a8a;
+}
+.qy-btn-400 {
+  width: 5.333333rem;
+  height: 0.933333rem;
+  text-align: center;
+  line-height: 0.933333rem;
+  background-color: #8a8a8a;
+  color: #fefefe;
+  font-size: 0.333333rem;
+}
+.qy-btn-180 {
+  width: 2.4rem;
+  height: 0.88rem;
+  text-align: center;
+  line-height: 0.88rem;
+  background-color: #8a8a8a;
+  color: #fefefe;
+  font-size: 0.346667rem;
+}
+.qy-btn-all {
+  width: 100%;
+  height: 1.333333rem;
+  text-align: center;
+  line-height: 1.333333rem;
+  background-color: #8a8a8a;
+  color: #fefefe;
+  font-size: 0.373333rem;
+}
+.qy-btn-cancel {
+  padding-left: 0.48rem;
+  padding-right: 0.48rem;
+  height: 0.88rem;
+  text-align: center;
+  line-height: 0.88rem;
+  background-color: #eeeeee;
+  border: 1px solid #a0a0a0;
+  color: #383838;
+  font-size: 0.346667rem;
+}
+.qy-btn-400.onTouch,
+.qy-btn-all.onTouch,
+.qy-btn-180.onTouch {
+  background-color: #807f83 !important;
+  color: #fff !important;
+}
+.qy-input-360 {
+  width: 4.8rem;
+  height: 1.066667rem;
+  background-color: #f4f4f4;
+  border: 1px solid #c9c9c9;
+}
+.qy-input-530 {
+  width: 7.066667rem;
+  height: 0.8rem;
+  background-color: #f4f4f4;
+  border: 1px solid #c9c9c9;
+}
+/* 确认取消弹框 */
+#mobileConfirmModal {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0);
+  z-index: 2000;
+  top: 0;
+  left: 0;
+  display: none;
+  transition: all .5s linear;
+}
+#mobileConfirmModal .mainContainer {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate3d(-50%, -50%, 0);
+  width: 72%;
+  padding-bottom: 0.4rem;
+}
+#mobileConfirmModal .mainContainer .mcmheader {
+  height: 0.666667rem;
+  width: 100%;
+  background-color: #8a8a8a;
+}
+#mobileConfirmModal .mainContainer .mcmheader > i {
+  float: right;
+  height: 100%;
+  width: 0.4rem;
+  line-height: 0.666667rem;
+  font-size: 0.4rem;
+  color: #fff;
+}
+#mobileConfirmModal .mainContainer .mcmbody {
+  padding-top: 0.4rem;
+  padding-bottom: 0.4rem;
+  background-color: #d8d8d8;
+}
+#mobileConfirmModal .mainContainer .mcmbody > p {
+  width: 100%;
+  font-size: 0.346667rem;
+  text-align: left;
+  padding-left: 14%;
+  color: #383838;
+}
+#mobileConfirmModal .mainContainer .mcmbody > .tipText {
+  font-size: 14px;
+  color: #b0b1b5;
+}
+#mobileConfirmModal .mainContainer .mcmbody > .textAreaBox {
+  padding-left: 14%;
+  padding-right: 14%;
+}
+#mobileConfirmModal .mainContainer .mcmbody > .textAreaBox textarea {
+  height: 3.18rem;
+  width: 100%;
+  margin-top: 1px;
+  resize: none;
+  padding: 0.2rem;
+  font-size: 14px;
+  border: none;
+}
+#mobileConfirmModal .mainContainer .mcmbody .btnBox {
+  margin-top: 0.266667rem;
+  text-align: center;
+}
+#mobileConfirmModal .mainContainer .mcmbody .btnBox button {
+  width: 2.4rem;
+  height: 0.8rem;
+  border: 1px solid #a0a0a0;
+  font-size: 0.346667rem;
+}
+#mobileConfirmModal .mainContainer .mcmbody .btnBox .cancel {
+  background-color: #eeeeee;
+}
+#mobileConfirmModal .mainContainer .mcmbody .btnBox .confirm {
+  background-color: #8a8a8a;
+  margin-left: 0.36rem;
+  color: #fff;
+}
+#mobileConfirmModal.show {
+  display: block;
+  background-color: rgba(0, 0, 0, 0.6);
+}

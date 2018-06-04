@@ -1,0 +1,3894 @@
+{
+    "returnCode": 1,
+    "returnMsg": null,
+    "data": [
+        {
+            "id": 1380,
+            "name": "路由器与设备距离过长，信号不稳定",
+            "itemCode": "WXCS217",
+            "repairCode": "WXCS217",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 1381,
+            "name": "上电开机后触碰选择/电源键3秒钟，直至闪烁",
+            "itemCode": "WXCS236",
+            "repairCode": "WXCS236",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 1382,
+            "name": "表示机器配网失败，检查家庭网络",
+            "itemCode": "WXCS014",
+            "repairCode": "WXCS014",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 1383,
+            "name": "路由器无网络，检查家庭网络",
+            "itemCode": "WXCS216",
+            "repairCode": "WXCS216",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 1384,
+            "name": "重新上电冲洗",
+            "itemCode": "WXCS294",
+            "repairCode": "WXCS294",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 1385,
+            "name": "更换后置滤芯",
+            "itemCode": "WXCS084",
+            "repairCode": "WXCS084",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 1386,
+            "name": "重新安装或冲洗前置滤芯",
+            "itemCode": "WXCS278",
+            "repairCode": "WXCS278",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 1387,
+            "name": "告知用户改善原水水质或解释说明",
+            "itemCode": "WXCS046",
+            "repairCode": "WXCS046",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 1388,
+            "name": "更换RO膜壳",
+            "itemCode": "WXCS050",
+            "repairCode": "WXCS050",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 1389,
+            "name": "重新安装RO膜密封圈",
+            "itemCode": "WXCS277",
+            "repairCode": "WXCS277",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 1390,
+            "name": "更换RO膜",
+            "itemCode": "WXCS049",
+            "repairCode": "WXCS049",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 1391,
+            "name": "清洗滤芯",
+            "itemCode": "WXCS228",
+            "repairCode": "WXCS228",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 1392,
+            "name": "更换RO膜",
+            "itemCode": "WXCS049",
+            "repairCode": "WXCS049",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 1393,
+            "name": "更换后置滤芯",
+            "itemCode": "WXCS084",
+            "repairCode": "WXCS084",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 1394,
+            "name": "更换RO膜",
+            "itemCode": "WXCS049",
+            "repairCode": "WXCS049",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 1395,
+            "name": "重新测试",
+            "itemCode": "WXCS279",
+            "repairCode": "WXCS279",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 1396,
+            "name": "更换废水比",
+            "itemCode": "WXCS074",
+            "repairCode": "WXCS074",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 1397,
+            "name": "检查管路连接，疏通管路",
+            "itemCode": "WXCS161",
+            "repairCode": "WXCS161",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 1398,
+            "name": "用压力表检测，更换逆止阀",
+            "itemCode": "WXCS262",
+            "repairCode": "WXCS262",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 1399,
+            "name": "更换相应滤芯",
+            "itemCode": "WXCS121",
+            "repairCode": "WXCS121",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 1400,
+            "name": "测试原水TDS并给用户解释",
+            "itemCode": "WXCS019",
+            "repairCode": "WXCS019",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 1401,
+            "name": "增加进水压力",
+            "itemCode": "WXCS272",
+            "repairCode": "WXCS272",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 1402,
+            "name": "检查电源适配器输出电压是否正常；水泵是否损坏",
+            "itemCode": "WXCS153",
+            "repairCode": "WXCS153",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 1403,
+            "name": "更换增压泵",
+            "itemCode": "WXCS127",
+            "repairCode": "WXCS127",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 1404,
+            "name": "更换组合冲洗阀",
+            "itemCode": "WXCS135",
+            "repairCode": "WXCS135",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 1405,
+            "name": "更换RO膜",
+            "itemCode": "WXCS049",
+            "repairCode": "WXCS049",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 1406,
+            "name": "重新安装RO膜",
+            "itemCode": "WXCS276",
+            "repairCode": "WXCS276",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 1407,
+            "name": "增加冲洗RO膜时间",
+            "itemCode": "WXCS271",
+            "repairCode": "WXCS271",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 1408,
+            "name": "重新连接好管路",
+            "itemCode": "WXCS287",
+            "repairCode": "WXCS287",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 1409,
+            "name": "更换后置滤芯",
+            "itemCode": "WXCS084",
+            "repairCode": "WXCS084",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 1410,
+            "name": "冲洗后置炭滤芯",
+            "itemCode": "WXCS025",
+            "repairCode": "WXCS025",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 1411,
+            "name": "清洗压力桶",
+            "itemCode": "WXCS230",
+            "repairCode": "WXCS230",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 1412,
+            "name": "更换RO膜",
+            "itemCode": "WXCS049",
+            "repairCode": "WXCS049",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 1413,
+            "name": "市电电压是否正常，电源适配器是否损坏",
+            "itemCode": "WXCS243",
+            "repairCode": "WXCS243",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 1414,
+            "name": "更换电源适配器",
+            "itemCode": "WXCS066",
+            "repairCode": "WXCS066",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 1415,
+            "name": "更换鹅颈龙头",
+            "itemCode": "WXCS070",
+            "repairCode": "WXCS070",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 1416,
+            "name": "检查逆止阀有无泄漏，压力桶是否渗漏",
+            "itemCode": "WXCS182",
+            "repairCode": "WXCS182",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 1417,
+            "name": "检查管路连接，疏通管路",
+            "itemCode": "WXCS161",
+            "repairCode": "WXCS161",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 1418,
+            "name": "检查进水电磁阀电压是否正常",
+            "itemCode": "WXCS169",
+            "repairCode": "WXCS169",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 1419,
+            "name": "更换进水电磁阀",
+            "itemCode": "WXCS089",
+            "repairCode": "WXCS089",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 1420,
+            "name": "检查进水球阀是否完全打开",
+            "itemCode": "WXCS175",
+            "repairCode": "WXCS175",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 1421,
+            "name": "更换相应滤芯",
+            "itemCode": "WXCS121",
+            "repairCode": "WXCS121",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 1422,
+            "name": "更换压力桶",
+            "itemCode": "WXCS123",
+            "repairCode": "WXCS123",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 1423,
+            "name": "更换增压泵",
+            "itemCode": "WXCS127",
+            "repairCode": "WXCS127",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 1424,
+            "name": "电源适配器输出电压是否正常，水泵是否损坏",
+            "itemCode": "WXCS041",
+            "repairCode": "WXCS041",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 1425,
+            "name": "更换组合冲洗电磁阀",
+            "itemCode": "WXCS134",
+            "repairCode": "WXCS134",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 1426,
+            "name": "告知增加清洗频率",
+            "itemCode": "WXCS047",
+            "repairCode": "WXCS047",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 1427,
+            "name": "告知需要即饮即用",
+            "itemCode": "WXCS045",
+            "repairCode": "WXCS045",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 1428,
+            "name": "更换冲洗阀",
+            "itemCode": "WXCS056",
+            "repairCode": "WXCS056",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 1429,
+            "name": "检查管路连接，疏通管路",
+            "itemCode": "WXCS161",
+            "repairCode": "WXCS161",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 1430,
+            "name": "进水球阀是否打开",
+            "itemCode": "WXCS211",
+            "repairCode": "WXCS211",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 1431,
+            "name": "清洗滤芯",
+            "itemCode": "WXCS228",
+            "repairCode": "WXCS228",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 1432,
+            "name": "检查进水电磁阀",
+            "itemCode": "WXCS167",
+            "repairCode": "WXCS167",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 1433,
+            "name": "按照箭头指向重新装好",
+            "itemCode": "WXCS005",
+            "repairCode": "WXCS005",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 1434,
+            "name": "自来水有无缺水",
+            "itemCode": "WXCS301",
+            "repairCode": "WXCS301",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 1435,
+            "name": "更换增压泵",
+            "itemCode": "WXCS127",
+            "repairCode": "WXCS127",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 1436,
+            "name": "更换相应滤芯",
+            "itemCode": "WXCS121",
+            "repairCode": "WXCS121",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 1437,
+            "name": "更换进水电磁阀",
+            "itemCode": "WXCS089",
+            "repairCode": "WXCS089",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 1438,
+            "name": "更换电源适配器",
+            "itemCode": "WXCS066",
+            "repairCode": "WXCS066",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 1439,
+            "name": "更换电源转换板",
+            "itemCode": "WXCS067",
+            "repairCode": "WXCS067",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 1440,
+            "name": "更换高压开关",
+            "itemCode": "WXCS079",
+            "repairCode": "WXCS079",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 1441,
+            "name": "更换连接线插头",
+            "itemCode": "WXCS098",
+            "repairCode": "WXCS098",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 1442,
+            "name": "检查连接线插头",
+            "itemCode": "WXCS181",
+            "repairCode": "WXCS181",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 1443,
+            "name": "电源插座有无电压",
+            "itemCode": "WXCS040",
+            "repairCode": "WXCS040",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 1444,
+            "name": "将压力桶球阀打到关闭状态",
+            "itemCode": "WXCS207",
+            "repairCode": "WXCS207",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 1445,
+            "name": "更换主控板",
+            "itemCode": "WXCS133",
+            "repairCode": "WXCS133",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 1446,
+            "name": "更换增压泵",
+            "itemCode": "WXCS127",
+            "repairCode": "WXCS127",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 1447,
+            "name": "更换电源适配器",
+            "itemCode": "WXCS066",
+            "repairCode": "WXCS066",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 1448,
+            "name": "更换电源转换板",
+            "itemCode": "WXCS067",
+            "repairCode": "WXCS067",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 1449,
+            "name": "更换减压阀",
+            "itemCode": "WXCS088",
+            "repairCode": "WXCS088",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 1450,
+            "name": "更换逆止阀",
+            "itemCode": "WXCS099",
+            "repairCode": "WXCS099",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 1451,
+            "name": "插好电源插座或适配器插头",
+            "itemCode": "WXCS020",
+            "repairCode": "WXCS020",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 1452,
+            "name": "更换主控板",
+            "itemCode": "WXCS133",
+            "repairCode": "WXCS133",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 1453,
+            "name": "解决漏水现象，擦干防漏水检测装置",
+            "itemCode": "WXCS209",
+            "repairCode": "WXCS209",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 1454,
+            "name": "售后上门确认",
+            "itemCode": "WXCS246",
+            "repairCode": "WXCS246",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 1455,
+            "name": "清洗管路或排查其他进水管路",
+            "itemCode": "WXCS224",
+            "repairCode": "WXCS224",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 1456,
+            "name": "更换后置滤芯",
+            "itemCode": "WXCS084",
+            "repairCode": "WXCS084",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 1457,
+            "name": "清洗压力桶",
+            "itemCode": "WXCS230",
+            "repairCode": "WXCS230",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 1458,
+            "name": "更换压力桶",
+            "itemCode": "WXCS123",
+            "repairCode": "WXCS123",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 1459,
+            "name": "原水水质并对用户进行必要解释",
+            "itemCode": "WXCS265",
+            "repairCode": "WXCS265",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 1460,
+            "name": "更换管路",
+            "itemCode": "WXCS081",
+            "repairCode": "WXCS081",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 1461,
+            "name": "检查接头并重新连接",
+            "itemCode": "WXCS166",
+            "repairCode": "WXCS166",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 1462,
+            "name": "重新拧紧滤瓶",
+            "itemCode": "WXCS289",
+            "repairCode": "WXCS289",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 1463,
+            "name": "检查并重新安放密封圈",
+            "itemCode": "WXCS146",
+            "repairCode": "WXCS146",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 1464,
+            "name": "检查并更换膜壳、滤桶",
+            "itemCode": "WXCS143",
+            "repairCode": "WXCS143",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 1465,
+            "name": "更换压力桶",
+            "itemCode": "WXCS123",
+            "repairCode": "WXCS123",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 1466,
+            "name": "更换主控板",
+            "itemCode": "WXCS133",
+            "repairCode": "WXCS133",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 1467,
+            "name": "需用到滤芯管理器连接USB接口进行复位",
+            "itemCode": "WXCS257",
+            "repairCode": "WXCS257",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 1468,
+            "name": "更换RO膜",
+            "itemCode": "WXCS049",
+            "repairCode": "WXCS049",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 1469,
+            "name": "更换废水比",
+            "itemCode": "WXCS074",
+            "repairCode": "WXCS074",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 1470,
+            "name": "更换高压开关",
+            "itemCode": "WXCS079",
+            "repairCode": "WXCS079",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 1471,
+            "name": "工作时浓缩水排量是否正常",
+            "itemCode": "WXCS136",
+            "repairCode": "WXCS136",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 1472,
+            "name": "检查进水电磁阀是否关不住",
+            "itemCode": "WXCS170",
+            "repairCode": "WXCS170",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 1473,
+            "name": "更换进水电磁阀",
+            "itemCode": "WXCS089",
+            "repairCode": "WXCS089",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 1474,
+            "name": "更换逆止阀",
+            "itemCode": "WXCS099",
+            "repairCode": "WXCS099",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 1475,
+            "name": "顺着箭头指向重新装好",
+            "itemCode": "WXCS248",
+            "repairCode": "WXCS248",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 1476,
+            "name": "增加进水压力",
+            "itemCode": "WXCS272",
+            "repairCode": "WXCS272",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 1477,
+            "name": "更换增压泵",
+            "itemCode": "WXCS127",
+            "repairCode": "WXCS127",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 1478,
+            "name": "更换组合冲洗阀",
+            "itemCode": "WXCS135",
+            "repairCode": "WXCS135",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 1479,
+            "name": "排出管路内部空气",
+            "itemCode": "WXCS220",
+            "repairCode": "WXCS220",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 1480,
+            "name": "减小原水压力",
+            "itemCode": "WXCS206",
+            "repairCode": "WXCS206",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 1481,
+            "name": "检查减压阀并清洗",
+            "itemCode": "WXCS164",
+            "repairCode": "WXCS164",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 1482,
+            "name": "检查进水电磁阀",
+            "itemCode": "WXCS167",
+            "repairCode": "WXCS167",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 1483,
+            "name": "更换进水电磁阀",
+            "itemCode": "WXCS089",
+            "repairCode": "WXCS089",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 1484,
+            "name": "更换逆止阀",
+            "itemCode": "WXCS099",
+            "repairCode": "WXCS099",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 1485,
+            "name": "增大原水压力",
+            "itemCode": "WXCS270",
+            "repairCode": "WXCS270",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 1486,
+            "name": "重新拧入接头",
+            "itemCode": "WXCS292",
+            "repairCode": "WXCS292",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 1487,
+            "name": "检查组合冲洗电磁阀",
+            "itemCode": "WXCS202",
+            "repairCode": "WXCS202",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 1488,
+            "name": "更换组合冲洗电磁阀",
+            "itemCode": "WXCS134",
+            "repairCode": "WXCS134",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 1489,
+            "name": "检查进水三通并重新连接",
+            "itemCode": "WXCS176",
+            "repairCode": "WXCS176",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 1490,
+            "name": "检查进水球阀并重新连接",
+            "itemCode": "WXCS174",
+            "repairCode": "WXCS174",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 1491,
+            "name": "更换增压泵",
+            "itemCode": "WXCS127",
+            "repairCode": "WXCS127",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 1492,
+            "name": "路由器与设备距离过长，信号不稳定",
+            "itemCode": "WXCS217",
+            "repairCode": "WXCS217",
+            "typeName": "纯水机",
+            "smallType": "商用 (200G-400G产品)"
+        },
+        {
+            "id": 1493,
+            "name": "上电开机后触碰选择/电源键3秒钟，直至闪烁",
+            "itemCode": "WXCS236",
+            "repairCode": "WXCS236",
+            "typeName": "纯水机",
+            "smallType": "商用 (200G-400G产品)"
+        },
+        {
+            "id": 1494,
+            "name": "表示机器配网失败，检查家庭网络",
+            "itemCode": "WXCS014",
+            "repairCode": "WXCS014",
+            "typeName": "纯水机",
+            "smallType": "商用 (200G-400G产品)"
+        },
+        {
+            "id": 1495,
+            "name": "路由器无网络，检查家庭网络",
+            "itemCode": "WXCS216",
+            "repairCode": "WXCS216",
+            "typeName": "纯水机",
+            "smallType": "商用 (200G-400G产品)"
+        },
+        {
+            "id": 1496,
+            "name": "重新上电冲洗",
+            "itemCode": "WXCS294",
+            "repairCode": "WXCS294",
+            "typeName": "纯水机",
+            "smallType": "商用 (200G-400G产品)"
+        },
+        {
+            "id": 1497,
+            "name": "更换后置滤芯",
+            "itemCode": "WXCS084",
+            "repairCode": "WXCS084",
+            "typeName": "纯水机",
+            "smallType": "商用 (200G-400G产品)"
+        },
+        {
+            "id": 1498,
+            "name": "重新安装或冲洗前置滤芯",
+            "itemCode": "WXCS278",
+            "repairCode": "WXCS278",
+            "typeName": "纯水机",
+            "smallType": "商用 (200G-400G产品)"
+        },
+        {
+            "id": 1499,
+            "name": "告知用户改善原水水质或解释说明",
+            "itemCode": "WXCS046",
+            "repairCode": "WXCS046",
+            "typeName": "纯水机",
+            "smallType": "商用 (200G-400G产品)"
+        },
+        {
+            "id": 1500,
+            "name": "更换相应滤芯",
+            "itemCode": "WXCS121",
+            "repairCode": "WXCS121",
+            "typeName": "纯水机",
+            "smallType": "商用 (200G-400G产品)"
+        },
+        {
+            "id": 1501,
+            "name": "更换相应滤芯",
+            "itemCode": "WXCS121",
+            "repairCode": "WXCS121",
+            "typeName": "纯水机",
+            "smallType": "商用 (200G-400G产品)"
+        },
+        {
+            "id": 1502,
+            "name": "确认水源为市政自来水",
+            "itemCode": "WXCS233",
+            "repairCode": "WXCS233",
+            "typeName": "纯水机",
+            "smallType": "商用 (200G-400G产品)"
+        },
+        {
+            "id": 1503,
+            "name": "更换RO膜壳",
+            "itemCode": "WXCS050",
+            "repairCode": "WXCS050",
+            "typeName": "纯水机",
+            "smallType": "商用 (200G-400G产品)"
+        },
+        {
+            "id": 1504,
+            "name": "重新安装RO膜密封圈",
+            "itemCode": "WXCS277",
+            "repairCode": "WXCS277",
+            "typeName": "纯水机",
+            "smallType": "商用 (200G-400G产品)"
+        },
+        {
+            "id": 1505,
+            "name": "更换RO膜",
+            "itemCode": "WXCS049",
+            "repairCode": "WXCS049",
+            "typeName": "纯水机",
+            "smallType": "商用 (200G-400G产品)"
+        },
+        {
+            "id": 1506,
+            "name": "清洗滤芯",
+            "itemCode": "WXCS228",
+            "repairCode": "WXCS228",
+            "typeName": "纯水机",
+            "smallType": "商用 (200G-400G产品)"
+        },
+        {
+            "id": 1507,
+            "name": "更换RO膜",
+            "itemCode": "WXCS049",
+            "repairCode": "WXCS049",
+            "typeName": "纯水机",
+            "smallType": "商用 (200G-400G产品)"
+        },
+        {
+            "id": 1508,
+            "name": "再次测试",
+            "itemCode": "WXCS267",
+            "repairCode": "WXCS267",
+            "typeName": "纯水机",
+            "smallType": "商用 (200G-400G产品)"
+        },
+        {
+            "id": 1509,
+            "name": "更换后置滤芯",
+            "itemCode": "WXCS084",
+            "repairCode": "WXCS084",
+            "typeName": "纯水机",
+            "smallType": "商用 (200G-400G产品)"
+        },
+        {
+            "id": 1510,
+            "name": "更换RO膜",
+            "itemCode": "WXCS049",
+            "repairCode": "WXCS049",
+            "typeName": "纯水机",
+            "smallType": "商用 (200G-400G产品)"
+        },
+        {
+            "id": 1511,
+            "name": "重新测试",
+            "itemCode": "WXCS279",
+            "repairCode": "WXCS279",
+            "typeName": "纯水机",
+            "smallType": "商用 (200G-400G产品)"
+        },
+        {
+            "id": 1512,
+            "name": "更换废水比",
+            "itemCode": "WXCS074",
+            "repairCode": "WXCS074",
+            "typeName": "纯水机",
+            "smallType": "商用 (200G-400G产品)"
+        },
+        {
+            "id": 1513,
+            "name": "检查管路连接，疏通管路",
+            "itemCode": "WXCS161",
+            "repairCode": "WXCS161",
+            "typeName": "纯水机",
+            "smallType": "商用 (200G-400G产品)"
+        },
+        {
+            "id": 1514,
+            "name": "用压力表检测，更换逆止阀",
+            "itemCode": "WXCS262",
+            "repairCode": "WXCS262",
+            "typeName": "纯水机",
+            "smallType": "商用 (200G-400G产品)"
+        },
+        {
+            "id": 1515,
+            "name": "更换相应滤芯",
+            "itemCode": "WXCS121",
+            "repairCode": "WXCS121",
+            "typeName": "纯水机",
+            "smallType": "商用 (200G-400G产品)"
+        },
+        {
+            "id": 1516,
+            "name": "测试原水TDS并给用户解释",
+            "itemCode": "WXCS019",
+            "repairCode": "WXCS019",
+            "typeName": "纯水机",
+            "smallType": "商用 (200G-400G产品)"
+        },
+        {
+            "id": 1517,
+            "name": "增加进水压力",
+            "itemCode": "WXCS272",
+            "repairCode": "WXCS272",
+            "typeName": "纯水机",
+            "smallType": "商用 (200G-400G产品)"
+        },
+        {
+            "id": 1518,
+            "name": "检查电源适配器输出电压是否正常；水泵是否损坏",
+            "itemCode": "WXCS153",
+            "repairCode": "WXCS153",
+            "typeName": "纯水机",
+            "smallType": "商用 (200G-400G产品)"
+        },
+        {
+            "id": 1519,
+            "name": "更换增压泵",
+            "itemCode": "WXCS127",
+            "repairCode": "WXCS127",
+            "typeName": "纯水机",
+            "smallType": "商用 (200G-400G产品)"
+        },
+        {
+            "id": 1520,
+            "name": "更换组合冲洗阀",
+            "itemCode": "WXCS135",
+            "repairCode": "WXCS135",
+            "typeName": "纯水机",
+            "smallType": "商用 (200G-400G产品)"
+        },
+        {
+            "id": 1521,
+            "name": "更换RO膜",
+            "itemCode": "WXCS049",
+            "repairCode": "WXCS049",
+            "typeName": "纯水机",
+            "smallType": "商用 (200G-400G产品)"
+        },
+        {
+            "id": 1522,
+            "name": "重新安装RO膜",
+            "itemCode": "WXCS276",
+            "repairCode": "WXCS276",
+            "typeName": "纯水机",
+            "smallType": "商用 (200G-400G产品)"
+        },
+        {
+            "id": 1523,
+            "name": "增加冲洗RO膜时间",
+            "itemCode": "WXCS271",
+            "repairCode": "WXCS271",
+            "typeName": "纯水机",
+            "smallType": "商用 (200G-400G产品)"
+        },
+        {
+            "id": 1524,
+            "name": "重新连接好管路",
+            "itemCode": "WXCS287",
+            "repairCode": "WXCS287",
+            "typeName": "纯水机",
+            "smallType": "商用 (200G-400G产品)"
+        },
+        {
+            "id": 1525,
+            "name": "更换后置滤芯",
+            "itemCode": "WXCS084",
+            "repairCode": "WXCS084",
+            "typeName": "纯水机",
+            "smallType": "商用 (200G-400G产品)"
+        },
+        {
+            "id": 1526,
+            "name": "冲洗后置炭滤芯",
+            "itemCode": "WXCS025",
+            "repairCode": "WXCS025",
+            "typeName": "纯水机",
+            "smallType": "商用 (200G-400G产品)"
+        },
+        {
+            "id": 1527,
+            "name": "清洗压力桶",
+            "itemCode": "WXCS230",
+            "repairCode": "WXCS230",
+            "typeName": "纯水机",
+            "smallType": "商用 (200G-400G产品)"
+        },
+        {
+            "id": 1528,
+            "name": "更换RO膜",
+            "itemCode": "WXCS049",
+            "repairCode": "WXCS049",
+            "typeName": "纯水机",
+            "smallType": "商用 (200G-400G产品)"
+        },
+        {
+            "id": 1529,
+            "name": "市电电压是否正常，电源适配器是否损坏",
+            "itemCode": "WXCS243",
+            "repairCode": "WXCS243",
+            "typeName": "纯水机",
+            "smallType": "商用 (200G-400G产品)"
+        },
+        {
+            "id": 1530,
+            "name": "更换电源适配器",
+            "itemCode": "WXCS066",
+            "repairCode": "WXCS066",
+            "typeName": "纯水机",
+            "smallType": "商用 (200G-400G产品)"
+        },
+        {
+            "id": 1531,
+            "name": "更换鹅颈龙头",
+            "itemCode": "WXCS070",
+            "repairCode": "WXCS070",
+            "typeName": "纯水机",
+            "smallType": "商用 (200G-400G产品)"
+        },
+        {
+            "id": 1532,
+            "name": "检查逆止阀有无泄漏，压力桶是否渗漏",
+            "itemCode": "WXCS182",
+            "repairCode": "WXCS182",
+            "typeName": "纯水机",
+            "smallType": "商用 (200G-400G产品)"
+        },
+        {
+            "id": 1533,
+            "name": "检查管路连接，疏通管路",
+            "itemCode": "WXCS161",
+            "repairCode": "WXCS161",
+            "typeName": "纯水机",
+            "smallType": "商用 (200G-400G产品)"
+        },
+        {
+            "id": 1534,
+            "name": "检查进水电磁阀电压是否正常",
+            "itemCode": "WXCS169",
+            "repairCode": "WXCS169",
+            "typeName": "纯水机",
+            "smallType": "商用 (200G-400G产品)"
+        },
+        {
+            "id": 1535,
+            "name": "更换进水电磁阀",
+            "itemCode": "WXCS089",
+            "repairCode": "WXCS089",
+            "typeName": "纯水机",
+            "smallType": "商用 (200G-400G产品)"
+        },
+        {
+            "id": 1536,
+            "name": "检查进水球阀是否完全打开",
+            "itemCode": "WXCS175",
+            "repairCode": "WXCS175",
+            "typeName": "纯水机",
+            "smallType": "商用 (200G-400G产品)"
+        },
+        {
+            "id": 1537,
+            "name": "清洗或更换滤芯、请与当地经销商联",
+            "itemCode": "WXCS226",
+            "repairCode": "WXCS226",
+            "typeName": "纯水机",
+            "smallType": "商用 (200G-400G产品)"
+        },
+        {
+            "id": 1538,
+            "name": "清洗或更换滤芯、请与当地经销商联",
+            "itemCode": "WXCS226",
+            "repairCode": "WXCS226",
+            "typeName": "纯水机",
+            "smallType": "商用 (200G-400G产品)"
+        },
+        {
+            "id": 1539,
+            "name": "更换相应滤芯",
+            "itemCode": "WXCS121",
+            "repairCode": "WXCS121",
+            "typeName": "纯水机",
+            "smallType": "商用 (200G-400G产品)"
+        },
+        {
+            "id": 1540,
+            "name": "检查进水端球阀和压力桶球阀是否完全打开",
+            "itemCode": "WXCS172",
+            "repairCode": "WXCS172",
+            "typeName": "纯水机",
+            "smallType": "商用 (200G-400G产品)"
+        },
+        {
+            "id": 1541,
+            "name": "采用增压措施",
+            "itemCode": "WXCS016",
+            "repairCode": "WXCS016",
+            "typeName": "纯水机",
+            "smallType": "商用 (200G-400G产品)"
+        },
+        {
+            "id": 1542,
+            "name": "更换压力桶",
+            "itemCode": "WXCS123",
+            "repairCode": "WXCS123",
+            "typeName": "纯水机",
+            "smallType": "商用 (200G-400G产品)"
+        },
+        {
+            "id": 1543,
+            "name": "更换增压泵",
+            "itemCode": "WXCS127",
+            "repairCode": "WXCS127",
+            "typeName": "纯水机",
+            "smallType": "商用 (200G-400G产品)"
+        },
+        {
+            "id": 1544,
+            "name": "电源适配器输出电压是否正常，水泵是否损坏",
+            "itemCode": "WXCS041",
+            "repairCode": "WXCS041",
+            "typeName": "纯水机",
+            "smallType": "商用 (200G-400G产品)"
+        },
+        {
+            "id": 1545,
+            "name": "更换组合冲洗电磁阀",
+            "itemCode": "WXCS134",
+            "repairCode": "WXCS134",
+            "typeName": "纯水机",
+            "smallType": "商用 (200G-400G产品)"
+        },
+        {
+            "id": 1546,
+            "name": "告知增加清洗频率",
+            "itemCode": "WXCS047",
+            "repairCode": "WXCS047",
+            "typeName": "纯水机",
+            "smallType": "商用 (200G-400G产品)"
+        },
+        {
+            "id": 1547,
+            "name": "告知需要即饮即用",
+            "itemCode": "WXCS045",
+            "repairCode": "WXCS045",
+            "typeName": "纯水机",
+            "smallType": "商用 (200G-400G产品)"
+        },
+        {
+            "id": 1548,
+            "name": "更换冲洗阀",
+            "itemCode": "WXCS056",
+            "repairCode": "WXCS056",
+            "typeName": "纯水机",
+            "smallType": "商用 (200G-400G产品)"
+        },
+        {
+            "id": 1549,
+            "name": "检查管路连接，疏通管路",
+            "itemCode": "WXCS161",
+            "repairCode": "WXCS161",
+            "typeName": "纯水机",
+            "smallType": "商用 (200G-400G产品)"
+        },
+        {
+            "id": 1550,
+            "name": "进水球阀是否打开",
+            "itemCode": "WXCS211",
+            "repairCode": "WXCS211",
+            "typeName": "纯水机",
+            "smallType": "商用 (200G-400G产品)"
+        },
+        {
+            "id": 1551,
+            "name": "清洗滤芯",
+            "itemCode": "WXCS228",
+            "repairCode": "WXCS228",
+            "typeName": "纯水机",
+            "smallType": "商用 (200G-400G产品)"
+        },
+        {
+            "id": 1552,
+            "name": "检查进水电磁阀",
+            "itemCode": "WXCS167",
+            "repairCode": "WXCS167",
+            "typeName": "纯水机",
+            "smallType": "商用 (200G-400G产品)"
+        },
+        {
+            "id": 1553,
+            "name": "按照箭头指向重新装好",
+            "itemCode": "WXCS005",
+            "repairCode": "WXCS005",
+            "typeName": "纯水机",
+            "smallType": "商用 (200G-400G产品)"
+        },
+        {
+            "id": 1554,
+            "name": "自来水有无缺水",
+            "itemCode": "WXCS301",
+            "repairCode": "WXCS301",
+            "typeName": "纯水机",
+            "smallType": "商用 (200G-400G产品)"
+        },
+        {
+            "id": 1555,
+            "name": "更换增压泵",
+            "itemCode": "WXCS127",
+            "repairCode": "WXCS127",
+            "typeName": "纯水机",
+            "smallType": "商用 (200G-400G产品)"
+        },
+        {
+            "id": 1556,
+            "name": "更换相应滤芯",
+            "itemCode": "WXCS121",
+            "repairCode": "WXCS121",
+            "typeName": "纯水机",
+            "smallType": "商用 (200G-400G产品)"
+        },
+        {
+            "id": 1557,
+            "name": "更换进水电磁阀",
+            "itemCode": "WXCS089",
+            "repairCode": "WXCS089",
+            "typeName": "纯水机",
+            "smallType": "商用 (200G-400G产品)"
+        },
+        {
+            "id": 1558,
+            "name": "更换电源适配器",
+            "itemCode": "WXCS066",
+            "repairCode": "WXCS066",
+            "typeName": "纯水机",
+            "smallType": "商用 (200G-400G产品)"
+        },
+        {
+            "id": 1559,
+            "name": "更换电源转换板",
+            "itemCode": "WXCS067",
+            "repairCode": "WXCS067",
+            "typeName": "纯水机",
+            "smallType": "商用 (200G-400G产品)"
+        },
+        {
+            "id": 1560,
+            "name": "更换高压开关",
+            "itemCode": "WXCS079",
+            "repairCode": "WXCS079",
+            "typeName": "纯水机",
+            "smallType": "商用 (200G-400G产品)"
+        },
+        {
+            "id": 1561,
+            "name": "更换连接线插头",
+            "itemCode": "WXCS098",
+            "repairCode": "WXCS098",
+            "typeName": "纯水机",
+            "smallType": "商用 (200G-400G产品)"
+        },
+        {
+            "id": 1562,
+            "name": "检查连接线插头",
+            "itemCode": "WXCS181",
+            "repairCode": "WXCS181",
+            "typeName": "纯水机",
+            "smallType": "商用 (200G-400G产品)"
+        },
+        {
+            "id": 1563,
+            "name": "电源插座有无电压",
+            "itemCode": "WXCS040",
+            "repairCode": "WXCS040",
+            "typeName": "纯水机",
+            "smallType": "商用 (200G-400G产品)"
+        },
+        {
+            "id": 1564,
+            "name": "将压力桶球阀打到关闭状态",
+            "itemCode": "WXCS207",
+            "repairCode": "WXCS207",
+            "typeName": "纯水机",
+            "smallType": "商用 (200G-400G产品)"
+        },
+        {
+            "id": 1565,
+            "name": "更换主控板",
+            "itemCode": "WXCS133",
+            "repairCode": "WXCS133",
+            "typeName": "纯水机",
+            "smallType": "商用 (200G-400G产品)"
+        },
+        {
+            "id": 1566,
+            "name": "更换增压泵",
+            "itemCode": "WXCS127",
+            "repairCode": "WXCS127",
+            "typeName": "纯水机",
+            "smallType": "商用 (200G-400G产品)"
+        },
+        {
+            "id": 1567,
+            "name": "检查电源、插紧电源插头",
+            "itemCode": "WXCS151",
+            "repairCode": "WXCS151",
+            "typeName": "纯水机",
+            "smallType": "商用 (200G-400G产品)"
+        },
+        {
+            "id": 1568,
+            "name": "有符合标准的水压时再启动机器",
+            "itemCode": "WXCS264",
+            "repairCode": "WXCS264",
+            "typeName": "纯水机",
+            "smallType": "商用 (200G-400G产品)"
+        },
+        {
+            "id": 1569,
+            "name": "更换RO膜",
+            "itemCode": "WXCS049",
+            "repairCode": "WXCS049",
+            "typeName": "纯水机",
+            "smallType": "商用 (200G-400G产品)"
+        },
+        {
+            "id": 1570,
+            "name": "更换储水桶",
+            "itemCode": "WXCS057",
+            "repairCode": "WXCS057",
+            "typeName": "纯水机",
+            "smallType": "商用 (200G-400G产品)"
+        },
+        {
+            "id": 1571,
+            "name": "更换高压开关",
+            "itemCode": "WXCS079",
+            "repairCode": "WXCS079",
+            "typeName": "纯水机",
+            "smallType": "商用 (200G-400G产品)"
+        },
+        {
+            "id": 1572,
+            "name": "更换逆止阀",
+            "itemCode": "WXCS099",
+            "repairCode": "WXCS099",
+            "typeName": "纯水机",
+            "smallType": "商用 (200G-400G产品)"
+        },
+        {
+            "id": 1573,
+            "name": "更换增压泵",
+            "itemCode": "WXCS127",
+            "repairCode": "WXCS127",
+            "typeName": "纯水机",
+            "smallType": "商用 (200G-400G产品)"
+        },
+        {
+            "id": 1574,
+            "name": "更换主板",
+            "itemCode": "WXCS132",
+            "repairCode": "WXCS132",
+            "typeName": "纯水机",
+            "smallType": "商用 (200G-400G产品)"
+        },
+        {
+            "id": 1575,
+            "name": "使用增压设备增大水压",
+            "itemCode": "WXCS241",
+            "repairCode": "WXCS241",
+            "typeName": "纯水机",
+            "smallType": "商用 (200G-400G产品)"
+        },
+        {
+            "id": 1576,
+            "name": "更换电源适配器",
+            "itemCode": "WXCS066",
+            "repairCode": "WXCS066",
+            "typeName": "纯水机",
+            "smallType": "商用 (200G-400G产品)"
+        },
+        {
+            "id": 1577,
+            "name": "更换电源转换板",
+            "itemCode": "WXCS067",
+            "repairCode": "WXCS067",
+            "typeName": "纯水机",
+            "smallType": "商用 (200G-400G产品)"
+        },
+        {
+            "id": 1578,
+            "name": "更换减压阀",
+            "itemCode": "WXCS088",
+            "repairCode": "WXCS088",
+            "typeName": "纯水机",
+            "smallType": "商用 (200G-400G产品)"
+        },
+        {
+            "id": 1579,
+            "name": "更换逆止阀",
+            "itemCode": "WXCS099",
+            "repairCode": "WXCS099",
+            "typeName": "纯水机",
+            "smallType": "商用 (200G-400G产品)"
+        },
+        {
+            "id": 1580,
+            "name": "插好电源插座或适配器插头",
+            "itemCode": "WXCS020",
+            "repairCode": "WXCS020",
+            "typeName": "纯水机",
+            "smallType": "商用 (200G-400G产品)"
+        },
+        {
+            "id": 1581,
+            "name": "更换主控板",
+            "itemCode": "WXCS133",
+            "repairCode": "WXCS133",
+            "typeName": "纯水机",
+            "smallType": "商用 (200G-400G产品)"
+        },
+        {
+            "id": 1582,
+            "name": "售后上门确认",
+            "itemCode": "WXCS246",
+            "repairCode": "WXCS246",
+            "typeName": "纯水机",
+            "smallType": "商用 (200G-400G产品)"
+        },
+        {
+            "id": 1583,
+            "name": "清洗管路或排查其他进水管路",
+            "itemCode": "WXCS224",
+            "repairCode": "WXCS224",
+            "typeName": "纯水机",
+            "smallType": "商用 (200G-400G产品)"
+        },
+        {
+            "id": 1584,
+            "name": "更换后置滤芯",
+            "itemCode": "WXCS084",
+            "repairCode": "WXCS084",
+            "typeName": "纯水机",
+            "smallType": "商用 (200G-400G产品)"
+        },
+        {
+            "id": 1585,
+            "name": "清洗压力桶",
+            "itemCode": "WXCS230",
+            "repairCode": "WXCS230",
+            "typeName": "纯水机",
+            "smallType": "商用 (200G-400G产品)"
+        },
+        {
+            "id": 1586,
+            "name": "更换压力桶",
+            "itemCode": "WXCS123",
+            "repairCode": "WXCS123",
+            "typeName": "纯水机",
+            "smallType": "商用 (200G-400G产品)"
+        },
+        {
+            "id": 1587,
+            "name": "原水水质并对用户进行必要解释",
+            "itemCode": "WXCS265",
+            "repairCode": "WXCS265",
+            "typeName": "纯水机",
+            "smallType": "商用 (200G-400G产品)"
+        },
+        {
+            "id": 1588,
+            "name": "更换管路",
+            "itemCode": "WXCS081",
+            "repairCode": "WXCS081",
+            "typeName": "纯水机",
+            "smallType": "商用 (200G-400G产品)"
+        },
+        {
+            "id": 1589,
+            "name": "请切断电源、水源，并联系当地经销商重新安装或更换",
+            "itemCode": "WXCS231",
+            "repairCode": "WXCS231",
+            "typeName": "纯水机",
+            "smallType": "商用 (200G-400G产品)"
+        },
+        {
+            "id": 1590,
+            "name": "请切断电源、水源，并联系当地经销商重新安装或更换",
+            "itemCode": "WXCS231",
+            "repairCode": "WXCS231",
+            "typeName": "纯水机",
+            "smallType": "商用 (200G-400G产品)"
+        },
+        {
+            "id": 1591,
+            "name": "检查接头并重新连接",
+            "itemCode": "WXCS166",
+            "repairCode": "WXCS166",
+            "typeName": "纯水机",
+            "smallType": "商用 (200G-400G产品)"
+        },
+        {
+            "id": 1592,
+            "name": "重新拧紧滤瓶",
+            "itemCode": "WXCS289",
+            "repairCode": "WXCS289",
+            "typeName": "纯水机",
+            "smallType": "商用 (200G-400G产品)"
+        },
+        {
+            "id": 1593,
+            "name": "检查并重新安放密封圈",
+            "itemCode": "WXCS146",
+            "repairCode": "WXCS146",
+            "typeName": "纯水机",
+            "smallType": "商用 (200G-400G产品)"
+        },
+        {
+            "id": 1594,
+            "name": "检查并更换膜壳、滤桶",
+            "itemCode": "WXCS143",
+            "repairCode": "WXCS143",
+            "typeName": "纯水机",
+            "smallType": "商用 (200G-400G产品)"
+        },
+        {
+            "id": 1595,
+            "name": "更换压力桶",
+            "itemCode": "WXCS123",
+            "repairCode": "WXCS123",
+            "typeName": "纯水机",
+            "smallType": "商用 (200G-400G产品)"
+        },
+        {
+            "id": 1596,
+            "name": "更换主控板",
+            "itemCode": "WXCS133",
+            "repairCode": "WXCS133",
+            "typeName": "纯水机",
+            "smallType": "商用 (200G-400G产品)"
+        },
+        {
+            "id": 1597,
+            "name": "需用到滤芯管理器连接USB接口进行复位",
+            "itemCode": "WXCS257",
+            "repairCode": "WXCS257",
+            "typeName": "纯水机",
+            "smallType": "商用 (200G-400G产品)"
+        },
+        {
+            "id": 1598,
+            "name": "更换RO膜",
+            "itemCode": "WXCS049",
+            "repairCode": "WXCS049",
+            "typeName": "纯水机",
+            "smallType": "商用 (200G-400G产品)"
+        },
+        {
+            "id": 1599,
+            "name": "更换废水比",
+            "itemCode": "WXCS074",
+            "repairCode": "WXCS074",
+            "typeName": "纯水机",
+            "smallType": "商用 (200G-400G产品)"
+        },
+        {
+            "id": 1600,
+            "name": "更换高压开关",
+            "itemCode": "WXCS079",
+            "repairCode": "WXCS079",
+            "typeName": "纯水机",
+            "smallType": "商用 (200G-400G产品)"
+        },
+        {
+            "id": 1601,
+            "name": "工作时浓缩水排量是否正常",
+            "itemCode": "WXCS136",
+            "repairCode": "WXCS136",
+            "typeName": "纯水机",
+            "smallType": "商用 (200G-400G产品)"
+        },
+        {
+            "id": 1602,
+            "name": "检查进水电磁阀是否关不住",
+            "itemCode": "WXCS170",
+            "repairCode": "WXCS170",
+            "typeName": "纯水机",
+            "smallType": "商用 (200G-400G产品)"
+        },
+        {
+            "id": 1603,
+            "name": "更换进水电磁阀",
+            "itemCode": "WXCS089",
+            "repairCode": "WXCS089",
+            "typeName": "纯水机",
+            "smallType": "商用 (200G-400G产品)"
+        },
+        {
+            "id": 1604,
+            "name": "更换逆止阀",
+            "itemCode": "WXCS099",
+            "repairCode": "WXCS099",
+            "typeName": "纯水机",
+            "smallType": "商用 (200G-400G产品)"
+        },
+        {
+            "id": 1605,
+            "name": "顺着箭头指向重新装好",
+            "itemCode": "WXCS248",
+            "repairCode": "WXCS248",
+            "typeName": "纯水机",
+            "smallType": "商用 (200G-400G产品)"
+        },
+        {
+            "id": 1606,
+            "name": "增加进水压力",
+            "itemCode": "WXCS272",
+            "repairCode": "WXCS272",
+            "typeName": "纯水机",
+            "smallType": "商用 (200G-400G产品)"
+        },
+        {
+            "id": 1607,
+            "name": "更换增压泵",
+            "itemCode": "WXCS127",
+            "repairCode": "WXCS127",
+            "typeName": "纯水机",
+            "smallType": "商用 (200G-400G产品)"
+        },
+        {
+            "id": 1608,
+            "name": "更换组合冲洗阀",
+            "itemCode": "WXCS135",
+            "repairCode": "WXCS135",
+            "typeName": "纯水机",
+            "smallType": "商用 (200G-400G产品)"
+        },
+        {
+            "id": 1609,
+            "name": "排出管路内部空气",
+            "itemCode": "WXCS220",
+            "repairCode": "WXCS220",
+            "typeName": "纯水机",
+            "smallType": "商用 (200G-400G产品)"
+        },
+        {
+            "id": 1610,
+            "name": "减小原水压力",
+            "itemCode": "WXCS206",
+            "repairCode": "WXCS206",
+            "typeName": "纯水机",
+            "smallType": "商用 (200G-400G产品)"
+        },
+        {
+            "id": 1611,
+            "name": "检查减压阀并清洗",
+            "itemCode": "WXCS164",
+            "repairCode": "WXCS164",
+            "typeName": "纯水机",
+            "smallType": "商用 (200G-400G产品)"
+        },
+        {
+            "id": 1612,
+            "name": "检查进水电磁阀",
+            "itemCode": "WXCS167",
+            "repairCode": "WXCS167",
+            "typeName": "纯水机",
+            "smallType": "商用 (200G-400G产品)"
+        },
+        {
+            "id": 1613,
+            "name": "更换进水电磁阀",
+            "itemCode": "WXCS089",
+            "repairCode": "WXCS089",
+            "typeName": "纯水机",
+            "smallType": "商用 (200G-400G产品)"
+        },
+        {
+            "id": 1614,
+            "name": "更换逆止阀",
+            "itemCode": "WXCS099",
+            "repairCode": "WXCS099",
+            "typeName": "纯水机",
+            "smallType": "商用 (200G-400G产品)"
+        },
+        {
+            "id": 1615,
+            "name": "增大原水压力",
+            "itemCode": "WXCS270",
+            "repairCode": "WXCS270",
+            "typeName": "纯水机",
+            "smallType": "商用 (200G-400G产品)"
+        },
+        {
+            "id": 1616,
+            "name": "重新拧入接头",
+            "itemCode": "WXCS292",
+            "repairCode": "WXCS292",
+            "typeName": "纯水机",
+            "smallType": "商用 (200G-400G产品)"
+        },
+        {
+            "id": 1617,
+            "name": "检查组合冲洗电磁阀",
+            "itemCode": "WXCS202",
+            "repairCode": "WXCS202",
+            "typeName": "纯水机",
+            "smallType": "商用 (200G-400G产品)"
+        },
+        {
+            "id": 1618,
+            "name": "更换组合冲洗电磁阀",
+            "itemCode": "WXCS134",
+            "repairCode": "WXCS134",
+            "typeName": "纯水机",
+            "smallType": "商用 (200G-400G产品)"
+        },
+        {
+            "id": 1619,
+            "name": "检查进水三通并重新连接",
+            "itemCode": "WXCS176",
+            "repairCode": "WXCS176",
+            "typeName": "纯水机",
+            "smallType": "商用 (200G-400G产品)"
+        },
+        {
+            "id": 1620,
+            "name": "检查进水球阀并重新连接",
+            "itemCode": "WXCS174",
+            "repairCode": "WXCS174",
+            "typeName": "纯水机",
+            "smallType": "商用 (200G-400G产品)"
+        },
+        {
+            "id": 1621,
+            "name": "更换增压泵",
+            "itemCode": "WXCS127",
+            "repairCode": "WXCS127",
+            "typeName": "纯水机",
+            "smallType": "商用 (200G-400G产品)"
+        },
+        {
+            "id": 1622,
+            "name": "冲洗或更换反渗透膜",
+            "itemCode": "WXCS026",
+            "repairCode": "WXCS026",
+            "typeName": "纯水机",
+            "smallType": "大型 (0.25T/h以上产品)"
+        },
+        {
+            "id": 1623,
+            "name": "运行状态下拧开高压泵排气螺栓，排气完毕再拧紧",
+            "itemCode": "WXCS266",
+            "repairCode": "WXCS266",
+            "typeName": "纯水机",
+            "smallType": "大型 (0.25T/h以上产品)"
+        },
+        {
+            "id": 1624,
+            "name": "更换前置滤芯",
+            "itemCode": "WXCS101",
+            "repairCode": "WXCS101",
+            "typeName": "纯水机",
+            "smallType": "大型 (0.25T/h以上产品)"
+        },
+        {
+            "id": 1625,
+            "name": "更换反渗透膜",
+            "itemCode": "WXCS071",
+            "repairCode": "WXCS071",
+            "typeName": "纯水机",
+            "smallType": "大型 (0.25T/h以上产品)"
+        },
+        {
+            "id": 1626,
+            "name": "更换后置滤芯",
+            "itemCode": "WXCS084",
+            "repairCode": "WXCS084",
+            "typeName": "纯水机",
+            "smallType": "大型 (0.25T/h以上产品)"
+        },
+        {
+            "id": 1627,
+            "name": "拧紧电磁阀头顶螺栓或更换电磁阀",
+            "itemCode": "WXCS218",
+            "repairCode": "WXCS218",
+            "typeName": "纯水机",
+            "smallType": "大型 (0.25T/h以上产品)"
+        },
+        {
+            "id": 1628,
+            "name": "检查热继电器，并复位",
+            "itemCode": "WXCS187",
+            "repairCode": "WXCS187",
+            "typeName": "纯水机",
+            "smallType": "大型 (0.25T/h以上产品)"
+        },
+        {
+            "id": 1629,
+            "name": "检修插座或者线路",
+            "itemCode": "WXCS204",
+            "repairCode": "WXCS204",
+            "typeName": "纯水机",
+            "smallType": "大型 (0.25T/h以上产品)"
+        },
+        {
+            "id": 1630,
+            "name": "检修或者更换更换增压泵",
+            "itemCode": "WXCS205",
+            "repairCode": "WXCS205",
+            "typeName": "纯水机",
+            "smallType": "大型 (0.25T/h以上产品)"
+        },
+        {
+            "id": 1631,
+            "name": "保证进水压力在0.15MPa-0.3MPa",
+            "itemCode": "WXCS009",
+            "repairCode": "WXCS009",
+            "typeName": "纯水机",
+            "smallType": "大型 (0.25T/h以上产品)"
+        },
+        {
+            "id": 1632,
+            "name": "灌水至压力罐水压下降至一定时",
+            "itemCode": "WXCS139",
+            "repairCode": "WXCS139",
+            "typeName": "纯水机",
+            "smallType": "大型 (0.25T/h以上产品)"
+        },
+        {
+            "id": 1633,
+            "name": "拧紧连接处或者更换密封垫重新连接",
+            "itemCode": "WXCS219",
+            "repairCode": "WXCS219",
+            "typeName": "纯水机",
+            "smallType": "大型 (0.25T/h以上产品)"
+        },
+        {
+            "id": 21138,
+            "name": "路由器与设备距离过长，信号不稳定",
+            "itemCode": "WXCS217",
+            "repairCode": "WXCS217",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 21139,
+            "name": "上电开机后触碰选择/电源键3秒钟，直至闪烁",
+            "itemCode": "WXCS236",
+            "repairCode": "WXCS236",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 21140,
+            "name": "表示机器配网失败，检查家庭网络",
+            "itemCode": "WXCS014",
+            "repairCode": "WXCS014",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 21141,
+            "name": "路由器无网络，检查家庭网络",
+            "itemCode": "WXCS216",
+            "repairCode": "WXCS216",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 21142,
+            "name": "重新上电冲洗",
+            "itemCode": "WXCS294",
+            "repairCode": "WXCS294",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 21143,
+            "name": "更换后置活性炭",
+            "itemCode": "WXCS306",
+            "repairCode": "WXCS306",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 21144,
+            "name": "重新安装或冲洗前置滤芯",
+            "itemCode": "WXCS278",
+            "repairCode": "WXCS278",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 21145,
+            "name": "告知用户改善原水水质或解释说明",
+            "itemCode": "WXCS046",
+            "repairCode": "WXCS046",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 21146,
+            "name": "更换RO膜壳",
+            "itemCode": "WXCS050",
+            "repairCode": "WXCS050",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 21147,
+            "name": "重新安装RO膜密封圈",
+            "itemCode": "WXCS277",
+            "repairCode": "WXCS277",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 21148,
+            "name": "更换RO膜",
+            "itemCode": "WXCS049",
+            "repairCode": "WXCS049",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 21149,
+            "name": "更换RO膜",
+            "itemCode": "WXCS049",
+            "repairCode": "WXCS049",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 21150,
+            "name": "清洗RO膜",
+            "itemCode": "WXCS303",
+            "repairCode": "WXCS303",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 21151,
+            "name": "更换后置滤芯",
+            "itemCode": "WXCS084",
+            "repairCode": "WXCS084",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 21152,
+            "name": "更换RO膜",
+            "itemCode": "WXCS049",
+            "repairCode": "WXCS049",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 21153,
+            "name": "重新测试",
+            "itemCode": "WXCS279",
+            "repairCode": "WXCS279",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 21154,
+            "name": "更换废水比",
+            "itemCode": "WXCS074",
+            "repairCode": "WXCS074",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 21155,
+            "name": "检查管路连接，疏通管路",
+            "itemCode": "WXCS161",
+            "repairCode": "WXCS161",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 21156,
+            "name": "更换滤芯",
+            "itemCode": "WXCS302",
+            "repairCode": "WXCS302",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 21157,
+            "name": "测试原水TDS并给用户解释",
+            "itemCode": "WXCS019",
+            "repairCode": "WXCS019",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 21158,
+            "name": "增加进水压力",
+            "itemCode": "WXCS272",
+            "repairCode": "WXCS272",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 21159,
+            "name": "更换增压泵",
+            "itemCode": "WXCS127",
+            "repairCode": "WXCS127",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 21160,
+            "name": "检查电源适配器输出电压是否正常；水泵是否损坏",
+            "itemCode": "WXCS153",
+            "repairCode": "WXCS153",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 21161,
+            "name": "更换组合冲洗阀",
+            "itemCode": "WXCS135",
+            "repairCode": "WXCS135",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 21162,
+            "name": "更换逆止阀",
+            "itemCode": "WXCS099",
+            "repairCode": "WXCS099",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 21163,
+            "name": "更换RO膜",
+            "itemCode": "WXCS049",
+            "repairCode": "WXCS049",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 21164,
+            "name": "重新安装RO膜密封圈",
+            "itemCode": "WXCS277",
+            "repairCode": "WXCS277",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 21165,
+            "name": "增加冲洗RO膜时间",
+            "itemCode": "WXCS271",
+            "repairCode": "WXCS271",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 21166,
+            "name": "重新连接管路",
+            "itemCode": "WXCS305",
+            "repairCode": "WXCS305",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 21167,
+            "name": "冲洗后置炭滤芯",
+            "itemCode": "WXCS025",
+            "repairCode": "WXCS025",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 21168,
+            "name": "清洗压力桶",
+            "itemCode": "WXCS230",
+            "repairCode": "WXCS230",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 21169,
+            "name": "更换后置炭滤芯",
+            "itemCode": "WXCS304",
+            "repairCode": "WXCS304",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 21170,
+            "name": "更换RO膜",
+            "itemCode": "WXCS049",
+            "repairCode": "WXCS049",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 21171,
+            "name": "更换电源适配器",
+            "itemCode": "WXCS066",
+            "repairCode": "WXCS066",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 21172,
+            "name": "市电电压是否正常，电源适配器是否损坏",
+            "itemCode": "WXCS243",
+            "repairCode": "WXCS243",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 21173,
+            "name": "更换鹅颈龙头",
+            "itemCode": "WXCS070",
+            "repairCode": "WXCS070",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 21174,
+            "name": "检查逆止阀有无泄漏，压力桶是否渗漏",
+            "itemCode": "WXCS182",
+            "repairCode": "WXCS182",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 21175,
+            "name": "检查管路连接，疏通管路",
+            "itemCode": "WXCS161",
+            "repairCode": "WXCS161",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 21176,
+            "name": "更换进水电磁阀",
+            "itemCode": "WXCS089",
+            "repairCode": "WXCS089",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 21177,
+            "name": "检查进水电磁阀电压是否正常",
+            "itemCode": "WXCS169",
+            "repairCode": "WXCS169",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 21178,
+            "name": "更换滤芯",
+            "itemCode": "WXCS302",
+            "repairCode": "WXCS302",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 21179,
+            "name": "更换压力桶",
+            "itemCode": "WXCS123",
+            "repairCode": "WXCS123",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 21180,
+            "name": "更换组合冲洗电磁阀",
+            "itemCode": "WXCS134",
+            "repairCode": "WXCS134",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 21181,
+            "name": "检查进水球阀是否完全打开",
+            "itemCode": "WXCS175",
+            "repairCode": "WXCS175",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 21182,
+            "name": "电源适配器输出电压是否正常，水泵是否损坏",
+            "itemCode": "WXCS041",
+            "repairCode": "WXCS041",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 21183,
+            "name": "更换增压泵",
+            "itemCode": "WXCS127",
+            "repairCode": "WXCS127",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 21184,
+            "name": "告知增加清洗频率",
+            "itemCode": "WXCS047",
+            "repairCode": "WXCS047",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 21185,
+            "name": "告知需要即饮即用",
+            "itemCode": "WXCS045",
+            "repairCode": "WXCS045",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 21186,
+            "name": "更换冲洗阀",
+            "itemCode": "WXCS056",
+            "repairCode": "WXCS056",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 21187,
+            "name": "检查管路连接，疏通管路",
+            "itemCode": "WXCS161",
+            "repairCode": "WXCS161",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 21188,
+            "name": "检查进水电磁阀",
+            "itemCode": "WXCS167",
+            "repairCode": "WXCS167",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 21189,
+            "name": "清洗滤芯",
+            "itemCode": "WXCS228",
+            "repairCode": "WXCS228",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 21190,
+            "name": "按照箭头指向重新装好",
+            "itemCode": "WXCS005",
+            "repairCode": "WXCS005",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 21191,
+            "name": "自来水有无缺水",
+            "itemCode": "WXCS301",
+            "repairCode": "WXCS301",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 21192,
+            "name": "更换增压泵",
+            "itemCode": "WXCS127",
+            "repairCode": "WXCS127",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 21193,
+            "name": "进水球阀是否打开",
+            "itemCode": "WXCS211",
+            "repairCode": "WXCS211",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 21194,
+            "name": "更换进水电磁阀",
+            "itemCode": "WXCS089",
+            "repairCode": "WXCS089",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 21195,
+            "name": "更换滤芯",
+            "itemCode": "WXCS302",
+            "repairCode": "WXCS302",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 21196,
+            "name": "更换电源适配器",
+            "itemCode": "WXCS066",
+            "repairCode": "WXCS066",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 21197,
+            "name": "更换电源转换板",
+            "itemCode": "WXCS067",
+            "repairCode": "WXCS067",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 21198,
+            "name": "更换高压开关",
+            "itemCode": "WXCS079",
+            "repairCode": "WXCS079",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 21199,
+            "name": "更换连接线插头",
+            "itemCode": "WXCS098",
+            "repairCode": "WXCS098",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 21200,
+            "name": "检查连接线插头",
+            "itemCode": "WXCS181",
+            "repairCode": "WXCS181",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 21201,
+            "name": "电源插座有无电压",
+            "itemCode": "WXCS040",
+            "repairCode": "WXCS040",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 21202,
+            "name": "将压力桶球阀打到关闭状态",
+            "itemCode": "WXCS207",
+            "repairCode": "WXCS207",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 21203,
+            "name": "更换增压泵",
+            "itemCode": "WXCS127",
+            "repairCode": "WXCS127",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 21204,
+            "name": "更换主控板",
+            "itemCode": "WXCS133",
+            "repairCode": "WXCS133",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 21205,
+            "name": "有符合标准的水压时再启动机器",
+            "itemCode": "WXCS264",
+            "repairCode": "WXCS264",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 21206,
+            "name": "更换电源适配器",
+            "itemCode": "WXCS066",
+            "repairCode": "WXCS066",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 21207,
+            "name": "更换电源转换板",
+            "itemCode": "WXCS067",
+            "repairCode": "WXCS067",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 21208,
+            "name": "更换减压阀",
+            "itemCode": "WXCS088",
+            "repairCode": "WXCS088",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 21209,
+            "name": "更换逆止阀",
+            "itemCode": "WXCS099",
+            "repairCode": "WXCS099",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 21210,
+            "name": "插好电源插座或适配器插头",
+            "itemCode": "WXCS020",
+            "repairCode": "WXCS020",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 21211,
+            "name": "更换主控板",
+            "itemCode": "WXCS133",
+            "repairCode": "WXCS133",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 21212,
+            "name": "解决漏水现象，擦干防漏水检测装置",
+            "itemCode": "WXCS209",
+            "repairCode": "WXCS209",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 21213,
+            "name": "售后上门确认",
+            "itemCode": "WXCS246",
+            "repairCode": "WXCS246",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 21214,
+            "name": "清洗管路或排查其他进水管路",
+            "itemCode": "WXCS224",
+            "repairCode": "WXCS224",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 21215,
+            "name": "更换后置滤芯",
+            "itemCode": "WXCS084",
+            "repairCode": "WXCS084",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 21216,
+            "name": "更换压力桶",
+            "itemCode": "WXCS123",
+            "repairCode": "WXCS123",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 21217,
+            "name": "原水水质并对用户进行必要解释",
+            "itemCode": "WXCS265",
+            "repairCode": "WXCS265",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 21218,
+            "name": "清洗压力桶",
+            "itemCode": "WXCS230",
+            "repairCode": "WXCS230",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 21219,
+            "name": "更换管路",
+            "itemCode": "WXCS081",
+            "repairCode": "WXCS081",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 21220,
+            "name": "检查接头并重新连接",
+            "itemCode": "WXCS166",
+            "repairCode": "WXCS166",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 21221,
+            "name": "重新拧紧滤瓶",
+            "itemCode": "WXCS289",
+            "repairCode": "WXCS289",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 21222,
+            "name": "检查并更换膜壳、滤桶",
+            "itemCode": "WXCS143",
+            "repairCode": "WXCS143",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 21223,
+            "name": "更换压力桶",
+            "itemCode": "WXCS123",
+            "repairCode": "WXCS123",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 21224,
+            "name": "检查并重新安放密封圈",
+            "itemCode": "WXCS146",
+            "repairCode": "WXCS146",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 21225,
+            "name": "更换主控板进行解决",
+            "itemCode": "WXCS307",
+            "repairCode": "WXCS307",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 21226,
+            "name": "需用到滤芯管理器连接USB接口进行复位",
+            "itemCode": "WXCS257",
+            "repairCode": "WXCS257",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 21227,
+            "name": "更换RO膜",
+            "itemCode": "WXCS049",
+            "repairCode": "WXCS049",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 21228,
+            "name": "更换废水比",
+            "itemCode": "WXCS074",
+            "repairCode": "WXCS074",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 21229,
+            "name": "更换高压开关",
+            "itemCode": "WXCS079",
+            "repairCode": "WXCS079",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 21230,
+            "name": "工作时浓缩水排量是否正常",
+            "itemCode": "WXCS136",
+            "repairCode": "WXCS136",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 21231,
+            "name": "更换进水电磁阀",
+            "itemCode": "WXCS089",
+            "repairCode": "WXCS089",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 21232,
+            "name": "检查进水电磁阀是否关不住",
+            "itemCode": "WXCS170",
+            "repairCode": "WXCS170",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 21233,
+            "name": "顺着箭头指向重新装好",
+            "itemCode": "WXCS248",
+            "repairCode": "WXCS248",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 21234,
+            "name": "增加进水压力",
+            "itemCode": "WXCS272",
+            "repairCode": "WXCS272",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 21235,
+            "name": "更换增压泵",
+            "itemCode": "WXCS127",
+            "repairCode": "WXCS127",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 21236,
+            "name": "更换逆止阀",
+            "itemCode": "WXCS099",
+            "repairCode": "WXCS099",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 21237,
+            "name": "更换组合冲洗阀",
+            "itemCode": "WXCS135",
+            "repairCode": "WXCS135",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 21238,
+            "name": "排出管路内部空气",
+            "itemCode": "WXCS220",
+            "repairCode": "WXCS220",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 21239,
+            "name": "减小原水压力",
+            "itemCode": "WXCS206",
+            "repairCode": "WXCS206",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 21240,
+            "name": "检查减压阀并清洗",
+            "itemCode": "WXCS164",
+            "repairCode": "WXCS164",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 21241,
+            "name": "检查进水电磁阀",
+            "itemCode": "WXCS167",
+            "repairCode": "WXCS167",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 21242,
+            "name": "更换进水电磁阀",
+            "itemCode": "WXCS089",
+            "repairCode": "WXCS089",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 21243,
+            "name": "更换逆止阀",
+            "itemCode": "WXCS099",
+            "repairCode": "WXCS099",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 21244,
+            "name": "增大原水压力",
+            "itemCode": "WXCS270",
+            "repairCode": "WXCS270",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 21245,
+            "name": "重新拧入接头",
+            "itemCode": "WXCS292",
+            "repairCode": "WXCS292",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 21246,
+            "name": "检查组合冲洗电磁阀",
+            "itemCode": "WXCS202",
+            "repairCode": "WXCS202",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 21247,
+            "name": "检查进水三通并重新连接",
+            "itemCode": "WXCS176",
+            "repairCode": "WXCS176",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 21248,
+            "name": "检查进水球阀并重新连接",
+            "itemCode": "WXCS174",
+            "repairCode": "WXCS174",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 21249,
+            "name": "更换增压泵",
+            "itemCode": "WXCS127",
+            "repairCode": "WXCS127",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 21250,
+            "name": "更换组合冲洗电磁阀",
+            "itemCode": "WXCS134",
+            "repairCode": "WXCS134",
+            "typeName": "纯水机",
+            "smallType": "家用 (100G以下产品)"
+        },
+        {
+            "id": 21251,
+            "name": "路由器与设备距离过长，信号不稳定",
+            "itemCode": "WXCS217",
+            "repairCode": "WXCS217",
+            "typeName": "纯水机",
+            "smallType": "200-400G产品"
+        },
+        {
+            "id": 21252,
+            "name": "上电开机后触碰选择/电源键3秒钟，直至闪烁",
+            "itemCode": "WXCS236",
+            "repairCode": "WXCS236",
+            "typeName": "纯水机",
+            "smallType": "200-400G产品"
+        },
+        {
+            "id": 21253,
+            "name": "表示机器配网失败，检查家庭网络",
+            "itemCode": "WXCS014",
+            "repairCode": "WXCS014",
+            "typeName": "纯水机",
+            "smallType": "200-400G产品"
+        },
+        {
+            "id": 21254,
+            "name": "路由器无网络，检查家庭网络",
+            "itemCode": "WXCS216",
+            "repairCode": "WXCS216",
+            "typeName": "纯水机",
+            "smallType": "200-400G产品"
+        },
+        {
+            "id": 21255,
+            "name": "重新上电冲洗",
+            "itemCode": "WXCS294",
+            "repairCode": "WXCS294",
+            "typeName": "纯水机",
+            "smallType": "200-400G产品"
+        },
+        {
+            "id": 21256,
+            "name": "更换后置活性炭",
+            "itemCode": "WXCS306",
+            "repairCode": "WXCS306",
+            "typeName": "纯水机",
+            "smallType": "200-400G产品"
+        },
+        {
+            "id": 21257,
+            "name": "重新安装或冲洗前置滤芯",
+            "itemCode": "WXCS278",
+            "repairCode": "WXCS278",
+            "typeName": "纯水机",
+            "smallType": "200-400G产品"
+        },
+        {
+            "id": 21258,
+            "name": "告知用户改善原水水质或解释说明",
+            "itemCode": "WXCS046",
+            "repairCode": "WXCS046",
+            "typeName": "纯水机",
+            "smallType": "200-400G产品"
+        },
+        {
+            "id": 21259,
+            "name": "更换RO膜壳",
+            "itemCode": "WXCS050",
+            "repairCode": "WXCS050",
+            "typeName": "纯水机",
+            "smallType": "200-400G产品"
+        },
+        {
+            "id": 21260,
+            "name": "重新安装RO膜密封圈",
+            "itemCode": "WXCS277",
+            "repairCode": "WXCS277",
+            "typeName": "纯水机",
+            "smallType": "200-400G产品"
+        },
+        {
+            "id": 21261,
+            "name": "更换RO膜",
+            "itemCode": "WXCS049",
+            "repairCode": "WXCS049",
+            "typeName": "纯水机",
+            "smallType": "200-400G产品"
+        },
+        {
+            "id": 21262,
+            "name": "更换RO膜",
+            "itemCode": "WXCS049",
+            "repairCode": "WXCS049",
+            "typeName": "纯水机",
+            "smallType": "200-400G产品"
+        },
+        {
+            "id": 21263,
+            "name": "清洗RO膜",
+            "itemCode": "WXCS303",
+            "repairCode": "WXCS303",
+            "typeName": "纯水机",
+            "smallType": "200-400G产品"
+        },
+        {
+            "id": 21264,
+            "name": "再次测试",
+            "itemCode": "WXCS267",
+            "repairCode": "WXCS267",
+            "typeName": "纯水机",
+            "smallType": "200-400G产品"
+        },
+        {
+            "id": 21265,
+            "name": "更换后置滤芯",
+            "itemCode": "WXCS084",
+            "repairCode": "WXCS084",
+            "typeName": "纯水机",
+            "smallType": "200-400G产品"
+        },
+        {
+            "id": 21266,
+            "name": "更换RO膜",
+            "itemCode": "WXCS049",
+            "repairCode": "WXCS049",
+            "typeName": "纯水机",
+            "smallType": "200-400G产品"
+        },
+        {
+            "id": 21267,
+            "name": "重新测试",
+            "itemCode": "WXCS279",
+            "repairCode": "WXCS279",
+            "typeName": "纯水机",
+            "smallType": "200-400G产品"
+        },
+        {
+            "id": 21268,
+            "name": "更换废水比",
+            "itemCode": "WXCS074",
+            "repairCode": "WXCS074",
+            "typeName": "纯水机",
+            "smallType": "200-400G产品"
+        },
+        {
+            "id": 21269,
+            "name": "检查管路连接，疏通管路",
+            "itemCode": "WXCS161",
+            "repairCode": "WXCS161",
+            "typeName": "纯水机",
+            "smallType": "200-400G产品"
+        },
+        {
+            "id": 21270,
+            "name": "更换滤芯",
+            "itemCode": "WXCS302",
+            "repairCode": "WXCS302",
+            "typeName": "纯水机",
+            "smallType": "200-400G产品"
+        },
+        {
+            "id": 21271,
+            "name": "测试原水TDS并给用户解释",
+            "itemCode": "WXCS019",
+            "repairCode": "WXCS019",
+            "typeName": "纯水机",
+            "smallType": "200-400G产品"
+        },
+        {
+            "id": 21272,
+            "name": "增加进水压力",
+            "itemCode": "WXCS272",
+            "repairCode": "WXCS272",
+            "typeName": "纯水机",
+            "smallType": "200-400G产品"
+        },
+        {
+            "id": 21273,
+            "name": "更换增压泵",
+            "itemCode": "WXCS127",
+            "repairCode": "WXCS127",
+            "typeName": "纯水机",
+            "smallType": "200-400G产品"
+        },
+        {
+            "id": 21274,
+            "name": "检查电源适配器输出电压是否正常；水泵是否损坏",
+            "itemCode": "WXCS153",
+            "repairCode": "WXCS153",
+            "typeName": "纯水机",
+            "smallType": "200-400G产品"
+        },
+        {
+            "id": 21275,
+            "name": "更换组合冲洗阀",
+            "itemCode": "WXCS135",
+            "repairCode": "WXCS135",
+            "typeName": "纯水机",
+            "smallType": "200-400G产品"
+        },
+        {
+            "id": 21276,
+            "name": "更换逆止阀",
+            "itemCode": "WXCS099",
+            "repairCode": "WXCS099",
+            "typeName": "纯水机",
+            "smallType": "200-400G产品"
+        },
+        {
+            "id": 21277,
+            "name": "更换RO膜",
+            "itemCode": "WXCS049",
+            "repairCode": "WXCS049",
+            "typeName": "纯水机",
+            "smallType": "200-400G产品"
+        },
+        {
+            "id": 21278,
+            "name": "重新安装RO膜密封圈",
+            "itemCode": "WXCS277",
+            "repairCode": "WXCS277",
+            "typeName": "纯水机",
+            "smallType": "200-400G产品"
+        },
+        {
+            "id": 21279,
+            "name": "增加冲洗RO膜时间",
+            "itemCode": "WXCS271",
+            "repairCode": "WXCS271",
+            "typeName": "纯水机",
+            "smallType": "200-400G产品"
+        },
+        {
+            "id": 21280,
+            "name": "重新连接管路",
+            "itemCode": "WXCS305",
+            "repairCode": "WXCS305",
+            "typeName": "纯水机",
+            "smallType": "200-400G产品"
+        },
+        {
+            "id": 21281,
+            "name": "冲洗后置炭滤芯",
+            "itemCode": "WXCS025",
+            "repairCode": "WXCS025",
+            "typeName": "纯水机",
+            "smallType": "200-400G产品"
+        },
+        {
+            "id": 21282,
+            "name": "清洗压力桶",
+            "itemCode": "WXCS230",
+            "repairCode": "WXCS230",
+            "typeName": "纯水机",
+            "smallType": "200-400G产品"
+        },
+        {
+            "id": 21283,
+            "name": "更换后置炭滤芯",
+            "itemCode": "WXCS304",
+            "repairCode": "WXCS304",
+            "typeName": "纯水机",
+            "smallType": "200-400G产品"
+        },
+        {
+            "id": 21284,
+            "name": "更换RO膜",
+            "itemCode": "WXCS049",
+            "repairCode": "WXCS049",
+            "typeName": "纯水机",
+            "smallType": "200-400G产品"
+        },
+        {
+            "id": 21285,
+            "name": "更换电源适配器",
+            "itemCode": "WXCS066",
+            "repairCode": "WXCS066",
+            "typeName": "纯水机",
+            "smallType": "200-400G产品"
+        },
+        {
+            "id": 21286,
+            "name": "市电电压是否正常，电源适配器是否损坏",
+            "itemCode": "WXCS243",
+            "repairCode": "WXCS243",
+            "typeName": "纯水机",
+            "smallType": "200-400G产品"
+        },
+        {
+            "id": 21287,
+            "name": "更换鹅颈龙头",
+            "itemCode": "WXCS070",
+            "repairCode": "WXCS070",
+            "typeName": "纯水机",
+            "smallType": "200-400G产品"
+        },
+        {
+            "id": 21288,
+            "name": "检查逆止阀有无泄漏，压力桶是否渗漏",
+            "itemCode": "WXCS182",
+            "repairCode": "WXCS182",
+            "typeName": "纯水机",
+            "smallType": "200-400G产品"
+        },
+        {
+            "id": 21289,
+            "name": "检查管路连接，疏通管路",
+            "itemCode": "WXCS161",
+            "repairCode": "WXCS161",
+            "typeName": "纯水机",
+            "smallType": "200-400G产品"
+        },
+        {
+            "id": 21290,
+            "name": "更换进水电磁阀",
+            "itemCode": "WXCS089",
+            "repairCode": "WXCS089",
+            "typeName": "纯水机",
+            "smallType": "200-400G产品"
+        },
+        {
+            "id": 21291,
+            "name": "检查进水电磁阀电压是否正常",
+            "itemCode": "WXCS169",
+            "repairCode": "WXCS169",
+            "typeName": "纯水机",
+            "smallType": "200-400G产品"
+        },
+        {
+            "id": 21292,
+            "name": "更换滤芯",
+            "itemCode": "WXCS302",
+            "repairCode": "WXCS302",
+            "typeName": "纯水机",
+            "smallType": "200-400G产品"
+        },
+        {
+            "id": 21293,
+            "name": "更换压力桶",
+            "itemCode": "WXCS123",
+            "repairCode": "WXCS123",
+            "typeName": "纯水机",
+            "smallType": "200-400G产品"
+        },
+        {
+            "id": 21294,
+            "name": "更换组合冲洗电磁阀",
+            "itemCode": "WXCS134",
+            "repairCode": "WXCS134",
+            "typeName": "纯水机",
+            "smallType": "200-400G产品"
+        },
+        {
+            "id": 21295,
+            "name": "检查进水球阀是否完全打开",
+            "itemCode": "WXCS175",
+            "repairCode": "WXCS175",
+            "typeName": "纯水机",
+            "smallType": "200-400G产品"
+        },
+        {
+            "id": 21296,
+            "name": "电源适配器输出电压是否正常，水泵是否损坏",
+            "itemCode": "WXCS041",
+            "repairCode": "WXCS041",
+            "typeName": "纯水机",
+            "smallType": "200-400G产品"
+        },
+        {
+            "id": 21297,
+            "name": "更换增压泵",
+            "itemCode": "WXCS127",
+            "repairCode": "WXCS127",
+            "typeName": "纯水机",
+            "smallType": "200-400G产品"
+        },
+        {
+            "id": 21298,
+            "name": "告知增加清洗频率",
+            "itemCode": "WXCS047",
+            "repairCode": "WXCS047",
+            "typeName": "纯水机",
+            "smallType": "200-400G产品"
+        },
+        {
+            "id": 21299,
+            "name": "告知需要即饮即用",
+            "itemCode": "WXCS045",
+            "repairCode": "WXCS045",
+            "typeName": "纯水机",
+            "smallType": "200-400G产品"
+        },
+        {
+            "id": 21300,
+            "name": "更换冲洗阀",
+            "itemCode": "WXCS056",
+            "repairCode": "WXCS056",
+            "typeName": "纯水机",
+            "smallType": "200-400G产品"
+        },
+        {
+            "id": 21301,
+            "name": "检查管路连接，疏通管路",
+            "itemCode": "WXCS161",
+            "repairCode": "WXCS161",
+            "typeName": "纯水机",
+            "smallType": "200-400G产品"
+        },
+        {
+            "id": 21302,
+            "name": "检查进水电磁阀",
+            "itemCode": "WXCS167",
+            "repairCode": "WXCS167",
+            "typeName": "纯水机",
+            "smallType": "200-400G产品"
+        },
+        {
+            "id": 21303,
+            "name": "清洗滤芯",
+            "itemCode": "WXCS228",
+            "repairCode": "WXCS228",
+            "typeName": "纯水机",
+            "smallType": "200-400G产品"
+        },
+        {
+            "id": 21304,
+            "name": "按照箭头指向重新装好",
+            "itemCode": "WXCS005",
+            "repairCode": "WXCS005",
+            "typeName": "纯水机",
+            "smallType": "200-400G产品"
+        },
+        {
+            "id": 21305,
+            "name": "自来水有无缺水",
+            "itemCode": "WXCS301",
+            "repairCode": "WXCS301",
+            "typeName": "纯水机",
+            "smallType": "200-400G产品"
+        },
+        {
+            "id": 21306,
+            "name": "更换增压泵",
+            "itemCode": "WXCS127",
+            "repairCode": "WXCS127",
+            "typeName": "纯水机",
+            "smallType": "200-400G产品"
+        },
+        {
+            "id": 21307,
+            "name": "进水球阀是否打开",
+            "itemCode": "WXCS211",
+            "repairCode": "WXCS211",
+            "typeName": "纯水机",
+            "smallType": "200-400G产品"
+        },
+        {
+            "id": 21308,
+            "name": "更换进水电磁阀",
+            "itemCode": "WXCS089",
+            "repairCode": "WXCS089",
+            "typeName": "纯水机",
+            "smallType": "200-400G产品"
+        },
+        {
+            "id": 21309,
+            "name": "更换滤芯",
+            "itemCode": "WXCS302",
+            "repairCode": "WXCS302",
+            "typeName": "纯水机",
+            "smallType": "200-400G产品"
+        },
+        {
+            "id": 21310,
+            "name": "更换电源适配器",
+            "itemCode": "WXCS066",
+            "repairCode": "WXCS066",
+            "typeName": "纯水机",
+            "smallType": "200-400G产品"
+        },
+        {
+            "id": 21311,
+            "name": "更换电源转换板",
+            "itemCode": "WXCS067",
+            "repairCode": "WXCS067",
+            "typeName": "纯水机",
+            "smallType": "200-400G产品"
+        },
+        {
+            "id": 21312,
+            "name": "更换高压开关",
+            "itemCode": "WXCS079",
+            "repairCode": "WXCS079",
+            "typeName": "纯水机",
+            "smallType": "200-400G产品"
+        },
+        {
+            "id": 21313,
+            "name": "更换连接线插头",
+            "itemCode": "WXCS098",
+            "repairCode": "WXCS098",
+            "typeName": "纯水机",
+            "smallType": "200-400G产品"
+        },
+        {
+            "id": 21314,
+            "name": "检查连接线插头",
+            "itemCode": "WXCS181",
+            "repairCode": "WXCS181",
+            "typeName": "纯水机",
+            "smallType": "200-400G产品"
+        },
+        {
+            "id": 21315,
+            "name": "电源插座有无电压",
+            "itemCode": "WXCS040",
+            "repairCode": "WXCS040",
+            "typeName": "纯水机",
+            "smallType": "200-400G产品"
+        },
+        {
+            "id": 21316,
+            "name": "将压力桶球阀打到关闭状态",
+            "itemCode": "WXCS207",
+            "repairCode": "WXCS207",
+            "typeName": "纯水机",
+            "smallType": "200-400G产品"
+        },
+        {
+            "id": 21317,
+            "name": "更换增压泵",
+            "itemCode": "WXCS127",
+            "repairCode": "WXCS127",
+            "typeName": "纯水机",
+            "smallType": "200-400G产品"
+        },
+        {
+            "id": 21318,
+            "name": "更换主控板",
+            "itemCode": "WXCS133",
+            "repairCode": "WXCS133",
+            "typeName": "纯水机",
+            "smallType": "200-400G产品"
+        },
+        {
+            "id": 21319,
+            "name": "更换RO膜",
+            "itemCode": "WXCS049",
+            "repairCode": "WXCS049",
+            "typeName": "纯水机",
+            "smallType": "200-400G产品"
+        },
+        {
+            "id": 21320,
+            "name": "更换储水桶",
+            "itemCode": "WXCS057",
+            "repairCode": "WXCS057",
+            "typeName": "纯水机",
+            "smallType": "200-400G产品"
+        },
+        {
+            "id": 21321,
+            "name": "更换高压开关",
+            "itemCode": "WXCS079",
+            "repairCode": "WXCS079",
+            "typeName": "纯水机",
+            "smallType": "200-400G产品"
+        },
+        {
+            "id": 21322,
+            "name": "更换增压泵",
+            "itemCode": "WXCS127",
+            "repairCode": "WXCS127",
+            "typeName": "纯水机",
+            "smallType": "200-400G产品"
+        },
+        {
+            "id": 21323,
+            "name": "更换主板",
+            "itemCode": "WXCS132",
+            "repairCode": "WXCS132",
+            "typeName": "纯水机",
+            "smallType": "200-400G产品"
+        },
+        {
+            "id": 21324,
+            "name": "使用增压设备增大水压",
+            "itemCode": "WXCS241",
+            "repairCode": "WXCS241",
+            "typeName": "纯水机",
+            "smallType": "200-400G产品"
+        },
+        {
+            "id": 21325,
+            "name": "更换逆止阀",
+            "itemCode": "WXCS099",
+            "repairCode": "WXCS099",
+            "typeName": "纯水机",
+            "smallType": "200-400G产品"
+        },
+        {
+            "id": 21326,
+            "name": "更换电源适配器",
+            "itemCode": "WXCS066",
+            "repairCode": "WXCS066",
+            "typeName": "纯水机",
+            "smallType": "200-400G产品"
+        },
+        {
+            "id": 21327,
+            "name": "更换电源转换板",
+            "itemCode": "WXCS067",
+            "repairCode": "WXCS067",
+            "typeName": "纯水机",
+            "smallType": "200-400G产品"
+        },
+        {
+            "id": 21328,
+            "name": "更换减压阀",
+            "itemCode": "WXCS088",
+            "repairCode": "WXCS088",
+            "typeName": "纯水机",
+            "smallType": "200-400G产品"
+        },
+        {
+            "id": 21329,
+            "name": "更换逆止阀",
+            "itemCode": "WXCS099",
+            "repairCode": "WXCS099",
+            "typeName": "纯水机",
+            "smallType": "200-400G产品"
+        },
+        {
+            "id": 21330,
+            "name": "插好电源插座或适配器插头",
+            "itemCode": "WXCS020",
+            "repairCode": "WXCS020",
+            "typeName": "纯水机",
+            "smallType": "200-400G产品"
+        },
+        {
+            "id": 21331,
+            "name": "更换主控板",
+            "itemCode": "WXCS133",
+            "repairCode": "WXCS133",
+            "typeName": "纯水机",
+            "smallType": "200-400G产品"
+        },
+        {
+            "id": 21332,
+            "name": "售后上门确认",
+            "itemCode": "WXCS246",
+            "repairCode": "WXCS246",
+            "typeName": "纯水机",
+            "smallType": "200-400G产品"
+        },
+        {
+            "id": 21333,
+            "name": "清洗管路或排查其他进水管路",
+            "itemCode": "WXCS224",
+            "repairCode": "WXCS224",
+            "typeName": "纯水机",
+            "smallType": "200-400G产品"
+        },
+        {
+            "id": 21334,
+            "name": "更换后置滤芯",
+            "itemCode": "WXCS084",
+            "repairCode": "WXCS084",
+            "typeName": "纯水机",
+            "smallType": "200-400G产品"
+        },
+        {
+            "id": 21335,
+            "name": "更换压力桶",
+            "itemCode": "WXCS123",
+            "repairCode": "WXCS123",
+            "typeName": "纯水机",
+            "smallType": "200-400G产品"
+        },
+        {
+            "id": 21336,
+            "name": "原水水质并对用户进行必要解释",
+            "itemCode": "WXCS265",
+            "repairCode": "WXCS265",
+            "typeName": "纯水机",
+            "smallType": "200-400G产品"
+        },
+        {
+            "id": 21337,
+            "name": "清洗压力桶",
+            "itemCode": "WXCS230",
+            "repairCode": "WXCS230",
+            "typeName": "纯水机",
+            "smallType": "200-400G产品"
+        },
+        {
+            "id": 21338,
+            "name": "更换管路",
+            "itemCode": "WXCS081",
+            "repairCode": "WXCS081",
+            "typeName": "纯水机",
+            "smallType": "200-400G产品"
+        },
+        {
+            "id": 21339,
+            "name": "检查接头并重新连接",
+            "itemCode": "WXCS166",
+            "repairCode": "WXCS166",
+            "typeName": "纯水机",
+            "smallType": "200-400G产品"
+        },
+        {
+            "id": 21340,
+            "name": "重新拧紧滤瓶",
+            "itemCode": "WXCS289",
+            "repairCode": "WXCS289",
+            "typeName": "纯水机",
+            "smallType": "200-400G产品"
+        },
+        {
+            "id": 21341,
+            "name": "检查并更换膜壳、滤桶",
+            "itemCode": "WXCS143",
+            "repairCode": "WXCS143",
+            "typeName": "纯水机",
+            "smallType": "200-400G产品"
+        },
+        {
+            "id": 21342,
+            "name": "更换压力桶",
+            "itemCode": "WXCS123",
+            "repairCode": "WXCS123",
+            "typeName": "纯水机",
+            "smallType": "200-400G产品"
+        },
+        {
+            "id": 21343,
+            "name": "检查并重新安放密封圈",
+            "itemCode": "WXCS146",
+            "repairCode": "WXCS146",
+            "typeName": "纯水机",
+            "smallType": "200-400G产品"
+        },
+        {
+            "id": 21344,
+            "name": "更换主控板进行解决",
+            "itemCode": "WXCS307",
+            "repairCode": "WXCS307",
+            "typeName": "纯水机",
+            "smallType": "200-400G产品"
+        },
+        {
+            "id": 21345,
+            "name": "需用到滤芯管理器连接USB接口进行复位",
+            "itemCode": "WXCS257",
+            "repairCode": "WXCS257",
+            "typeName": "纯水机",
+            "smallType": "200-400G产品"
+        },
+        {
+            "id": 21346,
+            "name": "更换RO膜",
+            "itemCode": "WXCS049",
+            "repairCode": "WXCS049",
+            "typeName": "纯水机",
+            "smallType": "200-400G产品"
+        },
+        {
+            "id": 21347,
+            "name": "更换废水比",
+            "itemCode": "WXCS074",
+            "repairCode": "WXCS074",
+            "typeName": "纯水机",
+            "smallType": "200-400G产品"
+        },
+        {
+            "id": 21348,
+            "name": "更换高压开关",
+            "itemCode": "WXCS079",
+            "repairCode": "WXCS079",
+            "typeName": "纯水机",
+            "smallType": "200-400G产品"
+        },
+        {
+            "id": 21349,
+            "name": "工作时浓缩水排量是否正常",
+            "itemCode": "WXCS136",
+            "repairCode": "WXCS136",
+            "typeName": "纯水机",
+            "smallType": "200-400G产品"
+        },
+        {
+            "id": 21350,
+            "name": "更换进水电磁阀",
+            "itemCode": "WXCS089",
+            "repairCode": "WXCS089",
+            "typeName": "纯水机",
+            "smallType": "200-400G产品"
+        },
+        {
+            "id": 21351,
+            "name": "检查进水电磁阀是否关不住",
+            "itemCode": "WXCS170",
+            "repairCode": "WXCS170",
+            "typeName": "纯水机",
+            "smallType": "200-400G产品"
+        },
+        {
+            "id": 21352,
+            "name": "顺着箭头指向重新装好",
+            "itemCode": "WXCS248",
+            "repairCode": "WXCS248",
+            "typeName": "纯水机",
+            "smallType": "200-400G产品"
+        },
+        {
+            "id": 21353,
+            "name": "增加进水压力",
+            "itemCode": "WXCS272",
+            "repairCode": "WXCS272",
+            "typeName": "纯水机",
+            "smallType": "200-400G产品"
+        },
+        {
+            "id": 21354,
+            "name": "更换增压泵",
+            "itemCode": "WXCS127",
+            "repairCode": "WXCS127",
+            "typeName": "纯水机",
+            "smallType": "200-400G产品"
+        },
+        {
+            "id": 21355,
+            "name": "更换逆止阀",
+            "itemCode": "WXCS099",
+            "repairCode": "WXCS099",
+            "typeName": "纯水机",
+            "smallType": "200-400G产品"
+        },
+        {
+            "id": 21356,
+            "name": "更换组合冲洗阀",
+            "itemCode": "WXCS135",
+            "repairCode": "WXCS135",
+            "typeName": "纯水机",
+            "smallType": "200-400G产品"
+        },
+        {
+            "id": 21357,
+            "name": "排出管路内部空气",
+            "itemCode": "WXCS220",
+            "repairCode": "WXCS220",
+            "typeName": "纯水机",
+            "smallType": "200-400G产品"
+        },
+        {
+            "id": 21358,
+            "name": "减小原水压力",
+            "itemCode": "WXCS206",
+            "repairCode": "WXCS206",
+            "typeName": "纯水机",
+            "smallType": "200-400G产品"
+        },
+        {
+            "id": 21359,
+            "name": "检查减压阀并清洗",
+            "itemCode": "WXCS164",
+            "repairCode": "WXCS164",
+            "typeName": "纯水机",
+            "smallType": "200-400G产品"
+        },
+        {
+            "id": 21360,
+            "name": "检查进水电磁阀",
+            "itemCode": "WXCS167",
+            "repairCode": "WXCS167",
+            "typeName": "纯水机",
+            "smallType": "200-400G产品"
+        },
+        {
+            "id": 21361,
+            "name": "更换进水电磁阀",
+            "itemCode": "WXCS089",
+            "repairCode": "WXCS089",
+            "typeName": "纯水机",
+            "smallType": "200-400G产品"
+        },
+        {
+            "id": 21362,
+            "name": "更换逆止阀",
+            "itemCode": "WXCS099",
+            "repairCode": "WXCS099",
+            "typeName": "纯水机",
+            "smallType": "200-400G产品"
+        },
+        {
+            "id": 21363,
+            "name": "增大原水压力",
+            "itemCode": "WXCS270",
+            "repairCode": "WXCS270",
+            "typeName": "纯水机",
+            "smallType": "200-400G产品"
+        },
+        {
+            "id": 21364,
+            "name": "重新拧入接头",
+            "itemCode": "WXCS292",
+            "repairCode": "WXCS292",
+            "typeName": "纯水机",
+            "smallType": "200-400G产品"
+        },
+        {
+            "id": 21365,
+            "name": "检查组合冲洗电磁阀",
+            "itemCode": "WXCS202",
+            "repairCode": "WXCS202",
+            "typeName": "纯水机",
+            "smallType": "200-400G产品"
+        },
+        {
+            "id": 21366,
+            "name": "检查进水三通并重新连接",
+            "itemCode": "WXCS176",
+            "repairCode": "WXCS176",
+            "typeName": "纯水机",
+            "smallType": "200-400G产品"
+        },
+        {
+            "id": 21367,
+            "name": "检查进水球阀并重新连接",
+            "itemCode": "WXCS174",
+            "repairCode": "WXCS174",
+            "typeName": "纯水机",
+            "smallType": "200-400G产品"
+        },
+        {
+            "id": 21368,
+            "name": "更换增压泵",
+            "itemCode": "WXCS127",
+            "repairCode": "WXCS127",
+            "typeName": "纯水机",
+            "smallType": "200-400G产品"
+        },
+        {
+            "id": 21369,
+            "name": "更换组合冲洗电磁阀",
+            "itemCode": "WXCS134",
+            "repairCode": "WXCS134",
+            "typeName": "纯水机",
+            "smallType": "200-400G产品"
+        }
+    ]
+}

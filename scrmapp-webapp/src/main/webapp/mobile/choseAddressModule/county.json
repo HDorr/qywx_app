@@ -1,0 +1,21 @@
+{
+    "returnCode": "1",
+    "returnMst": "msg",
+    "data": [{
+        "areaId": "001",
+        "areaName": "test001",
+        "cityId": "01"
+    }, {
+        "areaId": "002",
+        "areaName": "test002",
+        "cityId": "02"
+    }, {
+        "areaId": "003",
+        "areaName": "test003",
+        "cityId": "03"
+    }, {
+        "areaId": "004",
+        "areaName": "test004",
+        "cityId": "04"
+    }]
+}

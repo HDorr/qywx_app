@@ -1,0 +1,66 @@
+{
+    "returnCode": 1,
+    "returnMsg": "无敌",
+    "data": {
+        "id": 1345,
+        "ordersCode": null,
+        "orderType": 3,
+        "orderTypeName": "保养单",
+        "status": 1,
+        "orderStatus": "处理中",
+        "userName": "无敌无敌",
+        "userMobile": "12345678901",
+        "contactsTelephone":"012-1234123",
+        "userAddress": "上海市上海市浦东新区上海市上海市浦东新区无敌",
+        "imageUrl": null,
+        "orderTime": "2018-01-30 12:00~14:00",
+        "description": "无敌",
+        "faultImage": "http://photocdn.sohu.com/20160124/Img435671677.jpg,http://photocdn.sohu.com/20160124/Img435671677.jpg,http://photocdn.sohu.com/20160124/Img435671677.jpg",
+        "endTime": null,
+        "maintainItem": null,
+        "changeFilterItem": null,
+        "repairItemRecord": null,
+        "repairPartRecord": null,
+        "installPartRecord": null,
+        "wechatOrdersRecordList": [
+            {
+                "recordTime": "2018-01-29 13:56:33",
+                "recordContent": "用户下单"
+            }
+        ],
+        "filterList": null,
+        "maintainPriceList": null,
+        "installParts": null,
+        "repairItems": null,
+        "repairParts": null,
+        "products": [
+            {
+                "productId": 1136,
+                "levelId": 2,
+                "productName": "沁园牌反渗透净水器",
+                "typeName": "纯水机",
+                "smallcName": null,
+                "productCode": "0703067",
+                "productBarCode": "578816122822899",
+                "barCodeImage": null,
+                "modelName": "RU-185J(电商专供）",
+                "productImage": "http://qinyuanmall.com/upload/image/201610/5433fd92-3763-4ded-963a-4adf95b1f849.jpg",
+                "ordersId": 1345,
+                "itemKind": null,
+                "o2o": 0,
+                "buyChannel": 0,
+                "buyTime": null,
+                "buyChannelName": null,
+                "shoppingOrder": null,
+                "saleType": 3,
+                "status": 1
+            }
+        ],
+        "productFinish": [],
+        "orderTimeArr": [
+            "2018-01-30",
+            "12:00~14:00"
+        ],
+        "descTitle": "保养描述："
+    }
+}

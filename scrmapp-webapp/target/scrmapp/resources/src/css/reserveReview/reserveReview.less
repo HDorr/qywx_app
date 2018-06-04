@@ -1,0 +1,258 @@
+@import (reference) "../theme.less";
+//预约评价；
+.main_layer{
+	position: relative;
+    max-width: 750px;
+    margin:0 auto;
+    min-height: 100%;
+    background-color: #f4f4f4;
+	.reviewTitle{
+		width: 100%;
+		height: 0.8rem;
+		line-height: 0.8rem;
+		text-align: left;
+		font-size: 0.32rem;
+		color:#fff;
+		background: #f4f4f4;
+		padding-left: 0.333333rem;
+		color:#3c3c3c;
+	}
+	.workerInfoWrap{
+		width: 100%;
+		height: auto;
+		background: #fff;
+			margin-bottom: 0.266667rem;
+		.workerInfo{
+			width: 9.333333rem;
+			height: 2.32rem;
+			margin: 0 auto;
+			padding-top: 0.466667rem;
+
+
+			.personImg{
+				width: 1.466667rem;
+				height: 1.466667rem;
+				border: 1px solid #eee;
+				border-radius: 0.066667rem;
+				background: url(../../../images/myOrder/workerHead.png);
+				background-size: cover;
+
+			}
+
+			.personInfo{
+				width: 2.533333rem;
+				height: 1.466667rem;
+				margin: 0 0.266667rem 0 0.266667rem;
+				position: relative;
+
+				.name{
+					font-weight: bold;
+				}
+
+				.tel{
+					position: absolute;
+					bottom: 0;
+					left: 0;
+				}
+
+			}
+			.starLevel{
+				width:4.6rem;
+				// height:1.466667rem;
+				font-size:0.266667rem;
+				margin-top:-0.213333rem;
+				>div{
+					width: 100%;
+					height: 0.6rem;
+					line-height:0.6rem;
+					position:relative;
+					//margin-bottom:0.066667rem;
+					.starBox{
+						width: 1.653333rem;
+						height:0.253333rem;
+						line-height: 0.4rem;
+						position:absolute;
+						left:54%;
+						top:50%;
+						transform:translateY(-50%);
+						// margin-left: 0.066667rem;
+						// margin-top:0.15rem;
+						background:url("../../images/icons/greyStars.png");
+						background-repeat: no-repeat;
+						background-size:cover;
+						>p{
+							width: 100%;
+							height: 100%;
+							float: left;
+							background:url("../../images/icons/blueStars .png");
+							background-repeat: no-repeat;
+							background-size:cover;
+						}
+					}
+				}
+
+				.top{
+
+					>span{
+						float: left;
+					}
+
+				}
+			}
+		}
+	}
+
+	.reviewOperateWrap{
+		width: 100%;
+		height: 12.4rem;
+		background: #fff;
+		.reviewOperate{
+			width: 9.333333rem;
+			margin: 0 auto;
+			//height: 1.733333rem;
+			>div{
+				width: 100%;
+				//height: 1.733333rem;
+				border-bottom: 1px solid #eee;
+				padding:0 0.133333rem;
+				.up{
+					width: 100%;
+					height: 1.2rem;
+					>span{
+						width: 2.133333rem;
+						text-align: left;
+						height: 1.2rem;
+						line-height: 1.2rem;
+					}
+
+					.chooseStar{
+						//width: 7.2rem;
+						height: 1.2rem;
+						line-height: 1.2rem;
+						>span{
+							width: 0.666667rem;
+							height: 0.666667rem;
+							margin-top: 0.266667rem;
+							margin-left: 0.266667rem;
+							display: inline-block;
+							background: url(../../../src/images/icons/star_gray.png);
+							background-size:cover;
+						}
+						>span.active{
+							background: url(../../../src/images/icons/star_blue.png);
+							background-size:cover;
+						}
+					}
+				}
+
+				.down{
+					width: 100%;
+					line-height: 0.533333rem;
+					color:#acacac;
+					font-size:0.24rem;
+					
+				}
+			}
+		}
+
+		.reviewTxt{
+			width: 9.333333rem;
+			margin: 0 auto;
+			height: 2.533333rem;
+			margin-top: 0.4rem;
+
+			.textBox{
+				width: 7.333333rem;
+				height: 2.133333rem;
+				padding: 0.133333rem;
+				resize:none;
+				outline: 0;
+				border: 1px solid #eee;
+			}
+		}
+
+		.starWrap{
+			width: 9.333333rem;
+			height: 1.2rem;
+			margin: 0 auto;
+			.starCon{
+				width: 100%;
+				height: 1.2rem;
+				>span{
+					width: 2.133333rem;
+					text-align: left;
+					height: 1.2rem;
+					line-height: 1.2rem;
+				}
+
+				.chooseStar{
+					//width: 7.2rem;
+					height: 1.2rem;
+					line-height: 1.2rem;
+					>span{
+						width: 0.666667rem;
+						height: 0.666667rem;
+						margin-top: 0.266667rem;
+						margin-left: 0.266667rem;
+						display: inline-block;
+						background: url(../../../src/images/icons/star_gray.png);
+						background-size:cover;
+					}
+					>span.active{
+						background: url(../../../src/images/icons/star_blue.png);
+						background-size:cover;
+					}
+				}
+			}
+		}
+	}
+	.reviewFooter{
+		position: absolute;
+		bottom: 0;
+		background: #fff;
+
+		button{
+			width: 9.333333rem;
+			height:1.333333rem ;
+			margin: 0.4rem 0.333333rem;
+			/* position: absolute;
+			bottom: 0.4rem;
+			left:0.333333rem; */
+		}	
+	}
+}
+
+
+//评价成功
+.main_layer{
+	.imgBox{
+        width:1.933333rem;
+        height:1.933333rem;
+        background-size: cover;
+        margin-left:auto;
+        margin-right:auto;
+    }
+    >p{
+        width: 100%;
+        text-align:center;
+        color:#383838;
+        font-size: 0.333333rem;
+        margin-top:0.573333rem;
+        >i{
+            display:inline-block;
+            height: 0.346667rem;
+            width:0.346667rem;
+            background-size: cover;
+            vertical-align:sub;
+            margin-right:0.213333rem;
+        }
+    }
+    .qy-btn-400{
+        display: block;
+        margin-top:0.64rem;
+        margin-left:auto;
+        margin-right:auto;
+    }
+}
+
+

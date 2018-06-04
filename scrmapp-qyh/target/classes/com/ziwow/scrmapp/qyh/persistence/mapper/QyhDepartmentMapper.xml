@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ziwow.scrmapp.qyh.persistence.mapper.QyhDepartmentMapper" >
+  <resultMap id="BaseResultMap" type="com.ziwow.scrmapp.qyh.persistence.entity.QyhDepartment" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="parentId" property="parentid" jdbcType="BIGINT" />
+    <result column="orderId" property="order" jdbcType="BIGINT" />
+    <result column="corpId" property="corpid" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <trim prefix="where" prefixOverrides="and|or" >
+    <if test="condition.id != null" >
+         and id = #{condition.id,jdbcType=VARCHAR}
+      </if>
+      <if test="condition.name != null" >
+         and name = #{condition.name,jdbcType=VARCHAR}
+      </if>
+      <if test="condition.parentid != null" >
+         and parentId = #{condition.parentid,jdbcType=BIGINT}
+      </if>
+      <if test="condition.order != null" >
+         and orderId = #{condition.order,jdbcType=BIGINT}
+      </if>
+      <if test="condition.corpid != null" >
+         and corpId = #{condition.corpid,jdbcType=VARCHAR}
+      </if>
+    </trim>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <trim prefix="where" prefixOverrides="and|or" >
+     <if test="example.condition.id != null" >
+         and id = #{example.condition.id,jdbcType=VARCHAR}
+      </if>
+      <if test="example.condition.name != null" >
+         and name = #{example.condition.name,jdbcType=VARCHAR}
+      </if>
+      <if test="example.condition.parentid != null" >
+         and parentId = #{example.condition.parentid,jdbcType=BIGINT}
+      </if>
+      <if test="example.condition.order != null" >
+         and orderId = #{example.condition.order,jdbcType=BIGINT}
+      </if>
+      <if test="example.condition.corpid != null" >
+         and corpId = #{example.condition.corpid,jdbcType=VARCHAR}
+      </if>
+    </trim>
+  </sql>
+  <sql id="Base_Column_List" >
+    id, name, parentId, orderId, corpId
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.ziwow.scrmapp.common.bean.Criteria" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from t_qyh_department
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_qyh_department
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from t_qyh_department
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.ziwow.scrmapp.common.bean.Criteria" >
+    delete from t_qyh_department
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.ziwow.scrmapp.qyh.persistence.entity.QyhDepartment" >
+    <selectKey resultType="java.lang.Long" keyProperty="id" order="BEFORE" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_qyh_department (id, name, parentId, 
+      orderId, corpId)
+    values (#{id,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, #{parentid,jdbcType=BIGINT}, 
+      #{orderId,jdbcType=BIGINT}, #{corpid,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.ziwow.scrmapp.qyh.persistence.entity.QyhDepartment" >
+    <selectKey resultType="java.lang.Long" keyProperty="id" order="BEFORE" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_qyh_department
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      id,
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="parentid != null" >
+        parentId,
+      </if>
+      <if test="order != null" >
+        orderId,
+      </if>
+      <if test="corpid != null" >
+        corpId,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      #{id,jdbcType=BIGINT},
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="parentid != null" >
+        #{parentid,jdbcType=BIGINT},
+      </if>
+      <if test="order != null" >
+        #{orderId,jdbcType=BIGINT},
+      </if>
+      <if test="corpid != null" >
+        #{corpid,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.ziwow.scrmapp.common.bean.Criteria" resultType="java.lang.Integer" >
+    select count(*) from t_qyh_department
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update t_qyh_department
+    <set >
+      <if test="record.id != null" >
+        id = #{record.id,jdbcType=BIGINT},
+      </if>
+      <if test="record.name != null" >
+        name = #{record.name,jdbcType=VARCHAR},
+      </if>
+      <if test="record.parentid != null" >
+        parentId = #{record.parentid,jdbcType=BIGINT},
+      </if>
+      <if test="record.order != null" >
+        orderId = #{record.order,jdbcType=BIGINT},
+      </if>
+      <if test="record.corpid != null" >
+        corpId = #{record.corpid,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update t_qyh_department
+    set id = #{record.id,jdbcType=BIGINT},
+      name = #{record.name,jdbcType=VARCHAR},
+      parentId = #{record.parentid,jdbcType=BIGINT},
+      orderId = #{record.order,jdbcType=BIGINT},
+      corpId = #{record.corpid,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.ziwow.scrmapp.qyh.persistence.entity.QyhDepartment" >
+    update t_qyh_department
+    <set >
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="parentid != null" >
+        parentId = #{parentid,jdbcType=BIGINT},
+      </if>
+      <if test="order != null" >
+        orderId = #{order,jdbcType=BIGINT},
+      </if>
+      <if test="corpid != null" >
+        corpId = #{corpid,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.ziwow.scrmapp.qyh.persistence.entity.QyhDepartment" >
+    update t_qyh_department
+    set name = #{name,jdbcType=VARCHAR},
+      parentId = #{parentid,jdbcType=BIGINT},
+      orderId = #{order,jdbcType=BIGINT},
+      corpId = #{corpid,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  
+  <insert id="batchInsertDepartment">  
+        insert into t_qyh_department (id,name, parentId,orderId,corpId) values 
+        <foreach collection="departments" index="index" item="item" open="" close="" separator=",">  
+            ( 
+            	#{item.id},
+            	#{item.name},  
+             	#{item.parentid},  
+              	#{item.order},
+              	#{item.corpid} 
+            )
+            on duplicate key update orderId = #{item.order}  
+        </foreach>  
+    </insert>
+    
+    
+    <update id="batchUpdateDepartment">  
+        <foreach collection="departments" index="index" item="item" open="" close="" separator=";">  
+        	update t_qyh_department set
+            	name = #{item.name},  
+             	parentid = #{item.parentid},  
+              	orderId = #{item.order}  
+            where id = #{item.id} and corpId = #{item.corpid}
+        </foreach>  
+    </update>
+    
+    <delete id="batchDeleteDepartment">  
+        delete from t_qyh_department where corpid = #{corpId} and id in
+        <foreach collection="departmentId" index="index" item="item" open="(" close=")" separator=",">  
+        	#{item}
+        </foreach>  
+    </delete>
+    
+    <select id="getDepartmentByName" parameterType="java.lang.String" resultType="com.ziwow.scrmapp.qyh.persistence.entity.QyhDepartment">
+    	select id,name,parentId parentid,orderId 'order',corpId corpid from t_qyh_department where name = #{deptName} and corpId = #{corpId} limit 0,1
+    </select>
+</mapper>

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ziwow.scrmapp.common.persistence.mapper.SmsStatisticsMapper">
+    <insert id="batchSaveSmsStatisticsData" parameterType="com.ziwow.scrmapp.common.persistence.entity.SmsStatistics">
+        INSERT INTO t_sms_statistics(sync_time,sync_order_num,send_sms_num,install_sms_num,maintain_sms_num,repair_sms_num,
+                                     register_num,install_register_num,maintain_register_num,repair_register_num,`type`)
+        VALUES
+        <foreach collection="list" item="item" separator=",">
+            (#{item.syncTime},#{item.syncOrderNum},#{item.sendSmsNum},
+             #{item.installSmsNum},#{item.maintainSmsNum},#{item.repairSmsNum},
+             #{item.registerNum},#{item.installRegisterNum},#{item.maintainRegisterNum},
+             #{item.repairRegisterNum},#{item.smsType})
+        </foreach>
+    </insert>
+    <update id="batchUpdateSmsStatisticsData" parameterType="com.ziwow.scrmapp.common.persistence.entity.SmsStatistics">
+        <foreach collection="list" item="item" index="index" open="" close="" separator=";">
+            update t_sms_statistics
+            <set>
+                <if test="item.syncOrderNum != null">
+                    sync_order_num = ${item.syncOrderNum},
+                </if>
+                <if test="item.sendSmsNum != null">
+                    send_sms_num = ${item.sendSmsNum},
+                </if>
+                <if test="item.installSmsNum != null">
+                    install_sms_num = ${item.installSmsNum},
+                </if>
+                <if test="item.maintainSmsNum != null">
+                    maintain_sms_num = ${item.maintainSmsNum},
+                </if>
+                <if test="item.repairSmsNum != null">
+                    repair_sms_num = ${item.repairSmsNum},
+                </if>
+                <if test="item.registerNum != null">
+                    register_num = ${item.registerNum},
+                </if>
+                <if test="item.installRegisterNum != null">
+                    install_register_num = ${item.installRegisterNum},
+                </if>
+                <if test="item.maintainRegisterNum != null">
+                    maintain_register_num = ${item.maintainRegisterNum},
+                </if>
+                <if test="item.repairRegisterNum != null">
+                    repair_register_num = ${item.repairRegisterNum}
+                </if>
+            </set>
+            where id = ${item.id}
+        </foreach>
+    </update>
+    <select id="getSmsStatisticsByDateAndType"
+            resultType="com.ziwow.scrmapp.common.persistence.entity.SmsStatistics">
+        select id, sync_time syncTime,sync_order_num syncOrderNum,send_sms_num sendSmsNum,install_sms_num installSmsNum,
+        maintain_sms_num maintainSmsNum,repair_sms_num repairSmsNum,register_num registerNum,install_register_num installRegisterNum,
+        maintain_register_num maintainRegisterNum,repair_register_num repairRegisterNum,`type` smsType
+        from t_sms_statistics where sync_time = #{syncTime} and `type` = #{smsType}
+    </select>
+</mapper>

@@ -1,0 +1,162 @@
+@import (reference) "../theme.less";
+#saveBtn{
+    height: 2.666667rem;
+    width: 100%;
+    position:fixed;
+    left: 0;
+    bottom:0;
+    >a{
+        display: block;
+        width: 100%;
+        height: 2.666667rem;
+        line-height: 2.666667rem;
+        text-align: center;
+        font-size:0.8rem;
+        color:#fff;
+    }
+}
+
+
+
+
+
+
+.userInfo_main_layer{
+    background-color: #f4f4f4;
+    width: 100%;
+    min-height: 100%;
+    top:0;
+    position: relative;
+    max-width: 750px;
+    margin: 0 auto;
+    padding-bottom:2.666667rem;
+     #centerArea{
+        font-size:0.693333rem;
+        margin-top:0;
+        .weui-cells:first-child{
+            margin-top:0;
+        }
+        .weui-cells:last-child{
+            margin-bottom:2.666667rem;
+        }
+        .weui-cell .uneditble{
+            color:#ccc;
+        }
+        input{
+            font-size:16px;
+        }
+        .conmunicateWays{
+            .cmWayBox{
+                display:flex;
+                flex-wrap:wrap;
+                .cmWay{
+                    width: 25%;
+                    margin-bottom: 0.533333rem;
+                    .cm-ckBox{
+                        display:block;
+                        margin: 0 auto;
+                        width: 3.2rem;
+                        height: 1.226667rem;
+                        border: 1px solid #7d7d7d;
+                        border-radius: 2px;
+                        line-height:1.2rem;
+                        text-align:center;
+                        font-weight: bold;
+                        font-size:0.64rem;
+                        overflow:hidden;
+                    }
+                }
+                .cmWay.on .cm-ckBox{
+                    color:@mainColor;
+                    border: 1px solid #fff;
+                    border-radius:0;
+                    background: url("../../../images/small-gou.png");
+                    background-size:100% 100%; 
+                }
+                
+            }
+        }
+    }
+}
+
+
+
+
+
+
+//地址选择容器
+.choseAreaBox{
+    width: 100%;
+    height: 100%;
+    position:fixed;
+    top:0;
+    left:0;
+    display:none;
+    overflow:hidden;
+    .backBar{
+        height:40px;
+        width: 100%;
+        background-color: @mainColor;
+        >span{
+            display:block;
+            width: 10%;
+            font-size:24px;
+            height: 40px;
+            line-height: 40px;
+            padding-left:10px;
+            color:#fff;
+        }
+    }
+    .headerUl{
+        height:50px;
+        width: 100%;
+        display:flex;
+        >li{
+            line-height: 50px;
+            text-align: center;
+            flex:1;
+            height: 100%;
+            font-size: 16px;
+            position:relative;
+        }
+        >li.headerLiActive::after{
+            width: 60%;
+            height: 1px;
+            border-bottom: 2px solid #f23030;
+            position: absolute;
+            bottom: 1px;
+            left: 50%;
+            content: '';
+            margin-left: -30%;
+        }
+    }
+}
+/*地址容器*/
+.choseAreaBox{
+    .addressContainer{
+        height: 100%;
+        width: 300%;
+        overflow: hidden;
+        display:flex;
+        transition:transform .2s linear;
+        .wraper{
+            height: 100%;
+            flex:1;
+            position:relative;
+            >ul{
+                width: 100%;
+                position:absolute;
+                >li{
+                    width: 100%;
+                    padding-left:10px;
+                    height:44px;
+                    line-height: 44px;
+                    border-top: 1px solid #e3e5e9;
+                }
+                >li.liChosed{
+                    color:red;
+                }
+        }
+    }
+    }
+}

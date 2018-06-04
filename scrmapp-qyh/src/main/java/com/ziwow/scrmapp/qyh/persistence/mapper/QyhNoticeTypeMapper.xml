@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ziwow.scrmapp.qyh.persistence.mapper.QyhNoticeTypeMapper" >
+  <resultMap id="BaseResultMap" type="com.ziwow.scrmapp.qyh.persistence.entity.QyhNoticeType" >
+    <id column="assortment_id" property="assortmentId" jdbcType="INTEGER" />
+    <result column="assortment_name" property="assortmentName" jdbcType="VARCHAR" />
+    <result column="assortment_url" property="assortmentUrl" jdbcType="VARCHAR" />
+    <result column="assortment_parent_id" property="assortmentParentId" jdbcType="INTEGER" />
+    <result column="assortment_level" property="assortmentLevel" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <trim prefix="where" prefixOverrides="and|or" >
+      <if test="condition.assortmentName != null" >
+         and assortment_name = #{condition.assortmentName,jdbcType=VARCHAR}
+      </if>
+      <if test="condition.assortmentUrl != null" >
+         and assortment_url = #{condition.assortmentUrl,jdbcType=VARCHAR}
+      </if>
+      <if test="condition.assortmentParentId != null" >
+         and assortment_parent_id = #{condition.assortmentParentId,jdbcType=INTEGER}
+      </if>
+      <if test="condition.assortmentLevel != null" >
+         and assortment_level = #{condition.assortmentLevel,jdbcType=INTEGER}
+      </if>
+    </trim>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <trim prefix="where" prefixOverrides="and|or" >
+      <if test="example.condition.assortmentName != null" >
+         and assortment_name = #{example.condition.assortmentName,jdbcType=VARCHAR}
+      </if>
+      <if test="example.condition.assortmentUrl != null" >
+         and assortment_url = #{example.condition.assortmentUrl,jdbcType=VARCHAR}
+      </if>
+      <if test="example.condition.assortmentParentId != null" >
+         and assortment_parent_id = #{example.condition.assortmentParentId,jdbcType=INTEGER}
+      </if>
+      <if test="example.condition.assortmentLevel != null" >
+         and assortment_level = #{example.condition.assortmentLevel,jdbcType=INTEGER}
+      </if>
+    </trim>
+  </sql>
+  <sql id="Base_Column_List" >
+    assortment_id, assortment_name, assortment_url, assortment_parent_id, assortment_level
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.ziwow.scrmapp.common.bean.Criteria" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from t_qyh_notice_type
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_qyh_notice_type
+    where assortment_id = #{assortmentId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from t_qyh_notice_type
+    where assortment_id = #{assortmentId,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.ziwow.scrmapp.common.bean.Criteria" >
+    delete from t_qyh_notice_type
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.ziwow.scrmapp.qyh.persistence.entity.QyhNoticeType" >
+    insert into t_qyh_notice_type (assortment_id, assortment_name, assortment_url, 
+      assortment_parent_id, assortment_level)
+    values (#{assortmentId,jdbcType=INTEGER}, #{assortmentName,jdbcType=VARCHAR}, #{assortmentUrl,jdbcType=VARCHAR}, 
+      #{assortmentParentId,jdbcType=INTEGER}, #{assortmentLevel,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.ziwow.scrmapp.qyh.persistence.entity.QyhNoticeType" >
+    insert into t_qyh_notice_type
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="assortmentId != null" >
+        assortment_id,
+      </if>
+      <if test="assortmentName != null" >
+        assortment_name,
+      </if>
+      <if test="assortmentUrl != null" >
+        assortment_url,
+      </if>
+      <if test="assortmentParentId != null" >
+        assortment_parent_id,
+      </if>
+      <if test="assortmentLevel != null" >
+        assortment_level,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="assortmentId != null" >
+        #{assortmentId,jdbcType=INTEGER},
+      </if>
+      <if test="assortmentName != null" >
+        #{assortmentName,jdbcType=VARCHAR},
+      </if>
+      <if test="assortmentUrl != null" >
+        #{assortmentUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="assortmentParentId != null" >
+        #{assortmentParentId,jdbcType=INTEGER},
+      </if>
+      <if test="assortmentLevel != null" >
+        #{assortmentLevel,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.ziwow.scrmapp.common.bean.Criteria" resultType="java.lang.Integer" >
+    select count(*) from t_qyh_notice_type
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update t_qyh_notice_type
+    <set >
+      <if test="record.assortmentId != null" >
+        assortment_id = #{record.assortmentId,jdbcType=INTEGER},
+      </if>
+      <if test="record.assortmentName != null" >
+        assortment_name = #{record.assortmentName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.assortmentUrl != null" >
+        assortment_url = #{record.assortmentUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="record.assortmentParentId != null" >
+        assortment_parent_id = #{record.assortmentParentId,jdbcType=INTEGER},
+      </if>
+      <if test="record.assortmentLevel != null" >
+        assortment_level = #{record.assortmentLevel,jdbcType=INTEGER},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update t_qyh_notice_type
+    set assortment_id = #{record.assortmentId,jdbcType=INTEGER},
+      assortment_name = #{record.assortmentName,jdbcType=VARCHAR},
+      assortment_url = #{record.assortmentUrl,jdbcType=VARCHAR},
+      assortment_parent_id = #{record.assortmentParentId,jdbcType=INTEGER},
+      assortment_level = #{record.assortmentLevel,jdbcType=INTEGER}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.ziwow.scrmapp.qyh.persistence.entity.QyhNoticeType" >
+    update t_qyh_notice_type
+    <set >
+      <if test="assortmentName != null" >
+        assortment_name = #{assortmentName,jdbcType=VARCHAR},
+      </if>
+      <if test="assortmentUrl != null" >
+        assortment_url = #{assortmentUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="assortmentParentId != null" >
+        assortment_parent_id = #{assortmentParentId,jdbcType=INTEGER},
+      </if>
+      <if test="assortmentLevel != null" >
+        assortment_level = #{assortmentLevel,jdbcType=INTEGER},
+      </if>
+    </set>
+    where assortment_id = #{assortmentId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.ziwow.scrmapp.qyh.persistence.entity.QyhNoticeType" >
+    update t_qyh_notice_type
+    set assortment_name = #{assortmentName,jdbcType=VARCHAR},
+      assortment_url = #{assortmentUrl,jdbcType=VARCHAR},
+      assortment_parent_id = #{assortmentParentId,jdbcType=INTEGER},
+      assortment_level = #{assortmentLevel,jdbcType=INTEGER}
+    where assortment_id = #{assortmentId,jdbcType=INTEGER}
+  </update>
+</mapper>

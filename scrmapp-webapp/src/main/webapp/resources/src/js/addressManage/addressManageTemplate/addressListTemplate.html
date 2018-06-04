@@ -1,0 +1,36 @@
+{{each data as v i}}
+<div class="weui-cells addressContainer" data-id={{v.id}} data-userid=  {{v.userId}} >
+    <div class="addressTitle weui-cell">
+        <p class="pull-left weui-cell__bd">{{v.contacts}}</p>
+        <p class="pull-right weui-cell__bd">{{v.contactsMobile}}</p>
+    </div>
+    <div class="address weui-cell" data-id={{v.id}} onclick="gotoOrderService(this)">
+        <p>{{v.provinceName+v.cityName+v.areaName+v.streetName}}</p>
+    </div>
+    <div class="seprator weui-cell"></div>
+    <div class="opration weui-cell clearfix">
+        <div class="weui-cell__hd weui-cells_checkbox pull-left setDefaultBox">
+            <label class="weui-cell weui-check__label">
+                <div class="weui-cell__hd">
+                    {{if v.isDefault==1}}
+                    <input type="checkbox" class="weui-check defaultAddrCheck"  data-id={{v.id}} data-userid={{v.userId}} onchange="defaultAddrCheckOnChange   (this)" name="checkbox1" checked>
+                    {{else}}
+                    <input type="checkbox"  data-id={{v.id}} data-userid={{v.userId}} class="weui-check defaultAddrCheck" onchange="defaultAddrCheckOnChange(this)">
+                    {{/if}}
+                    <i class="weui-icon-checked"></i>
+                </div>
+                <div class="weui-cell__bd">
+                    <p>设为默认</p>
+                </div>
+            </label>
+        </div>
+        <div class="pull-right weui-cell__bd detailOpt">
+            <a href={{"#/addrEdit?id="+v.id+"&userId="+v.userId+"&fAid="+v.fAid}} data-faid={{v.fAid}} data-id={{v.id}} data-userid= {{v.userId}}><img src="../../../resources/images/addressEdit.png" class="addrListEditIcon">编辑</a>
+            <a href="javascript:;" data-id={{v.id}} data-userid={{v.userId}}     onclick="confirmDelet(this)"><img src="../../../resources/images/addressRemove.png" class="addrListDelIcon">删除</a>
+        </div>
+    </div>
+</div>
+{{/each}}
+<a id="addNewAddr" href={{"#/addrAdd?userId="+data[0].userId}} class="qyBlue">
+    <p>添加新地址 +</p>
+</a>

@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ziwow.scrmapp.qyh.persistence.mapper.QyhAuthAgentMapper" >
+  <resultMap id="BaseResultMap" type="com.ziwow.scrmapp.qyh.persistence.entity.QyhAuthAgent" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="appid" property="appid" jdbcType="VARCHAR" />
+    <result column="agentId" property="agentid" jdbcType="VARCHAR" />
+    <result column="authCorpId" property="authcorpid" jdbcType="VARCHAR" />
+    <result column="createTime" property="createtime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <trim prefix="where" prefixOverrides="and|or" >
+      <if test="condition.appid != null" >
+         and appid = #{condition.appid,jdbcType=VARCHAR}
+      </if>
+      <if test="condition.agentid != null" >
+         and agentId = #{condition.agentid,jdbcType=VARCHAR}
+      </if>
+      <if test="condition.authcorpid != null" >
+         and authCorpId = #{condition.authcorpid,jdbcType=VARCHAR}
+      </if>
+      <if test="condition.createtime != null" >
+         and createTime = #{condition.createtime,jdbcType=TIMESTAMP}
+      </if>
+    </trim>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <trim prefix="where" prefixOverrides="and|or" >
+      <if test="example.condition.appid != null" >
+         and appid = #{example.condition.appid,jdbcType=VARCHAR}
+      </if>
+      <if test="example.condition.agentid != null" >
+         and agentId = #{example.condition.agentid,jdbcType=VARCHAR}
+      </if>
+      <if test="example.condition.authcorpid != null" >
+         and authCorpId = #{example.condition.authcorpid,jdbcType=VARCHAR}
+      </if>
+      <if test="example.condition.createtime != null" >
+         and createTime = #{example.condition.createtime,jdbcType=TIMESTAMP}
+      </if>
+    </trim>
+  </sql>
+  <sql id="Base_Column_List" >
+    id, appid, agentId, authCorpId, createTime
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.ziwow.scrmapp.common.bean.Criteria" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from t_qyh_auth_agent
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_qyh_auth_agent
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from t_qyh_auth_agent
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.ziwow.scrmapp.common.bean.Criteria" >
+    delete from t_qyh_auth_agent
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.ziwow.scrmapp.qyh.persistence.entity.QyhAuthAgent" >
+    <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_qyh_auth_agent (appid, agentId, authCorpId, 
+      createTime)
+    values (#{appid,jdbcType=VARCHAR}, #{agentid,jdbcType=VARCHAR}, #{authcorpid,jdbcType=VARCHAR}, 
+      #{createtime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.ziwow.scrmapp.qyh.persistence.entity.QyhAuthAgent" >
+    <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_qyh_auth_agent
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="appid != null" >
+        appid,
+      </if>
+      <if test="agentid != null" >
+        agentId,
+      </if>
+      <if test="authcorpid != null" >
+        authCorpId,
+      </if>
+      <if test="createtime != null" >
+        createTime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="appid != null" >
+        #{appid,jdbcType=VARCHAR},
+      </if>
+      <if test="agentid != null" >
+        #{agentid,jdbcType=VARCHAR},
+      </if>
+      <if test="authcorpid != null" >
+        #{authcorpid,jdbcType=VARCHAR},
+      </if>
+      <if test="createtime != null" >
+        #{createtime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.ziwow.scrmapp.common.bean.Criteria" resultType="java.lang.Integer" >
+    select count(*) from t_qyh_auth_agent
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update t_qyh_auth_agent
+    <set >
+      <if test="record.id != null" >
+        id = #{record.id,jdbcType=BIGINT},
+      </if>
+      <if test="record.appid != null" >
+        appid = #{record.appid,jdbcType=VARCHAR},
+      </if>
+      <if test="record.agentid != null" >
+        agentId = #{record.agentid,jdbcType=VARCHAR},
+      </if>
+      <if test="record.authcorpid != null" >
+        authCorpId = #{record.authcorpid,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createtime != null" >
+        createTime = #{record.createtime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update t_qyh_auth_agent
+    set id = #{record.id,jdbcType=BIGINT},
+      appid = #{record.appid,jdbcType=VARCHAR},
+      agentId = #{record.agentid,jdbcType=VARCHAR},
+      authCorpId = #{record.authcorpid,jdbcType=VARCHAR},
+      createTime = #{record.createtime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.ziwow.scrmapp.qyh.persistence.entity.QyhAuthAgent" >
+    update t_qyh_auth_agent
+    <set >
+      <if test="appid != null" >
+        appid = #{appid,jdbcType=VARCHAR},
+      </if>
+      <if test="agentid != null" >
+        agentId = #{agentid,jdbcType=VARCHAR},
+      </if>
+      <if test="authcorpid != null" >
+        authCorpId = #{authcorpid,jdbcType=VARCHAR},
+      </if>
+      <if test="createtime != null" >
+        createTime = #{createtime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.ziwow.scrmapp.qyh.persistence.entity.QyhAuthAgent" >
+    update t_qyh_auth_agent
+    set appid = #{appid,jdbcType=VARCHAR},
+      agentId = #{agentid,jdbcType=VARCHAR},
+      authCorpId = #{authcorpid,jdbcType=VARCHAR},
+      createTime = #{createtime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  
+  <select id="getQyhAuthAgentByAppId" resultType="com.ziwow.scrmapp.qyh.persistence.entity.QyhAuthAgent">
+		SELECT
+			agent.*,
+			app.suiteId as suiteId
+		FROM
+			t_qyh_app app,
+		  	t_qyh_auth_corp corp,
+			t_qyh_auth_agent agent
+		WHERE
+		  app.suiteId = corp.suiteId
+		  and corp.id = agent.authCorpId
+		  and app.appId = agent.appid
+		  and corp.corpId = #{corpId}
+		  and app.appId = #{appId} and  app.suiteId=#{suitId}
+	</select>
+</mapper>

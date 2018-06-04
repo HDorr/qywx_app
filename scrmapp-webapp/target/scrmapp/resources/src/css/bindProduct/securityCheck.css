@@ -1,0 +1,114 @@
+.main_layer {
+  background: #f4f4f4;
+  padding: 0.493333rem;
+}
+.main_layer .content_success {
+  width: 8.986667rem;
+  height: 8.053333rem;
+  border: 1px solid #d4d4d4;
+  background: #fff;
+}
+.main_layer .content_success .top {
+  width: 100%;
+  height: 3.813333rem;
+  margin-top: 1.066667rem;
+}
+.main_layer .content_success .top .imgBox {
+  text-align: center;
+}
+.main_layer .content_success .top .imgBox > span {
+  margin: 0 auto;
+  width: 1.746667rem;
+  height: 2.24rem;
+  background: url('../../../images/securityCheck/check_success.png') top left no-repeat;
+  background-size: cover;
+  display: inline-block;
+}
+.main_layer .content_success .top > p {
+  text-align: center;
+  font-size: 0.373333rem;
+  margin: 0.133333rem 0;
+  color: #3b3b3b;
+}
+.main_layer .content_success .top > p > span {
+  display: inline-block;
+}
+.main_layer .content_success .top > p .thankTxt {
+  width: 2.106667rem;
+  height: 0.64rem;
+  border: 1px dashed #666;
+  color: #666;
+  border-radius: 0.4rem;
+}
+.main_layer .content_success .down {
+  padding: 0.266667rem 0.8rem;
+  color: #626262;
+}
+.main_layer .content_success .down > p {
+  line-height: 0.613333rem;
+  font-size: 0.293333rem;
+}
+.main_layer .content_success .down > p > span {
+  width: 5.333333rem;
+  height: 0.435rem;
+  display: inline-block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.main_layer .content_failed {
+  width: 8.986667rem;
+  height: 8.053333rem;
+  border: 1px solid #d4d4d4;
+  background: #fff;
+}
+.main_layer .content_failed .top {
+  width: 100%;
+  height: 3.813333rem;
+  margin-top: 1.066667rem;
+}
+.main_layer .content_failed .top > p {
+  text-align: center;
+  font-size: 0.373333rem;
+}
+.main_layer .content_failed .top > p > span {
+  display: inline-block;
+}
+.main_layer .content_failed .top > p .sorryTxt {
+  width: 3.6rem;
+  height: 0.8rem;
+  line-height: 0.8rem;
+  background: #eeeeee;
+  border-radius: 0.4rem;
+  color: #8e8e8e;
+}
+.main_layer .content_failed .top .imgBox {
+  text-align: center;
+  margin-top: 0.266667rem;
+}
+.main_layer .content_failed .top .imgBox > span {
+  margin: 0 auto;
+  width: 3.6rem;
+  height: 2.733333rem;
+  background: url('../../../images/securityCheck/check_failed.png') top left no-repeat;
+  background-size: cover;
+  display: inline-block;
+}
+.main_layer .content_failed .down {
+  padding: 0.266667rem 0.8rem;
+  color: #626262;
+  margin-top: 0.533333rem;
+}
+.main_layer .content_failed .down > p {
+  line-height: 0.613333rem;
+  font-size: 0.32rem;
+}
+.main_layer .content_failed .down > p > span {
+  width: 5.333333rem;
+  height: 0.466667rem;
+  display: inline-block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.main_layer .content_failed .down > p .userName {
+  width: auto;
+}

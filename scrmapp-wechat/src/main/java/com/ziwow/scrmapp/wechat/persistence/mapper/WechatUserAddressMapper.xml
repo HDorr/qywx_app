@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ziwow.scrmapp.wechat.persistence.mapper.WechatUserAddressMapper">
+
+    <resultMap id="wechatUserAddressMap" type="com.ziwow.scrmapp.wechat.persistence.entity.ext.WechatUserAddressExt">
+        <result column="id" property="id"/>
+        <result column="userId" property="userId"/>
+        <result column="contacts" property="contacts"/>
+        <result column="contactsMobile" property="contactsMobile"/>
+        <result column="provinceId" property="provinceId"/>
+        <result column="provinceName" property="provinceName"/>
+        <result column="cityId" property="cityId"/>
+        <result column="cityName" property="cityName"/>
+        <result column="areaId" property="areaId"/>
+        <result column="areaName" property="areaName"/>
+        <result column="streetName" property="streetName"/>
+        <result column="isDefault" property="isDefault"/>
+        <result column="type" property="type"/>
+        <result column="headimgurl" property="headimgurl"/>
+        <result column="fixedTelephone" property="fixedTelephone"/>
+        <result column="f_aid" property="fAid"/>
+    </resultMap>
+
+    <!-- 查询用户所有地址信息 -->
+    <select id="findListByUserId" resultMap="wechatUserAddressMap">
+		SELECT
+			twf.headimgurl,
+			twua.*
+		FROM
+			t_wechat_user_address twua
+		LEFT JOIN t_wechat_user twu ON twu.userId = twua.userId
+		LEFT JOIN t_wechat_fans twf ON twu.wfId = twf.id
+		WHERE
+			twua.userId = #{userId}
+		AND twua.type = 1
+		ORDER BY
+			twua.isDefault ASC,
+			twua.id ASC
+    </select>
+
+    <!-- 查询用户具体地址信息 -->
+    <select id="findAddress" resultMap="wechatUserAddressMap">
+      select id,userId,contacts,contactsMobile,provinceId,provinceName,cityId,cityName,areaId,areaName,streetName,isDefault,type,fixedTelephone,f_aid from t_wechat_user_address where id = #{id} and type = 1
+    </select>
+
+    <select id="findAddressByAid" resultType="java.lang.Long">
+        select id from t_wechat_user_address where f_aid = #{aId} limit 0,1
+    </select>
+
+    <insert id="saveAddress" useGeneratedKeys="true" keyProperty="id"
+            parameterType="com.ziwow.scrmapp.wechat.persistence.entity.WechatUserAddress">
+      insert into t_wechat_user_address(userId,contacts,contactsMobile,provinceId,provinceName,cityId,cityName,areaId,areaName,streetName,isDefault,type,fixedTelephone,f_aid)
+      values(#{userId},#{contacts},#{contactsMobile},#{provinceId},#{provinceName},#{cityId},#{cityName},#{areaId},#{areaName},#{streetName},#{isDefault},1,#{fixedTelephone},#{fAid})
+    </insert>
+
+    <update id="updateAddress" parameterType="com.ziwow.scrmapp.wechat.persistence.entity.WechatUserAddress">
+      update t_wechat_user_address set contacts = #{contacts},contactsMobile = #{contactsMobile},provinceId = #{provinceId},
+      provinceName = #{provinceName},cityId = #{cityId},cityName = #{cityName},areaId = #{areaId},areaName = #{areaName},
+      streetName = #{streetName},isDefault = #{isDefault},fixedTelephone = #{fixedTelephone} where userId = #{userId} and id = #{id}
+    </update>
+
+    <update id="updateAddressSelective" parameterType="com.ziwow.scrmapp.wechat.persistence.entity.WechatUserAddress">
+        update t_wechat_user_address
+        <set>
+            <if test="contacts != null">
+                contacts = #{contacts,jdbcType=INTEGER},
+            </if>
+            <if test="contactsMobile != null">
+                contactsMobile = #{contactsMobile,jdbcType=INTEGER},
+            </if>
+            <if test="provinceId != null">
+                provinceId = #{provinceId,jdbcType=INTEGER},
+            </if>
+            <if test="provinceName != null">
+                provinceName = #{provinceName,jdbcType=VARCHAR},
+            </if>
+            <if test="cityId != null">
+                cityId = #{cityId,jdbcType=INTEGER},
+            </if>
+            <if test="cityName != null">
+                cityName = #{cityName,jdbcType=VARCHAR},
+            </if>
+            <if test="areaId != null">
+                areaId = #{areaId,jdbcType=INTEGER},
+            </if>
+            <if test="areaName != null">
+                areaName = #{areaName,jdbcType=VARCHAR},
+            </if>
+            <if test="streetName != null">
+                streetName = #{streetName,jdbcType=VARCHAR},
+            </if>
+            <if test="isDefault != null">
+                isDefault = #{isDefault,jdbcType=TINYINT},
+            </if>
+            <if test="fixedTelephone != null">
+                fixedTelephone = #{fixedTelephone,jdbcType=VARCHAR},
+            </if>
+            <if test="fAid != null">
+                f_aid = #{fAid,jdbcType=VARCHAR},
+            </if>
+        </set>
+    where id = #{id,jdbcType = INTEGER}
+</update>
+
+    <!-- 逻辑删除地址 -->
+    <update id="deleteAddress">
+      update t_wechat_user_address set type = 2 where userId = #{userId} and id = #{id} and type = 1
+    </update>
+
+    <!-- 逻辑删除地址 -->
+    <update id="delAddressById">
+        update t_wechat_user_address set type = 2 where id = #{id} and type = 1
+    </update>
+
+    <!-- 修改当前地址为默认地址 -->
+    <update id="setDefault">
+      update t_wechat_user_address set isDefault = 1 where userId = #{userId} and id = #{id} and type = 1
+    </update>
+
+    <!-- 修改当前用户所有地址为非默认 -->
+    <update id="cancelDefault">
+      update t_wechat_user_address set isDefault = 2 where userId = #{userId} and type = 1 and isDefault = 1
+    </update>
+
+</mapper>

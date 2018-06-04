@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xsi:schemaLocation="
+                    http://www.springframework.org/schema/beans
+                    http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+                    http://www.springframework.org/schema/tx 
+                    http://www.springframework.org/schema/tx/spring-tx-4.0.xsd
+                    http://www.springframework.org/schema/aop 
+                    http://www.springframework.org/schema/aop/spring-aop-4.0.xsd
+                    http://www.springframework.org/schema/context      
+                    http://www.springframework.org/schema/context/spring-context-4.0.xsd
+                    http://www.springframework.org/schema/mvc
+                    http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd
+                    http://www.springframework.org/schema/util
+    			    http://www.springframework.org/schema/util/spring-util-3.0.xsd"
+      xmlns:util="http://www.springframework.org/schema/util">
+  
+
+	<!-- DispatcherServlet Context: defines this servlet's request-processing infrastructure -->
+	
+	<!-- 启动Spring MVC的注解功能，完成请求和注解POJO的映射 -->
+	<!-- <bean
+		class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter" /> -->
+
+	<!-- 主要作用于@Controller，激活该模式，下面是一种简写形式，完全可以手动配置替代这种简写形式，它会自动注册DefaultAnnotationHandlerMapping与AnnotationMethodHandlerAdapter，是spring 
+		MVC为@Controllers分发请求所必须的 -->
+	<mvc:annotation-driven>
+		<mvc:message-converters >
+			<bean id="jacksonMessageConverter"
+				class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
+				<property name="objectMapper" ref="objectMappingCustomer"></property>
+				<property name="supportedMediaTypes">
+					<list>
+						<value>application/json;charset=UTF-8</value>
+						<value>application/x-www-form-urlencoded;charset=UTF-8</value>
+						<value>text/plain;charset=UTF-8</value>
+					</list>
+				</property> 
+			</bean>
+		</mvc:message-converters>
+	</mvc:annotation-driven>
+	
+	
+	
+	
+	<!-- 最重要:::如果放在spring-context.xml中，这里的aop设置将不会生效 -->
+	<aop:aspectj-autoproxy proxy-target-class="true"/>
+	<!-- 指定Sping组件扫描的基本包路径 -->
+	<context:component-scan base-package="com.ziwow.scrmapp.aop">
+		<context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+	</context:component-scan>
+	<!-- <mvc:interceptors>  
+     使用bean定义一个Interceptor，直接定义在mvc:interceptors根下面的Interceptor将拦截所有的请求
+    <bean class="com.ziwow.activity.interceptor.SessionTimeOutInterceptor"/>  
+    <mvc:interceptor>
+        <mvc:mapping path="/**"/>
+        定义在mvc:interceptor下面的表示是对特定的请求才进行拦截的
+        <bean class="com.ziwow.activity.interceptor.SessionTimeOutInterceptor"/>  
+    </mvc:interceptor>  
+</mvc:interceptors> -->
+	
+	<!-- Handles HTTP GET requests for /resources/** by efficiently serving up static resources in the ${webappRoot}/resources/ directory -->
+	<mvc:resources mapping="/resources/**" location="/resources/" />
+	
+	<!-- Resolves views selected for rendering by @Controllers to .jsp resources in the /WEB-INF/views directory -->
+	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="prefix" value="/WEB-INF/views/" />
+		<property name="suffix" value=".jsp" />
+	</bean>
+	
+	<bean id="objectMappingCustomer" class="com.ziwow.scrmapp.core.util.ObjectMappingCustomer" />
+	
+	<context:property-placeholder location="/WEB-INF/classes/*.properties" />
+</beans>

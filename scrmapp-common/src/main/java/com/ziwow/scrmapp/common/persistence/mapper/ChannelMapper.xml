@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ziwow.scrmapp.common.persistence.mapper.ChannelMapper">
+    <resultMap id="BaseResultMap" type="com.ziwow.scrmapp.common.persistence.entity.Channel">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="channelName" property="channelName" jdbcType="VARCHAR"/>
+        <result column="creator" property="creator" jdbcType="VARCHAR"/>
+        <result column="createTime" property="createTime" jdbcType="DATE"/>
+        <result column="mark" property="mark" jdbcType="VARCHAR"/>
+        <result column="qrUrl" property="qrUrl" jdbcType="VARCHAR"/>
+        <result column="isClose" property="isClose" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <select id="query" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select * from t_channel where id = #{channelId} limit 0,1
+    </select>
+</mapper>

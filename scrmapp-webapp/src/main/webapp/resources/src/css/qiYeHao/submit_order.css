@@ -1,0 +1,533 @@
+.btn {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  height: 2.0rem;
+  background: #f4f4f4;
+  text-align: center;
+  padding: 0 0.333333rem;
+}
+.btn button {
+  width: 9.333333rem;
+  height: 1.333333rem;
+  line-height: 1.333333rem;
+  margin: 0.333333rem auto;
+}
+.btn .confirmBtn {
+  width: 4.533333rem;
+  height: 1.333333rem;
+  line-height: 1.333333rem;
+  float: left;
+}
+.btn .cancelBtn {
+  width: 4.533333rem;
+  height: 1.333333rem;
+  line-height: 1.333333rem;
+  background: #fff;
+  color: #8a8a8a;
+  float: right;
+}
+.errorIcon {
+  margin: 0 auto;
+  width: 2.04rem;
+  height: 2.293333rem;
+  background: url(../../../src/images/icons/noInfo.png) top left no-repeat;
+  background-size: cover;
+  margin-top: 2.666667rem;
+}
+.errorTxt {
+  width: 100%;
+  text-align: center;
+  margin-top: 0.6rem;
+  color: #3c3c3c;
+}
+.main_layer {
+  padding-bottom: 2.0rem;
+  padding-top: 0.666667rem;
+}
+.main_layer .writeQrcode {
+  display: none;
+}
+.main_layer .topTips {
+  width: 100%;
+  height: 0.666667rem;
+  line-height: 0.666667rem;
+  color: #333333;
+  font-size: 0.32rem;
+}
+.main_layer .topTips > p {
+  width: 9.333333rem;
+  margin: 0 auto;
+  line-height: 0.666667rem;
+}
+.main_layer .scanArea {
+  height: 2.933333rem;
+  width: 100%;
+  background-color: #fff;
+  padding-left: 0.333333rem;
+  padding-right: 0.586667rem;
+}
+.main_layer .scanArea .title {
+  height: 0.666667rem;
+  line-height: 0.666667rem;
+  margin-bottom: 0.4rem;
+}
+.main_layer .scanArea > label {
+  font-size: 0.32rem;
+  color: #393939;
+  position: relative;
+}
+.main_layer .scanArea .qy-input-360 {
+  font-size: 0.333333rem;
+  margin-left: 0.48rem;
+  padding-left: 0.2rem;
+  background: #FFF;
+}
+.main_layer .scanArea .scanQrCode {
+  width: 1.266667rem;
+  height: 1.266667rem;
+  background-size: cover;
+  margin-top: -0.066667rem;
+  position: relative;
+}
+.main_layer .scanArea .scanQrCode > p {
+  width: 110%;
+  position: absolute;
+  bottom: -0.506667rem;
+  font-size: 0.333333rem;
+  color: #333333;
+  text-align: center;
+}
+.main_layer > div {
+  padding: 0 0.333333rem;
+  margin: 0 auto;
+  background: #fff;
+  overflow: hidden;
+  color: #3c3c3c;
+}
+.main_layer .productImg {
+  width: 100%;
+  height: 2.4rem;
+  margin-bottom: 0.266667rem;
+}
+.main_layer .productImg .formBox {
+  width: 9.333333rem;
+  height: 1.866667rem;
+  overflow: hidden;
+}
+.main_layer .productImg .formBox .noPicBox {
+  width: 8.4rem;
+  height: 1.466667rem;
+  line-height: 1.466667rem;
+  border: 1px dashed #333333;
+  margin: 0 auto;
+  margin-top: 0.4rem;
+  text-align: center;
+}
+.main_layer .productImg .formBox .noPicBox #uploadBtn {
+  height: 0.4rem;
+  overflow: hidden;
+  color: #333333;
+  text-decoration: underline;
+}
+.main_layer .productImg .formBox .picShowBox {
+  margin-top: 0.333333rem;
+  height: 1.533333rem;
+  display: none;
+}
+.main_layer .productImg .formBox .picShowBox .pull-left {
+  line-height: 1.466667rem;
+  float: left;
+}
+.main_layer .productImg .formBox .picShowBox .picShow {
+  display: inline-block;
+  width: 1.52rem;
+  height: 1.52rem;
+  border: 1px solid #008dda;
+  margin-left: 0.533333rem;
+  line-height: 1.52rem;
+  text-align: center;
+  float: left;
+}
+.main_layer .productImg .formBox .picShowBox .picShow > img {
+  width: 1.466667rem;
+  height: 1.466667rem;
+}
+.main_layer .productImg .formBox .picShowBox .newUpLoad {
+  display: inline-block;
+  text-decoration: underline;
+  float: left;
+  margin-top: 1.066667rem;
+  margin-left: 0.2rem;
+  color: #333333;
+}
+.main_layer .productImg > p {
+  color: #e81f05;
+  margin-left: 0.4rem;
+  font-size: 0.293333rem;
+}
+.main_layer .title {
+  width: 9.333333rem;
+  height: 1.066667rem;
+  line-height: 1.066667rem;
+  font-size: 0.32rem;
+  border-bottom: 1px solid #f3f3f3;
+}
+.main_layer .order_info > div {
+  width: 9.333333rem;
+  height: 0.933333rem;
+  line-height: 0.933333rem;
+}
+.main_layer .order_info > div > span {
+  word-wrap: break-word;
+}
+.main_layer .order_info > div .con {
+  width: 7.2rem;
+}
+.main_layer .order_info .imgBox {
+  padding: 0.333333rem;
+  height: auto;
+  overflow: hidden;
+  display: none;
+}
+.main_layer .order_info .imgBox .img {
+  width: 2.666667rem;
+  height: 2.666667rem;
+  margin-right: 0.666667rem;
+  background: #eee;
+  display: none;
+}
+.main_layer .order_info .imgBox .img img {
+  width: 2.666667rem;
+  height: 2.666667rem;
+}
+.main_layer .weui-cells_checkbox .weui-icon-checked:before {
+  font-size: 16px;
+}
+.main_layer .isChangeFilter {
+  margin-top: 0.266667rem;
+}
+.main_layer .isChangeFilter .weui-cells {
+  font-size: 0.293333rem;
+  margin-top: 0;
+}
+.main_layer .isChangeFilter .weui-cells:after {
+  border-bottom: 0;
+}
+.main_layer .isChangeFilter .weui-cells:before {
+  border: 0;
+}
+.main_layer .isChangeFilter .weui-cell:before {
+  border: 0;
+}
+.main_layer .isChangeFilter .weui-cell {
+  padding-left: 0;
+}
+.main_layer .maintain {
+  margin-top: 0.266667rem;
+}
+.main_layer .maintain .top {
+  border-bottom: 1px solid #f3f3f3;
+}
+.main_layer .maintain .weui-cells {
+  font-size: 0.293333rem;
+  margin-top: 0;
+}
+.main_layer .maintain .weui-cells:before {
+  border: 0;
+}
+.main_layer .maintain .weui-cells:after {
+  border-bottom: 0;
+}
+.main_layer .maintain .weui-cell:before {
+  border: 0;
+}
+.main_layer .maintain .weui-cell__ft {
+  color: #3c3c3c;
+}
+.main_layer .maintain .left {
+  width: 1.333333rem;
+  text-align: center;
+}
+.main_layer .maintain .center {
+  width: 5.333333rem;
+  text-align: center;
+}
+.main_layer .maintain .right {
+  width: 2.666667rem;
+  text-align: center;
+}
+.main_layer .changeFilter {
+  display: none;
+}
+.main_layer .isCheckItem {
+  width: 100%;
+  height: 1.173333rem;
+  line-height: 1.173333rem;
+  margin-top: 0.266667rem;
+  border-bottom: 1px solid #eee;
+  font-size: 0.32rem;
+}
+.main_layer .isCheckItem .checkBox {
+  width: 0.293333rem;
+  height: 0.293333rem;
+  border: 1px solid #7b7b7b;
+  display: inline-block;
+  margin-right: 0.2rem;
+}
+.main_layer .isCheckItem .checkBox.action {
+  background: url(../../../src/images/icons/onCheckBlue.jpg) top left no-repeat;
+  border: none;
+  background-size: cover;
+}
+.main_layer .measureBox {
+  background: #eaf7fb;
+  height: auto;
+  display: none;
+  padding: 0.333333rem 0;
+}
+.main_layer .measureBox span:nth-child(1) {
+  float: left;
+  margin-left: 0.533333rem;
+  width: 8.0rem;
+}
+.main_layer .measureBox span:nth-child(2) {
+  float: right;
+  margin-right: 0.266667rem;
+}
+.main_layer .partBox {
+  background: #eaf7fb;
+  border-bottom: 1px solid #eee;
+  display: none;
+}
+.main_layer .partBox .partTable {
+  width: 9.2rem;
+  font-size: 0.32rem;
+  color: #383838;
+}
+.main_layer .partBox .partTable .tableHeader {
+  font-size: 0.32rem;
+  border-bottom: 1px solid #eee;
+}
+.main_layer .partBox .partTable .tableHeader td {
+  height: 0.786667rem;
+  text-align: center;
+}
+.main_layer .partBox .partTable .tableHeader td:nth-child(1) {
+  width: 1.066667rem;
+}
+.main_layer .partBox .partTable .tableHeader td:nth-child(2) {
+  width: 4.8rem;
+}
+.main_layer .partBox .partTable .tableHeader td:nth-child(3) {
+  width: 2.133333rem;
+}
+.main_layer .partBox .partTable .tableHeader td:nth-child(4) {
+  width: 1.333333rem;
+}
+.main_layer .partBox .partTable .tableBody > tr {
+  height: 0.933333rem;
+}
+.main_layer .partBox .partTable .tableBody > tr td {
+  text-align: center;
+}
+.main_layer .partBox .partTable .tableBody > tr td:nth-child(1) {
+  width: 1.066667rem;
+}
+.main_layer .partBox .partTable .tableBody > tr td:nth-child(2) {
+  width: 4.8rem;
+}
+.main_layer .partBox .partTable .tableBody > tr td:nth-child(3) {
+  width: 2.133333rem;
+}
+.main_layer .partBox .partTable .tableBody > tr td:nth-child(3) input {
+  width: 1.653333rem;
+  height: 0.586667rem;
+  border: 1px solid #b5b5b5;
+  text-align: center;
+  background: #f9f9f9;
+}
+.main_layer .partBox .partTable .tableBody > tr td:nth-child(4) {
+  width: 1.333333rem;
+}
+.main_layer .partBox .partTable .tableBody > tr td:nth-child(4) input {
+  width: 1.04rem;
+  height: 0.586667rem;
+  border: 1px solid #b5b5b5;
+  text-align: center;
+  background: #f9f9f9;
+}
+.main_layer .searchBox {
+  width: 100%;
+  height: 1.32rem;
+  border-bottom: 1px solid #eee;
+}
+.main_layer .searchBox .allBtn {
+  width: 0.8rem;
+  height: 0.8rem;
+  display: inline-block;
+  line-height: 0.8rem;
+  margin-top: 0.266667rem;
+  float: left;
+  text-align: center;
+  color: #333333;
+}
+.main_layer .searchBox > div {
+  width: 8.293333rem;
+  height: 0.8rem;
+  margin: 0 auto;
+  margin-top: 0.266667rem;
+  line-height: 0.8rem;
+  border: 1px solid #333333;
+  border-radius: 0.4rem;
+  overflow: hidden;
+}
+.main_layer .searchBox > div .searInput {
+  height: 0.76rem;
+  width: 7.04rem;
+  font-size: 0.32rem;
+  color: #333333;
+  text-align: center;
+  float: left;
+}
+.main_layer .searchBox > div .searBtn {
+  width: 1.2rem;
+  height: 0.76rem;
+  background: #e5fafe;
+  display: inline-block;
+  border-radius: 0 0.4rem 0.4rem 0;
+  background-image: url('../../../src/images/icons/searIcon.png');
+  background-size: cover;
+  float: left;
+  border-left: 1px solid #008dda;
+}
+.main_layer .measureListBox {
+  padding-bottom: 0.533333rem;
+}
+.main_layer .measureListBox li {
+  width: 9.2rem;
+  height: auto;
+  line-height: 0.853333rem;
+  border-bottom: 1px solid #eee;
+}
+.main_layer .measureListBox .noRes {
+  line-height: 5.333333rem;
+  width: 100%;
+  text-align: center;
+  font-size: 0.346667rem;
+}
+.main_layer .partListBox {
+  width: 100%;
+  height: auto;
+  padding: 0;
+}
+.main_layer .partListBox table {
+  font-size: 0.32rem;
+  color: #383838;
+}
+.main_layer .partListBox table .checkBox,
+.main_layer .partListBox table .allCheck {
+  width: 0.373333rem;
+  height: 0.373333rem;
+  border: 1px solid #b2b2b2;
+  display: inline-block;
+  vertical-align: text-bottom;
+}
+.main_layer .partListBox table .allCheck.action {
+  background: url(../../../src/images/icons/onCheckBlue.jpg) top left no-repeat;
+  background-size: cover;
+  border: none;
+}
+.main_layer .partListBox table .checkBox.action {
+  background: url(../../../src/images/icons/onCheckBlue.jpg) top left no-repeat;
+  background-size: cover;
+  border: none;
+}
+.main_layer .partListBox table thead {
+  font-size: 0.32rem;
+}
+.main_layer .partListBox table thead tr td:nth-child(1) {
+  width: 1.6rem;
+  height: 0.786667rem;
+  text-align: center;
+}
+.main_layer .partListBox table thead tr td:nth-child(2) {
+  width: 5.6rem;
+  height: 0.786667rem;
+  text-align: center;
+}
+.main_layer .partListBox table thead tr td:nth-child(3) {
+  width: 2.266667rem;
+  height: 0.786667rem;
+  text-align: center;
+}
+.main_layer .partListBox table tbody tr td:nth-child(1) {
+  width: 1.6rem;
+  height: 0.933333rem;
+  text-align: center;
+}
+.main_layer .partListBox table tbody tr td:nth-child(2) {
+  width: 5.6rem;
+  height: 0.933333rem;
+  text-align: left;
+}
+.main_layer .partListBox table tbody tr td:nth-child(3) {
+  width: 2.266667rem;
+  height: 0.933333rem;
+  text-align: center;
+}
+.main_layer .itemBox {
+  background: #fff;
+  border-bottom: 1px solid #eee;
+  margin-top: 0.266667rem;
+}
+.main_layer .itemBox .itemHeader {
+  height: 1.066667rem;
+  line-height: 1.066667rem;
+  border-bottom: 1px solid #eee;
+}
+.main_layer .itemBox .itemTable {
+  font-size: 0.32rem;
+  color: #383838;
+}
+.main_layer .itemBox .itemTable .tableHeader {
+  border-bottom: 1px solid #eee;
+}
+.main_layer .itemBox .itemTable .tableHeader td {
+  text-align: center;
+  height: 0.8rem;
+}
+.main_layer .itemBox .itemTable .tableHeader td:nth-child(1) {
+  width: 1.533333rem;
+}
+.main_layer .itemBox .itemTable .tableHeader td:nth-child(2) {
+  width: 5.2rem;
+}
+.main_layer .itemBox .itemTable .tableHeader td:nth-child(3) {
+  width: 2.666667rem;
+}
+.main_layer .itemBox .itemTable .tableBody td {
+  height: 1.0rem;
+  text-align: center;
+}
+.main_layer .itemBox .itemTable .tableBody td .checkBox {
+  width: 0.293333rem;
+  height: 0.293333rem;
+  border: 1px solid #7b7b7b;
+  display: inline-block;
+}
+.main_layer .itemBox .itemTable .tableBody td .checkBox.action {
+  background: url(../../../src/images/icons/onCheckBlue.jpg) top left no-repeat;
+  background-size: cover;
+  border: none;
+}
+.main_layer .itemBox .itemTable .tableBody td input {
+  width: 1.666667rem;
+  height: 0.64rem;
+  border: 1px solid #b5b5b5;
+  text-align: center;
+  background: #f9f9f9;
+}
+.main_layer .itemBox .changeFilter {
+  display: none;
+}
