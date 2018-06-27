@@ -218,6 +218,11 @@
 				<artifactId>httpclient</artifactId>
 				<version>4.4.1</version>
 			</dependency>
+			<dependency>
+				<groupId>org.apache.httpcomponents</groupId>
+				<artifactId>httpcore</artifactId>
+				<version>4.4.1</version>
+			</dependency>
 
 			<!-- Connection Pool -->
 			<dependency>
@@ -252,7 +257,7 @@
 			<dependency>
 				<groupId>org.apache.tomcat</groupId>
 				<artifactId>tomcat-servlet-api</artifactId>
-				<version>7.0.30</version>
+				<version>7.0.85</version>
 			</dependency>
 			<dependency>
 				<groupId>javax.servlet.jsp</groupId>
@@ -271,6 +276,7 @@
 					</exclusion>
 				</exclusions>
 			</dependency>
+
 
 			<!-- Database Driver -->
 			<dependency>

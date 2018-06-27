@@ -2,34 +2,37 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ziwow.scrmapp.common.persistence.mapper.ProductMapper">
     <resultMap id="BaseResultMap" type="com.ziwow.scrmapp.common.persistence.entity.Product">
-        <id column="id" jdbcType="BIGINT" property="id"/>
-        <result column="itemKind" jdbcType="VARCHAR" property="itemKind"/>
-        <result column="typeName" jdbcType="VARCHAR" property="typeName"/>
-        <result column="smallcName" jdbcType="VARCHAR" property="smallcName"/>
-        <result column="modelName" jdbcType="VARCHAR" property="modelName"/>
-        <result column="levelId" jdbcType="BIGINT" property="levelId"/>
-        <result column="levelName" jdbcType="VARCHAR" property="levelName"/>
-        <result column="productName" jdbcType="VARCHAR" property="productName"/>
-        <result column="productCode" jdbcType="VARCHAR" property="productCode"/>
-        <result column="productImage" jdbcType="VARCHAR" property="productImage"/>
-        <result column="productBarCode" jdbcType="VARCHAR" property="productBarCode"/>
-        <result column="barCodeImage" jdbcType="VARCHAR" property="barCodeImage"/>
-        <result column="shoppingOrder" jdbcType="VARCHAR" property="shoppingOrder"/>
-        <result column="saleType" jdbcType="INTEGER" property="saleType"/>
-        <result column="o2o" jdbcType="INTEGER" property="o2o"/>
-        <result column="buyChannel" jdbcType="INTEGER" property="buyChannel"/>
-        <result column="filterRemind" jdbcType="INTEGER" property="filterRemind"/>
-        <result column="userId" jdbcType="VARCHAR" property="userId"/>
-        <result column="buyTime" jdbcType="DATE" property="buyTime"/>
-        <result column="status" jdbcType="INTEGER" property="status"/>
-        <result column="createTime" jdbcType="DATE" property="createTime"/>
-        <result column="productBarCodeTwenty" jdbcType="VARCHAR" property="productBarCodeTwenty"/>
+        <id column="id" jdbcType="BIGINT" property="id" />
+        <result column="itemKind" jdbcType="VARCHAR" property="itemKind" />
+        <result column="typeName" jdbcType="VARCHAR" property="typeName" />
+        <result column="smallcName" jdbcType="VARCHAR" property="smallcName" />
+        <result column="modelName" jdbcType="VARCHAR" property="modelName" />
+        <result column="levelId" jdbcType="BIGINT" property="levelId" />
+        <result column="levelName" jdbcType="VARCHAR" property="levelName" />
+        <result column="productName" jdbcType="VARCHAR" property="productName" />
+        <result column="productCode" jdbcType="VARCHAR" property="productCode" />
+        <result column="productImage" jdbcType="VARCHAR" property="productImage" />
+        <result column="productBarCode" jdbcType="VARCHAR" property="productBarCode" />
+        <result column="barCodeImage" jdbcType="VARCHAR" property="barCodeImage" />
+        <result column="shoppingOrder" jdbcType="VARCHAR" property="shoppingOrder" />
+        <result column="saleType" jdbcType="TINYINT" property="saleType" />
+        <result column="o2o" jdbcType="TINYINT" property="o2o" />
+        <result column="buyChannel" jdbcType="TINYINT" property="buyChannel" />
+        <result column="filterRemind" jdbcType="TINYINT" property="filterRemind" />
+        <result column="userId" jdbcType="VARCHAR" property="userId" />
+        <result column="buyTime" jdbcType="DATE" property="buyTime" />
+        <result column="status" jdbcType="TINYINT" property="status" />
+        <result column="createTime" jdbcType="DATE" property="createTime" />
+        <result column="productBarCodeTwenty" jdbcType="VARCHAR" property="productBarCodeTwenty" />
+        <result column="serviceFee" jdbcType="VARCHAR" property="serviceFee" />
+        <result column="serviceStatus" jdbcType="VARCHAR" property="serviceStatus" />
+        <result column="serviceFeeId" jdbcType="VARCHAR" property="serviceFeeId" />
     </resultMap>
     
     <sql id="Base_Column_List">
 	    id, itemKind, typeName, smallcName, modelName, levelId, levelName, productName, productCode, barCodeImage,
 	    productImage, productBarCode, shoppingOrder, saleType, o2o, buyChannel, filterRemind, 
-	    userId, buyTime, status, createTime,productBarCodeTwenty
+	    userId, buyTime, status, createTime,productBarCodeTwenty,serviceFee,serviceStatus,serviceFeeId
 	</sql>
 	
     <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
@@ -287,6 +290,15 @@
             <if test="createTime != null">
                 #{createTime,jdbcType=DATE},
             </if>
+            <if test="serviceFee != null">
+                #{serviceFee,jdbcType=VARCHAR},
+            </if>
+            <if test="serviceStatus != null">
+                #{serviceStatus,jdbcType=VARCHAR},
+            </if>
+            <if test="serviceFeeId != null">
+                #{serviceFeeId,jdbcType=VARCHAR},
+            </if>
         </set>
         where id = #{id,jdbcType=BIGINT}
     </update>
@@ -311,7 +323,10 @@
         userId = #{userId,jdbcType=VARCHAR},
         buyTime = #{buyTime,jdbcType=DATE},
         status = #{status,jdbcType=INTEGER},
-        createTime = #{createTime,jdbcType=DATE}
+        createTime = #{createTime,jdbcType=DATE},
+        serviceFee = #{serviceFee,jdbcType=VARCHAR},
+        serviceStatus = #{serviceStatus,jdbcType=VARCHAR},
+        serviceFeeId = #{serviceFeeId,jdbcType=VARCHAR}
         where id = #{id,jdbcType=BIGINT}
     </update>
 
@@ -319,6 +334,14 @@
         update t_product
         set productImage = #{productImage,jdbcType=VARCHAR}
         where modelName = #{modelName,jdbcType=VARCHAR}
+    </update>
+
+    <update id="updateProductById">
+        update t_product
+        set serviceFee=#{serviceFee,jdbcType=VARCHAR},
+        serviceStatus=#{serviceStatus,jdbcType=VARCHAR},
+        serviceFeeId=#{serviceFeeId,jdbcType=VARCHAR}
+        where id=#{id}
     </update>
 
     <update id="updateRemind">
@@ -444,6 +467,32 @@
         </trim>
     </select>
 
+    <select id="getProductsByIds" parameterType="java.util.List" resultType="com.ziwow.scrmapp.common.persistence.entity.Product">
+        SELECT
+        id,
+        levelId,
+        productName,
+        typeName,
+        productBarCode,
+        modelName,
+        itemKind,
+        buyChannel,
+        productCode,
+        buyTime,
+        shoppingOrder,
+        saleType,
+        productBarCodeTwenty
+        FROM
+        t_product
+        WHERE
+        id
+        <trim prefix="in (" suffix=")" suffixOverrides=",">
+            <foreach collection="list" item="productId" index="index" separator=",">
+                #{productId,jdbcType=BIGINT}
+            </foreach>
+        </trim>
+    </select>
+
     <select id="getFinishedOrdersDetail" resultType="com.ziwow.scrmapp.common.bean.vo.ProductFinishVo">
         SELECT
             CASE opr.status
@@ -476,6 +525,12 @@
     <update id="updateSmallcNameByOrderCode">
         update t_product set smallcName = #{smallcName,jdbcType=VARCHAR}
         where productCode = #{productCode,jdbcType=VARCHAR} and smallcName is null
+    </update>
+
+    <update id="updateProductByModelName" parameterType="com.ziwow.scrmapp.common.persistence.entity.Product">
+        UPDATE t_product
+        SET serviceFee=#{serviceFee,jdbcType=VARCHAR}, serviceStatus=#{serviceStatus,jdbcType=VARCHAR}, serviceFeeId=#{serviceFeeId,jdbcType=VARCHAR}
+        WHERE modelName=#{modelName,jdbcType=VARCHAR}
     </update>
 
 </mapper>

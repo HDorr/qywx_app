@@ -2,12 +2,18 @@ package com.ziwow.scrmapp.wechat.controller;
 
 import java.math.BigDecimal;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.ziwow.scrmapp.common.persistence.entity.*;
+import com.ziwow.scrmapp.wechat.constants.WXPayConstant;
+import com.ziwow.scrmapp.wechat.persistence.entity.WechatFans;
+import com.ziwow.scrmapp.wechat.service.*;
+import com.ziwow.scrmapp.wechat.utils.JsonApache;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,10 +37,6 @@ import com.ziwow.scrmapp.common.bean.vo.QyhUserVo;
 import com.ziwow.scrmapp.common.bean.vo.WechatOrdersVo;
 import com.ziwow.scrmapp.common.constants.Constant;
 import com.ziwow.scrmapp.common.constants.SystemConstants;
-import com.ziwow.scrmapp.common.persistence.entity.QyhUser;
-import com.ziwow.scrmapp.common.persistence.entity.QyhUserAppraisal;
-import com.ziwow.scrmapp.common.persistence.entity.WechatOrders;
-import com.ziwow.scrmapp.common.persistence.entity.WechatOrdersRecord;
 import com.ziwow.scrmapp.common.result.BaseResult;
 import com.ziwow.scrmapp.common.result.Result;
 import com.ziwow.scrmapp.common.service.MobileService;
@@ -47,13 +49,6 @@ import com.ziwow.scrmapp.tools.utils.DateUtil;
 import com.ziwow.scrmapp.tools.utils.StringUtil;
 import com.ziwow.scrmapp.wechat.constants.WeChatConstants;
 import com.ziwow.scrmapp.wechat.persistence.entity.WechatUser;
-import com.ziwow.scrmapp.wechat.service.FailRecordService;
-import com.ziwow.scrmapp.wechat.service.OrdersProRelationsService;
-import com.ziwow.scrmapp.wechat.service.ProductService;
-import com.ziwow.scrmapp.wechat.service.WechatOrdersRecordService;
-import com.ziwow.scrmapp.wechat.service.WechatOrdersService;
-import com.ziwow.scrmapp.wechat.service.WechatQyhUserService;
-import com.ziwow.scrmapp.wechat.service.WechatUserService;
 
 /**
  * Created by xiaohei on 2017/4/7.
@@ -65,6 +60,11 @@ public class WechatOrdersController {
 
     @Value("${order.detail.url}")
     private String orderDetailUrl;
+
+    //查询产品服务路径
+    @Value("${qinyuan.modelname.service.query.url}")
+    private String qinyuanModelnameServiceQuery;
+
     @Autowired
     private WechatUserService wechatUserService;
     @Autowired
@@ -81,6 +81,11 @@ public class WechatOrdersController {
     private OrdersProRelationsService relationsService;
     @Autowired
     private ProductService productService;
+    @Autowired
+    private WXPayService wxPayService;
+    @Autowired
+    private WechatFansService wechatFansService;
+
 
     /**
      * 用户预约
@@ -121,6 +126,28 @@ public class WechatOrdersController {
             List<ProductVo> list = wechatOrdersService.getProductInfoById(wechatOrdersParamExt.getProductIds());
             wechatOrdersParamExt.setProducts(list);
 
+            // 获取modelName   拼接CSM用
+            List<String> mnList = new ArrayList<String>();
+            for (ProductVo pvo : list) {
+                mnList.add(pvo.getModelName());
+            }
+
+
+            long wfId = wechatUser.getWfId();
+            WechatFans wechatFans = wechatFansService.getWechatFansById(wfId);
+            String unionId = wechatFans.getUnionId();
+            //下面通过外部接口获取付款金额
+            List<Integer> idList = new ArrayList<Integer>();
+            String[] productArr = productIds.split(",");
+            for (String productId : productArr) {
+                idList.add(Integer.parseInt(productId));
+            }
+            //根据productId获取产品信息(批量)
+            List<Product> productList = productService.getProductsByIds(idList);
+            //判断产品是否已经购买服务费
+            // 小程序无法验证
+
+
             if ("".equals(wechatOrdersParamExt.getContactsTelephone()) || null == wechatOrdersParamExt.getContactsTelephone()) {
                 wechatOrdersParamExt.setTel(wechatUser.getMobilePhone());
             } else {
@@ -146,6 +173,35 @@ public class WechatOrdersController {
             wechatOrders.setOrderTime(DateUtil.StringToDate(wechatOrdersParamExt.getOrderTime(), "yyyy-MM-dd HH"));
             //来源是微信
             wechatOrders.setSource(SystemConstants.WEIXIN);
+
+
+            //拼接CSM数据到description描述后面
+            // 描述格式
+            //原用户输入描述:XXXX
+            // &产品型号(服务费):XXXXX&金额：XXXXX&关联订单号：XXXXX；
+            String description;
+            String tem = wechatOrders.getDescription();
+            if (tem != null) {
+               description = tem;
+            } else {
+                description = "";
+            }
+            String ext = "";   //保持扩展信息
+            String[] idArr = productIds.split(",");
+            for (String pid : idArr) {
+                ProductFilter pf = wxPayService.getProductFilterByProductId(Long.parseLong(pid));
+                if (pf != null) {
+                    BigDecimal b = new BigDecimal(pf.getServiceFee());
+                    String tp = b.setScale(2, BigDecimal.ROUND_HALF_UP).toString();
+                    //由于产品型号不是唯一值，通过主键ID + 型号拼接
+                    ext = "&产品型号(服务费):" + pf.getId() + "--" + pf.getModelName() + "&金额:" + tp + "&关联订单号:" + pf.getOrderId() + ";";
+                }
+            }
+            if (StringUtils.isNotEmpty(description)) {
+                wechatOrders.setDescription(description + "\n" +  ext);   //关联到描述信息
+            } else {
+                wechatOrders.setDescription(description + ext);   //关联到描述信息
+            }
 
             //新增一单多产品接口
             wechatOrders = wechatOrdersService.saveOrdersMultiProduct(wechatOrders, wechatOrdersParamExt.getProductIds());

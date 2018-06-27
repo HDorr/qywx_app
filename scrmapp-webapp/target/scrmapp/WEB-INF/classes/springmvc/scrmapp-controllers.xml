@@ -31,7 +31,8 @@
 		<context:exclude-filter type="annotation" expression="org.springframework.stereotype.Service" /> 
 	</context:component-scan>
 	 <!-- Handles HTTP GET requests for /resources/** by efficiently serving up static resources in the ${webappRoot}/resources/ directory -->
-	<mvc:resources mapping="/resources/**" location="/resources/" />
+
+
 	<bean id="stringConverter" class="org.springframework.http.converter.StringHttpMessageConverter">  
         <property name="supportedMediaTypes">  
             <list>  

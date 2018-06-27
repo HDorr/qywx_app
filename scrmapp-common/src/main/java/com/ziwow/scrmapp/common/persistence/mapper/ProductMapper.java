@@ -7,6 +7,8 @@ import org.apache.ibatis.annotations.Param;
 import com.ziwow.scrmapp.common.bean.vo.ProductFinishVo;
 import com.ziwow.scrmapp.common.bean.vo.ProductVo;
 import com.ziwow.scrmapp.common.persistence.entity.Product;
+import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 
 public interface ProductMapper {
     int deleteByPrimaryKey(Long id);
@@ -52,4 +54,18 @@ public interface ProductMapper {
     List<ProductVo> selectByOrdersIds(Long[] ordersIds);
 
     List<ProductFinishVo> getFinishedOrdersDetail(Long ordersId);
+
+    List<Product> getProductsByIds(List<Integer> list);
+
+    @Select("SELECT * FROM t_product WHERE modelName=#{modelName}")
+    Product getProductByModelName(@Param("modelName")String modelName);
+
+    @Update("update t_product set serviceFee=#{serviceFee}, serviceStatus=#{serviceStatus}, serviceFeeId=#{serviceFeeId} where modelName=#{modelName}")
+    int updateProductByModelName(@Param("modelName")String modelName, @Param("serviceFee")String serviceFee,
+                                 @Param("serviceStatus")String serviceStatus, @Param("serviceFeeId")String serviceFeeId);
+
+
+    //@Update("update t_product set serviceFee=#{serviceFee}, serviceStatus=#{serviceStatus}, serviceFeeId=#{serviceFeeId} where id=#{id}")
+    int updateProductById(@Param("id")Long id, @Param("serviceFee")String serviceFee,
+                                 @Param("serviceStatus")String serviceStatus, @Param("serviceFeeId")String serviceFeeId);
 }

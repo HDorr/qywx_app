@@ -42,6 +42,7 @@ import com.ziwow.scrmapp.wechat.utils.BarCodeConvert;
 import com.ziwow.scrmapp.wechat.vo.ProductVo;
 import com.ziwow.scrmapp.wechat.vo.WechatFansVo;
 import com.ziwow.scrmapp.wechat.vo.WechatUserVo;
+import org.apache.ibatis.annotations.Param;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -196,7 +197,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
-    private void saveFilterLevel(Long levelId, String levelName) {
+    public void saveFilterLevel(Long levelId, String levelName) {
         filterLevelMapper.insert(new FilterLevel(levelId, levelName));
 
     }
@@ -231,6 +232,12 @@ public class ProductServiceImpl implements ProductService {
             }
         }
         return productVo;
+    }
+
+    @Override
+    public Product getProductPrimaryKey(Long id) {
+        Product product = productMapper.selectByPrimaryKey(id);
+        return product;
     }
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
@@ -577,6 +584,7 @@ public class ProductServiceImpl implements ProductService {
             LOG.info("绑定产品信息同步到小程序失败,unionid不能为空!");
             return;
         }
+
         Map<String, Object> params = new HashMap<String, Object>();
         long timestamp = System.currentTimeMillis();
         params.put("timestamp", timestamp);
@@ -672,5 +680,30 @@ public class ProductServiceImpl implements ProductService {
             result.setReturnCode(Constant.FAIL);
         }
         return result;
+    }
+
+    @Override
+    public List<Product> getProductsByIds(List<Integer> list) {
+        return productMapper.getProductsByIds(list);
+    }
+
+    @Override
+    public Product getProductByModelName(String modelName) {
+        return productMapper.getProductByModelName(modelName);
+    }
+
+    @Override
+    public int updateProductByModelName(String modelName, String serviceFee, String serviceStatus, String serviceFeeId) {
+        return productMapper.updateProductByModelName(modelName, serviceFee, serviceStatus, serviceFeeId);
+    }
+
+    @Override
+    public int updateByPrimaryKeySelective(Product record) {
+        return productMapper.updateByPrimaryKeySelective(record);
+    }
+
+    @Override
+    public int updateProductById(long id, String serviceFee, String serviceStatus, String serviceFeeId) {
+        return productMapper.updateProductById(id, serviceFee, serviceStatus, serviceFeeId);
     }
 }

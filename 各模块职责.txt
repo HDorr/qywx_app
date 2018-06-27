@@ -1,11 +1,11 @@
-¹²Í¨Ä£¿é
-scrmapp-common(ÏîÄ¿»ù´¡Ä£¿é,°üº¬ËùÓĞµÄ¹«¹²jar°ü)
-scrmapp-miniapp(Î¢ĞÅĞ¡³ÌĞòÄ£¿é)
-scrmapp-qyh(Î¢ĞÅÆóÒµºÅÄ£¿é)
-scrmapp-wechat(Î¢ĞÅ·şÎñºÅÄ£¿é)
-scrmapp-tools(ÏîÄ¿¹¤¾ß¿âÄ£¿é)
+å…±é€šæ¨¡å—
+scrmapp-common(é¡¹ç›®åŸºç¡€æ¨¡å—,åŒ…å«æ‰€æœ‰çš„å…¬å…±jaråŒ…)
+scrmapp-miniapp(å¾®ä¿¡å°ç¨‹åºæ¨¡å—)
+scrmapp-qyh(å¾®ä¿¡ä¼ä¸šå·æ¨¡å—)
+scrmapp-wechat(å¾®ä¿¡æœåŠ¡å·æ¨¡å—)
+scrmapp-tools(é¡¹ç›®å·¥å…·åº“æ¨¡å—)
 
 
-¾ßÌåµ½Ã¿¸öÏîÄ¿
-scrmapp-api(¸÷×ÔµÄcontrollerºÍ¸÷×ÔË½ÓĞµÄservice)
-scrmapp-webapp(¸÷×ÔµÄÇ°¶ËÎÄ¼şºÍweb.xmlÅäÖÃ,Ö÷ÒªÒıÈëscrmapp-apiÄ£¿é)
+å…·ä½“åˆ°æ¯ä¸ªé¡¹ç›®
+scrmapp-api(å„è‡ªçš„controllerå’Œå„è‡ªç§æœ‰çš„service)
+scrmapp-webapp(å„è‡ªçš„å‰ç«¯æ–‡ä»¶å’Œweb.xmlé…ç½®,ä¸»è¦å¼•å…¥scrmapp-apiæ¨¡å—)

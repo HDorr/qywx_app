@@ -1,6 +1,6 @@
 com/ziwow/scrmapp/api/log/aop/LogAopAction.class
-com/ziwow/scrmapp/api/limit/RequestLimitException.class
 com/ziwow/scrmapp/api/limit/RequestLimitContract.class
+com/ziwow/scrmapp/api/limit/RequestLimitException.class
 com/ziwow/scrmapp/api/OssController.class
 com/ziwow/scrmapp/api/BaseController.class
 com/ziwow/scrmapp/api/log/aop/LogEntity.class

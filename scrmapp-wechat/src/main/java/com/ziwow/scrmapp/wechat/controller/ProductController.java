@@ -1,28 +1,36 @@
 package com.ziwow.scrmapp.wechat.controller;
 
 import com.alibaba.druid.util.StringUtils;
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.ziwow.scrmapp.common.constants.Constant;
 import com.ziwow.scrmapp.common.constants.SystemConstants;
+import com.ziwow.scrmapp.common.persistence.entity.ProductFilter;
 import com.ziwow.scrmapp.common.result.BaseResult;
 import com.ziwow.scrmapp.common.result.Result;
 import com.ziwow.scrmapp.common.service.MobileService;
 import com.ziwow.scrmapp.tools.utils.Base64;
 import com.ziwow.scrmapp.tools.utils.CookieUtil;
 import com.ziwow.scrmapp.tools.utils.StringUtil;
+import com.ziwow.scrmapp.wechat.constants.WXPayConstant;
 import com.ziwow.scrmapp.wechat.constants.WeChatConstants;
 import com.ziwow.scrmapp.wechat.enums.BuyChannel;
 import com.ziwow.scrmapp.common.persistence.entity.Product;
-import com.ziwow.scrmapp.wechat.persistence.entity.WechatArea;
-import com.ziwow.scrmapp.wechat.persistence.entity.WechatCity;
-import com.ziwow.scrmapp.wechat.persistence.entity.WechatProvince;
-import com.ziwow.scrmapp.wechat.persistence.entity.WechatUser;
+import com.ziwow.scrmapp.wechat.persistence.entity.*;
 import com.ziwow.scrmapp.wechat.service.ProductService;
+import com.ziwow.scrmapp.wechat.service.WXPayService;
+import com.ziwow.scrmapp.wechat.service.WechatFansService;
 import com.ziwow.scrmapp.wechat.service.WechatUserService;
 import com.ziwow.scrmapp.wechat.utils.BarCodeConvert;
+import com.ziwow.scrmapp.wechat.utils.JsonApache;
+import com.ziwow.scrmapp.wechat.utils.ProductServiceParamUtil;
 import com.ziwow.scrmapp.wechat.vo.EnumVo;
 import com.ziwow.scrmapp.wechat.vo.ProductVo;
-import java.util.HashMap;
-import java.util.Map;
+
+import java.math.BigDecimal;
+import java.util.*;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,8 +43,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
-import java.util.Date;
-import java.util.List;
 
 /**
  * Created by xiaohei on 2017/4/5.
@@ -49,12 +55,21 @@ public class ProductController {
     private ProductService productService;
     @Autowired
     private WechatUserService wechatUserService;
+    @Autowired
+    private WechatFansService wechatFansService;
     @Value("${wechat.appid}")
     private String appid;
     @Value("${open.weixin.component_appid}")
     private String component_appid;
+
+    //查询产品服务路径
+    @Value("${qinyuan.modelname.service.query.url}")
+    private String qinyuanModelnameServiceQuery;
+
     @Autowired
     private MobileService mobileService;
+    @Autowired
+    private WXPayService wxPayService;
 
     /**
      * 展示产品系列列表
@@ -163,8 +178,8 @@ public class ProductController {
                 productBarCode = BarCodeConvert.convert(productBarCode);
             }
             ProductVo product = productService.queryProduct(modelName, productBarCode);
-            if(null != productBarCode || "".equals(productBarCode)){
-            	product.setProductBarCode(productBarCode);
+            if (null != productBarCode || "".equals(productBarCode)) {
+                product.setProductBarCode(productBarCode);
             }
             String image = productService.queryProductImage(product.getModelName());
             product.setProductImage(image);
@@ -260,6 +275,108 @@ public class ProductController {
             logger.error("用户查询产品列表失败，原因[{}]", e.getMessage());
         }
         return result;
+
+        //外部接口没有通
+//        Result result = new BaseResult();
+//        try {
+//            String encode = CookieUtil.readCookie(request, response, WeChatConstants.SCRMAPP_USER);
+//            String userId = new String(Base64.decode(encode));
+//
+//            //用户id不存在
+//            if (!wechatUserService.checkUser(userId)) {
+//                logger.error("查询用户产品列表失败，cookie中userId错误");
+//                result.setReturnCode(Constant.FAIL);
+//                result.setReturnMsg("用户无效，请退出重新操作！");
+//                return result;
+//            }
+//
+//            WechatUser wechatUser = wechatUserService.getUserByUserId(userId);
+//            if (wechatUser == null) {
+//                logger.error("查询用户失败，cookie中userId错误");
+//                result.setReturnCode(Constant.FAIL);
+//                result.setReturnMsg("用户无效，请退出重新操作！");
+//                return result;
+//            }
+//            long wfId = wechatUser.getWfId();
+//            WechatFans wechatFans = wechatFansService.getWechatFansById(wfId);
+//            String unionId = wechatFans.getUnionId();
+//            List<Product> temList = productService.getProductsByUserId(userId);
+//            //System.out.println(temList);
+//            //读取远程服务费信息，content为JSONARrray [{id:xxx, model_name:xxx,service_fee:xxx,service_status:xxx},{,,}]
+//            String content = JsonApache.postModelNames(unionId, temList, qinyuanModelnameServiceQuery);
+//            if (content == null) {
+//                result.setReturnCode(Constant.FAIL);
+//                result.setReturnMsg("查询外部产品列表失败!");
+//                logger.error("用户查询产品列表失败，原因[{}]", "外部查询服务费状态失败");
+//                return result;
+//            }
+//            JSONObject jsonObject = JSON.parseObject(content);
+//            JSONArray jsonArray = jsonObject.getJSONArray("data");
+//            List<ProductFilter> productFilterList = new ArrayList<ProductFilter>();
+//            for (int i = 0; i < jsonArray.size(); i++) {
+//                JSONObject jo = (JSONObject) jsonArray.get(i);
+//                String temId = (String) jo.get("id");  //id为商品主键ID
+//                long id = Long.parseLong(temId);
+//                String modelName = (String) jo.get("modelName");
+//                String serviceFee = (String) jo.get("serviceFeePrice");
+//                if (serviceFee == null) {
+//                    serviceFee = "0";
+//                }
+//                //0：已购买滤芯未购买服务 1：已购买滤芯和服务 5：没有滤芯或不能购买滤芯
+//                String serviceStatus = (String) jo.get("serviceStatus");
+//                String serviceFeeId = (String) jo.get("serviceFeeId");
+//                if (serviceFeeId == null) {
+//                    serviceFeeId = "0";
+//                }
+//               /* Product p = new Product();
+//                p.setId(id);
+//                p.setServiceFee(serviceFee);
+//                p.setServiceStatus(serviceStatus);
+//                p.setServiceFeeId(serviceFeeId);*/
+//                //根据ID更新Product
+//                //productService.updateByPrimaryKeySelective(p);
+//                productService.updateProductById(id, serviceFee, serviceStatus, serviceFeeId);
+//            }
+//            //对产品添加服务费和服务状态
+//            List<Product> products = ProductServiceParamUtil.addServiceParam(temList, content);
+//            result.setReturnCode(Constant.SUCCESS);
+//            result.setData(products);
+//        } catch (Exception e) {
+//            result.setReturnCode(Constant.FAIL);
+//            result.setReturnMsg("查询产品列表失败!");
+//            logger.error("用户查询产品列表失败，原因[{}]", e.getMessage());
+//        }
+//        return result;
+
+
+        //临时测试用
+        /*Result result = new BaseResult();
+        try {
+            String encode = CookieUtil.readCookie(request, response, WeChatConstants.SCRMAPP_USER);
+            String userId = new String(Base64.decode(encode));
+
+            //用户id不存在
+            if (!wechatUserService.checkUser(userId)) {
+                logger.error("查询用户产品列表失败，cookie中userId错误");
+                result.setReturnCode(Constant.FAIL);
+                result.setReturnMsg("用户无效，请退出重新操作！");
+                return result;
+            }
+            List<Product> tem = productService.getProductsByUserId(userId);
+            List<Product> products = new ArrayList<Product>();
+            for(Product p : tem) {
+                p.setServiceFee("0.01");
+                p.setServiceStatus(WXPayConstant.filterServiceUnpay);  //已购买滤芯未购买服务
+                products.add(p);
+            }
+            result.setReturnCode(Constant.SUCCESS);
+            result.setData(products);
+        } catch (Exception e) {
+            result.setReturnCode(Constant.FAIL);
+            result.setReturnMsg("查询产品列表失败!");
+            logger.error("用户查询产品列表失败，原因[{}]", e.getMessage());
+        }
+        return result;*/
 
     }
 
@@ -469,10 +586,16 @@ public class ProductController {
         url = url.replace("{COMPONENT_APPID}", component_appid);
 
         String contextPath = request.getContextPath();
-        String basePath = "https" + "://" + request.getServerName() + contextPath;
+        //String basePath = "https" + "://" + request.getServerName() + contextPath;
+        //-------------------------------------------------------------------------------------------------------------------------------------
+        //-------------------------------------------------------------------------------------------------------------------------------------
+        //-------------------------------------------------------------------------------------------------------------------------------------
+        //-------------------------------------------------------------------------------------------------------------------------------------
+        //-------------------------------------------------------------------------------------------------------------------------------------
+        String basePath = "http" + "://" + request.getServerName() + contextPath;
 //        String basePath = request.getScheme() +"://" + request.getServerName() + contextPath;
 
-        
+
         String intallBaseUrl = basePath + "/scrmapp/consumer/user/filter/reserveService/jsp/chooseProduct?orderType=1";
         String maintainBaseUrl = basePath + "/scrmapp/consumer/user/filter/reserveService/jsp/chooseProduct?orderType=2";
         String updateFilterBaseUrl = basePath + "/scrmapp/consumer/user/filter/reserveService/jsp/chooseProduct?orderType=4";
@@ -600,7 +723,13 @@ public class ProductController {
         url = url.replace("{COMPONENT_APPID}", component_appid);
 
         String contextPath = request.getContextPath();
-        String basePath = "https" + "://" + request.getServerName() + contextPath;
+        //String basePath = "https" + "://" + request.getServerName() + contextPath;
+        //-------------------------------------------------------------------------------------------------------------------------------------
+        //-------------------------------------------------------------------------------------------------------------------------------------
+        //-------------------------------------------------------------------------------------------------------------------------------------
+        //-------------------------------------------------------------------------------------------------------------------------------------
+        //-------------------------------------------------------------------------------------------------------------------------------------
+        String basePath = "http" + "://" + request.getServerName() + contextPath;
 //        String basePath = request.getScheme() +"://" + request.getServerName() + contextPath;
 
 
@@ -658,14 +787,14 @@ public class ProductController {
      * @return
      */
     @RequestMapping("/product/reserve/install")
-    public ModelAndView goReserveInstallJsp(@RequestParam(value = "scOrderItemId",required = false) String scOrderItemId) {
+    public ModelAndView goReserveInstallJsp(@RequestParam(value = "scOrderItemId", required = false) String scOrderItemId) {
 
-        Map<String,String> map=new HashMap<String, String>();
-        if (StringUtil.isNotBlank(scOrderItemId)){
-            map.put("scOrderItemId",scOrderItemId);
+        Map<String, String> map = new HashMap<String, String>();
+        if (StringUtil.isNotBlank(scOrderItemId)) {
+            map.put("scOrderItemId", scOrderItemId);
         }
 
-        ModelAndView modelAndView = new ModelAndView("/reserveService/jsp/reserveService_install",map);
+        ModelAndView modelAndView = new ModelAndView("/reserveService/jsp/reserveService_install", map);
         return modelAndView;
     }
 
@@ -675,13 +804,13 @@ public class ProductController {
      * @return
      */
     @RequestMapping("/product/reserve/maintain")
-    public ModelAndView goReserveRepairJsp(@RequestParam(value = "scOrderItemId",required = false) String scOrderItemId) {
+    public ModelAndView goReserveRepairJsp(@RequestParam(value = "scOrderItemId", required = false) String scOrderItemId) {
 
-        Map<String,String> map=new HashMap<String, String>();
-        if (StringUtil.isNotBlank(scOrderItemId)){
-            map.put("scOrderItemId",scOrderItemId);
+        Map<String, String> map = new HashMap<String, String>();
+        if (StringUtil.isNotBlank(scOrderItemId)) {
+            map.put("scOrderItemId", scOrderItemId);
         }
-        ModelAndView modelAndView = new ModelAndView("/reserveService/jsp/reserveService_maintain",map);
+        ModelAndView modelAndView = new ModelAndView("/reserveService/jsp/reserveService_maintain", map);
         return modelAndView;
     }
 
@@ -691,13 +820,13 @@ public class ProductController {
      * @return
      */
     @RequestMapping("/product/reserve/updateFilter")
-    public ModelAndView goReserveMaintainJsp(@RequestParam(value = "scOrderItemId",required = false) String scOrderItemId) {
+    public ModelAndView goReserveMaintainJsp(@RequestParam(value = "scOrderItemId", required = false) String scOrderItemId) {
 
-        Map<String,String> map=new HashMap<String, String>();
-        if (StringUtil.isNotBlank(scOrderItemId)){
-            map.put("scOrderItemId",scOrderItemId);
+        Map<String, String> map = new HashMap<String, String>();
+        if (StringUtil.isNotBlank(scOrderItemId)) {
+            map.put("scOrderItemId", scOrderItemId);
         }
-        ModelAndView modelAndView = new ModelAndView("/reserveService/jsp/reserveService_updateFilter",map);
+        ModelAndView modelAndView = new ModelAndView("/reserveService/jsp/reserveService_updateFilter", map);
         return modelAndView;
     }
 }

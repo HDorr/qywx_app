@@ -46,8 +46,14 @@ public class Product {
     private Integer status;
 
     private Date createTime;
-    
+
     private String productBarCodeTwenty;
+
+    private String serviceFee;
+
+    private String serviceStatus;
+
+    private String serviceFeeId;
 
     public Long getId() {
         return id;
@@ -193,7 +199,7 @@ public class Product {
         this.userId = userId;
     }
 
-    @DateTimeFormat(pattern="yyyy-MM-dd")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     public Date getBuyTime() {
         return buyTime;
     }
@@ -218,11 +224,31 @@ public class Product {
         this.createTime = createTime;
     }
 
-	public String getProductBarCodeTwenty() {
-		return productBarCodeTwenty;
-	}
+    public String getProductBarCodeTwenty() {
+        return productBarCodeTwenty;
+    }
 
-	public void setProductBarCodeTwenty(String productBarCodeTwenty) {
-		this.productBarCodeTwenty = productBarCodeTwenty;
-	}
+    public void setProductBarCodeTwenty(String productBarCodeTwenty) {
+        this.productBarCodeTwenty = productBarCodeTwenty;
+    }
+
+    public String getServiceFee() {
+        return serviceFee;
+    }
+
+    public void setServiceFee(String serviceFee) {
+        this.serviceFee = serviceFee;
+    }
+
+    public String getServiceStatus() {
+        return serviceStatus;
+    }
+
+    public void setServiceStatus(String serviceStatus) {
+        this.serviceStatus = serviceStatus;
+    }
+
+    public String getServiceFeeId() { return serviceFeeId; }
+
+    public void setServiceFeeId(String serviceFeeId) { this.serviceFeeId = serviceFeeId; }
 }

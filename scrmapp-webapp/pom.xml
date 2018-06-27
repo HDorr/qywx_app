@@ -120,6 +120,7 @@
                     <jswarn>false</jswarn>
                     <force>false</force>
                     <nosuffix>true</nosuffix>
+
                     <disableOptimizations>false</disableOptimizations>
                     <linebreakpos>7999</linebreakpos>
                     压缩js和css文件

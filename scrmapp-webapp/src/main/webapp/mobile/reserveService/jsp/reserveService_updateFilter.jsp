@@ -14,6 +14,7 @@
     <link rel="stylesheet" href="${f_ctxpath}/resources/src/css/jqweui/weui.min.css">
     <link rel="stylesheet" href="${f_ctxpath}/resources/src/css/jqweui/jquery-weui.css">
     <link rel="stylesheet" href="${f_ctxpath}/resources/src/css/reserveService/reserveService_updateFilter.css${f_ver}">
+    <%--<link rel="stylesheet" href="${f_ctxpath}/resources/src/css/pop/common.css">--%>
 </head>
 <body>
     <header class="conHeader">
@@ -44,6 +45,12 @@
                     <p>{{product.productName}}</p>
                     <p>产品条码: {{product.productBarCode}}</p>
                     <p>产品型号: {{product.modelName}}</p>
+                    {{if product.serviceStatus == null || product.serviceStatus == undefined || product.serviceStatus == ''}}
+                    <p style="color:red;">提示：该商品预约次数已用完</p>
+                    <p style="color:red;">请到微信商城购买新滤芯</p>
+                    {{else}}
+                    <p>服务状态: {{product.serviceStatus}}</p>
+                    {{/if}}
                 </div>
                 <div class="delete-product" data-productid="{{product.id}}"></div>
             </div>
@@ -82,8 +89,8 @@
     {{/if}}
     <p class="tip" style="color:#000">您是否已购买滤芯，请做如下选择</p>
     <div class="isBuyFilter">
-        <div class="buyed isBuyFilterSelect" data-isbuyfilter="1">已购买滤芯</div>
-        <div class="unbuyed isBuyFilterSelect" data-isbuyfilter="2">未购买滤芯</div>
+        <div class="buyed isBuyFilterSelect" data-isbuyfilter="1" >已购买滤芯</div>
+        <div class="unbuyed isBuyFilterSelect" data-isbuyfilter="2" >未购买滤芯</div>
     </div>
     <p class="isBuyFilter-tip tip">点击菜单-一键服务-产品防伪查询可查询产品真伪</p>
 </script>
@@ -91,7 +98,7 @@
 <!-- 预约信息-template -->
 <script type="text/html" id="reserveInfo_template">
     <header class="title">
-        <img src="${f_ctxpath}/resources/src/images/icons/reserve.png">
+        <img src="${f_ctxpath}/resources/src/images/icons/reserve.png">re
         预约信息
     </header>
     <div class="timePickerContainer">
@@ -112,5 +119,7 @@
 <script src="${f_ctxpath}/resources/thirdparty/arttemplate/arttemplate.js"></script>
 <script src="${f_ctxpath}/resources/src/js/common.js${f_ver}"></script>
 <script src="${f_ctxpath}/resources/src/js/reserveService/reserveService_updateFilter.js${f_ver}"></script>
+    <%--<script src="${f_ctxpath}/resources/src/pop/jquery-1.10.1.min.js"></script>
+    <script src="${f_ctxpath}/resources/src/pop/alertPopShow.js"></script>--%>
 </body>
 </html>

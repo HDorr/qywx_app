@@ -93,7 +93,8 @@ var queryUrls = IS_DEVENV ?
     qyhQueryRefuseOrder: "/resources/fakeJson/fetchSuccess.json", //师傅侧拒绝工单
     qyhQueryChangeOrder: rootPath + "/scrmapp/qyhuser/orders/change/ordertime", //师傅侧更改预约时间
     qyhQueryUFinedOrderDetail: "/resources/fakeJson/unfinishedWorkOrderDetail.json", //获取待处理工单详情
-    qyhQueryFinedOrderDetail: "/resources/fakeJson/finishedWorkOrderDetail.json" //获取已完成工单详情
+    qyhQueryFinedOrderDetail: "/resources/fakeJson/finishedWorkOrderDetail.json", //获取已完成工单详情
+    wxuserauth: rootPath + "/wx/user/auth"
 } :  {//正式接口
     getProductsList: rootPath + "/scrmapp/consumer/product/list",
     queryAddrList: rootPath + "/scrmapp/consumer/wechatuser/addressList/get",
@@ -117,7 +118,8 @@ var queryUrls = IS_DEVENV ?
     qyhQueryRefuseOrder: rootPath + "/scrmapp/qyhuser/orders/refuse", //师傅侧拒绝工单
     qyhQueryChangeOrder: rootPath + "/scrmapp/qyhuser/orders/change/ordertime", //师傅侧更改预约时间
     qyhQueryUFinedOrderDetail: rootPath + "/scrmapp/qyhuser/orders/pending/detail", //获取待处理工单详情
-    qyhQueryFinedOrderDetail: rootPath + "/scrmapp/qyhuser/orders/finished/detail" //获取已完成工单详情
+    qyhQueryFinedOrderDetail: rootPath + "/scrmapp/qyhuser/orders/finished/detail", //获取已完成工单详情
+        wxuserauth: rootPath + "/wx/user/auth"
 }
 
 //跳转至一键预约页面

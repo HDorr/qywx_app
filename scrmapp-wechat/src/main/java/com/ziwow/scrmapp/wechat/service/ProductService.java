@@ -35,6 +35,8 @@ public interface ProductService {
 
     ProductVo getProductById(Long productId);
 
+    Product getProductPrimaryKey(Long id);
+
     int openOrCloseRemind(Long productId);
 
     int batchSave(List<Product> products, List<FilterLevel> filterLevels) throws SQLDataException;
@@ -58,4 +60,16 @@ public interface ProductService {
     void syncProdBindToMiniApp(String userId, String productCode);
 
     void syncProdUnbindToMiniApp(String userId, String productCode);
+
+    //根据productId获取产品信息(批量)
+    List<Product> getProductsByIds(List<Integer> list);
+
+    //根据modelName获取产品
+    Product getProductByModelName(String modelName);
+
+    int updateProductByModelName(String modelName, String serviceFee, String serviceStatus, String serviceFeeId);
+
+    int updateByPrimaryKeySelective(Product record);
+
+    int updateProductById(long id, String serviceFee, String serviceStatus, String serviceFeeId);
 }
