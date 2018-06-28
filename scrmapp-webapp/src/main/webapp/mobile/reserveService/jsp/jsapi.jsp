@@ -12,8 +12,8 @@
     <script type="text/javascript">
         var orderId = "${orderId}";
         var ids = "${ids}"
-        alert("订单号：" + orderId + "商品IDS：" + ids);
-        var idArr = ids.split(",");
+        console.log("订单号：" + orderId + "商品IDS：" + ids);
+        var idArr = ids.split("_");
         function onBridgeReady(){
             WeixinJSBridge.invoke(
                 'getBrandWCPayRequest', {
@@ -31,9 +31,10 @@
                         var products = JSON.parse(localStorage.getItem('reserve_products') || "[]")
                         for (var i=0; i<products.length; i++) {
                             var p = products[i];
-                            alert("商品ID: " + p.id);
+                            console.log("商品ID: " + p.id);
                             for (var y=0; y<idArr.length; y++) {
                                 if (p.id == idArr[y]) {
+                                    console.log(p.id+":"+p.serviceStatus);
                                     p.serviceStatus = "已购买滤芯和服务";
                                     //alert(p.serviceStatus);
                                 }
@@ -43,16 +44,19 @@
                                 alert(p.serviceStatus);
                             }*/
                         }
-                        localStorage.setItem('reserve_products',JSON.stringify(products))
+                        localStorage.setItem('reserve_products',JSON.stringify(products));
+                        localStorage.setItem('isPaidSuccess',"true");
                         //此处可以修改商品滤芯服务费状态---------------------------------
                         window.location.href = "${pageContext.request.contextPath}/wx/order/query?orderId="+orderId;
                         //window.location.href = "${pageContext.request.contextPath}/wx/order/query?orderId=${orderId}";
                     }else if(res.err_msg == "get_brand_wcpay_request:fail"){
                         alert('支付失败');
+                        localStorage.setItem('isPaidSuccess',"false");
                         //alert(JSON.stringify(res));
                         window.location.href = "${pageContext.request.contextPath}/wx/pay/fail"
                     }else if(res.err_msg == "get_brand_wcpay_request:cancel"){
                         alert('支付取消');
+                        localStorage.setItem('isPaidSuccess',"false");
                         window.location.href = "${pageContext.request.contextPath}/wx/pay/fail"
                     }else{
                         alert(res.err_msg);

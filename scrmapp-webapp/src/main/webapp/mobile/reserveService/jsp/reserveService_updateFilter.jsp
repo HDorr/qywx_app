@@ -4,7 +4,8 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>预约更换滤芯</title>
-    <meta name="viewport" content="initial-scale=1, maximum-scale=1,user-scalable=no,viewport-fit=cover">
+    <meta name="viewport"
+          content="initial-scale=1, maximum-scale=1,user-scalable=no,viewport-fit=cover">
     <meta name="x5-fullscreen" content="true">
     <meta name="full-screen" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -13,21 +14,22 @@
     <link rel="stylesheet" href="${f_ctxpath}/resources/src/css/index/index.css">
     <link rel="stylesheet" href="${f_ctxpath}/resources/src/css/jqweui/weui.min.css">
     <link rel="stylesheet" href="${f_ctxpath}/resources/src/css/jqweui/jquery-weui.css">
-    <link rel="stylesheet" href="${f_ctxpath}/resources/src/css/reserveService/reserveService_updateFilter.css${f_ver}">
-<%--    <script src="//cdn.jsdelivr.net/npm/eruda"></script>
-    <script>eruda.init();</script>--%>
-    <%--<link rel="stylesheet" href="${f_ctxpath}/resources/src/css/pop/common.css">--%>
+    <link rel="stylesheet"
+          href="${f_ctxpath}/resources/src/css/reserveService/reserveService_updateFilter.css${f_ver}">
+    <link rel="stylesheet" href="${f_ctxpath}/resources/src/css/pop/common.css">
+    <script src="//cdn.jsdelivr.net/npm/eruda"></script>
+    <script>eruda.init();</script>
 </head>
 <body>
-    <header class="conHeader">
-        <p>您可以提前预约，享受专业便捷的服务支持！</p>
-    </header>
-    <div class="pdt-info bloque" id="pdtInfoBox"></div>
-    <div class="user-info bloque" id="addressInfoBox"></div>
-    <div class="reserve-info bloque" id="reserveInfoBox"></div>
-    <footer class="conFooter" style="background:#fff">
-        <button class="qy-btn-400" id="submitReserve">提交预约</button>
-    </footer>
+<header class="conHeader">
+    <p>您可以提前预约，享受专业便捷的服务支持！</p>
+</header>
+<div class="pdt-info bloque" id="pdtInfoBox"></div>
+<div class="user-info bloque" id="addressInfoBox"></div>
+<div class="reserve-info bloque" id="reserveInfoBox"></div>
+<footer class="conFooter" style="background:#fff">
+    <button class="qy-btn-400" id="submitReserve">提交预约</button>
+</footer>
 
 
 <!-- 产品信息-template -->
@@ -47,7 +49,8 @@
                     <p>{{product.productName}}</p>
                     <p>产品条码: {{product.productBarCode}}</p>
                     <p>产品型号: {{product.modelName}}</p>
-                    {{if product.serviceStatus == null || product.serviceStatus == undefined || product.serviceStatus == ''}}
+                    {{if product.serviceStatus == null || product.serviceStatus == undefined ||
+                    product.serviceStatus == ''}}
                     <p style="color:red;">提示：该商品预约次数已用完</p>
                     <p style="color:red;">请到微信商城购买新滤芯</p>
                     {{else}}
@@ -60,7 +63,7 @@
         {{/each}}
     </ul>
     <div class="add-box">
-        <img src="${f_ctxpath}/resources/src/images/icons/add_grey.png" >
+        <img src="${f_ctxpath}/resources/src/images/icons/add_grey.png">
         请点击添加您要预约滤芯服务的产品哟！
     </div>
 </script>
@@ -77,22 +80,25 @@
             <img src="{{data.headimgurl}}" alt="">
         </div>
         <div class="userText">
-            <p><img src="${f_ctxpath}/resources/src/images/icons/personInfo.png">{{data.contacts}}</p>
-            <p><img src="${f_ctxpath}/resources/src/images/icons/tel.png"> {{data.contactsMobile}};{{data.fixedTelephone ? data.fixedTelephone : ""}}</p>
-            <p><img src="${f_ctxpath}/resources/src/images/icons/location.png">{{data.provinceName}}{{data.cityName}}{{data.areaName}}{{data.streetName}}</p>
+            <p><img src="${f_ctxpath}/resources/src/images/icons/personInfo.png">{{data.contacts}}
+            </p>
+            <p><img src="${f_ctxpath}/resources/src/images/icons/tel.png">
+                {{data.contactsMobile}};{{data.fixedTelephone ? data.fixedTelephone : ""}}</p>
+            <p><img src="${f_ctxpath}/resources/src/images/icons/location.png">{{data.provinceName}}{{data.cityName}}{{data.areaName}}{{data.streetName}}
+            </p>
         </div>
         <div class="edit edit-address"></div>
-     </div>
+    </div>
     {{else}}
     <div class="add-box edit-address">
-        <img src="${f_ctxpath}/resources/src/images/icons/add_grey.png" >
+        <img src="${f_ctxpath}/resources/src/images/icons/add_grey.png">
         请点击选择您预约服务的地址哟！
     </div>
     {{/if}}
     <p class="tip" style="color:#000">您是否已购买滤芯，请做如下选择</p>
     <div class="isBuyFilter">
-        <div  class="buyed isBuyFilterSelect" data-isbuyfilter="1" >已购买滤芯</div>
-        <div class="unbuyed isBuyFilterSelect" data-isbuyfilter="2" >未购买滤芯</div>
+        <div class="buyed isBuyFilterSelect" data-isbuyfilter="1">已购买滤芯</div>
+        <div class="unbuyed isBuyFilterSelect" data-isbuyfilter="2">未购买滤芯</div>
     </div>
     <p class="isBuyFilter-tip tip">点击菜单-一键服务-产品防伪查询可查询产品真伪</p>
 </script>
@@ -121,20 +127,20 @@
 <script src="${f_ctxpath}/resources/thirdparty/arttemplate/arttemplate.js"></script>
 <script src="${f_ctxpath}/resources/src/js/common.js${f_ver}"></script>
 <script src="${f_ctxpath}/resources/src/js/reserveService/reserveService_updateFilter.js${f_ver}"></script>
-    <%--<script src="${f_ctxpath}/resources/src/pop/jquery-1.10.1.min.js"></script>
-    <script src="${f_ctxpath}/resources/src/pop/alertPopShow.js"></script>--%>
+<%--<script src="${f_ctxpath}/resources/src/pop/jquery-1.10.1.min.js"></script>
+<script src="${f_ctxpath}/resources/src/pop/alertPopShow.js"></script>--%>
 <script>
   var flags = {
     submitFlag: true
   };
 
-  function loadExtentFile(filePath, fileType){
-    if(fileType == "js"){
+  function loadExtentFile(filePath, fileType) {
+    if (fileType == "js") {
       var oJs = document.create_rElement('script');
-      oJs.setAttribute("type","text/javascript");
+      oJs.setAttribute("type", "text/javascript");
       oJs.setAttribute("src", filename);//文件的地址 ,可为绝对及相对路径
       document.getElementsByTagName_r("head")[0].appendChild(oJs);//绑定
-    }else if(fileType == "css"){
+    } else if (fileType == "css") {
       var oCss = document.create_rElement("link");
       oCss.setAttribute("rel", "stylesheet");
       oCss.setAttribute("type", "text/css");
@@ -143,9 +149,7 @@
     }
   };
 
-
-
-  $(function(){
+  $(function () {
     /*     wxInit.init();
         shieldShare();
         wx.error(function(res) {
@@ -153,12 +157,11 @@
         })
     */
 
-
     var addressId = getUrlParam("addressId");
     var scOrderItemId = getUrlParam("scOrderItemId")
     var user_data = null
-    var reserve_products = JSON.parse(localStorage.getItem('reserve_products') || "[]")
-    var can_submit = true
+    var reserve_products = JSON.parse(localStorage.getItem('reserve_products') || "[]");
+    var can_submit = true;
     var getData = {
       data: getShowDate()
     };
@@ -222,7 +225,7 @@
 
     function isBuyFilterClick() {
 
-      $(document).on('click',".buyed",function (e) {
+      $(document).on('click', ".isBuyFilterSelect", function (e) {
         var $target = $(e.target);
         $target.addClass('active').siblings('.isBuyFilterSelect').removeClass('active')
         var res = {};
@@ -253,8 +256,11 @@
           }
           //alert(p.serviceStatus);
         }
+        //清楚支付状态
+        localStorage.removeItem("isPaidSuccess");
         if (flag == 1) {
-          window.location.href = "http://dev.99baby.cn/scrmapp/wx/user/auth?productIds=" + obj.productIds;
+          window.location.href = "http://dev.99baby.cn/scrmapp/wx/user/auth?productIds="
+              + obj.productIds;
         }
         //window.location.href = "http://dev.99baby.cn/scrmapp/wx/user/auth?productIds=" + "1688,1680";
         /*ajax.post('http://dev.99baby.cn/scrmapp/wx/user/auth', res, true)
@@ -442,7 +448,8 @@
             break;
           case "address" :
             res.address =
-                joinString(user_data.provinceName, user_data.cityName, user_data.areaName, user_data.streetName)
+                joinString(user_data.provinceName, user_data.cityName, user_data.areaName,
+                    user_data.streetName)
             break;
           case "productIds" :
             res.productIds = _getProductsIds(reserve_products)
@@ -478,7 +485,17 @@
   });
 
 
-
+  document.addEventListener('WeixinJSBridgeReady', function onBridgeReady() {
+    let paidStatus = localStorage.getItem("isPaidSuccess");
+    console.log("支付结果" + paidStatus);
+    if (paidStatus === "true") {
+      console.log("支付成功");
+      $(".buyed").addClass('active').siblings('.isBuyFilterSelect').removeClass('active');
+      $(".isBuyFilter-tip").show();
+    } else {
+      console.log("未支付成功");
+    }
+  });
 
 
 
