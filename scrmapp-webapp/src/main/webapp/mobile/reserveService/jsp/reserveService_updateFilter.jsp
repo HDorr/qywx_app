@@ -17,8 +17,8 @@
     <link rel="stylesheet"
           href="${f_ctxpath}/resources/src/css/reserveService/reserveService_updateFilter.css${f_ver}">
     <link rel="stylesheet" href="${f_ctxpath}/resources/src/css/pop/common.css">
-    <script src="//cdn.jsdelivr.net/npm/eruda"></script>
-    <script>eruda.init();</script>
+<%--    <script src="//cdn.jsdelivr.net/npm/eruda"></script>
+    <script>eruda.init();</script>--%>
 </head>
 <body>
 <header class="conHeader">
