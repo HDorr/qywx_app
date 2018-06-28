@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ziwow.scrmapp.common.persistence.mapper.ProductFilterMapper">
+  <resultMap id="BaseResultMap" type="com.ziwow.scrmapp.common.persistence.entity.ProductFilter">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="product_id" jdbcType="BIGINT" property="productId" />
+    <result column="order_id" jdbcType="VARCHAR" property="orderId" />
+    <result column="refund_id" jdbcType="VARCHAR" property="refundId" />
+    <result column="model_name" jdbcType="VARCHAR" property="modelName" />
+    <result column="service_fee" jdbcType="INTEGER" property="serviceFee" />
+    <result column="pay_status" jdbcType="INTEGER" property="payStatus" />
+    <result column="sync_status" jdbcType="INTEGER" property="syncStatus" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, product_id, order_id, refund_id, model_name, service_fee, pay_status, sync_status, create_time
+  </sql>
+  
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_product_filter
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from t_product_filter
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  
+  <insert id="insert" parameterType="com.ziwow.scrmapp.common.persistence.entity.ProductFilter">
+    insert into t_product_filter (id, product_id, order_id,
+      refund_id, model_name, service_fee,
+      pay_status, sync_status, create_time
+      )
+    values (#{id,jdbcType=BIGINT}, #{productId,jdbcType=BIGINT}, #{orderId,jdbcType=VARCHAR},
+      #{refundId,jdbcType=VARCHAR}, #{modelName,jdbcType=VARCHAR}, #{serviceFee,jdbcType=INTEGER},
+      #{payStatus,jdbcType=INTEGER}, #{syncStatus,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.ziwow.scrmapp.common.persistence.entity.ProductFilter">
+    insert into t_product_filter
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="productId != null">
+        product_id,
+      </if>
+      <if test="orderId != null">
+        order_id,
+      </if>
+      <if test="refundId != null">
+        refund_id,
+      </if>
+      <if test="modelName != null">
+        model_name,
+      </if>
+      <if test="serviceFee != null">
+        service_fee,
+      </if>
+      <if test="payStatus != null">
+        pay_status,
+      </if>
+      <if test="syncStatus != null">
+        sync_status,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="productId != null">
+        #{productId,jdbcType=BIGINT},
+      </if>
+      <if test="orderId != null">
+        #{orderId,jdbcType=VARCHAR},
+      </if>
+      <if test="refundId != null">
+        #{refundId,jdbcType=VARCHAR},
+      </if>
+      <if test="modelName != null">
+        #{modelName,jdbcType=VARCHAR},
+      </if>
+      <if test="serviceFee != null">
+        #{serviceFee,jdbcType=INTEGER},
+      </if>
+      <if test="payStatus != null">
+        #{payStatus,jdbcType=INTEGER},
+      </if>
+      <if test="syncStatus != null">
+        #{syncStatus,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+ 
+  <update id="updateByPrimaryKeySelective" parameterType="com.ziwow.scrmapp.common.persistence.entity.ProductFilter">
+      update t_product
+      <set>
+          <if test="itemkind != null">
+              itemKind = #{itemkind,jdbcType=VARCHAR},
+          </if>
+          <if test="typename != null">
+              typeName = #{typename,jdbcType=VARCHAR},
+          </if>
+          <if test="smallcname != null">
+              smallcName = #{smallcname,jdbcType=VARCHAR},
+          </if>
+          <if test="modelname != null">
+              modelName = #{modelname,jdbcType=VARCHAR},
+          </if>
+          <if test="levelid != null">
+              levelId = #{levelid,jdbcType=BIGINT},
+          </if>
+          <if test="levelname != null">
+              levelName = #{levelname,jdbcType=VARCHAR},
+          </if>
+          <if test="productname != null">
+              productName = #{productname,jdbcType=VARCHAR},
+          </if>
+          <if test="productcode != null">
+              productCode = #{productcode,jdbcType=VARCHAR},
+          </if>
+          <if test="productimage != null">
+              productImage = #{productimage,jdbcType=VARCHAR},
+          </if>
+          <if test="productbarcode != null">
+              productBarCode = #{productbarcode,jdbcType=VARCHAR},
+          </if>
+          <if test="barcodeimage != null">
+              barCodeImage = #{barcodeimage,jdbcType=VARCHAR},
+          </if>
+          <if test="shoppingorder != null">
+              shoppingOrder = #{shoppingorder,jdbcType=VARCHAR},
+          </if>
+          <if test="saletype != null">
+              saleType = #{saletype,jdbcType=TINYINT},
+          </if>
+          <if test="o2o != null">
+              o2o = #{o2o,jdbcType=TINYINT},
+          </if>
+          <if test="buychannel != null">
+              buyChannel = #{buychannel,jdbcType=TINYINT},
+          </if>
+          <if test="filterremind != null">
+              filterRemind = #{filterremind,jdbcType=TINYINT},
+          </if>
+          <if test="userid != null">
+              userId = #{userid,jdbcType=VARCHAR},
+          </if>
+          <if test="buytime != null">
+              buyTime = #{buytime,jdbcType=DATE},
+          </if>
+          <if test="status != null">
+              status = #{status,jdbcType=TINYINT},
+          </if>
+          <if test="createtime != null">
+              createTime = #{createtime,jdbcType=DATE},
+          </if>
+          <if test="productbarcodetwenty != null">
+              productBarCodeTwenty = #{productbarcodetwenty,jdbcType=VARCHAR},
+          </if>
+          <if test="servicefee != null">
+              serviceFee = #{servicefee,jdbcType=VARCHAR},
+          </if>
+          <if test="servicestatus != null">
+              serviceStatus = #{servicestatus,jdbcType=VARCHAR},
+          </if>
+          <if test="servicefeeid != null">
+              serviceFeeId = #{servicefeeid,jdbcType=VARCHAR},
+          </if>
+      </set>
+      where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.ziwow.scrmapp.common.persistence.entity.ProductFilter">
+    update t_product_filter
+    set product_id = #{productId,jdbcType=BIGINT},
+      order_id = #{orderId,jdbcType=VARCHAR},
+      refund_id = #{refundId,jdbcType=VARCHAR},
+      model_name = #{modelName,jdbcType=VARCHAR},
+      service_fee = #{serviceFee,jdbcType=INTEGER},
+      pay_status = #{payStatus,jdbcType=INTEGER},
+      sync_status = #{syncStatus,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+
+ <!-- <select id="getProductFilterListByOrderId" resultType="com.ziwow.scrmapp.common.persistence.entity.ProductFilter"
+          parameterType="java.lang.String">
+    SELECT *
+    FROM
+    t_product_filter
+    WHERE order_id = #{orderId}
+  </select>-->
+
+  <!--<update id="updateProductFilterByOrderId" parameterType="com.ziwow.scrmapp.common.persistence.entity.ProductFilter">
+    UPDATE t_product_filter
+    SET pay_status = #{payStatus,jdbcType=INTEGER}
+    WHERE order_id = #{orderId,dbcType=VARCHAR}
+  </update>-->
+
+  <select id="getProductFilterListByOrderId" resultMap="BaseResultMap" parameterType="java.lang.String">
+    select
+    id, product_id, order_id, refund_id, model_name, service_fee, pay_status, sync_status
+    from t_product_filter
+    where order_id = #{orderId}
+  </select>
+
+    <select id="getProductFilterByProductId" resultMap="BaseResultMap" parameterType="java.lang.String">
+        select
+        id, product_id, order_id, refund_id, model_name, service_fee, pay_status, sync_status
+        from t_product_filter
+        where product_id=#{pid}
+    </select>
+</mapper>
