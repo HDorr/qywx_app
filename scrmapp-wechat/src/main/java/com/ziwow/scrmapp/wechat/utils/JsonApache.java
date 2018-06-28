@@ -6,6 +6,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.ziwow.scrmapp.common.persistence.entity.Product;
 import com.ziwow.scrmapp.common.persistence.entity.ProductFilter;
 import com.ziwow.scrmapp.wechat.constants.WXPayConstant;
+import com.ziwow.scrmapp.wechat.service.ProductService;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
@@ -32,6 +33,7 @@ public class JsonApache {
                 JSONObject jo = new JSONObject();
                 jo.put("id", String.valueOf(p.getId()));
                 jo.put("modelName", p.getModelName());
+                jo.put("productCode",p.getProductCode());
                 arr[i] = jo;
             }
             jsonObject.put("unionId", unionId);
