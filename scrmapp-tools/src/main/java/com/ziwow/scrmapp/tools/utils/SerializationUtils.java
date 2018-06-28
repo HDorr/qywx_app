@@ -32,7 +32,7 @@ public class SerializationUtils {
 			kryo.writeClassAndObject(output, obj);
 			return output.toBytes();
 		} catch (Exception e) {
-			logger.error(e.getMessage());
+			logger.error(e.getMessage(),e);
 		}
 		return buffer;
 	}
@@ -42,7 +42,7 @@ public class SerializationUtils {
 		try {
 			return kryo.readClassAndObject(input);
 		} catch (Exception e) {
-			logger.error(e.getMessage());
+			logger.error(e.getMessage(),e);
 		}
 		return kryo;
 	}

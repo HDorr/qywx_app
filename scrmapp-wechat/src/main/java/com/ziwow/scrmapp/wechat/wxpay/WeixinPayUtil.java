@@ -64,7 +64,7 @@ public class WeixinPayUtil {
         try {
             initCert(mchid, certpath);
         } catch (Exception e) {
-            log.error(e.getMessage());
+            log.error(e.getMessage(),e);
         }
 		HttpPost httpost = new HttpPost(url);
 		String prepay_id = "";
@@ -82,7 +82,7 @@ public class WeixinPayUtil {
 			String return_code = (String) map.get("return_code");
 			prepay_id = (String) map.get("prepay_id");
 		} catch (Exception e) {
-			log.error(e.getMessage());
+			log.error(e.getMessage(),e);
 		}
 		return prepay_id;
 	}
@@ -164,7 +164,7 @@ public class WeixinPayUtil {
         try {
             initCert(mchid, certpath);
         } catch (Exception e) {
-            log.error(e.getMessage());
+            log.error(e.getMessage(),e);
         }
 		HttpPost httpost = new HttpPost(url);
 		String jsonStr = "";
@@ -173,7 +173,7 @@ public class WeixinPayUtil {
 			HttpResponse response = httpclient.execute(httpost);
 			jsonStr = EntityUtils.toString(response.getEntity(), "UTF-8");
 		} catch (Exception e) {
-			log.error(e.getMessage());
+			log.error(e.getMessage(),e);
 		}
 		return jsonStr;
 	}
@@ -192,7 +192,7 @@ public class WeixinPayUtil {
 				Map map = doXMLParse(resultStr);
 				codeUrl = (String)map.get("code_url");
 			} catch (Exception e) {
-				log.error(e.getMessage());
+				log.error(e.getMessage(),e);
 			}
 		}
 		return codeUrl;
@@ -268,13 +268,13 @@ public class WeixinPayUtil {
 				result += line;
 			}
 		}catch(Exception e){
-			log.error(e.getMessage());
+			log.error(e.getMessage(),e);
 		}finally{
 			if(bis != null){
 				try{
 					bis.close();
 				}catch(IOException e){
-					log.error(e.getMessage());
+					log.error(e.getMessage(),e);
 				}
 			}
 		}

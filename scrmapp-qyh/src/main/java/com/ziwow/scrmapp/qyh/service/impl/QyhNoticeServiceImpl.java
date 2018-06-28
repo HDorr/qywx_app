@@ -82,7 +82,7 @@ public class QyhNoticeServiceImpl extends GenericServiceImpl<QyhNotice, Long> im
 				return true;
 			}
 		}catch (Exception e) {
-			logger.error(e.getMessage());
+			logger.error(e.getMessage(),e);
 		}
 		
 		//先比较当个用户
@@ -98,7 +98,7 @@ public class QyhNoticeServiceImpl extends GenericServiceImpl<QyhNotice, Long> im
 				}
 			}
 		}catch (Exception e) {
-			logger.error(e.getMessage());
+			logger.error(e.getMessage(),e);
 		}
 		
 		//部门比较
@@ -120,7 +120,7 @@ public class QyhNoticeServiceImpl extends GenericServiceImpl<QyhNotice, Long> im
 						
 					}
 			}catch (Exception e) {
-				logger.error(e.getMessage());
+				logger.error(e.getMessage(),e);
 			}
 			
 		}

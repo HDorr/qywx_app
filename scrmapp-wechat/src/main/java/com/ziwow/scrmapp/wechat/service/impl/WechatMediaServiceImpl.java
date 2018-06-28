@@ -60,7 +60,7 @@ public class WechatMediaServiceImpl implements WechatMediaService{
 			}
 			
 		}catch (Exception e) {
-			logger.error("下载图片失败,[{}]",e.getMessage());
+			logger.error("下载图片失败,[{}]",e);
 		}
 		return null;
 	}

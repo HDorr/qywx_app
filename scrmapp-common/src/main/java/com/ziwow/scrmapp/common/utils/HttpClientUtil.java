@@ -71,10 +71,10 @@ public class HttpClientUtil {
 				response = GetResponseString(_InputStream, "UTF-8");
 			}
 		} catch (HttpException e) {
-			logger.error("获取响应错误，原因：" + e.getMessage());
+			logger.error("获取响应错误，原因：" + e);
 			e.printStackTrace();
 		} catch (IOException e) {
-			logger.error("获取响应错误，原因1：" + e.getMessage());
+			logger.error("获取响应错误，原因1：" + e);
 			e.printStackTrace();
 		} finally {
 			httpmethod.releaseConnection();
@@ -97,10 +97,10 @@ public class HttpClientUtil {
 				}
 			}
 		} catch (HttpException e) {
-			logger.error("获取响应错误，原因：" + e.getMessage());
+			logger.error("获取响应错误，原因：" + e);
 			e.printStackTrace();
 		} catch (IOException e) {
-			logger.error("获取响应错误，原因1：" + e.getMessage());
+			logger.error("获取响应错误，原因1：" + e);
 			e.printStackTrace();
 		} finally {
 			postMethod.releaseConnection();
@@ -129,7 +129,7 @@ public class HttpClientUtil {
 				buffer = null;
 			}
 		} catch (Exception e) {
-			logger.error("获取响应错误，原因：" + e.getMessage());
+			logger.error("获取响应错误，原因：" + e);
 			response = response + e.getMessage();
 			e.printStackTrace();
 		}

@@ -227,7 +227,7 @@ public class WXPayController {
             log.info("/user/auth接口url：" + url);
             response.sendRedirect(url);
         } catch (IOException e) {
-            log.error("/user/auth接口异常：" + e.getMessage());
+            log.error("/user/auth接口异常：" + e);
             throw new RuntimeException("获取微信支付用户认证失败");
         }
         return null;  //可以指定错误页面
@@ -353,7 +353,7 @@ public class WXPayController {
             model.addAttribute("ids", ids);
             return "/reserveService/jsp/jsapi";
         } catch (NumberFormatException e) {
-            log.error(e.getMessage());
+            log.error(e.getMessage(),e);
         }
         return null;    //可以指定错误页面
 
@@ -417,7 +417,7 @@ public class WXPayController {
                             log.error("支付失败，订单号：" + return_code);
                         }
                     } catch (Exception e) {
-                        log.error("/notify/url接口异常：" + e.getMessage());
+                        log.error("/notify/url接口异常：" + e);
                     }
                 } else {
                     //签名校验失败
@@ -425,7 +425,7 @@ public class WXPayController {
                 }
             }
         } catch (Exception e) {
-            log.error("/notify/url接口异常：" + e.getMessage());
+            log.error("/notify/url接口异常：" + e);
         }
         return null;
     }
@@ -441,7 +441,7 @@ public class WXPayController {
         try {
             config = new MyConfig();
         } catch (Exception e) {
-            log.error("/order/query接口异常：" + e.getMessage());
+            log.error("/order/query接口异常：" + e);
         }
         WXPay wxpay = new WXPay(config);
 
@@ -499,7 +499,7 @@ public class WXPayController {
                 return modelAndView;
             }
         } catch (Exception e) {
-            log.error("/pay/check接口异常：" + e.getMessage());
+            log.error("/pay/check接口异常：" + e);
         }
         model.addAttribute("code", "500");
         ModelAndView modelAndView = new ModelAndView("/reserveService/jsp/reserveService_updateFilter");
@@ -525,7 +525,7 @@ public class WXPayController {
         try {
             writer = response.getWriter();
         } catch (IOException e) {
-            log.error(e.getMessage());
+            log.error(e.getMessage(),e);
         }
         JSONObject result = new JSONObject();
         String temId = refundVO.getId();  //退款单号为id属性，既主键ID
@@ -552,7 +552,7 @@ public class WXPayController {
         try {
             config = new MyConfig();
         } catch (Exception e) {
-            log.error("异常：" + e.getMessage());
+            log.error("异常：" + e);
         }
         WXPay wxpay = new WXPay(config);
         Map<String, String> data = new HashMap<String, String>();
@@ -597,7 +597,7 @@ public class WXPayController {
                 return;
             }
         } catch (Exception e) {
-            log.error("退款异常：" + e.getMessage());
+            log.error("退款异常：" + e);
             result.put("status", "0");
             writer.println(result.toJSONString());
             writer.close();

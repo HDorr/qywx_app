@@ -54,7 +54,7 @@ public class JsonApache {
                 return result;
             }
         } catch (Exception e) {
-            log.error(e.getMessage());
+            log.error(e.getMessage(),e);
         }
         return null;
     }
@@ -101,7 +101,7 @@ public class JsonApache {
                 return true;
             }
         } catch (Exception e) {
-            log.error(e.getMessage());
+            log.error(e.getMessage(),e);
         }
         return false;
     }
@@ -149,7 +149,7 @@ public class JsonApache {
                 return result;
             }
         } catch (Exception e) {
-            log.error(e.getMessage());
+            log.error(e.getMessage(),e);
         }
         return null;
     }

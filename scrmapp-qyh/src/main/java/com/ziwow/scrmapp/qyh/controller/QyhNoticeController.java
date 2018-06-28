@@ -254,7 +254,7 @@ public class QyhNoticeController extends BaseController{
 				}
 			}
 		}catch (Exception e) {
-			logger.error("userId解密失败"+e.getMessage());
+			logger.error("userId解密失败"+e.getMessage(),e);
 			errCode = ErrorCodeConstants.CODE_3;
 		}
 		

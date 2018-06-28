@@ -27,13 +27,13 @@ public class RequestUtil {
 				result += line;
 			}
 		}catch(Exception e){
-			log.error(e.getMessage());
+			log.error(e.getMessage(),e);
 		}finally{
 			if(bis != null){
 				try{
 					bis.close();
 				}catch(IOException e){
-					log.error(e.getMessage());
+					log.error(e.getMessage(),e);
 				}
 			}
 		}

@@ -37,7 +37,7 @@ public class SignUtil {
             byte[] digest = md.digest(content.toString().getBytes());
             tmpStr = byteToStr(digest);
         } catch (NoSuchAlgorithmException e) {
-            log.error(e.getMessage());
+            log.error(e.getMessage(),e);
         }
         // 将 sha1 加密后的字符串可与 signature 对比，标识该请求来源于微信
         boolean flag =  tmpStr != null ? tmpStr.equals(signature.toUpperCase()) : false;

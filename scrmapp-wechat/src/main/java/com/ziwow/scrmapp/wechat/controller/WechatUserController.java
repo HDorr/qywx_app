@@ -825,7 +825,7 @@ public class WechatUserController {
                 result.setData(wechatUser.getNickName());
             }
         } catch (Exception e) {
-            logger.error(e.getMessage());
+            logger.error("查询失败",e);
             result.setReturnMsg("查询失败!");
             result.setReturnCode(Constant.FAIL);
         }

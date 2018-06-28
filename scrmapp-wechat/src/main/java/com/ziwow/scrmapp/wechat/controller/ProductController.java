@@ -93,7 +93,7 @@ public class ProductController {
         } catch (Exception e) {
             result.setReturnCode(Constant.FAIL);
             result.setReturnMsg("数据获取失败!");
-            logger.error("查询产品系列数据过程中遇到异常，原因[{}]", e.getMessage());
+            logger.error("查询产品系列数据过程中遇到异常，原因[{}]", e);
         }
         return result;
     }
@@ -122,7 +122,7 @@ public class ProductController {
         } catch (Exception e) {
             result.setReturnCode(Constant.FAIL);
             result.setReturnMsg("数据获取失败!");
-            logger.error("查询产品类型数据过程中遇到异常，原因[{}]", e.getMessage());
+            logger.error("查询产品类型数据过程中遇到异常，原因[{}]", e);
         }
         return result;
     }
@@ -150,7 +150,7 @@ public class ProductController {
         } catch (Exception e) {
             result.setReturnCode(Constant.FAIL);
             result.setReturnMsg("数据获取失败!");
-            logger.error("查询产品型号数据过程中遇到异常，原因[{}]", e.getMessage());
+            logger.error("查询产品型号数据过程中遇到异常，原因[{}]", e);
         }
         return result;
     }
@@ -192,7 +192,7 @@ public class ProductController {
         } catch (Exception e) {
             result.setReturnCode(Constant.FAIL);
             result.setReturnMsg("产品查询失败!");
-            logger.error("调用沁园产品绑定失败,原因[{}]", e.getMessage());
+            logger.error("调用沁园产品绑定失败,原因[{}]", e);
         }
         return result;
     }
@@ -238,7 +238,7 @@ public class ProductController {
         } catch (Exception e) {
             result.setReturnCode(Constant.FAIL);
             result.setReturnMsg("产品绑定失败!");
-            logger.error("产品绑定失败,原因[{}]", e.getMessage());
+            logger.error("产品绑定失败,原因[{}]", e);
         }
 
         return result;
@@ -272,7 +272,7 @@ public class ProductController {
         } catch (Exception e) {
             result.setReturnCode(Constant.FAIL);
             result.setReturnMsg("查询产品列表失败!");
-            logger.error("用户查询产品列表失败，原因[{}]", e.getMessage());
+            logger.error("用户查询产品列表失败，原因[{}]", e);
         }
         return result;
 
@@ -344,7 +344,7 @@ public class ProductController {
 //        } catch (Exception e) {
 //            result.setReturnCode(Constant.FAIL);
 //            result.setReturnMsg("查询产品列表失败!");
-//            logger.error("用户查询产品列表失败，原因[{}]", e.getMessage());
+//            logger.error("用户查询产品列表失败，原因[{}]", e);
 //        }
 //        return result;
 
@@ -374,7 +374,7 @@ public class ProductController {
         } catch (Exception e) {
             result.setReturnCode(Constant.FAIL);
             result.setReturnMsg("查询产品列表失败!");
-            logger.error("用户查询产品列表失败，原因[{}]", e.getMessage());
+            logger.error("用户查询产品列表失败，原因[{}]", e);
         }
         return result;*/
 
@@ -399,7 +399,7 @@ public class ProductController {
         } catch (Exception e) {
             result.setReturnCode(Constant.FAIL);
             result.setReturnMsg("查询产品详情失败!");
-            logger.error("用户查询产品详情失败，原因[{}]", e.getMessage());
+            logger.error("用户查询产品详情失败，原因[{}]", e);
         }
         return result;
     }
@@ -432,7 +432,7 @@ public class ProductController {
         } catch (Exception e) {
             result.setReturnCode(Constant.FAIL);
             result.setReturnMsg("操作失败!");
-            logger.error("开闭或开启滤芯提醒异常，原因[{}]", e.getMessage());
+            logger.error("开闭或开启滤芯提醒异常，原因[{}]", e);
         }
         return result;
     }
@@ -467,7 +467,7 @@ public class ProductController {
         } catch (Exception e) {
             result.setReturnCode(Constant.FAIL);
             result.setReturnMsg("图片获取失败!");
-            logger.error("调用沁园获取图片失败，原因[{}]", e.getMessage());
+            logger.error("调用沁园获取图片失败，原因[{}]", e);
         }
         return result;
     }
@@ -492,7 +492,7 @@ public class ProductController {
         } catch (Exception e) {
             result.setReturnCode(Constant.FAIL);
             result.setReturnMsg("查询产品信息失败!");
-            logger.error("用户查询产品基本信息失败，原因[{}]", e.getMessage());
+            logger.error("用户查询产品基本信息失败，原因[{}]", e);
         }
         return result;
     }
@@ -532,7 +532,7 @@ public class ProductController {
         } catch (Exception e) {
             result.setReturnCode(Constant.FAIL);
             result.setReturnMsg("删除产品失败!");
-            logger.error("删除产品失败，原因[{}]", e.getMessage());
+            logger.error("删除产品失败，原因[{}]", e);
         }
         return result;
     }
@@ -557,7 +557,7 @@ public class ProductController {
         } catch (Exception e) {
             result.setReturnCode(Constant.FAIL);
             result.setReturnMsg("数据获取失败!");
-            logger.error("获取购买渠道数据失败，原因[{}]", e.getMessage());
+            logger.error("获取购买渠道数据失败，原因[{}]", e);
         }
         return result;
     }

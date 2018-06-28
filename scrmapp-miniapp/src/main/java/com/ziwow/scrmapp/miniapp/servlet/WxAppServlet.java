@@ -84,7 +84,7 @@ public class WxAppServlet extends HttpServlet {
 			String postData = IOUtils.toString(in, "utf-8");
 			wxAppMessageProcessingHandler.manageMessage(postData,request, response);
 		}catch (Exception e) {
-			log.error(e.getMessage());
+			log.error(e);
 		}finally{
 			try {
 				in.close();

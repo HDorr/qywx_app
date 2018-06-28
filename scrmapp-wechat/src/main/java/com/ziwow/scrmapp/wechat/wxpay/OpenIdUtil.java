@@ -74,9 +74,9 @@ public class OpenIdUtil {
 			conn.disconnect();
 			jsonObject = JSONObject.parseObject(buffer.toString());
 		} catch (ConnectException ce) {
-			log.error(ce.getMessage());
+			log.error(ce.getMessage(),ce);
 		} catch (Exception e) {
-			log.error(e.getMessage());
+			log.error(e.getMessage(),e);
 		}
 		return jsonObject;
 	}

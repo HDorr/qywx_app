@@ -94,7 +94,7 @@ Logger LOG = LoggerFactory.getLogger(QyhWxSaaSServiceImpl.class);
 			}
 			LOG.info("suiteId:[{}],suite_access_token:[{}]",suiteId,suite_access_token);
 		} catch (Exception e) {
-			LOG.error(e.getMessage());
+			LOG.error(e.getMessage(),e);
 		}
 		return suite_access_token;
 	}
@@ -121,7 +121,7 @@ Logger LOG = LoggerFactory.getLogger(QyhWxSaaSServiceImpl.class);
 			}
 			
 		} catch (Exception e) {
-			LOG.error(e.getMessage());
+			LOG.error(e.getMessage(),e);
 		}
 		return pre_auth_code;
 	}

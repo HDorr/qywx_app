@@ -573,7 +573,7 @@ public class WechatOrdersController {
             result.setData(wechatOrdersVo);
             logger.debug("预约详情获取成功!");
         } catch (Exception e) {
-            logger.error("获取预约详情记录失败,原因[{}]", e.getMessage());
+            logger.error("获取预约详情记录失败,原因[{}]", e);
             result.setReturnCode(Constant.FAIL);
             result.setReturnMsg("数据获取失败,请稍后再试!");
         }

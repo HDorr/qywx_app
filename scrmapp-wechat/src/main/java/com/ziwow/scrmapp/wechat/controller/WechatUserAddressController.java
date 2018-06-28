@@ -62,7 +62,7 @@ public class WechatUserAddressController {
         } catch (Exception e) {
             result.setReturnCode(Constant.FAIL);
             result.setReturnMsg("列表列表获取失败，请重试!");
-            logger.error("地址列表获取失败, 原因[{}]", e.getMessage());
+            logger.error("地址列表获取失败, 原因[{}]", e);
         }
 
         return result;
@@ -98,7 +98,7 @@ public class WechatUserAddressController {
         } catch (Exception e) {
             result.setReturnCode(Constant.FAIL);
             result.setReturnMsg("数据获取失败，请重试!");
-            logger.error("地址数据获取失败,addressId = [{}],原因[{}]", addressId, e.getMessage());
+            logger.error("地址数据获取失败,addressId = [{}],原因[{}]", addressId, e);
         }
 
         return result;
@@ -171,7 +171,7 @@ public class WechatUserAddressController {
             result.setReturnCode(Constant.SUCCESS);
             result.setReturnMsg("保存成功!");
         } catch (Exception e) {
-            logger.error("保存地址信息失败,原因[{}]", e.getMessage());
+            logger.error("保存地址信息失败,原因[{}]", e);
             result.setReturnCode(Constant.FAIL);
             result.setReturnMsg("保存失败!");
         }

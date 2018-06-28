@@ -117,7 +117,7 @@ public class QyhUserController {
             result.setReturnCode(Constant.SUCCESS);
             result.setData(userOrdersVo);
         } catch (Exception e) {
-            logger.error("请求待处理工单数据失败,原因:[{}]", e.getMessage());
+            logger.error("请求待处理工单数据失败,原因:[{}]", e);
             result.setReturnMsg("请求数据失败,请稍后再试!");
             result.setReturnCode(Constant.FAIL);
         }
@@ -143,7 +143,7 @@ public class QyhUserController {
             result.setReturnCode(Constant.SUCCESS);
             result.setData(detailVoList);
         } catch (Exception e) {
-            logger.error("查询待处理工单失败,原因:[{}]", e.getMessage());
+            logger.error("查询待处理工单失败,原因:[{}]", e);
             result.setReturnMsg("请求数据失败,请稍后再试!");
             result.setReturnCode(Constant.FAIL);
         }
@@ -210,7 +210,7 @@ public class QyhUserController {
                 logger.info(qyhUserId + "师傅拒单操作成功!");
             }
         } catch (Exception e) {
-            logger.error("师傅拒绝工单异常,原因:[{}]", e.getMessage());
+            logger.error("师傅拒绝工单异常,原因:[{}]", e);
             result.setReturnCode(Constant.FAIL);
             result.setReturnMsg("操作失败，请稍后再试!");
         }
@@ -231,7 +231,7 @@ public class QyhUserController {
         } catch (Exception e) {
             result.setReturnCode(Constant.FAIL);
             result.setReturnMsg("操作失败，请稍后再试!");
-            logger.error("师傅取消单个产品异常,原因:" + e.getMessage());
+            logger.error("师傅取消单个产品异常,原因:" + e);
         }
         return result;
     }
@@ -299,7 +299,7 @@ public class QyhUserController {
                 logger.info(qyhUserId + "师傅更改预约时间成功!");
             }
         } catch (Exception e) {
-            logger.error("师傅更改预约时间异常,原因:[{}]", e.getMessage());
+            logger.error("师傅更改预约时间异常,原因:[{}]", e);
             result.setReturnCode(Constant.FAIL);
             result.setReturnMsg("操作失败，请稍后再试!");
         }
@@ -323,7 +323,7 @@ public class QyhUserController {
             result.setData(finishedOrdersDetail);
             result.setReturnCode(Constant.SUCCESS);
         } catch (Exception e) {
-            logger.error("获取待处理工单详情信息异常,原因:[{}]", e.getMessage());
+            logger.error("获取待处理工单详情信息异常,原因:[{}]", e);
             result.setReturnCode(Constant.FAIL);
             result.setReturnMsg("请求数据失败,请稍后再试!");
         }
@@ -347,7 +347,7 @@ public class QyhUserController {
             result.setData(finishedOrdersDetail);
             result.setReturnCode(Constant.SUCCESS);
         } catch (Exception e) {
-            logger.error("获取工单详情信息异常,原因:[{}]", e.getMessage());
+            logger.error("获取工单详情信息异常,原因:[{}]", e);
             result.setReturnCode(Constant.FAIL);
             result.setReturnMsg("请求数据失败,请稍后再试!");
         }
@@ -371,7 +371,7 @@ public class QyhUserController {
             result.setData(finishedOrdersInfo);
             result.setReturnCode(Constant.SUCCESS);
         } catch (Exception e) {
-            logger.error("获取工单详情信息异常,原因:[{}]", e.getMessage());
+            logger.error("获取工单详情信息异常,原因:[{}]", e);
             result.setReturnCode(Constant.FAIL);
             result.setReturnMsg("请求数据失败,请稍后再试!");
         }
@@ -687,7 +687,7 @@ public class QyhUserController {
                 nameDecode = URLDecoder.decode(name, "utf-8");
             }
         } catch (UnsupportedEncodingException e) {
-            logger.error(e.getMessage());
+            logger.error(e.getMessage(),e);
         }
         Result result = qyhOrdersService.findRepairItem(typeNameDecode, smallcNameDecode, nameDecode);
         return result;
@@ -715,7 +715,7 @@ public class QyhUserController {
                 nameDecode = URLDecoder.decode(name, "utf-8");
             }
         } catch (UnsupportedEncodingException e) {
-            logger.error(e.getMessage());
+            logger.error(e.getMessage(),e);
         }
         Result result = qyhOrdersService.findInstallPart(modelNameDecode, nameDecode);
         return result;
@@ -742,7 +742,7 @@ public class QyhUserController {
                 nameDecode = URLDecoder.decode(name, "utf-8");
             }
         } catch (UnsupportedEncodingException e) {
-            logger.error(e.getMessage());
+            logger.error(e.getMessage(),e);
         }
         Result result = qyhOrdersService.findRepairPart(modelNameDecode, nameDecode);
         return result;

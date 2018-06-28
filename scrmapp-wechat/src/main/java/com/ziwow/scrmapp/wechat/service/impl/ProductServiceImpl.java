@@ -675,7 +675,7 @@ public class ProductServiceImpl implements ProductService {
             LOG.info("checkProductIsTrue---------------------" + ((SecurityVo) result.getData()).getProdName());
             LOG.info("checkProductIsTrue----------------" + ((SecurityVo) result.getData()).getBarCode());
         } catch (Exception e) {
-            LOG.error(e.getMessage());
+            LOG.error(e.getMessage(),e);
             result.setReturnMsg("查询失败!");
             result.setReturnCode(Constant.FAIL);
         }

@@ -74,7 +74,7 @@ public class WeChatServlet extends HttpServlet {
 	        String xmlMsg = Tools.inputStream2String(in);
 	        weChatMessageProcessingHandler.manageMessage(xmlMsg,request, response);
 		}catch (Exception e) {
-			log.error(e.getMessage());
+			log.error(e.getMessage(),e);
 		}finally{
 			try {
 				in.close();

@@ -122,7 +122,7 @@ public class WeiXinWerviceImpl implements WeiXinService {
                 return JSONObject.parseObject(reslut);
             }
         } catch (Exception e) {
-            LOG.error("发送客服消息失败[{}]", e.getMessage());
+            LOG.error("发送客服消息失败[{}]", e);
         }
         return null;
     }
@@ -145,7 +145,7 @@ public class WeiXinWerviceImpl implements WeiXinService {
                 return JSONObject.parseObject(reslut).getString("ticket");
             }
         } catch (Exception e) {
-            LOG.error("发送客服消息失败[{}]", e.getMessage());
+            LOG.error("发送客服消息失败[{}]", e);
         }
         return StringUtils.EMPTY;
     }
