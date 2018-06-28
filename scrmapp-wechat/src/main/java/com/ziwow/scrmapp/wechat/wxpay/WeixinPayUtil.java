@@ -1,5 +1,6 @@
 package com.ziwow.scrmapp.wechat.wxpay;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.config.RequestConfig;
@@ -42,7 +43,8 @@ public class WeixinPayUtil {
         // 指定读取证书格式为PKCS12
         KeyStore keyStore = KeyStore.getInstance("PKCS12");
         // 读取本机存放的PKCS12证书文件
-        FileInputStream instream = new FileInputStream(new File(path));
+        InputStream instream=WeixinPayUtil.class.getClassLoader().getResourceAsStream(certpath);
+        //FileInputStream instream = new FileInputStream(new File(path));
         try {
             // 指定PKCS12的密码(商户ID)
             keyStore.load(instream, key.toCharArray());

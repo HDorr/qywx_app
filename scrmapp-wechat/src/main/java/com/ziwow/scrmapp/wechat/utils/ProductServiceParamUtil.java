@@ -21,6 +21,8 @@ public class ProductServiceParamUtil {
         //System.out.println(data);  //[{"modelName":"[\"MK-UF-12\"]","serviceStatus":"5"}]
         List<Product> newList = new ArrayList<Product>();
 
+
+
         for (Product p : list) {
             String modelName = p.getModelName();
             for (int i = 0; i < jsonArray.size(); i++) {
@@ -36,6 +38,7 @@ public class ProductServiceParamUtil {
                     String serviceStatus = serviceStatusCompare(tem);
                     p.setServiceStatus(serviceStatus);
                     newList.add(p);
+                    jsonArray.remove(i);
                 }
             }
         }

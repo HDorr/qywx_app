@@ -14,14 +14,14 @@
     <link rel="stylesheet" href="${f_ctxpath}/resources/src/css/jqweui/weui.min.css">
     <link rel="stylesheet" href="${f_ctxpath}/resources/src/css/jqweui/jquery-weui.css">
     <link rel="stylesheet" href="${f_ctxpath}/resources/src/css/reserveService/reserveService_updateFilter.css${f_ver}">
-    <script src="//cdn.jsdelivr.net/npm/eruda"></script>
-    <script>eruda.init();</script>
+<%--    <script src="//cdn.jsdelivr.net/npm/eruda"></script>
+    <script>eruda.init();</script>--%>
     <%--<link rel="stylesheet" href="${f_ctxpath}/resources/src/css/pop/common.css">--%>
 </head>
 <body>
-    <div class="conHeader">
+    <header class="conHeader">
         <p>您可以提前预约，享受专业便捷的服务支持！</p>
-    </div>
+    </header>
     <div class="pdt-info bloque" id="pdtInfoBox"></div>
     <div class="user-info bloque" id="addressInfoBox"></div>
     <div class="reserve-info bloque" id="reserveInfoBox"></div>
@@ -31,11 +31,11 @@
 
 
 <!-- 产品信息-template -->
-<div type="text/html" id="pdtInfo_template">
-    <div class="title">
+<script type="text/html" id="pdtInfo_template">
+    <header class="title">
         <img src="${f_ctxpath}/resources/src/images/icons/pdtInfo.png">
         产品信息
-    </div>
+    </header>
     <ul class="productList">
         {{each list as product}}
         <li>
@@ -63,14 +63,14 @@
         <img src="${f_ctxpath}/resources/src/images/icons/add_grey.png" >
         请点击添加您要预约滤芯服务的产品哟！
     </div>
-</div>
+</script>
 
 <!-- 地址用户信息-template -->
-<div type="text/html" id="addressInfo_template">
-    <div class="title">
+<script type="text/html" id="addressInfo_template">
+    <header class="title">
         <img src="${f_ctxpath}/resources/src/images/icons/personInfo.png">
         用户信息
-    </div>
+    </header>
     {{if data}}
     <div class="info-box">
         <div class="userAvatar">
@@ -95,14 +95,14 @@
         <div class="unbuyed isBuyFilterSelect" data-isbuyfilter="2" >未购买滤芯</div>
     </div>
     <p class="isBuyFilter-tip tip">点击菜单-一键服务-产品防伪查询可查询产品真伪</p>
-</div>
+</script>
 
 <!-- 预约信息-template -->
-<div type="text/html" id="reserveInfo_template">
-    <div class="title">
+<script type="text/html" id="reserveInfo_template">
+    <header class="title">
         <img src="${f_ctxpath}/resources/src/images/icons/reserve.png">re
         预约信息
-    </div>
+    </header>
     <div class="timePickerContainer">
         <div>上门时间：</div>
         <div id="changeOrder">请填写上门服务时间</div>
@@ -112,7 +112,7 @@
         <p>保养描述</p>
         <textarea id="description" placeholder="如有其他需要特别说明，请填写！"></textarea>
     </div>
-</div>
+</script>
 
 <script src="${f_ctxpath}/resources/src/js/flexible.js"></script>
 <script src="${f_ctxpath}/resources/thirdparty/jquery/dist/jquery.min.js"></script>
@@ -226,7 +226,6 @@
         var $target = $(e.target);
         $target.addClass('active').siblings('.isBuyFilterSelect').removeClass('active')
         var res = {};
-        alert("111");
         if ($target.data('isbuyfilter') == '1') {
           $target.parent('.isBuyFilter').siblings('.isBuyFilter-tip').show()
           res.productIds = _getProductsIds(reserve_products);

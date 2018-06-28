@@ -254,29 +254,6 @@ public class ProductController {
     @RequestMapping(value = "/product/list", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
     @ResponseBody
     public Result queryUserProduct(HttpServletRequest request, HttpServletResponse response) {
-        Result result = new BaseResult();
-        try {
-            String encode = CookieUtil.readCookie(request, response, WeChatConstants.SCRMAPP_USER);
-            String userId = new String(Base64.decode(encode));
-
-            //用户id不存在
-            if (!wechatUserService.checkUser(userId)) {
-                logger.error("查询用户产品列表失败，cookie中userId错误");
-                result.setReturnCode(Constant.FAIL);
-                result.setReturnMsg("用户无效，请退出重新操作！");
-                return result;
-            }
-            List<Product> products = productService.getProductsByUserId(userId);
-            result.setReturnCode(Constant.SUCCESS);
-            result.setData(products);
-        } catch (Exception e) {
-            result.setReturnCode(Constant.FAIL);
-            result.setReturnMsg("查询产品列表失败!");
-            logger.error("用户查询产品列表失败，原因[{}]", e);
-        }
-        return result;
-
-        //外部接口没有通
 //        Result result = new BaseResult();
 //        try {
 //            String encode = CookieUtil.readCookie(request, response, WeChatConstants.SCRMAPP_USER);
@@ -289,56 +266,7 @@ public class ProductController {
 //                result.setReturnMsg("用户无效，请退出重新操作！");
 //                return result;
 //            }
-//
-//            WechatUser wechatUser = wechatUserService.getUserByUserId(userId);
-//            if (wechatUser == null) {
-//                logger.error("查询用户失败，cookie中userId错误");
-//                result.setReturnCode(Constant.FAIL);
-//                result.setReturnMsg("用户无效，请退出重新操作！");
-//                return result;
-//            }
-//            long wfId = wechatUser.getWfId();
-//            WechatFans wechatFans = wechatFansService.getWechatFansById(wfId);
-//            String unionId = wechatFans.getUnionId();
-//            List<Product> temList = productService.getProductsByUserId(userId);
-//            //System.out.println(temList);
-//            //读取远程服务费信息，content为JSONARrray [{id:xxx, model_name:xxx,service_fee:xxx,service_status:xxx},{,,}]
-//            String content = JsonApache.postModelNames(unionId, temList, qinyuanModelnameServiceQuery);
-//            if (content == null) {
-//                result.setReturnCode(Constant.FAIL);
-//                result.setReturnMsg("查询外部产品列表失败!");
-//                logger.error("用户查询产品列表失败，原因[{}]", "外部查询服务费状态失败");
-//                return result;
-//            }
-//            JSONObject jsonObject = JSON.parseObject(content);
-//            JSONArray jsonArray = jsonObject.getJSONArray("data");
-//            List<ProductFilter> productFilterList = new ArrayList<ProductFilter>();
-//            for (int i = 0; i < jsonArray.size(); i++) {
-//                JSONObject jo = (JSONObject) jsonArray.get(i);
-//                String temId = (String) jo.get("id");  //id为商品主键ID
-//                long id = Long.parseLong(temId);
-//                String modelName = (String) jo.get("modelName");
-//                String serviceFee = (String) jo.get("serviceFeePrice");
-//                if (serviceFee == null) {
-//                    serviceFee = "0";
-//                }
-//                //0：已购买滤芯未购买服务 1：已购买滤芯和服务 5：没有滤芯或不能购买滤芯
-//                String serviceStatus = (String) jo.get("serviceStatus");
-//                String serviceFeeId = (String) jo.get("serviceFeeId");
-//                if (serviceFeeId == null) {
-//                    serviceFeeId = "0";
-//                }
-//               /* Product p = new Product();
-//                p.setId(id);
-//                p.setServiceFee(serviceFee);
-//                p.setServiceStatus(serviceStatus);
-//                p.setServiceFeeId(serviceFeeId);*/
-//                //根据ID更新Product
-//                //productService.updateByPrimaryKeySelective(p);
-//                productService.updateProductById(id, serviceFee, serviceStatus, serviceFeeId);
-//            }
-//            //对产品添加服务费和服务状态
-//            List<Product> products = ProductServiceParamUtil.addServiceParam(temList, content);
+//            List<Product> products = productService.getProductsByUserId(userId);
 //            result.setReturnCode(Constant.SUCCESS);
 //            result.setData(products);
 //        } catch (Exception e) {
@@ -347,6 +275,78 @@ public class ProductController {
 //            logger.error("用户查询产品列表失败，原因[{}]", e);
 //        }
 //        return result;
+
+        //外部接口没有通
+        Result result = new BaseResult();
+        try {
+            String encode = CookieUtil.readCookie(request, response, WeChatConstants.SCRMAPP_USER);
+            String userId = new String(Base64.decode(encode));
+
+            //用户id不存在
+            if (!wechatUserService.checkUser(userId)) {
+                logger.error("查询用户产品列表失败，cookie中userId错误");
+                result.setReturnCode(Constant.FAIL);
+                result.setReturnMsg("用户无效，请退出重新操作！");
+                return result;
+            }
+
+            WechatUser wechatUser = wechatUserService.getUserByUserId(userId);
+            if (wechatUser == null) {
+                logger.error("查询用户失败，cookie中userId错误");
+                result.setReturnCode(Constant.FAIL);
+                result.setReturnMsg("用户无效，请退出重新操作！");
+                return result;
+            }
+            long wfId = wechatUser.getWfId();
+            WechatFans wechatFans = wechatFansService.getWechatFansById(wfId);
+            String unionId = wechatFans.getUnionId();
+            List<Product> temList = productService.getProductsByUserId(userId);
+            //System.out.println(temList);
+            //读取远程服务费信息，content为JSONARrray [{id:xxx, model_name:xxx,service_fee:xxx,service_status:xxx},{,,}]
+            String content = JsonApache.postModelNames(unionId, temList, qinyuanModelnameServiceQuery);
+            if (content == null) {
+                result.setReturnCode(Constant.FAIL);
+                result.setReturnMsg("查询外部产品列表失败!");
+                logger.error("用户查询产品列表失败，原因[{}]", "外部查询服务费状态失败");
+                return result;
+            }
+            JSONObject jsonObject = JSON.parseObject(content);
+            JSONArray jsonArray = jsonObject.getJSONArray("data");
+            List<ProductFilter> productFilterList = new ArrayList<ProductFilter>();
+            for (int i = 0; i < jsonArray.size(); i++) {
+                JSONObject jo = (JSONObject) jsonArray.get(i);
+                String temId = (String) jo.get("id");  //id为商品主键ID
+                long id = Long.parseLong(temId);
+                String modelName = (String) jo.get("modelName");
+                String serviceFee = (String) jo.get("serviceFeePrice");
+                if (serviceFee == null) {
+                    serviceFee = "0";
+                }
+                //0：已购买滤芯未购买服务 1：已购买滤芯和服务 5：没有滤芯或不能购买滤芯
+                String serviceStatus = (String) jo.get("serviceStatus");
+                String serviceFeeId = (String) jo.get("serviceFeeId");
+                if (serviceFeeId == null) {
+                    serviceFeeId = "0";
+                }
+               /* Product p = new Product();
+                p.setId(id);
+                p.setServiceFee(serviceFee);
+                p.setServiceStatus(serviceStatus);
+                p.setServiceFeeId(serviceFeeId);*/
+                //根据ID更新Product
+                //productService.updateByPrimaryKeySelective(p);
+                productService.updateProductById(id, serviceFee, serviceStatus, serviceFeeId);
+            }
+            //对产品添加服务费和服务状态
+            List<Product> products = ProductServiceParamUtil.addServiceParam(temList, content);
+            result.setReturnCode(Constant.SUCCESS);
+            result.setData(products);
+        } catch (Exception e) {
+            result.setReturnCode(Constant.FAIL);
+            result.setReturnMsg("查询产品列表失败!");
+            logger.error("用户查询产品列表失败，原因[{}]", e);
+        }
+        return result;
 
 
         //临时测试用
