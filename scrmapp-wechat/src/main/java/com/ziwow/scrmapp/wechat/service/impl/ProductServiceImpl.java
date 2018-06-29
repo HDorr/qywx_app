@@ -584,13 +584,16 @@ public class ProductServiceImpl implements ProductService {
             LOG.info("绑定产品信息同步到小程序失败,unionid不能为空!");
             return;
         }
-
         Map<String, Object> params = new HashMap<String, Object>();
         long timestamp = System.currentTimeMillis();
         params.put("timestamp", timestamp);
         params.put("signture", MD5.toMD5(Constant.AUTH_KEY + timestamp));
         params.put("unionId", wechatFans.getUnionId());
         params.put("productCode", productCode);
+
+        int count = productMapper.countByUserIdWithoutStatus(userId);
+        params.put("isFirst",count==0);
+
         LOG.info("绑定产品信息同步到小程序请求参数:{}", JSON.toJSONString(params));
         String result = HttpClientUtils.postJson(syncProdBindUrl, net.sf.json.JSONObject.fromObject(params).toString());
         if (org.apache.commons.lang.StringUtils.isNotBlank(result)) {

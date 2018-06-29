@@ -68,4 +68,6 @@ public interface ProductMapper {
     //@Update("update t_product set serviceFee=#{serviceFee}, serviceStatus=#{serviceStatus}, serviceFeeId=#{serviceFeeId} where id=#{id}")
     int updateProductById(@Param("id")Long id, @Param("serviceFee")String serviceFee,
                                  @Param("serviceStatus")String serviceStatus, @Param("serviceFeeId")String serviceFeeId);
+
+    int countByUserIdWithoutStatus(@Param("userId")String userId);
 }

@@ -521,6 +521,10 @@
 		WHERE
 			opr.orderId = #{ordersId}
     </select>
+    <select id="countByUserIdWithoutStatus" resultType="java.lang.Integer">
+        select * from t_product
+        where userId=#{userId}
+    </select>
 
     <update id="updateSmallcNameByOrderCode">
         update t_product set smallcName = #{smallcName,jdbcType=VARCHAR}
