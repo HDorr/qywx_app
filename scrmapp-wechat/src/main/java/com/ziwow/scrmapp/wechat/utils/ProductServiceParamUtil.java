@@ -34,9 +34,11 @@ public class ProductServiceParamUtil {
                     } else {
                         p.setServiceFee(serviceFee);
                     }
-                    String tem = (String) jo.get("serviceStatus");
-                    String serviceStatus = serviceStatusCompare(tem);
+                    String serviceStatus = (String) jo.get("serviceStatus");
+//                    String serviceStatus = serviceStatusCompare(tem);
+                    String serviceStatusStr = (String) jo.get("serviceStatusStr");
                     p.setServiceStatus(serviceStatus);
+                    p.setServiceStatusStr(serviceStatusStr);
                     newList.add(p);
                     jsonArray.remove(i);
                 }

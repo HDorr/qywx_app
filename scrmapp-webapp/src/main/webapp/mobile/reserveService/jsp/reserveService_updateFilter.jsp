@@ -49,12 +49,11 @@
                     <p>{{product.productName}}</p>
                     <p>产品条码: {{product.productBarCode}}</p>
                     <p>产品型号: {{product.modelName}}</p>
-                    {{if product.serviceStatus == null || product.serviceStatus == undefined ||
-                    product.serviceStatus == ''}}
+                    {{if product.serviceStatus ==5 }}
                     <p style="color:red;">提示：该商品预约次数已用完</p>
                     <p style="color:red;">请到微信商城购买新滤芯</p>
                     {{else}}
-                    <p>服务状态: {{product.serviceStatus}}</p>
+                    <p>服务状态: {{product.serviceStatusStr}}</p>
                     {{/if}}
                 </div>
                 <div class="delete-product" data-productid="{{product.id}}"></div>
@@ -165,6 +164,7 @@
     var getData = {
       data: getShowDate()
     };
+
     renderPdtArea()
     renderAddressArea()
     renderReserveArea()
@@ -176,8 +176,25 @@
     pickerInit()
 
     function renderPdtArea() {
-      var pdtInfoHtml = template('pdtInfo_template', {list: reserve_products})
-      $("#pdtInfoBox").html(pdtInfoHtml)
+      queryUrls.getProductsListWithServiceFeeStatus='http://dev.99baby.cn/scrmapp/scrmapp/consumer/product/list/serviceFeeStatus'
+      ajax.post(queryUrls.getProductsListWithServiceFeeStatus,reserve_products,true,'加载中...')
+      .then(function (res) {
+        if (res.returnCode !== ERR_OK) {
+          $.alert(res.returnMsg)
+          return
+        }
+        reserve_products = res.data
+        localStorage.setItem('reserve_products', JSON.stringify(reserve_products));
+        if (reserve_products.length === 0) {
+          window.location.href = pageUrls.scanToBindPdt;
+        } else {
+          var pdtInfoHtml = template('pdtInfo_template', {list: reserve_products})
+          $("#pdtInfoBox").html(pdtInfoHtml)
+        }
+      })
+      .fail(function (err) {
+        $.alert(err)
+      })
     }
 
     function renderAddressArea() {
@@ -231,48 +248,18 @@
         var res = {};
         if ($target.data('isbuyfilter') == '1') {
           $target.parent('.isBuyFilter').siblings('.isBuyFilter-tip').show()
-          res.productIds = _getProductsIds(reserve_products);
+          res.productIds = _getPayProductsIds(reserve_products);
           //$.alert(JSON.stringify(res));
 
         } else {
           $target.parent('.isBuyFilter').siblings('.isBuyFilter-tip').hide()
-          res.productIds = _getProductsIds(reserve_products);
-          //$.alert(JSON.stringify(res));
-        }
-        var data = JSON.stringify(res);
-        var obj = JSON.parse(data);
-        //alert(obj.productIds);
-        //$.alert("微信user/auth地址：" + queryUrls.wxuserauth);
-
-        var flag = 0;
-        var products = JSON.parse(localStorage.getItem('reserve_products') || "[]")
-        for (var i = 0; i < products.length; i++) {
-          var p = products[i];
-          if (p.serviceStatus == "已购买滤芯未购买服务") {
-            flag = 1;
-          }
-          if (p.serviceStatus == null || p.serviceStatus == undefined || p.serviceStatus == '') {
-            pop = 1;
-          }
-          //alert(p.serviceStatus);
         }
         //清楚支付状态
         localStorage.removeItem("isPaidSuccess");
-        if (flag == 1) {
+        if (res.productIds!=undefined && res.productIds!='') {
           window.location.href = "http://dev.99baby.cn/scrmapp/wx/user/auth?productIds="
-              + obj.productIds;
+              + res.productIds;
         }
-        //window.location.href = "http://dev.99baby.cn/scrmapp/wx/user/auth?productIds=" + "1688,1680";
-        /*ajax.post('http://dev.99baby.cn/scrmapp/wx/user/auth', res, true)
-            .then(function (data) {
-
-            })
-            .fail(function (err) {
-                alertMsg.error(err)
-            })
-            .always(function () {
-                can_submit = true
-            })*/
       })
     }
 
@@ -478,7 +465,17 @@
       var ids = []
       for (var i = 0; i < products.length; i++) {
         var product = products[i]
-        if (product.id) ids.push(product.id)
+        if (product.id ) ids.push(product.id)
+      }
+      return ids.join(',')
+    }
+
+
+    function _getPayProductsIds(products) {
+      var ids = []
+      for (var i = 0; i < products.length; i++) {
+        var product = products[i]
+        if (product.id && product.serviceStatus==0) ids.push(product.id)
       }
       return ids.join(',')
     }

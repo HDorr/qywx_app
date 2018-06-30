@@ -522,7 +522,7 @@
 			opr.orderId = #{ordersId}
     </select>
     <select id="countProductByUserIdWithoutStatus" resultType="java.lang.Integer">
-        select * from t_product
+        select count(*) from t_product
         where userId=#{userId}
     </select>
 

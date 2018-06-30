@@ -14,6 +14,7 @@ import com.ziwow.scrmapp.common.persistence.entity.ProductFilter;
 import com.ziwow.scrmapp.common.result.BaseResult;
 import com.ziwow.scrmapp.common.result.Result;
 import com.ziwow.scrmapp.tools.utils.Base64;
+import com.ziwow.scrmapp.tools.utils.CommonUtil;
 import com.ziwow.scrmapp.tools.utils.CookieUtil;
 import com.ziwow.scrmapp.tools.utils.StringUtil;
 import com.ziwow.scrmapp.wechat.constants.WXPayConstant;
@@ -30,6 +31,7 @@ import com.ziwow.scrmapp.wechat.utils.RsaUtil;
 import com.ziwow.scrmapp.wechat.vo.RefundVO;
 import com.ziwow.scrmapp.wechat.wxpay.*;
 
+import java.util.Map.Entry;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -362,7 +364,8 @@ public class WXPayController {
 
     //微信异步回调
     @RequestMapping("/notify/url")
-    public String weixinReceive(HttpServletRequest request, HttpServletResponse response) {
+    public void weixinReceive(HttpServletRequest request, HttpServletResponse response)
+        throws IOException {
         log.info("==开始进入h5支付回调方法==");
 
         String xml_review_result = RequestUtil.getXmlRequest(request);
@@ -427,7 +430,47 @@ public class WXPayController {
         } catch (Exception e) {
             log.error("/notify/url接口异常：" + e);
         }
-        return null;
+        HashMap<String, String> xml = new HashMap<String, String>();
+        xml.put("return_code", "SUCCESS");
+        xml.put("return_msg", "OK");
+        responseBody(ArrayToXml(xml), response);
+    }
+
+    public  boolean IsNumeric(String str) {
+        if (str.matches("\\d *")) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public String ArrayToXml(HashMap<String, String> arr) {
+        String xml = "<xml>";
+
+        Iterator<Entry<String, String>> iter = arr.entrySet().iterator();
+        while (iter.hasNext()) {
+            Entry<String, String> entry = iter.next();
+            String key = entry.getKey();
+            String val = entry.getValue();
+            if (IsNumeric(val)) {
+                xml += "<" + key + ">" + val + "</" + key + ">";
+
+            } else
+                xml += "<" + key + "><![CDATA[" + val + "]]></" + key + ">";
+        }
+
+        xml += "</xml>";
+        return xml;
+    }
+
+    protected void responseBody(String html, HttpServletResponse resp) throws IOException {
+        PrintWriter writer = resp.getWriter();
+        try {
+            writer.print(html);
+            writer.flush();
+        } finally {
+            writer.close();
+        }
     }
 
 

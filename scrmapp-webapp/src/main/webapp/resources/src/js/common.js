@@ -68,7 +68,7 @@ var pageUrls = IS_DEVENV ?
     reserveCleanPage: rootPath +"/scrmapp/consumer/product/reserve/clean"  //预约清洗滤芯详情
 }
 
-
+IS_DEVENV=false
 var queryUrls = IS_DEVENV ? 
 {   //开发测试用
     getProductsList:"/resources/fakeJson/productLists.json",
@@ -97,6 +97,7 @@ var queryUrls = IS_DEVENV ?
     wxuserauth: rootPath + "/wx/user/auth"
 } :  {//正式接口
     getProductsList: rootPath + "/scrmapp/consumer/product/list",
+    getProductsListWithServiceFeeStatus: rootPath + "/scrmapp/consumer/product/list/serviceFeeStatus",
     queryAddrList: rootPath + "/scrmapp/consumer/wechatuser/addressList/get",
     queryPdtByCodeOrModal:rootPath + "/scrmapp/consumer/product/query",
     saveReserve:rootPath + "/scrmapp/consumer/wechat/orders/save", //服务号 保存预约

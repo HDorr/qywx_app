@@ -247,6 +247,12 @@ public class ProductController {
         return result;
     }
 
+
+
+
+
+
+
     /**
      * 查询用户绑定所有产品信息
      *
@@ -257,29 +263,42 @@ public class ProductController {
     @RequestMapping(value = "/product/list", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
     @ResponseBody
     public Result queryUserProduct(HttpServletRequest request, HttpServletResponse response) {
-//        Result result = new BaseResult();
-//        try {
-//            String encode = CookieUtil.readCookie(request, response, WeChatConstants.SCRMAPP_USER);
-//            String userId = new String(Base64.decode(encode));
-//
-//            //用户id不存在
-//            if (!wechatUserService.checkUser(userId)) {
-//                logger.error("查询用户产品列表失败，cookie中userId错误");
-//                result.setReturnCode(Constant.FAIL);
-//                result.setReturnMsg("用户无效，请退出重新操作！");
-//                return result;
-//            }
-//            List<Product> products = productService.getProductsByUserId(userId);
-//            result.setReturnCode(Constant.SUCCESS);
-//            result.setData(products);
-//        } catch (Exception e) {
-//            result.setReturnCode(Constant.FAIL);
-//            result.setReturnMsg("查询产品列表失败!");
-//            logger.error("用户查询产品列表失败，原因[{}]", e);
-//        }
-//        return result;
+        Result result = new BaseResult();
+        try {
+            String encode = CookieUtil.readCookie(request, response, WeChatConstants.SCRMAPP_USER);
+            String userId = new String(Base64.decode(encode));
 
-        //外部接口没有通
+            //用户id不存在
+            if (!wechatUserService.checkUser(userId)) {
+                logger.error("查询用户产品列表失败，cookie中userId错误");
+                result.setReturnCode(Constant.FAIL);
+                result.setReturnMsg("用户无效，请退出重新操作！");
+                return result;
+            }
+            List<Product> products = productService.getProductsByUserId(userId);
+            result.setReturnCode(Constant.SUCCESS);
+            result.setData(products);
+        } catch (Exception e) {
+            result.setReturnCode(Constant.FAIL);
+            result.setReturnMsg("查询产品列表失败!");
+            logger.error("用户查询产品列表失败，原因[{}]", e);
+        }
+        return result;
+
+    }
+
+
+    /**
+     * 查询产品的服务费信息
+     *
+     * @param request
+     * @param response
+     * @return
+     */
+    @RequestMapping(value = "/product/list/serviceFeeStatus", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+    @ResponseBody
+    public Result queryUserProductServiceFeeStatus(HttpServletRequest request, HttpServletResponse response,@RequestBody List<Product> temList) {
+
         Result result = new BaseResult();
         try {
             String encode = CookieUtil.readCookie(request, response, WeChatConstants.SCRMAPP_USER);
@@ -303,7 +322,7 @@ public class ProductController {
             long wfId = wechatUser.getWfId();
             WechatFans wechatFans = wechatFansService.getWechatFansById(wfId);
             String unionId = wechatFans.getUnionId();
-            List<Product> temList = productService.getProductsByUserId(userId);
+             temList = productService.getProductsByUserId(userId);
             //System.out.println(temList);
             //读取远程服务费信息，content为JSONARrray [{id:xxx, model_name:xxx,service_fee:xxx,service_status:xxx},{,,}]
             String content = JsonApache.postModelNames(unionId, temList, qinyuanModelnameServiceQuery);
@@ -316,6 +335,17 @@ public class ProductController {
             JSONObject jsonObject = JSON.parseObject(content);
             JSONArray jsonArray = jsonObject.getJSONArray("data");
             List<ProductFilter> productFilterList = new ArrayList<ProductFilter>();
+
+            /**
+             * 	 *
+             * 	 * 0:已购买滤芯未购买服务费
+             * 	 * 1：已购买滤芯已购买服务费
+             * 	 *
+             * 	 * 5：查到滤芯但是预约次数达到上限
+             * 	 * 6：没有产品
+             * 	 * 7：没有关联滤芯够买记录
+             * 	 * 8：没有购买过产品
+             */
             for (int i = 0; i < jsonArray.size(); i++) {
                 JSONObject jo = (JSONObject) jsonArray.get(i);
                 String temId = (String) jo.get("id");  //id为商品主键ID
@@ -331,13 +361,6 @@ public class ProductController {
                 if (serviceFeeId == null) {
                     serviceFeeId = "0";
                 }
-               /* Product p = new Product();
-                p.setId(id);
-                p.setServiceFee(serviceFee);
-                p.setServiceStatus(serviceStatus);
-                p.setServiceFeeId(serviceFeeId);*/
-                //根据ID更新Product
-                //productService.updateByPrimaryKeySelective(p);
                 productService.updateProductById(id, serviceFee, serviceStatus, serviceFeeId);
             }
             //对产品添加服务费和服务状态
@@ -350,36 +373,6 @@ public class ProductController {
             logger.error("用户查询产品列表失败，原因[{}]", e);
         }
         return result;
-
-
-        //临时测试用
-        /*Result result = new BaseResult();
-        try {
-            String encode = CookieUtil.readCookie(request, response, WeChatConstants.SCRMAPP_USER);
-            String userId = new String(Base64.decode(encode));
-
-            //用户id不存在
-            if (!wechatUserService.checkUser(userId)) {
-                logger.error("查询用户产品列表失败，cookie中userId错误");
-                result.setReturnCode(Constant.FAIL);
-                result.setReturnMsg("用户无效，请退出重新操作！");
-                return result;
-            }
-            List<Product> tem = productService.getProductsByUserId(userId);
-            List<Product> products = new ArrayList<Product>();
-            for(Product p : tem) {
-                p.setServiceFee("0.01");
-                p.setServiceStatus(WXPayConstant.filterServiceUnpay);  //已购买滤芯未购买服务
-                products.add(p);
-            }
-            result.setReturnCode(Constant.SUCCESS);
-            result.setData(products);
-        } catch (Exception e) {
-            result.setReturnCode(Constant.FAIL);
-            result.setReturnMsg("查询产品列表失败!");
-            logger.error("用户查询产品列表失败，原因[{}]", e);
-        }
-        return result;*/
 
     }
 

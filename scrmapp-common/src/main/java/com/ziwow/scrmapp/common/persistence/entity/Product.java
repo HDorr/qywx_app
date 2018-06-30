@@ -55,6 +55,16 @@ public class Product {
 
     private String serviceFeeId;
 
+    private String serviceStatusStr;
+
+    public String getServiceStatusStr() {
+        return serviceStatusStr;
+    }
+
+    public void setServiceStatusStr(String serviceStatusStr) {
+        this.serviceStatusStr = serviceStatusStr;
+    }
+
     public Long getId() {
         return id;
     }

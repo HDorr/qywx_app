@@ -194,7 +194,7 @@ public class WechatOrdersController {
                     BigDecimal b = new BigDecimal(pf.getServiceFee());
                     String tp = b.setScale(2, BigDecimal.ROUND_HALF_UP).toString();
                     //由于产品型号不是唯一值，通过主键ID + 型号拼接
-                    ext = "&产品型号(服务费):" + pf.getId() + "--" + pf.getModelName() + "&金额:" + tp + "&关联订单号:" + pf.getOrderId() + ";";
+                    ext = " 产品型号" + pf.getModelName() + " 服务费金额:" + tp + " 关联订单号:" + pf.getOrderId();
                 }
             }
             if (StringUtils.isNotEmpty(description)) {
@@ -212,9 +212,9 @@ public class WechatOrdersController {
                 String serverType = OrderUtils.getServiceTypeName(orderType);
                 String mobilePhone = wechatUser.getMobilePhone();
                 String msgContent = "亲爱的用户，您预约的" + serverType + "服务已成功提交，我们将尽快为您派单。您可进入“沁园”官方微信服务号查看订单状态。";
-                mobileService.sendContentByEmay(mobilePhone, msgContent, Constant.CUSTOMER);
+//                mobileService.sendContentByEmay(mobilePhone, msgContent, Constant.CUSTOMER);
                 // 预约提交成功模板消息提醒
-                wechatOrdersService.sendAppointmentTemplateMsg(wechatOrders.getOrdersCode(), serverType);
+//                wechatOrdersService.sendAppointmentTemplateMsg(wechatOrders.getOrdersCode(), serverType);
                 WechatOrdersRecord wechatOrdersRecord = new WechatOrdersRecord();
                 wechatOrdersRecord.setOrderId(wechatOrders.getId());
                 wechatOrdersRecord.setRecordTime(date);

@@ -29,13 +29,17 @@
                     if(res.err_msg == "get_brand_wcpay_request:ok") {
                         alert('支付成功');
                         var products = JSON.parse(localStorage.getItem('reserve_products') || "[]")
+                        alert(products)
+                        alert(idArr)
+
                         for (var i=0; i<products.length; i++) {
                             var p = products[i];
                             console.log("商品ID: " + p.id);
                             for (var y=0; y<idArr.length; y++) {
                                 if (p.id == idArr[y]) {
-                                    console.log(p.id+":"+p.serviceStatus);
-                                    p.serviceStatus = "已购买滤芯和服务";
+                                    console.log(p.id+":"+p.serviceStatusStr);
+                                    p.serviceStatus=0;
+                                    p.serviceStatusStr = "已购买滤芯和服务";
                                     //alert(p.serviceStatus);
                                 }
                             }
@@ -45,10 +49,10 @@
                             }*/
                         }
                         localStorage.setItem('reserve_products',JSON.stringify(products));
-                        localStorage.setItem('isPaidSuccess',"true");
-                        //此处可以修改商品滤芯服务费状态---------------------------------
+                      localStorage.setItem('isPaidSuccess',"true");
+                      alert("跳转："+"${pageContext.request.contextPath}/wx/order/query?orderId="+orderId)
+                      //此处可以修改商品滤芯服务费状态---------------------------------
                         window.location.href = "${pageContext.request.contextPath}/wx/order/query?orderId="+orderId;
-                        //window.location.href = "${pageContext.request.contextPath}/wx/order/query?orderId=${orderId}";
                     }else if(res.err_msg == "get_brand_wcpay_request:fail"){
                         alert('支付失败');
                         localStorage.setItem('isPaidSuccess',"false");
