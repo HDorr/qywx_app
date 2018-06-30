@@ -69,5 +69,5 @@ public interface ProductMapper {
     int updateProductById(@Param("id")Long id, @Param("serviceFee")String serviceFee,
                                  @Param("serviceStatus")String serviceStatus, @Param("serviceFeeId")String serviceFeeId);
 
-    int countByUserIdWithoutStatus(@Param("userId")String userId);
+    int countProductByUserIdWithoutStatus(@Param("userId") String userId);
 }

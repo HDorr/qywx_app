@@ -521,7 +521,7 @@
 		WHERE
 			opr.orderId = #{ordersId}
     </select>
-    <select id="countByUserIdWithoutStatus" resultType="java.lang.Integer">
+    <select id="countProductByUserIdWithoutStatus" resultType="java.lang.Integer">
         select * from t_product
         where userId=#{userId}
     </select>

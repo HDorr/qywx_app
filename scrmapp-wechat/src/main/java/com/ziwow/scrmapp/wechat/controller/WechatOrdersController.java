@@ -666,7 +666,11 @@ public class WechatOrdersController {
             }
             evaluateParam.setNumber_type(orderType);
             evaluateParam.setEvaluate_note(content);
-            evaluateParam.setNumber(wechatOrders.getOrdersCode());
+            evaluateParam.setNumber(wechatOrders.getOrdersNo());
+            evaluateParam.setIs_attitude(inValidNotNUll(attitude));
+            evaluateParam.setIs_specialty(inValidNotNUll(profession));
+            evaluateParam.setIs_integrity(inValidNotNUll(integrity));
+            evaluateParam.setIs_recommend(inValidNotNUll(recommend));
             Result invokeResult = wechatUserService.invokeCssEvaluate(evaluateParam);
 
             if (Constant.SUCCESS == invokeResult.getReturnCode()) {
@@ -715,6 +719,13 @@ public class WechatOrdersController {
             result.setReturnMsg("用户评分失败!");
         }
         return result;
+    }
+
+    private int inValidNotNUll(BigDecimal bigDecimal){
+        if(bigDecimal == null){
+            return  0;
+        }
+        return bigDecimal.intValue();
     }
 
 

@@ -57,7 +57,7 @@ public interface ProductService {
 
     List<com.ziwow.scrmapp.common.bean.vo.ProductVo> findByOrderId(Long orderId);
 
-    void syncProdBindToMiniApp(String userId, String productCode);
+    void syncProdBindToMiniApp(String userId, String productCode, boolean isFirst);
 
     void syncProdUnbindToMiniApp(String userId, String productCode);
 
@@ -72,4 +72,6 @@ public interface ProductService {
     int updateByPrimaryKeySelective(Product record);
 
     int updateProductById(long id, String serviceFee, String serviceStatus, String serviceFeeId);
+
+    boolean isFirstBindProduct(String userId);
 }

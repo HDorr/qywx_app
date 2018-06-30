@@ -21,7 +21,7 @@ public interface WechatOrdersMapper {
 
     int updateByPrimaryKey(WechatOrders record);
 
-    WechatOrders getWechatOrdersByCode(@Param("ordersCode") String ordersCode);
+    WechatOrderVo getWechatOrdersVoByCode(@Param("ordersCode") String ordersCode);
 
     List<WechatOrdersVo> getOrdersByUserId(String userId);
 
@@ -63,7 +63,7 @@ public interface WechatOrdersMapper {
 
     AppointmentMsgVo getAppointmentMsgVo(@Param("ordersCode") String ordersCode);
 
-    List<WechatOrders> findBeforeSevenDaysOrders();
+    List<WechatOrderVo> findBeforeSevenDaysOrders();
 
     public int getDispatchOrderNumByDate(@Param("orderDate")String orderDate);
 

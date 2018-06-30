@@ -201,7 +201,7 @@ public class QyhOrdersServiceImpl implements QyhOrdersService {
     @Transactional
     public Result changeOrdersTime(Long ordersId, String ordersCode, String qyhUserId, String updateTime, String reason) {
         Result result = new BaseResult();
-        WechatOrders wechatOrders = wechatOrdersMapper.getWechatOrdersByCode(ordersCode);
+        WechatOrders wechatOrders = wechatOrdersMapper.getWechatOrdersVoByCode(ordersCode);
         if (StringUtils.isEmpty(wechatOrders.getQyhUserId()) || !qyhUserId.equals(wechatOrders.getQyhUserId())) {
             result.setReturnCode(Constant.FAIL);
             result.setReturnMsg("无法更改预约时间,此工单并非您的工单!");
@@ -234,7 +234,7 @@ public class QyhOrdersServiceImpl implements QyhOrdersService {
     @Override
     public Result refuseOrders(Long ordersId, String ordersCode, String qyhUserId, String reason) {
         Result result = new BaseResult();
-        WechatOrders wechatOrders = wechatOrdersMapper.getWechatOrdersByCode(ordersCode);
+        WechatOrders wechatOrders = wechatOrdersMapper.getWechatOrdersVoByCode(ordersCode);
         if (StringUtils.isEmpty(wechatOrders.getQyhUserId()) || !qyhUserId.equals(wechatOrders.getQyhUserId())) {
             result.setReturnCode(Constant.FAIL);
             result.setReturnMsg("无法拒绝工单,此工单并非您的工单!");
