@@ -24,10 +24,10 @@ public class ProductServiceParamUtil {
 
 
         for (Product p : list) {
-            String modelName = p.getModelName();
+            Long id = p.getId();
             for (int i = 0; i < jsonArray.size(); i++) {
                 JSONObject jo = (JSONObject) jsonArray.get(i);
-                if (modelName.equals((String) jo.get("modelName"))) {
+                if (String.valueOf(id).equals( jo.get("id"))) {
                     String serviceFee = (String) jo.get("serviceFeePrice");
                     if (serviceFee == null) {
                         p.setServiceFee("");
@@ -37,8 +37,10 @@ public class ProductServiceParamUtil {
                     String serviceStatus = (String) jo.get("serviceStatus");
 //                    String serviceStatus = serviceStatusCompare(tem);
                     String serviceStatusStr = (String) jo.get("serviceStatusStr");
+                    String serviceFeeId = (String) jo.get("serviceFeeId");
                     p.setServiceStatus(serviceStatus);
                     p.setServiceStatusStr(serviceStatusStr);
+                    p.setServiceFeeId(serviceFeeId);
                     newList.add(p);
                     jsonArray.remove(i);
                 }

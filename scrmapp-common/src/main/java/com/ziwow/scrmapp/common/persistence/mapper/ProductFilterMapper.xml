@@ -11,9 +11,11 @@
     <result column="pay_status" jdbcType="INTEGER" property="payStatus" />
     <result column="sync_status" jdbcType="INTEGER" property="syncStatus" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="sc_order_no" jdbcType="VARCHAR" property="scOrderNo" />
+    <result column="service_fee_id" jdbcType="VARCHAR" property="serviceFeeId" />
   </resultMap>
   <sql id="Base_Column_List">
-    id, product_id, order_id, refund_id, model_name, service_fee, pay_status, sync_status, create_time
+    id, product_id, order_id, refund_id, model_name, service_fee, pay_status, sync_status, create_time,sc_order_no,service_fee_id
   </sql>
   
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
@@ -30,11 +32,12 @@
   <insert id="insert" parameterType="com.ziwow.scrmapp.common.persistence.entity.ProductFilter">
     insert into t_product_filter (id, product_id, order_id,
       refund_id, model_name, service_fee,
-      pay_status, sync_status, create_time
+      pay_status, sync_status, create_time,sc_order_no,service_fee_id
       )
     values (#{id,jdbcType=BIGINT}, #{productId,jdbcType=BIGINT}, #{orderId,jdbcType=VARCHAR},
       #{refundId,jdbcType=VARCHAR}, #{modelName,jdbcType=VARCHAR}, #{serviceFee,jdbcType=INTEGER},
-      #{payStatus,jdbcType=INTEGER}, #{syncStatus,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}
+      #{payStatus,jdbcType=INTEGER}, #{syncStatus,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP},
+      #{scOrderId,jdbcType=VARCHAR},#{serviceFeeId,jdbcType=VARCHAR}
       )
   </insert>
   <insert id="insertSelective" parameterType="com.ziwow.scrmapp.common.persistence.entity.ProductFilter">
@@ -67,6 +70,12 @@
       <if test="createTime != null">
         create_time,
       </if>
+      <if test="scOrderNo != null">
+        sc_order_no,
+      </if>
+      <if test="serviceFeeId != null">
+        service_fee_id,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -96,15 +105,18 @@
       <if test="createTime != null">
         #{createTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="scOrderNo != null">
+        #{scOrderNo,jdbcType=VARCHAR},
+      </if>
+      <if test="serviceFeeId != null">
+        #{serviceFeeId,jdbcType=VARCHAR},
+      </if>
     </trim>
   </insert>
  
   <update id="updateByPrimaryKeySelective" parameterType="com.ziwow.scrmapp.common.persistence.entity.ProductFilter">
       update t_product
       <set>
-          <if test="itemkind != null">
-              itemKind = #{itemkind,jdbcType=VARCHAR},
-          </if>
           <if test="typename != null">
               typeName = #{typename,jdbcType=VARCHAR},
           </if>
@@ -190,6 +202,12 @@
     where id = #{id,jdbcType=BIGINT}
   </update>
 
+  <update id="refundProductFilterServiceFee" parameterType="com.ziwow.scrmapp.common.persistence.entity.ProductFilter">
+    update t_product_filter
+    set pay_status=5,refund_id=#{refundId}
+    where id =#{id}
+  </update>
+
  <!-- <select id="getProductFilterListByOrderId" resultType="com.ziwow.scrmapp.common.persistence.entity.ProductFilter"
           parameterType="java.lang.String">
     SELECT *
@@ -206,15 +224,15 @@
 
   <select id="getProductFilterListByOrderId" resultMap="BaseResultMap" parameterType="java.lang.String">
     select
-    id, product_id, order_id, refund_id, model_name, service_fee, pay_status, sync_status
+    id, product_id, order_id, refund_id, model_name, service_fee, pay_status, sync_status,sc_order_no,service_fee_id
     from t_product_filter
     where order_id = #{orderId}
   </select>
 
     <select id="getProductFilterByProductId" resultMap="BaseResultMap" parameterType="java.lang.String">
         select
-        id, product_id, order_id, refund_id, model_name, service_fee, pay_status, sync_status
+        id, product_id, order_id, refund_id, model_name, service_fee, pay_status, sync_status,sc_order_no,service_fee_id
         from t_product_filter
-        where product_id=#{pid}
+        where product_id=#{pid} order by id desc limit 0,1
     </select>
 </mapper>

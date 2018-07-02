@@ -49,4 +49,6 @@ public interface ProductFilterMapper {
 
     //@Select("SELECT * FROM t_product_filter WHERE product_id=#{pid}")
     ProductFilter getProductFilterByProductId(@Param("pid")Long pid);
+
+  int refundProductFilterServiceFee(ProductFilter productFilter);
 }

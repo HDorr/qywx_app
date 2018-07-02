@@ -125,12 +125,14 @@ public class JsonApache {
                 BigDecimal bg = new BigDecimal(String.valueOf(temFee));
                 String serviceFee = bg.setScale(2, BigDecimal.ROUND_CEILING).divide(new BigDecimal(100)).toString();
                 jo.put("serviceFee", serviceFee);
-                String serviceFeeId = "";
-                for (Product p : productList) {
-                    if (p.getModelName().equals(modelName)) {
-                        jo.put("serviceFeeID", p.getServiceFeeId());
-                    }
-                }
+                String serviceFeeId = pf.getServiceFeeId();
+                jo.put("serviceFeeID",serviceFeeId);
+
+//                for (Product p : productList) {
+//                    if (p.getId().equals(pf.getProductId())) {
+//                        jo.put("serviceFeeID", p.getServiceFeeId());
+//                    }
+//                }
                 arr[i] = jo;
             }
             jsonObject.put("data", arr);

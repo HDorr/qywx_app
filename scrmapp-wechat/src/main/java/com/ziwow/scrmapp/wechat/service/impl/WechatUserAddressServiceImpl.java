@@ -151,7 +151,7 @@ public class WechatUserAddressServiceImpl implements WechatUserAddressService {
         Map<String, Object> params = new HashMap<String, Object>();
         long timestamp = System.currentTimeMillis();
         params.put("timestamp", timestamp);
-        params.put("signture", MD5.toMD5(Constant.AUTH_KEY + timestamp));
+        params.put("signature", MD5.toMD5(Constant.AUTH_KEY + timestamp));
         params.put("unionId", wechatFans.getUnionId());
         params.put("id", wechatUserAddress.getId());
         params.put("consignee", wechatUserAddress.getContacts());
@@ -188,7 +188,7 @@ public class WechatUserAddressServiceImpl implements WechatUserAddressService {
         Map<String, Object> params = new HashMap<String, Object>();
         long timestamp = System.currentTimeMillis();
         params.put("timestamp", timestamp);
-        params.put("signture", MD5.toMD5(Constant.AUTH_KEY + timestamp));
+        params.put("signature", MD5.toMD5(Constant.AUTH_KEY + timestamp));
         params.put("unionId", wechatFans.getUnionId());
         params.put("aId", wechatUserAddress.getfAid());
         params.put("consignee", wechatUserAddress.getContacts());
@@ -220,7 +220,7 @@ public class WechatUserAddressServiceImpl implements WechatUserAddressService {
         Map<String, Object> params = new HashMap<String, Object>();
         long timestamp = System.currentTimeMillis();
         params.put("timestamp", timestamp);
-        params.put("signture", MD5.toMD5(Constant.AUTH_KEY + timestamp));
+        params.put("signature", MD5.toMD5(Constant.AUTH_KEY + timestamp));
         params.put("aId", aId.trim());
         String result = HttpClientUtils.postJson(syncAddressDelUrl, JSONObject.fromObject(params).toString());
         if (StringUtils.isNotBlank(result)) {
@@ -240,7 +240,7 @@ public class WechatUserAddressServiceImpl implements WechatUserAddressService {
         Map<String, Object> params = new HashMap<String, Object>();
         long timestamp = System.currentTimeMillis();
         params.put("timestamp", timestamp);
-        params.put("signture", MD5.toMD5(Constant.AUTH_KEY + timestamp));
+        params.put("signature", MD5.toMD5(Constant.AUTH_KEY + timestamp));
         params.put("aId", aId.trim());
         String result = HttpClientUtils.postJson(syncAddressDefaultUrl, JSONObject.fromObject(params).toString());
         if (StringUtils.isNotBlank(result)) {

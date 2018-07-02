@@ -31,4 +31,5 @@ public interface WXPayService {
     ProductFilter getProductFilterByProductId(long pid);
 
 
+  int refundProductFilterServiceFee(ProductFilter productFilter);
 }

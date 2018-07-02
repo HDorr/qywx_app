@@ -38,7 +38,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -763,14 +762,16 @@ public class WechatOrdersServiceImpl implements WechatOrdersService {
     //给小程序推送预约成功
     @Override
     @Async
-    public void syncMakeAppointment(String scOrderItemId, String ordersCode) {
+    public void syncMakeAppointment(String scOrderItemId, String ordersCode,
+        String serviceFeeIds) {
         // 异步推送给小程序对接方
         Map<String, Object> params = new HashMap<String, Object>();
         long timestamp = System.currentTimeMillis();
         params.put("orderItemId", scOrderItemId);
+        params.put("serviceFeeIds", serviceFeeIds);
         params.put("ordersCode",ordersCode);
         params.put("timestamp", timestamp);
-        params.put("signture", MD5.toMD5(Constant.AUTH_KEY + timestamp));
+        params.put("signature", MD5.toMD5(Constant.AUTH_KEY + timestamp));
         String result = HttpClientUtils.postJson(makeAppointmentUrl, JSONObject.fromObject(params).toString());
         if (StringUtils.isNotBlank(result)) {
             JSONObject o1 = JSONObject.fromObject(result);

@@ -38,6 +38,7 @@ body {
 .bloque .title > img {
   display: inline-block;
   height: 0.3467rem;
+  margin-top: 10px;
 }
 .bloque .add-box {
   height: 1.2667rem;

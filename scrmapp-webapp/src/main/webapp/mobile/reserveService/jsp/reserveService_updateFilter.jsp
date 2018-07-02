@@ -53,6 +53,7 @@
                     <p style="color:red;">提示：该商品预约次数已用完</p>
                     <p style="color:red;">请到微信商城购买新滤芯</p>
                     {{else}}
+                    <p>服务费名称: {{product.modelName}}</p>
                     <p>服务状态: {{product.serviceStatusStr}}</p>
                     {{/if}}
                 </div>
@@ -176,11 +177,10 @@
     pickerInit()
 
     function renderPdtArea() {
-      queryUrls.getProductsListWithServiceFeeStatus='http://dev.99baby.cn/scrmapp/scrmapp/consumer/product/list/serviceFeeStatus'
       ajax.post(queryUrls.getProductsListWithServiceFeeStatus,reserve_products,true,'加载中...')
       .then(function (res) {
         if (res.returnCode !== ERR_OK) {
-          $.alert(res.returnMsg)
+          $.alert("获取产品列表失败")
           return
         }
         reserve_products = res.data
@@ -248,15 +248,17 @@
         var res = {};
         if ($target.data('isbuyfilter') == '1') {
           $target.parent('.isBuyFilter').siblings('.isBuyFilter-tip').show()
-          res.productIds = _getPayProductsIds(reserve_products);
+          res.productIds = _getProductsIds(reserve_products);
+          res.payProductIds = _getPayProductsIds(reserve_products);
           //$.alert(JSON.stringify(res));
 
         } else {
           $target.parent('.isBuyFilter').siblings('.isBuyFilter-tip').hide()
+          res.productIds = _getProductsIds(reserve_products);
+          res.payProductIds = _getPayProductsIds(reserve_products);
         }
-        //清楚支付状态
         localStorage.removeItem("isPaidSuccess");
-        if (res.productIds!=undefined && res.productIds!='') {
+        if (res.payProductIds!=undefined && res.payProductIds!='' ) {
           window.location.href = "http://dev.99baby.cn/scrmapp/wx/user/auth?productIds="
               + res.productIds;
         }
@@ -266,6 +268,17 @@
     function submitReserveClick() {
       $("#submitReserve").click(function (e) {
         if (!can_submit) return
+
+        //再次校验
+        var productIds = _getPayProductsIds(reserve_products);
+        if (productIds!=undefined && productIds!=''){
+          //清楚支付状态
+          localStorage.removeItem("isPaidSuccess");
+            window.location.href = "http://dev.99baby.cn/scrmapp/wx/user/auth?productIds="
+                + productIds;
+            return
+        }
+
         var submit_data = _getSubmitParams()
         var errorMsg = _checkSubmitData(submit_data)
         if (errorMsg) {
@@ -273,8 +286,9 @@
           can_submit = true
           return
         }
-        //submit_data.uuid = JSON.stringify(submit_data)
-        submit_data.scOrderItemId = scOrderItemId
+        if (scOrderItemId!=null && scOrderItemId!=undefined && scOrderItemId!=''){
+          submit_data.scOrderItemId = scOrderItemId
+        }
         ajax.post(queryUrls.saveReserve, submit_data, true)
         .then(function (data) {
           if (data.returnCode !== ERR_OK) {
@@ -418,7 +432,9 @@
         "description": $("#description").val(),
         "faultImage": "",
         "status": 1,
-        "productIds": ""
+        "productIds": "",
+        "payProductIds": "",
+        "serviceFeeIds":""
       }
       var res = {}
       for (var key in templateData) {
@@ -443,6 +459,12 @@
             break
           case "contactsTelephone":
             res.contactsTelephone = user_data.fixedTelephone
+            break
+          case "serviceFeeIds":
+            res.serviceFeeIds = _getServiceFeeIds(reserve_products)
+            break
+          case "payProductIds":
+            res.payProductIds = _getServiceFeeProductsIds(reserve_products)
             break
           default :
             res[key] = user_data[key] ? user_data[key] : templateData[key]
@@ -470,12 +492,32 @@
       return ids.join(',')
     }
 
+    function _getServiceFeeIds(products) {
+      var ids = []
+
+
+      for (var i = 0; i < products.length; i++) {
+        var product = products[i]
+        if (product.serviceFeeId ) ids.push(product.serviceFeeId)
+      }
+      return ids.join(',')
+    }
+
 
     function _getPayProductsIds(products) {
       var ids = []
       for (var i = 0; i < products.length; i++) {
         var product = products[i]
         if (product.id && product.serviceStatus==0) ids.push(product.id)
+      }
+      return ids.join(',')
+    }
+
+    function _getServiceFeeProductsIds(products) {
+      var ids = []
+      for (var i = 0; i < products.length; i++) {
+        var product = products[i]
+        if (product.id && product.serviceStatus==1) ids.push(product.id)
       }
       return ids.join(',')
     }

@@ -8,36 +8,9 @@ var IS_DEVENV = (location.origin === "http://localhost:8080") ||
                 (location.origin === "http://localhost:9527") ||
                 (location.origin === "http://127.0.0.1:8080") ||
                 (location.origin === "http://vjddka.natappfree.cc")
-var pageUrls = IS_DEVENV ?
-{   //开发测试用
-    oneClickService: rootPath + "/scrmapp/consumer/product/index",
-    scanToBindPdt: rootPath + "/scrmapp/consumer/product/bind/scan/page",
-    noScanToBindPdt: rootPath + "/scrmapp/consumer/product/bind/noscan/page",
-    bindPdtMain: rootPath + "/scrmapp/consumer/product/query/page",
-    bindPdtLists: rootPath + "/scrmapp/consumer/user/filter/myProducts/jsp/myPdtList",
-    bindPdtDetail: rootPath + "/scrmapp/consumer/product/detail/page",
-    orderList: rootPath + "/scrmapp/consumer/user/filter/myOrder/jsp/myOrderList",
-    orderDetail: "../../../mobile/myOrder/html/orderDetail.html",
-    securityCheck: rootPath + "/scrmapp/consumer/product/securityCheck/page",
-    securityCheckRes: rootPath + "/scrmapp/consumer/product/securityCheck/result/page",
-    reserveSuccess:"../../../../mobile/reserveService/html/reserveSuccessPrompt.html",
-    reviewPraide: rootPath + "/scrmapp/consumer/wechat/orders/appraisal/page",
-    finishedWorkOrderList: rootPath + "/scrmapp/qyhuser/orders/finish/list/page",
-    engineerPersonCenter: rootPath + "/scrmapp/qyhuser/index/page",
-    unfinishedWorkOrderList: "../../../../mobile/qiYeHao/workOrderOperation/html/unfinishedWorkOrders.html",
-    unfinishedWorkOrderDetail_install_detail: "../../../../mobile/qiYeHao/workOrderOperation/html/unfinishedOrderDetail_install.html",
-    unfinishedWorkOrderDetail_repair: "../../../../mobile/qiYeHao/workOrderOperation/html/unfinishedOrderDetail_repair.html",
-    unfinishedWorkOrderDetail_repair_detail: "../../../../mobile/qiYeHao/workOrderOperation/html/unfinishedOrderDetail_repair_detail.html",
-    unfinishedWorkOrderDetail_maintain: "../../../../mobile/qiYeHao/workOrderOperation/html/unfinishedOrderDetail_maintain.html",
-    unfinishedWorkOrderDetail_maintain_detail: "../../../../mobile/qiYeHao/workOrderOperation/html/unfinishedOrderDetail_maintain_detail.html",
-    completeWorkOrderTip:"../../../../mobile/qiYeHao/workOrderOperation/html/completeServiceTip.html",//完成工单后的成功提示页面
-    reserveServicePdtList:"../../../../mobile/reserveService/html/chooseProduct.html",
-    chooseAddressPage: rootPath + "/scrmapp/consumer/wechatuser/address/index",                     //地址选择
-    reserveInstallPage:"../../../../mobile/reserveService/html/reserveService_install.html",           //预约安装详情
-    reserveUpdateFilterPage:"../../../../mobile/reserveService/html/reserveService_updateFilter.html",  //预约更换滤芯详情
-    reserveMaintainPage:"../../../../mobile/reserveService/html/reserveService_maintain.html",  //预约维修详情
-    reserveCleanPage:"../../../../mobile/reserveService/html/reserveService_clean.html"  //预约清洗滤芯详情
-} : { //正式环境
+
+
+var pageUrls =  { //正式环境
     oneClickService: rootPath + "/scrmapp/consumer/product/index",
     scanToBindPdt: rootPath + "/scrmapp/consumer/product/bind/scan/page",
     noScanToBindPdt: rootPath + "/scrmapp/consumer/product/bind/noscan/page",
@@ -60,7 +33,7 @@ var pageUrls = IS_DEVENV ?
     unfinishedWorkOrderDetail_maintain:  rootPath + "/scrmapp/qyhuser/orders/detail/maintain",//TODO 未完成工单保养单详情
     unfinishedWorkOrderDetail_maintain_detail: rootPath + "/scrmapp/qyhuser/orders/maintain/detail",//TODO 未完成工单保养单产品详情提交
     completeWorkOrderTip:rootPath + "/mobile/qiYeHao/workOrderOperation/jsp/completeServiceTip.jsp",//完成工单后的成功提示页面
-    reserveServicePdtList:rootPath + "/scrmapp/consumer/wechat/orders/service/choice/product",
+    reserveServicePdtList:rootPath + "/scrmapp/consumer/wechat/orders/schooseProduct",
     chooseAddressPage: rootPath + "/scrmapp/consumer/wechatuser/address/index",                     //地址选择
     reserveInstallPage: rootPath +"/scrmapp/consumer/product/reserve/install",           //预约安装详情
     reserveUpdateFilterPage: rootPath +"/scrmapp/consumer/product/reserve/updateFilter",  //预约更换滤芯详情
@@ -68,34 +41,9 @@ var pageUrls = IS_DEVENV ?
     reserveCleanPage: rootPath +"/scrmapp/consumer/product/reserve/clean"  //预约清洗滤芯详情
 }
 
-IS_DEVENV=false
-var queryUrls = IS_DEVENV ? 
-{   //开发测试用
-    getProductsList:"/resources/fakeJson/productLists.json",
-    queryAddrList: "/resources/src/js/addressManage/fakeJson/addressList.json",
-    queryPdtByCodeOrModal:"/resources/fakeJson/fetchSuccess.json",
-    orderList: "/resources/fakeJson/orderList.json",
-    saveReserve:"/resources/fakeJson/fetchSuccess.json", //服务号 保存预约
-    orderDetail: "/resources/fakeJson/orderDetail.json",
-    orderCancel: "/resources/fakeJson/fetchSuccess.json",
-    orderUpdate: "/resources/fakeJson/fetchSuccess.json",
-    getReserveData: "/resources/fakeJson/getReserveData.json", //获取预约请假详情
-    reservationAppraisal: rootPath + "/scrmapp/consumer/wechat/orders/user/appraisal", //提交预约评价
-    qyhGetRepairItem: "/resources/fakeJson/repairItem.json", //获取维修措施列表
-    qyhGetRepairPart: "/resources/fakeJson/repairPart.json", //获取维修配件列表
-    qyhGetMaintainAndFilter: "/resources/fakeJson/maintainAndFilters.json", //获取保养项和滤芯列表
-    qyhQueryUnfinishedOrder: "/resources/fakeJson/unfinishedWorkOrders.json", //获取待处理订单
-    qyhSubmitOrder_install:"/resources/fakeJson/fetchSuccess.json", //安装单完工提交
-    qyhSubmitOrder_repair: "/resources/fakeJson/fetchSuccess.json", //维修单完工提交
-    qyhSubmitOrder_maintain: "/resources/fakeJson/fetchSuccess.json", //保养单完工提交
-    qyhCancelOrderProduct:"/resources/fakeJson/fetchSuccess.json",//师傅侧工单取消产品
-    qyhQueryFinishedOrder: "/resources/fakeJson/completedWorkOrder.json", //获取已完成工单
-    qyhQueryRefuseOrder: "/resources/fakeJson/fetchSuccess.json", //师傅侧拒绝工单
-    qyhQueryChangeOrder: rootPath + "/scrmapp/qyhuser/orders/change/ordertime", //师傅侧更改预约时间
-    qyhQueryUFinedOrderDetail: "/resources/fakeJson/unfinishedWorkOrderDetail.json", //获取待处理工单详情
-    qyhQueryFinedOrderDetail: "/resources/fakeJson/finishedWorkOrderDetail.json", //获取已完成工单详情
-    wxuserauth: rootPath + "/wx/user/auth"
-} :  {//正式接口
+
+var queryUrls =
+    {//正式接口
     getProductsList: rootPath + "/scrmapp/consumer/product/list",
     getProductsListWithServiceFeeStatus: rootPath + "/scrmapp/consumer/product/list/serviceFeeStatus",
     queryAddrList: rootPath + "/scrmapp/consumer/wechatuser/addressList/get",

@@ -454,9 +454,6 @@
          o.contactsMobile AS userMobile,
          o.description AS description,
          concat(
-            o.province,
-            o.city,
-            o.area,
             o.address
         ) AS userAddress,
          o.faultImage,

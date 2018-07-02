@@ -322,7 +322,7 @@ public class ProductController {
             long wfId = wechatUser.getWfId();
             WechatFans wechatFans = wechatFansService.getWechatFansById(wfId);
             String unionId = wechatFans.getUnionId();
-             temList = productService.getProductsByUserId(userId);
+//             temList = productService.getProductsByUserId(userId);
             //System.out.println(temList);
             //读取远程服务费信息，content为JSONARrray [{id:xxx, model_name:xxx,service_fee:xxx,service_status:xxx},{,,}]
             String content = JsonApache.postModelNames(unionId, temList, qinyuanModelnameServiceQuery);

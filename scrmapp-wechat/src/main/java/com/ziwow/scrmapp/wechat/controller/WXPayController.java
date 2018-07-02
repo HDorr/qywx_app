@@ -183,9 +183,12 @@ public class WXPayController {
         for (int i = 0; i < jsonArray.size(); i++) {
             JSONObject jo = (JSONObject) jsonArray.get(i);
             String serviceStatus = (String) jo.get("serviceStatus");
+            String id = (String) jo.get("id");
             if (serviceStatus.equals("0")) {    //已购买滤芯未购买服务
                 String modelName = (String) jo.get("modelName");
                 String serviceFee = (String) jo.get("serviceFeePrice");
+                String scOrderNo = (String) jo.get("orderNo");
+                String serviceFeeId = (String) jo.get("serviceFeeId");
                 int fee;
                 if (serviceFee == null) {
                     return null;
@@ -194,15 +197,17 @@ public class WXPayController {
                 }
                 ProductFilter pf = new ProductFilter();
                 for (Product product : list) {
-                    if (product.getModelName().equals(modelName)){
+                    if (String.valueOf(product.getId()).equals(id)){
                         pf.setProductId(product.getId());
                     }
                 }
                 pf.setOrderId(orderId);
+                pf.setScOrderNo(scOrderNo);
                 pf.setModelName(modelName);
                 pf.setServiceFee(fee);
                 pf.setPayStatus(WXPayConstant.payStatusZero);  //0未付款，1已经付款，5不能购买
                 pf.setCreateTime(new Date());
+                pf.setServiceFeeId(serviceFeeId);
                 wxPayService.insert(pf);
                 totalFee = totalFee + fee;
             }
@@ -291,7 +296,7 @@ public class WXPayController {
             data.put("appid", appId);
             data.put("mch_id", mchId);
             data.put("nonce_str", nonce_str);
-            data.put("body", body);
+            data.put("body", orderId);
             data.put("out_trade_no", orderId);
             data.put("total_fee", totalFee);
             data.put("spbill_create_ip", spbill_create_ip);
@@ -403,12 +408,6 @@ public class WXPayController {
                             WechatFans wechatFans = wechatFansService.getWechatFansById(wfId);
                             String unionId = wechatFans.getUnionId();
                             List<Product> productList = new ArrayList<Product>();
-                            for (ProductFilter pFilter : productFilterList) {
-                                //根据modelName获取Product
-                                Product product = productService.getProductPrimaryKey(productId);
-                                productList.add(product);
-                            }
-                            //{"moreInfo":null,"data":true,"error":"Success","errorCode":200}
                             String result = JsonApache.notifyBackPlatform(unionId, productList, productFilterList, qinyuanModelnameServicePayNotifyUrl);
                             JSONObject jsonObject = JSON.parseObject(result);
                             boolean flag = jsonObject.getBoolean("data");
@@ -580,7 +579,7 @@ public class WXPayController {
                 result.put("status", "5");
                 writer.println(result.toJSONString());
                 writer.close();
-                return;
+                return ;
             }
         }
         ProductFilter pf = wxPayService.selectByPrimaryKey(id);
@@ -618,11 +617,11 @@ public class WXPayController {
                     productFilter.setId(id);
                     productFilter.setPayStatus(WXPayConstant.payStatusRefund);
                     productFilter.setRefundId(refundId);
-                    wxPayService.updateByPrimaryKeySelective(productFilter);
+                    wxPayService.refundProductFilterServiceFee(productFilter);
                     result.put("status", "1");
                     writer.println(result.toJSONString());
                     writer.close();
-                    return;
+                    return  ;
                 } else {
                     String err_code = (String) resp.get("err_code");
                     String err_code_des = (String) resp.get("err_code_des");
@@ -630,14 +629,14 @@ public class WXPayController {
                     result.put("status", "0");
                     writer.println(result.toJSONString());
                     writer.close();
-                    return;
+                    return ;
                 }
             } else {
                 log.info("退款失败", "通信错误");
                 result.put("status", "0");
                 writer.println(result.toJSONString());
                 writer.close();
-                return;
+                return ;
             }
         } catch (Exception e) {
             log.error("退款异常：" + e);

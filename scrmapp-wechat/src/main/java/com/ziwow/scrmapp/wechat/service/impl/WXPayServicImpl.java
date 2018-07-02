@@ -72,4 +72,9 @@ public class WXPayServicImpl implements WXPayService {
     public ProductFilter getProductFilterByProductId(long pid) {
         return productFilterMapper.getProductFilterByProductId(pid);
     }
+
+    @Override
+    public int refundProductFilterServiceFee(ProductFilter productFilter) {
+        return productFilterMapper.refundProductFilterServiceFee(productFilter);
+    }
 }

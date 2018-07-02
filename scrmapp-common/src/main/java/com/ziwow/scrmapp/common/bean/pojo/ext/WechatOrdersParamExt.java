@@ -8,7 +8,27 @@ import com.ziwow.scrmapp.common.bean.pojo.WechatOrdersParam;
 public class WechatOrdersParamExt extends WechatOrdersParam{
 	private String productIds;
 
+	private String payProductIds;
+
 	private String scOrderItemId;
+
+	private String serviceFeeIds;
+
+	public String getPayProductIds() {
+		return payProductIds;
+	}
+
+	public void setPayProductIds(String payProductIds) {
+		this.payProductIds = payProductIds;
+	}
+
+	public String getServiceFeeIds() {
+		return serviceFeeIds;
+	}
+
+	public void setServiceFeeIds(String serviceFeeIds) {
+		this.serviceFeeIds = serviceFeeIds;
+	}
 
 	public String getScOrderItemId() {
 		return scOrderItemId;

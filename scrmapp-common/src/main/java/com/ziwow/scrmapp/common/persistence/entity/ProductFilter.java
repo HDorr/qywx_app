@@ -14,6 +14,24 @@ public class ProductFilter {
     private Integer syncStatus;
     private Date createTime;
 
+    private String scOrderNo;
+    private String serviceFeeId;
+
+    public String getServiceFeeId() {
+        return serviceFeeId;
+    }
+
+    public void setServiceFeeId(String serviceFeeId) {
+        this.serviceFeeId = serviceFeeId;
+    }
+
+    public String getScOrderNo() {
+        return scOrderNo;
+    }
+
+    public void setScOrderNo(String scOrderNo) {
+        this.scOrderNo = scOrderNo;
+    }
 
     public Long getId() {
         return id;

@@ -127,25 +127,57 @@ public class WechatOrdersController {
             wechatOrdersParamExt.setProducts(list);
 
             // 获取modelName   拼接CSM用
-            List<String> mnList = new ArrayList<String>();
-            for (ProductVo pvo : list) {
-                mnList.add(pvo.getModelName());
-            }
+//            List<String> mnList = new ArrayList<String>();
+//            for (ProductVo pvo : list) {
+//                mnList.add(pvo.getModelName());
+//            }
 
 
-            long wfId = wechatUser.getWfId();
-            WechatFans wechatFans = wechatFansService.getWechatFansById(wfId);
-            String unionId = wechatFans.getUnionId();
+//            long wfId = wechatUser.getWfId();
+//            WechatFans wechatFans = wechatFansService.getWechatFansById(wfId);
+//            String unionId = wechatFans.getUnionId();
             //下面通过外部接口获取付款金额
-            List<Integer> idList = new ArrayList<Integer>();
-            String[] productArr = productIds.split(",");
-            for (String productId : productArr) {
-                idList.add(Integer.parseInt(productId));
-            }
+//            List<Integer> idList = new ArrayList<Integer>();
+//            String[] productArr = productIds.split(",");
+//            for (String productId : productArr) {
+//                idList.add(Integer.parseInt(productId));
+//            }
             //根据productId获取产品信息(批量)
-            List<Product> productList = productService.getProductsByIds(idList);
+//            List<Product> productList = productService.getProductsByIds(idList);
             //判断产品是否已经购买服务费
             // 小程序无法验证
+
+
+            //拼接CSM数据到description描述后面
+            // 描述格式
+            //原用户输入描述:XXXX
+            // &产品型号(服务费):XXXXX&金额：XXXXX&关联订单号：XXXXX；
+            String description;
+            String tem = wechatOrdersParamExt.getDescription();
+            if (tem != null) {
+                description = tem;
+            } else {
+                description = "";
+            }
+            String ext = "";   //保持扩展信息
+            String payProductIds = wechatOrdersParamExt.getPayProductIds();
+            if (StringUtil.isNotBlank(payProductIds)){
+                String[] idArr = payProductIds.split(",");
+                for (String pid : idArr) {
+                    ProductFilter pf = wxPayService.getProductFilterByProductId(Long.parseLong(pid));
+                    if (pf != null) {
+                        BigDecimal b = new BigDecimal(pf.getServiceFee());
+                        String tp = b.setScale(2, BigDecimal.ROUND_HALF_UP).divide(new BigDecimal(100)).toString();
+                        //由于产品型号不是唯一值，通过主键ID + 型号拼接
+                        ext =ext + " " + pf.getModelName() + "服务费 &金额:" + tp + " &关联订单号:" + pf.getScOrderNo();
+                    }
+                }
+            }
+
+
+            if (StringUtils.isNotEmpty(ext)) {
+                wechatOrdersParamExt.setDescription(description + "\n" +  ext);   //关联到描述信息
+            }
 
 
             if ("".equals(wechatOrdersParamExt.getContactsTelephone()) || null == wechatOrdersParamExt.getContactsTelephone()) {
@@ -174,35 +206,6 @@ public class WechatOrdersController {
             //来源是微信
             wechatOrders.setSource(SystemConstants.WEIXIN);
 
-
-            //拼接CSM数据到description描述后面
-            // 描述格式
-            //原用户输入描述:XXXX
-            // &产品型号(服务费):XXXXX&金额：XXXXX&关联订单号：XXXXX；
-            String description;
-            String tem = wechatOrders.getDescription();
-            if (tem != null) {
-               description = tem;
-            } else {
-                description = "";
-            }
-            String ext = "";   //保持扩展信息
-            String[] idArr = productIds.split(",");
-            for (String pid : idArr) {
-                ProductFilter pf = wxPayService.getProductFilterByProductId(Long.parseLong(pid));
-                if (pf != null) {
-                    BigDecimal b = new BigDecimal(pf.getServiceFee());
-                    String tp = b.setScale(2, BigDecimal.ROUND_HALF_UP).toString();
-                    //由于产品型号不是唯一值，通过主键ID + 型号拼接
-                    ext = " 产品型号" + pf.getModelName() + " 服务费金额:" + tp + " 关联订单号:" + pf.getOrderId();
-                }
-            }
-            if (StringUtils.isNotEmpty(description)) {
-                wechatOrders.setDescription(description + "\n" +  ext);   //关联到描述信息
-            } else {
-                wechatOrders.setDescription(description + ext);   //关联到描述信息
-            }
-
             //新增一单多产品接口
             wechatOrders = wechatOrdersService.saveOrdersMultiProduct(wechatOrders, wechatOrdersParamExt.getProductIds());
 
@@ -227,8 +230,9 @@ public class WechatOrdersController {
 
                 // 向沁园小程序推送预约成功
                 String scOrderItemId = wechatOrdersParamExt.getScOrderItemId();
-                if (StringUtil.isNotBlank(scOrderItemId)){
-                    wechatOrdersService.syncMakeAppointment(scOrderItemId,wechatOrders.getOrdersCode());
+                String serviceFeeIds = wechatOrdersParamExt.getServiceFeeIds();
+                if (StringUtil.isNotBlank(scOrderItemId) || StringUtil.isNotBlank(serviceFeeIds) ){
+                    wechatOrdersService.syncMakeAppointment(scOrderItemId,wechatOrders.getOrdersCode(),serviceFeeIds);
                 }
             } else {
                 throw new SQLException("wechatOrders:" + JSONObject.toJSONString(wechatOrders));
