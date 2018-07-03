@@ -53,7 +53,7 @@
                     <p style="color:red;">提示：该商品预约次数已用完</p>
                     <p style="color:red;">请到微信商城购买新滤芯</p>
                     {{else}}
-                    <p>服务费名称: {{product.modelName}}</p>
+                    <p>服务费名称: {{product.serviceFeeName}}</p>
                     <p>服务状态: {{product.serviceStatusStr}}</p>
                     {{/if}}
                 </div>

@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.ziwow.scrmapp.common.persistence.entity.Product;
 import com.ziwow.scrmapp.common.persistence.entity.ProductFilter;
+import com.ziwow.scrmapp.tools.utils.StringUtil;
 import com.ziwow.scrmapp.wechat.constants.WXPayConstant;
 
 import java.math.BigDecimal;
@@ -38,9 +39,13 @@ public class ProductServiceParamUtil {
 //                    String serviceStatus = serviceStatusCompare(tem);
                     String serviceStatusStr = (String) jo.get("serviceStatusStr");
                     String serviceFeeId = (String) jo.get("serviceFeeId");
+                    String filterModel = (String) jo.get("modelName");
                     p.setServiceStatus(serviceStatus);
                     p.setServiceStatusStr(serviceStatusStr);
                     p.setServiceFeeId(serviceFeeId);
+                    if (StringUtil.isNotBlank(filterModel)){
+                        p.setServiceFeeName(filterModel+"服务费");
+                    }
                     newList.add(p);
                     jsonArray.remove(i);
                 }

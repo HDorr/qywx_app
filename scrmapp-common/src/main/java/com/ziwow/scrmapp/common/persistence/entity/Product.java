@@ -57,6 +57,16 @@ public class Product {
 
     private String serviceStatusStr;
 
+    private String serviceFeeName;
+
+    public String getServiceFeeName() {
+        return serviceFeeName;
+    }
+
+    public void setServiceFeeName(String serviceFeeName) {
+        this.serviceFeeName = serviceFeeName;
+    }
+
     public String getServiceStatusStr() {
         return serviceStatusStr;
     }
