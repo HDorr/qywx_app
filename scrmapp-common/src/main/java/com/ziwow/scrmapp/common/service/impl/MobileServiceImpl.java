@@ -53,6 +53,13 @@ public class MobileServiceImpl implements MobileService {
     @Value("${message.emay.marketing.password}")
     private String msgEmayMarketingPassword;
 
+
+    @Value("${message.emay.qysc.username}")
+    private String msgEmayQyscUserName;
+
+    @Value("${message.emay.qysc.password}")
+    private String msgEmayQyscPassword;
+
     @Resource
     RedisService redisService;
 
@@ -149,18 +156,25 @@ public class MobileServiceImpl implements MobileService {
         String username = StringUtils.EMPTY;
         String password = StringUtils.EMPTY;
         String content = StringUtils.EMPTY;
-        content = "【沁园集团】".concat(msgContent);
+
         if (Constant.CUSTOMER == type) {
+            content = "【沁园集团】".concat(msgContent);
             username = msgEmayUserName;
             password = msgEmayPassword;
         } else if (Constant.ENGINEER == type) {
+            content = "【沁园集团】".concat(msgContent);
             username = msgEmayQyhUserName;
             password = msgEmayQyhPassword;
         } else if(Constant.MARKETING == type) {
+            content = "【沁园集团】".concat(msgContent);
             username = msgEmayMarketingUserName;
             password = msgEmayMarketingPassword;
             content = content.concat("回复TD退订");
-        } else {
+        } else if (Constant.BIND_GIFT == type || Constant.REGISTER_GIFT==type){
+            username = msgEmayQyscUserName;
+            password = msgEmayQyscPassword;
+            content=msgContent;
+        }else  {
             return false;
         }
 

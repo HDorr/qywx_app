@@ -11,6 +11,7 @@ package com.ziwow.scrmapp.wechat.controller;
 import com.alibaba.fastjson.JSON;
 import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
+import com.sun.tools.jxc.apt.Const;
 import com.ziwow.scrmapp.common.bean.pojo.DispatchDotParam;
 import com.ziwow.scrmapp.common.bean.pojo.DispatchMasterParam;
 import com.ziwow.scrmapp.common.bean.pojo.DispatchOrderParam;
@@ -23,6 +24,7 @@ import com.ziwow.scrmapp.common.persistence.entity.FilterLevel;
 import com.ziwow.scrmapp.common.persistence.entity.Product;
 import com.ziwow.scrmapp.common.result.BaseResult;
 import com.ziwow.scrmapp.common.result.Result;
+import com.ziwow.scrmapp.common.service.MobileService;
 import com.ziwow.scrmapp.common.service.ThirdPartyService;
 import com.ziwow.scrmapp.tools.thirdParty.SignUtil;
 import com.ziwow.scrmapp.tools.utils.DateUtil;
@@ -35,6 +37,7 @@ import com.ziwow.scrmapp.wechat.persistence.entity.WechatFans;
 import com.ziwow.scrmapp.wechat.persistence.entity.WechatUser;
 import com.ziwow.scrmapp.wechat.service.*;
 import com.ziwow.scrmapp.wechat.utils.BarCodeConvert;
+import com.ziwow.scrmapp.wechat.vo.MiniappSendSms;
 import com.ziwow.scrmapp.wechat.vo.WechatFansVo;
 import com.ziwow.scrmapp.wechat.vo.WechatJSSdkSignVO;
 import net.sf.json.JSONArray;
@@ -92,6 +95,9 @@ public class WechatController {
     private ProductService productService;
     @Resource
     HttpSession session;
+
+    @Autowired
+    private MobileService mobileService;
 
     @RequestMapping(value = "/getWechatGetAccessToken", method = RequestMethod.GET)
     @ResponseBody
@@ -504,6 +510,37 @@ public class WechatController {
 
         return result;
     }
+
+
+    @RequestMapping(value = "/sendSms", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
+    @ResponseBody
+    public Result sendSms(@RequestBody MiniappSendSms miniappSendSms) throws Exception {
+        logger.info("调用发送短信,参数为:", miniappSendSms.toString());
+        Result result = new BaseResult();
+
+        boolean isLegal = SignUtil.checkSignature(miniappSendSms.getSignature(),miniappSendSms.getTimeStamp(), Constant.AUTH_KEY);
+        if (!isLegal) {
+            result.setReturnCode(Constant.FAIL);
+            result.setReturnMsg(Constant.ILLEGAL_REQUEST);
+            logger.error("调用发送短信失败，校验数据非法,",miniappSendSms.toString());
+            return result;
+        }
+
+        if (miniappSendSms.getType()==3){//绑定有礼
+
+            String msgContent = "亲爱的会员，恭喜您已成功绑定产品，小沁送您用户尊享满200立减50元优惠券一张，购买微商城内任意商品通用哦。进入沁园微信公众号（qy_serve ），点击菜单<我的沁园-优惠券>即可查看，还有更多用户尊享服务一键预约快速达。点击<要购买-微信商城>，即刻开启您的专享优惠通道吧~回复TD退订";
+            mobileService.sendContentByEmay(miniappSendSms.getPhone(),msgContent, Constant.BIND_GIFT );
+        }else if (miniappSendSms.getType()==4){//注册有礼
+
+            String msgContent = "嗨，欢迎进入沁园水健康守护基地，恭喜您已完成会员注册。小沁送您会员尊享立减100元优惠券一张，购买微商城内任意净水器通用哦。进入沁园微信公众号（qy_serve ），点击菜单<我的沁园-优惠券>即可查看。立即绑定产品，还有更多滤芯优惠券等着您！点击<要购买-微信商城>，即刻开启您的专享优惠通道吧~回复TD退订";
+            mobileService.sendContentByEmay(miniappSendSms.getPhone(), msgContent,Constant.REGISTER_GIFT);
+        }
+
+
+        result.setReturnCode(Constant.SUCCESS);
+        return result;
+    }
+
 
     /**
      * 二维码跳转链接

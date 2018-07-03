@@ -160,9 +160,9 @@ public class WechatOrdersController {
                 description = "";
             }
             String ext = "";   //保持扩展信息
-            String payProductIds = wechatOrdersParamExt.getPayProductIds();
-            if (StringUtil.isNotBlank(payProductIds)){
-                String[] idArr = payProductIds.split(",");
+            String serviceFeeProductsIds = wechatOrdersParamExt.getServiceFeeProductsIds();
+            if (StringUtil.isNotBlank(serviceFeeProductsIds)){
+                String[] idArr = serviceFeeProductsIds.split(",");
                 for (String pid : idArr) {
                     ProductFilter pf = wxPayService.getProductFilterByProductId(Long.parseLong(pid));
                     if (pf != null) {
@@ -173,6 +173,8 @@ public class WechatOrdersController {
                     }
                 }
             }
+            logger.info("生成预约单带服务费产品id："+serviceFeeProductsIds);
+            logger.info("生成预约单描述："+ext);
 
 
             if (StringUtils.isNotEmpty(ext)) {

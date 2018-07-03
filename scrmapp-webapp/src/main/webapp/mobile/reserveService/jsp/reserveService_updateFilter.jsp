@@ -444,7 +444,7 @@
         "faultImage": "",
         "status": 1,
         "productIds": "",
-        "payProductIds": "",
+        "serviceFeeProductsIds": "",
         "serviceFeeIds":""
       }
       var res = {}
@@ -474,8 +474,8 @@
           case "serviceFeeIds":
             res.serviceFeeIds = _getServiceFeeIds(reserve_products)
             break
-          case "payProductIds":
-            res.payProductIds = _getServiceFeeProductsIds(reserve_products)
+          case "serviceFeeProductsIds":
+            res.serviceFeeProductsIds = _getServiceFeeProductsIds(reserve_products)
             break
           default :
             res[key] = user_data[key] ? user_data[key] : templateData[key]

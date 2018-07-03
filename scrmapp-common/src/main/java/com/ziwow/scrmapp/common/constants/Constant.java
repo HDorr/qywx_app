@@ -34,6 +34,9 @@ public class Constant {
     public static int ENGINEER = 1;
     public static int MARKETING = 2;
 
+    public static int BIND_GIFT=3;//绑定有礼
+    public static int REGISTER_GIFT=4;//注册有礼
+
     public static final int NORMAL = 1, CANCEL = 2, COMPLETE = 3;
 
     public static final int HIDDEN = 1;
