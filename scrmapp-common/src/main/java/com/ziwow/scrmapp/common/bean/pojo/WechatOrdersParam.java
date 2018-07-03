@@ -2,6 +2,7 @@ package com.ziwow.scrmapp.common.bean.pojo;
 
 import com.ziwow.scrmapp.common.bean.vo.ProductVo;
 
+import com.ziwow.scrmapp.common.persistence.entity.ServiceFeeProduct;
 import java.util.List;
 
 /**
@@ -69,6 +70,17 @@ public class WechatOrdersParam {
 
     public void setOrdersId(Long ordersId) {
         this.ordersId = ordersId;
+    }
+
+    private List<ServiceFeeProduct> serviceFeeProducts;
+
+    public List<ServiceFeeProduct> getServiceFeeProducts() {
+        return serviceFeeProducts;
+    }
+
+    public void setServiceFeeProducts(
+        List<ServiceFeeProduct> serviceFeeProducts) {
+        this.serviceFeeProducts = serviceFeeProducts;
     }
 
 

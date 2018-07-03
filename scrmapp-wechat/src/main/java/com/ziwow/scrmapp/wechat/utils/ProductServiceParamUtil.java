@@ -40,6 +40,8 @@ public class ProductServiceParamUtil {
                     String serviceStatusStr = (String) jo.get("serviceStatusStr");
                     String serviceFeeId = (String) jo.get("serviceFeeId");
                     String filterModel = (String) jo.get("modelName");
+                    String scOrderNo = (String) jo.get("orderNo");
+                    p.setScOrderNo(scOrderNo);
                     p.setServiceStatus(serviceStatus);
                     p.setServiceStatusStr(serviceStatusStr);
                     p.setServiceFeeId(serviceFeeId);

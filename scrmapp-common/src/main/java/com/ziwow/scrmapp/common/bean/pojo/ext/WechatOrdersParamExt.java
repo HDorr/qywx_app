@@ -1,6 +1,9 @@
 package com.ziwow.scrmapp.common.bean.pojo.ext;
 
 import com.ziwow.scrmapp.common.bean.pojo.WechatOrdersParam;
+import com.ziwow.scrmapp.common.persistence.entity.ProductFilter;
+import com.ziwow.scrmapp.common.persistence.entity.ServiceFeeProduct;
+import java.util.List;
 
 /**
  * Created by gp6 on 2017/12/12.
@@ -8,19 +11,13 @@ import com.ziwow.scrmapp.common.bean.pojo.WechatOrdersParam;
 public class WechatOrdersParamExt extends WechatOrdersParam{
 	private String productIds;
 
-	private String serviceFeeProductsIds;
+
+
 
 	private String scOrderItemId;
 
 	private String serviceFeeIds;
 
-	public String getServiceFeeProductsIds() {
-		return serviceFeeProductsIds;
-	}
-
-	public void setServiceFeeProductsIds(String serviceFeeProductsIds) {
-		this.serviceFeeProductsIds = serviceFeeProductsIds;
-	}
 
 	public String getServiceFeeIds() {
 		return serviceFeeIds;

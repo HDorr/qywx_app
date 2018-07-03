@@ -59,6 +59,16 @@ public class Product {
 
     private String serviceFeeName;
 
+    private String scOrderNo;
+
+    public String getScOrderNo() {
+        return scOrderNo;
+    }
+
+    public void setScOrderNo(String scOrderNo) {
+        this.scOrderNo = scOrderNo;
+    }
+
     public String getServiceFeeName() {
         return serviceFeeName;
     }

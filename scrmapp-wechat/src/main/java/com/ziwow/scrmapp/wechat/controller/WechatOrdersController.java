@@ -1,5 +1,6 @@
 package com.ziwow.scrmapp.wechat.controller;
 
+import com.alibaba.fastjson.JSON;
 import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -160,20 +161,20 @@ public class WechatOrdersController {
                 description = "";
             }
             String ext = "";   //保持扩展信息
-            String serviceFeeProductsIds = wechatOrdersParamExt.getServiceFeeProductsIds();
-            if (StringUtil.isNotBlank(serviceFeeProductsIds)){
-                String[] idArr = serviceFeeProductsIds.split(",");
-                for (String pid : idArr) {
-                    ProductFilter pf = wxPayService.getProductFilterByProductId(Long.parseLong(pid));
+
+            List<ServiceFeeProduct> serviceFeeProducts = wechatOrdersParamExt.getServiceFeeProducts();
+            if (serviceFeeProducts!=null && serviceFeeProducts.size()>0){
+                for (ServiceFeeProduct pf : serviceFeeProducts) {
                     if (pf != null) {
-                        BigDecimal b = new BigDecimal(pf.getServiceFee());
+
+                      BigDecimal b = new BigDecimal(pf.getServiceFee());
                         String tp = b.setScale(2, BigDecimal.ROUND_HALF_UP).divide(new BigDecimal(100)).toString();
                         //由于产品型号不是唯一值，通过主键ID + 型号拼接
-                        ext =ext + " " + pf.getModelName() + "服务费 &金额:" + tp + " &关联订单号:" + pf.getScOrderNo();
+                        ext =ext + " " + pf.getServiceFeeName() + " &金额:" + tp + " &关联订单号:" + pf.getScOrderNo();
                     }
                 }
             }
-            logger.info("生成预约单带服务费产品id："+serviceFeeProductsIds);
+            logger.info("生成预约单带服务费产品id："+ JSON.toJSONString(serviceFeeProducts));
             logger.info("生成预约单描述："+ext);
 
 

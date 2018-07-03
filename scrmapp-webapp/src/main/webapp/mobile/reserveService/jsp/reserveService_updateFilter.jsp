@@ -300,6 +300,7 @@
         if (scOrderItemId!=null && scOrderItemId!=undefined && scOrderItemId!=''){
           submit_data.scOrderItemId = scOrderItemId
         }
+
         ajax.post(queryUrls.saveReserve, submit_data, true)
         .then(function (data) {
           if (data.returnCode !== ERR_OK) {
@@ -444,7 +445,7 @@
         "faultImage": "",
         "status": 1,
         "productIds": "",
-        "serviceFeeProductsIds": "",
+        "serviceFeeProducts":[],
         "serviceFeeIds":""
       }
       var res = {}
@@ -474,8 +475,8 @@
           case "serviceFeeIds":
             res.serviceFeeIds = _getServiceFeeIds(reserve_products)
             break
-          case "serviceFeeProductsIds":
-            res.serviceFeeProductsIds = _getServiceFeeProductsIds(reserve_products)
+          case "serviceFeeProducts":
+            res.serviceFeeProducts = _getServiceFeeProducts(reserve_products)
             break
           default :
             res[key] = user_data[key] ? user_data[key] : templateData[key]
@@ -524,13 +525,31 @@
       return ids.join(',')
     }
 
-    function _getServiceFeeProductsIds(products) {
+
+    function _getServiceFeeProducts(products) {
       var ids = []
       for (var i = 0; i < products.length; i++) {
         var product = products[i]
-        if (product.id && product.serviceStatus==1) ids.push(product.id)
+        if (product.id && (product.serviceStatus==1)){
+          var pr={};
+          /**
+           * "serviceFee": "0.01",
+           "serviceStatus": "1",
+           "serviceFeeId": "1764",
+           "serviceStatusStr": "已购买滤芯并购买服务费",
+           "serviceFeeName": "MK-UF-12服务费",
+           "scOrderNo": "ESO180702182800241089"
+           */
+          pr.serviceFee=product.serviceFee;
+          pr.serviceStatus=product.serviceStatus;
+          pr.serviceFeeId=product.serviceFeeId;
+          pr.serviceStatusStr=product.serviceStatusStr;
+          pr.serviceFeeName=product.serviceFeeName;
+          pr.scOrderNo=product.scOrderNo;
+          ids.push(pr)
+        }
       }
-      return ids.join(',')
+      return ids;
     }
   });
 
