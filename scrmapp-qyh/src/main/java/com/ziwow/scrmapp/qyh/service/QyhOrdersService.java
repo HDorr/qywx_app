@@ -151,4 +151,6 @@ public interface QyhOrdersService {
     public Result cancelProduct(CancelProductParam cancelProductParam) throws Exception;
 
     public int getProductStatus(Long orderId);
+
+    void finishMakeAppointment(String ordersCode);
 }

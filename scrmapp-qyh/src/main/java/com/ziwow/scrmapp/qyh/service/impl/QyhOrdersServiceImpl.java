@@ -1,5 +1,7 @@
 package com.ziwow.scrmapp.qyh.service.impl;
 
+import com.ziwow.scrmapp.tools.utils.HttpClientUtils;
+import com.ziwow.scrmapp.tools.utils.MD5;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
@@ -18,6 +20,7 @@ import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -151,6 +154,9 @@ public class QyhOrdersServiceImpl implements QyhOrdersService {
 
     //将字符串中的\替换为空字符串
     private Pattern pattern = Pattern.compile("\\\\");
+
+    @Value("${miniapp.product.finishmakeAppointment}")
+    private String finishmakeAppointment;
 
 
     @Override
@@ -1144,6 +1150,28 @@ public class QyhOrdersServiceImpl implements QyhOrdersService {
 
     public int getProductStatus(Long orderId) {
         return wechatOrdersRecordMapper.getProductStatus(orderId);
+    }
+
+    @Override
+    public void finishMakeAppointment(String ordersCode) {
+        logger.info("预约完工信息同步到小程序,ordersCode:{}", ordersCode);
+        // 异步推送给小程序对接方
+        Map<String, Object> params = new HashMap<String, Object>();
+        long timestamp = System.currentTimeMillis();
+        params.put("ordersCode", ordersCode);
+        params.put("timestamp", timestamp);
+        params.put("signature", MD5.toMD5(Constant.AUTH_KEY + timestamp));
+        String result = HttpClientUtils
+            .postJson(finishmakeAppointment, net.sf.json.JSONObject.fromObject(params).toString());
+        if (StringUtils.isNotBlank(result)) {
+            net.sf.json.JSONObject o1 = net.sf.json.JSONObject.fromObject(result);
+            if (o1.containsKey("errorCode") && o1.getInt("errorCode") == 200) {
+                String fAid = o1.getString("data");
+                logger.info("预约完工信息同步到小程序成功,aid:{}", fAid);
+            } else {
+                logger.error("预约完工信息同步到小程序失败,moreInfo:{}", o1.getString("moreInfo"));
+            }
+        }
     }
 
     /**

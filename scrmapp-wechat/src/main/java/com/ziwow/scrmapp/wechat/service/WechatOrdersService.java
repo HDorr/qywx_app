@@ -63,4 +63,8 @@ public interface WechatOrdersService {
     void testSendSms(Integer ordersType, String mobile);
 
   void syncMakeAppointment(String scOrderItemId, String ordersCode, String serviceFeeIds);
+
+    void updateMakeAppointment(String oldOrderCode, String newOrdersCode);
+
+    void cancelMakeAppointment(String ordersCode);
 }

@@ -35,8 +35,8 @@
                             for (var y=0; y<idArr.length; y++) {
                                 if (p.id == idArr[y]) {
                                     console.log(p.id+":"+p.serviceStatusStr);
-                                    p.serviceStatus=0;
-                                    p.serviceStatusStr = "已购买滤芯和服务";
+                                    // p.serviceStatus=0;
+                                    // p.serviceStatusStr = "已购买滤芯和服务";
                                     //alert(p.serviceStatus);
                                 }
                             }

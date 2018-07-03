@@ -558,6 +558,8 @@ public class QyhUserController {
             if (count == 0) {
                 sendTemplate(completeParam);
             }
+
+            qyhOrdersService.finishMakeAppointment(completeParam.getOrdersCode());
         } catch (RuntimeException ex) {
             logger.error("师傅点击工单[{}]完工操作出现异常,原因:[{}]", ordersCode, ex);
             result.setReturnCode(Constant.FAIL);

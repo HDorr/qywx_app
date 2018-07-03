@@ -105,6 +105,12 @@ public class WechatOrdersServiceImpl implements WechatOrdersService {
     @Value("${miniapp.product.makeAppointment}")
     private String makeAppointmentUrl;
 
+    @Value("${miniapp.product.updatemakeAppointment}")
+    private String updatemakeAppointmentUrl;
+
+    @Value("${miniapp.product.cancelmakeAppointment}")
+    private String cancelmakeAppointmentUrl;
+
     @Override
     public WechatOrders getWechatOrdersByCode(String ordersCode) {
         return wechatOrdersMapper.getWechatOrdersVoByCode(ordersCode);
@@ -764,6 +770,7 @@ public class WechatOrdersServiceImpl implements WechatOrdersService {
     @Async
     public void syncMakeAppointment(String scOrderItemId, String ordersCode,
         String serviceFeeIds) {
+        LOG.info("预约信息同步到小程序,scOrderItemId:"+ scOrderItemId+"   ordersCode:"+ordersCode+"   serviceFeeIds:"+serviceFeeIds);
         // 异步推送给小程序对接方
         Map<String, Object> params = new HashMap<String, Object>();
         long timestamp = System.currentTimeMillis();
@@ -780,6 +787,50 @@ public class WechatOrdersServiceImpl implements WechatOrdersService {
                 LOG.info("预约信息同步到小程序成功,aid:{}", fAid);
             } else {
                 LOG.error("预约信息信息同步到小程序失败,moreInfo:{}", o1.getString("moreInfo"));
+            }
+        }
+    }
+
+    @Override
+    public void updateMakeAppointment(String oldOrdersCode, String newOrdersCode) {
+        LOG.info("预约信息更改同步到小程序,oldOrdersCode:{}", oldOrdersCode);
+        LOG.info("预约信息更改同步到小程序,newOrdersCode:{}", newOrdersCode);
+        // 异步推送给小程序对接方
+        Map<String, Object> params = new HashMap<String, Object>();
+        long timestamp = System.currentTimeMillis();
+        params.put("oldOrdersCode", oldOrdersCode);
+        params.put("newOrdersCode", newOrdersCode);
+        params.put("timestamp", timestamp);
+        params.put("signature", MD5.toMD5(Constant.AUTH_KEY + timestamp));
+        String result = HttpClientUtils.postJson(updatemakeAppointmentUrl, JSONObject.fromObject(params).toString());
+        if (StringUtils.isNotBlank(result)) {
+            JSONObject o1 = JSONObject.fromObject(result);
+            if (o1.containsKey("errorCode") && o1.getInt("errorCode") == 200) {
+                String fAid = o1.getString("data");
+                LOG.info("预约信息更改同步到小程序成功,aid:{}", fAid);
+            } else {
+                LOG.error("预约信息信息更改同步到小程序失败,moreInfo:{}", o1.getString("moreInfo"));
+            }
+        }
+    }
+
+    @Override
+    public void cancelMakeAppointment(String ordersCode) {
+        LOG.info("取消预约信息同步到小程序,ordersCode:{}", ordersCode);
+        // 异步推送给小程序对接方
+        Map<String, Object> params = new HashMap<String, Object>();
+        long timestamp = System.currentTimeMillis();
+        params.put("ordersCode", ordersCode);
+        params.put("timestamp", timestamp);
+        params.put("signature", MD5.toMD5(Constant.AUTH_KEY + timestamp));
+        String result = HttpClientUtils.postJson(cancelmakeAppointmentUrl, JSONObject.fromObject(params).toString());
+        if (StringUtils.isNotBlank(result)) {
+            JSONObject o1 = JSONObject.fromObject(result);
+            if (o1.containsKey("errorCode") && o1.getInt("errorCode") == 200) {
+                String fAid = o1.getString("data");
+                LOG.info("取消预约信息同步到小程序成功,aid:{}", fAid);
+            } else {
+                LOG.error("取消预约信息同步到小程序失败,moreInfo:{}", o1.getString("moreInfo"));
             }
         }
     }

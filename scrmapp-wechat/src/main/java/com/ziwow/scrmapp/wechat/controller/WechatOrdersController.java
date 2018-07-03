@@ -215,6 +215,7 @@ public class WechatOrdersController {
                 String serverType = OrderUtils.getServiceTypeName(orderType);
                 String mobilePhone = wechatUser.getMobilePhone();
                 String msgContent = "亲爱的用户，您预约的" + serverType + "服务已成功提交，我们将尽快为您派单。您可进入“沁园”官方微信服务号查看订单状态。";
+                //fixme 隐藏短信
 //                mobileService.sendContentByEmay(mobilePhone, msgContent, Constant.CUSTOMER);
                 // 预约提交成功模板消息提醒
 //                wechatOrdersService.sendAppointmentTemplateMsg(wechatOrders.getOrdersCode(), serverType);
@@ -232,7 +233,27 @@ public class WechatOrdersController {
                 String scOrderItemId = wechatOrdersParamExt.getScOrderItemId();
                 String serviceFeeIds = wechatOrdersParamExt.getServiceFeeIds();
                 if (StringUtil.isNotBlank(scOrderItemId) || StringUtil.isNotBlank(serviceFeeIds) ){
-                    wechatOrdersService.syncMakeAppointment(scOrderItemId,wechatOrders.getOrdersCode(),serviceFeeIds);
+                    wechatOrdersService
+                        .syncMakeAppointment(scOrderItemId, wechatOrders.getOrdersCode(),
+                            serviceFeeIds);
+//                    if (!syncMakeAppointment){
+//                        /*调用沁园接口，取消预约*/
+//                        Result cancelResult = wechatOrdersService.cancelOrders(wechatOrders.getOrdersCode());
+//                        if (Constant.SUCCESS == cancelResult.getReturnCode()) {
+//                            int count = wechatOrdersService.updateOrdersStatus(wechatOrders.getOrdersCode(), userId, date, SystemConstants.CANCEL);
+//                            if (count > 0) {
+//                                WechatOrdersRecord cancelWechatOrdersRecord = new WechatOrdersRecord();
+//                                cancelWechatOrdersRecord.setOrderId(wechatOrders.getId());
+//                                cancelWechatOrdersRecord.setRecordTime(date);
+//                                cancelWechatOrdersRecord.setRecordContent("用户取消预约");
+//                                wechatOrdersRecordService.saveWechatOrdersRecord(cancelWechatOrdersRecord);
+//                                logger.info("预约取消,userId = [{}] , ordersCode = [{}]", userId, wechatOrders.getOrdersCode());
+//                            }
+//                        } else {
+//                            return cancelResult;
+//                        }
+//                    }
+
                 }
             } else {
                 throw new SQLException("wechatOrders:" + JSONObject.toJSONString(wechatOrders));
@@ -398,6 +419,30 @@ public class WechatOrdersController {
                 result.setReturnCode(Constant.SUCCESS);
                 result.setReturnMsg("预约时间更改成功!");
                 logger.info("重新生成受理单,userId = [{}] , ordersCode = [{}]", userId, newOrdersCode);
+
+
+
+                //推送更新到小程序
+                wechatOrdersService.updateMakeAppointment(ordersCode,newOrdersCode);
+//                if (!updateMakeAppointment){
+//                    /*调用沁园接口，取消预约*/
+//                    Result cancelResult = wechatOrdersService.cancelOrders(wechatOrders.getOrdersCode());
+//                    if (Constant.SUCCESS == cancelResult.getReturnCode()) {
+//                        int count = wechatOrdersService.updateOrdersStatus(wechatOrders.getOrdersCode(), userId, date, SystemConstants.CANCEL);
+//                        if (count > 0) {
+//                            WechatOrdersRecord cancelWechatOrdersRecord = new WechatOrdersRecord();
+//                            cancelWechatOrdersRecord.setOrderId(wechatOrders.getId());
+//                            cancelWechatOrdersRecord.setRecordTime(date);
+//                            cancelWechatOrdersRecord.setRecordContent("用户取消预约");
+//                            wechatOrdersRecordService.saveWechatOrdersRecord(cancelWechatOrdersRecord);
+//                            logger.info("预约取消,userId = [{}] , ordersCode = [{}]", userId, wechatOrders.getOrdersCode());
+//                        }
+//                    } else {
+//                        return cancelResult;
+//                    }
+//                }
+
+
             }
         } catch (Exception e) {
             logger.error("更改预约失败,原因[{}]", e);
@@ -454,6 +499,11 @@ public class WechatOrdersController {
 
             /*调用沁园取消预约接口*/
             Result cancelResult = wechatOrdersService.cancelOrders(ordersCode);
+
+            /*调用自营商城取消预约*/
+//            wechatOrdersService.cancelOrders(ordersCode)
+
+
             if (Constant.SUCCESS == cancelResult.getReturnCode()) {
                 Date date = new Date();
                 int count = wechatOrdersService.updateOrdersStatus(ordersCode, userId, date, SystemConstants.CANCEL);
@@ -494,6 +544,12 @@ public class WechatOrdersController {
                     result.setReturnCode(Constant.SUCCESS);
                     result.setReturnMsg("预约取消成功!");
                     logger.info("预约取消,userId = [{}] , ordersCode = [{}]", userId, ordersCode);
+
+
+                    //推送更新到小程序
+                    wechatOrdersService.cancelMakeAppointment(ordersCode);
+
+
                 } else {
                     throw new SQLException("ordersCode:" + ordersCode + ",status:" + SystemConstants.CANCEL);
                 }
