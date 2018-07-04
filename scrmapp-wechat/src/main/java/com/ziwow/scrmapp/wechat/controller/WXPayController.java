@@ -28,6 +28,7 @@ import com.ziwow.scrmapp.wechat.service.WechatUserService;
 
 import com.ziwow.scrmapp.wechat.utils.JsonApache;
 import com.ziwow.scrmapp.wechat.utils.RsaUtil;
+import com.ziwow.scrmapp.wechat.vo.ProductVo;
 import com.ziwow.scrmapp.wechat.vo.RefundVO;
 import com.ziwow.scrmapp.wechat.wxpay.*;
 
@@ -153,8 +154,14 @@ public class WXPayController {
         Product p = productService.getProductPrimaryKey(Long.parseLong(productArr[0]));
         String userId = p.getUserId();
 
+
         //根据productId获取产品信息(批量)
-        List<Product> list = productService.getProductsByIds(idList);
+        List<Product> list = new ArrayList<Product>();
+        for (Integer id : idList) {
+            list.add(productService.getProductPrimaryKey(id.longValue()));
+        }
+
+
         log.info("/user/auth接口list数量: " + list.size());
         // 订单编号
         String orderId = UUID.randomUUID().toString().replaceAll("-", "");

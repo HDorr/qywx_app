@@ -2,8 +2,10 @@ package com.ziwow.scrmapp.wechat.vo;
 
 public class MiniappSendSms {
 
+
   private String signature;
-  private String timeStamp;
+  private String timestamp;
+
 
   private int type;
   private String message;
@@ -17,12 +19,12 @@ public class MiniappSendSms {
     this.signature = signature;
   }
 
-  public String getTimeStamp() {
-    return timeStamp;
+  public String getTimestamp() {
+    return timestamp;
   }
 
-  public void setTimeStamp(String timeStamp) {
-    this.timeStamp = timeStamp;
+  public void setTimestamp(String timestamp) {
+    this.timestamp = timestamp;
   }
 
   public int getType() {

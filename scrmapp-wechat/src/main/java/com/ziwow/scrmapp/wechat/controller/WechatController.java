@@ -518,7 +518,7 @@ public class WechatController {
         logger.info("调用发送短信,参数为:", miniappSendSms.toString());
         Result result = new BaseResult();
 
-        boolean isLegal = SignUtil.checkSignature(miniappSendSms.getSignature(),miniappSendSms.getTimeStamp(), Constant.AUTH_KEY);
+        boolean isLegal = SignUtil.checkSignature(miniappSendSms.getSignature(),miniappSendSms.getTimestamp(), Constant.AUTH_KEY);
         if (!isLegal) {
             result.setReturnCode(Constant.FAIL);
             result.setReturnMsg(Constant.ILLEGAL_REQUEST);

@@ -168,7 +168,7 @@ public class WechatOrdersController {
                     if (pf != null) {
 
                       BigDecimal b = new BigDecimal(pf.getServiceFee());
-                        String tp = b.setScale(2, BigDecimal.ROUND_HALF_UP).divide(new BigDecimal(100)).toString();
+                        String tp = b.setScale(2, BigDecimal.ROUND_HALF_UP).toString();
                         //由于产品型号不是唯一值，通过主键ID + 型号拼接
                         ext =ext + " " + pf.getServiceFeeName() + " &金额:" + tp + " &关联订单号:" + pf.getScOrderNo();
                     }
