@@ -52,4 +52,6 @@ public interface ProductMapper {
     List<ProductVo> selectByOrdersIds(Long[] ordersIds);
 
     List<ProductFinishVo> getFinishedOrdersDetail(Long ordersId);
+
+    int countProductByUserIdWithoutStatus(@Param("userId") String userId);
 }

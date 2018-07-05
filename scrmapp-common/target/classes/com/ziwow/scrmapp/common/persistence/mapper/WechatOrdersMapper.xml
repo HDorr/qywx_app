@@ -28,6 +28,13 @@
         <result column="contactsTelephone" property="contactsTelephone" jdbcType="VARCHAR"/>
     </resultMap>
 
+    <resultMap id="BaseResultMapVo" type="com.ziwow.scrmapp.common.bean.vo.WechatOrderVo" extends="BaseResultMap">
+        <result column="attitude" property="is_attitude" jdbcType="VARCHAR"/>
+        <result column="profession" property="is_specialty" jdbcType="VARCHAR"/>
+        <result column="integrity" property="is_integrity" jdbcType="VARCHAR"/>
+        <result column="recommend" property="is_recommend" jdbcType="VARCHAR"/>
+    </resultMap>
+
     <resultMap id="orderMap" type="com.ziwow.scrmapp.common.bean.vo.WechatOrdersVo">
         <result column="id" property="id" jdbcType="BIGINT"/>
         <result column="ordersCode" property="ordersCode" jdbcType="VARCHAR"/>
@@ -328,8 +335,13 @@
       endTime = #{endTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=BIGINT}
   </update>
-    <select id="getWechatOrdersByCode" parameterType="java.lang.String" resultMap="BaseResultMap">
-        select * from t_wechat_orders where ordersCode = #{ordersCode}
+    <select id="getWechatOrdersVoByCode" parameterType="java.lang.String" resultMap="BaseResultMapVo">
+        select o.id,o.ordersCode,o.ordersNo,o.orderType,o.userId,o.qyhUserId,a.attitude,a.profession,a.integrity,a.recommend,o.status
+        FROM
+        t_wechat_orders o
+        left join t_qyh_user_appraisal a
+        on o.id = a.orderId
+        where o.ordersCode = #{ordersCode}
     </select>
 
 
@@ -826,11 +838,13 @@
         AND fans.is_cancel = 0
         AND orders.ordersCode = #{ordersCode}
     </select>
-    <select id="findBeforeSevenDaysOrders" resultMap="BaseResultMap">
+    <select id="findBeforeSevenDaysOrders" resultMap="BaseResultMapVo">
         SELECT
-        id,ordersCode,ordersNo,orderType,userId,qyhUserId
+        o.id,o.ordersCode,o.ordersNo,o.orderType,o.userId,o.qyhUserId,a.attitude,a.profession,a.integrity,a.recommend
         FROM
-        t_wechat_orders
+        t_wechat_orders o
+        join t_qyh_user_appraisal a
+        on o.id = a.orderId
         WHERE
         STATUS = 5
         AND endTime &lt;= DATE_ADD(SYSDATE(), INTERVAL - 7 DAY)

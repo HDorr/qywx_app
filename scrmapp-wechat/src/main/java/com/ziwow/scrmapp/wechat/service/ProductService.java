@@ -58,4 +58,6 @@ public interface ProductService {
     void syncProdBindToMiniApp(String userId, String productCode);
 
     void syncProdUnbindToMiniApp(String userId, String productCode);
+
+    boolean isFirstBindProduct(String userId);
 }
