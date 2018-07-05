@@ -172,6 +172,7 @@ public class WechatOrdersController {
                 // 向沁园小程序推送预约成功
                 String scOrderItemId = wechatOrdersParamExt.getScOrderItemId();
                 if (StringUtil.isNotBlank(scOrderItemId)){
+                    logger.info("预约信息同步到小程序:"+wechatUser.getMobilePhone()+" scOrderItemId="+scOrderItemId+"    ordersCode:"+wechatOrders.getOrdersCode());
                     wechatOrdersService.syncMakeAppointment(scOrderItemId,wechatOrders.getOrdersCode());
                 }
             } else {

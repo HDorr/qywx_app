@@ -105,7 +105,6 @@
             }
             //submit_data.uuid = JSON.stringify(submit_data)
             var needStringify = true
-          submit_data.scOrderItemId=scOrderItemId
             ajax.post(queryUrls.saveReserve,submit_data,needStringify)
                 .then(function(data){
                     if(data.returnCode !== ERR_OK){
@@ -242,7 +241,8 @@
             "description":$("#description").val(),
             "faultImage":"",
             "status":1,
-            "productIds":""
+            "productIds":"",
+            "scOrderItemId":""
         }
         var res = {}
         for(var key in templateData) {
@@ -267,6 +267,12 @@
                 case "contactsTelephone":
                     res.contactsTelephone = user_data.fixedTelephone
                     break
+              case "scOrderItemId":
+                let scOrderItemId = localStorage.getItem("scOrderItemId");
+                if (scOrderItemId!=null && scOrderItemId!=undefined && scOrderItemId!=''){
+                  res.scOrderItemId=scOrderItemId;
+                }
+                break
                 default :
                     res[key] = user_data[key] ? user_data[key] : templateData[key]
                     break;
