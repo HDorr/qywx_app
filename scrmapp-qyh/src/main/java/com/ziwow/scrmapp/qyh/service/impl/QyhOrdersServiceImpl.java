@@ -1160,7 +1160,7 @@ public class QyhOrdersServiceImpl implements QyhOrdersService {
         long timestamp = System.currentTimeMillis();
         params.put("ordersCode", ordersCode);
         params.put("timestamp", timestamp);
-        params.put("signature", MD5.toMD5(Constant.AUTH_KEY + timestamp));
+        params.put("signture", MD5.toMD5(Constant.AUTH_KEY + timestamp));
         String result = HttpClientUtils
             .postJson(finishmakeAppointment, net.sf.json.JSONObject.fromObject(params).toString());
         if (StringUtils.isNotBlank(result)) {

@@ -778,7 +778,7 @@ public class WechatOrdersServiceImpl implements WechatOrdersService {
         params.put("serviceFeeIds", serviceFeeIds);
         params.put("ordersCode",ordersCode);
         params.put("timestamp", timestamp);
-        params.put("signature", MD5.toMD5(Constant.AUTH_KEY + timestamp));
+        params.put("signture", MD5.toMD5(Constant.AUTH_KEY + timestamp));
         String result = HttpClientUtils.postJson(makeAppointmentUrl, JSONObject.fromObject(params).toString());
         if (StringUtils.isNotBlank(result)) {
             JSONObject o1 = JSONObject.fromObject(result);
@@ -801,7 +801,7 @@ public class WechatOrdersServiceImpl implements WechatOrdersService {
         params.put("oldOrdersCode", oldOrdersCode);
         params.put("newOrdersCode", newOrdersCode);
         params.put("timestamp", timestamp);
-        params.put("signature", MD5.toMD5(Constant.AUTH_KEY + timestamp));
+        params.put("signture", MD5.toMD5(Constant.AUTH_KEY + timestamp));
         String result = HttpClientUtils.postJson(updatemakeAppointmentUrl, JSONObject.fromObject(params).toString());
         if (StringUtils.isNotBlank(result)) {
             JSONObject o1 = JSONObject.fromObject(result);
@@ -822,7 +822,7 @@ public class WechatOrdersServiceImpl implements WechatOrdersService {
         long timestamp = System.currentTimeMillis();
         params.put("ordersCode", ordersCode);
         params.put("timestamp", timestamp);
-        params.put("signature", MD5.toMD5(Constant.AUTH_KEY + timestamp));
+        params.put("signture", MD5.toMD5(Constant.AUTH_KEY + timestamp));
         String result = HttpClientUtils.postJson(cancelmakeAppointmentUrl, JSONObject.fromObject(params).toString());
         if (StringUtils.isNotBlank(result)) {
             JSONObject o1 = JSONObject.fromObject(result);

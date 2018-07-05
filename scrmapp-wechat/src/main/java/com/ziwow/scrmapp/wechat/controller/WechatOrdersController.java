@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import java.util.UUID;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -189,8 +190,10 @@ public class WechatOrdersController {
                 wechatOrdersParamExt.setTel(wechatOrdersParamExt.getContactsTelephone().replace("-", ""));
             }
 
-            // 调用沁园接口，生成受理单
-            result = wechatOrdersService.geneatorCode(wechatOrdersParamExt);
+            // fixme 调用沁园接口，生成受理单   隐藏，随机生成csm单号
+//            result = wechatOrdersService.geneatorCode(wechatOrdersParamExt);
+            result.setReturnCode(Constant.SUCCESS);
+            result.setData(UUID.randomUUID());
             if (Constant.SUCCESS != result.getReturnCode()) {
                 return result;
             }

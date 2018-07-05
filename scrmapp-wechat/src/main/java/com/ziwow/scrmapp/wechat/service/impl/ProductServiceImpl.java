@@ -586,7 +586,7 @@ public class ProductServiceImpl implements ProductService {
         Map<String, Object> params = new HashMap<String, Object>();
         long timestamp = System.currentTimeMillis();
         params.put("timestamp", timestamp);
-        params.put("signature", MD5.toMD5(Constant.AUTH_KEY + timestamp));
+        params.put("signture", MD5.toMD5(Constant.AUTH_KEY + timestamp));
         params.put("unionId", wechatFans.getUnionId());
         params.put("productCode", productCode);
         params.put("isFirst",isFirst);
@@ -615,7 +615,7 @@ public class ProductServiceImpl implements ProductService {
         Map<String, Object> params = new HashMap<String, Object>();
         long timestamp = System.currentTimeMillis();
         params.put("timestamp", timestamp);
-        params.put("signature", MD5.toMD5(Constant.AUTH_KEY + timestamp));
+        params.put("signture", MD5.toMD5(Constant.AUTH_KEY + timestamp));
         params.put("unionId", wechatFans.getUnionId());
         params.put("productCode", productCode);
         String result = HttpClientUtils.postJson(delProdBindUrl, net.sf.json.JSONObject.fromObject(params).toString());

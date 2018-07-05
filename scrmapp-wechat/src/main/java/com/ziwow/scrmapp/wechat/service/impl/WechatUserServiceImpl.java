@@ -206,7 +206,7 @@ public class WechatUserServiceImpl implements WechatUserService {
         Map<String, Object> params = new HashMap<String, Object>();
         long timestamp = System.currentTimeMillis();
         params.put("timestamp", timestamp);
-        params.put("signature", MD5.toMD5(Constant.AUTH_KEY + timestamp));
+        params.put("signture", MD5.toMD5(Constant.AUTH_KEY + timestamp));
         params.put("mobile", mobile);
         params.put("unionId", unionId);
         String result = HttpClientUtils.postJson(syncUserUrl, JSONObject.fromObject(params).toString());
