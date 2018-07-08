@@ -284,7 +284,7 @@
         if(!data.productIds.length)     return "请至少选择一个产品";
         if(!data.orderTime)             return "请选择上门时间";
         if(!data.contacts)              return "请选择有效地址";
-        if(!data.description)           return "请填写安装描述";
+        // if(!data.description)           return "请填写安装描述";
         return null
     }
     function _getProductsIds(products){
