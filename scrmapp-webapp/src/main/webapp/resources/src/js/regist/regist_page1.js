@@ -99,8 +99,16 @@ var registRootPath = getRootPath();
             e.preventDefault();
             var code = $("#confirmCode").val();
             telNum = $("#phone_number").val().trim();
+
+            let privateContactChecked = $("#cb_private_contact").prop("checked");
+
+            if ( !privateContactChecked ){
+              warnFade("warn_text", 3000, "请阅读并同意《沁园隐私政策》")
+              return;
+            }
+
             //验证验证码格式
-            if (!reg.cfCode_reg.test(code) || !reg.phoneNum_reg.test(telNum)) {
+            if (!reg.cfCode_reg.test(code) || !reg.phoneNum_reg.test(telNum) ) {
                 warnFade("warn_text", 3000, "验证码或手机号错误")
             } else {
                 //提交

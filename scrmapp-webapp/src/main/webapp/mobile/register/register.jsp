@@ -40,7 +40,11 @@
                         <p id="warn_text"></p>
                     </div>
                     <button class="bigBtn qyBlue" id="nextStepBtn">下一步</button>
-                    <div class="private_contact">已阅读并同意<a href="${f_ctxpath}/scrmapp/consumer/user/filter/register/private_contact" style="color: #aaa"><u>《沁园隐私政策》</u></a></div>
+                    <div    class="private_contact">
+                        <input id="cb_private_contact" type="checkbox" >
+                        已阅读并同意
+                        <a href="${f_ctxpath}/scrmapp/consumer/user/filter/register/private_contact" style="color: #aaa"><u>《沁园隐私政策》</u></a>
+                    </div>
                 </section>
 
                 <section id="step2Box" class="hideStep">
