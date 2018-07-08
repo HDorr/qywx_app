@@ -209,9 +209,12 @@ public class ProductController {
             product.setStatus(1);
             product.setCreateTime(new Date());
             product.setFilterRemind(SystemConstants.REMIND);
+
+            boolean isFirst=productService.isFirstBindProduct(userId);
+
             productService.save(product);
             // 绑定产品成功后异步推送给小程序
-            productService.syncProdBindToMiniApp(userId, product.getProductCode());
+            productService.syncProdBindToMiniApp(userId, product.getProductCode(),isFirst);
 
             // 产品绑定后发送模板消息
             productService.productBindTemplateMsg(product);

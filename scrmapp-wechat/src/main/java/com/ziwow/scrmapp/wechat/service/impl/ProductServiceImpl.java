@@ -196,7 +196,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
-    private void saveFilterLevel(Long levelId, String levelName) {
+    public void saveFilterLevel(Long levelId, String levelName) {
         filterLevelMapper.insert(new FilterLevel(levelId, levelName));
 
     }
@@ -569,7 +569,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Async
     @Override
-    public void syncProdBindToMiniApp(String userId, String productCode) {
+    public void syncProdBindToMiniApp(String userId, String productCode, boolean isFirst) {
         // 异步推送给小程序对接方
         WechatFans wechatFans = wechatFansMapper.getWechatFansByUserId(userId);
         String unionId = wechatFans.getUnionId();
@@ -583,6 +583,7 @@ public class ProductServiceImpl implements ProductService {
         params.put("signture", MD5.toMD5(Constant.AUTH_KEY + timestamp));
         params.put("unionId", wechatFans.getUnionId());
         params.put("productCode", productCode);
+        params.put("isFirst",isFirst);
         LOG.info("绑定产品信息同步到小程序请求参数:{}", JSON.toJSONString(params));
         String result = HttpClientUtils.postJson(syncProdBindUrl, net.sf.json.JSONObject.fromObject(params).toString());
         if (org.apache.commons.lang.StringUtils.isNotBlank(result)) {
@@ -620,6 +621,11 @@ public class ProductServiceImpl implements ProductService {
                 LOG.info("解绑产品信息同步到小程序失败,moreInfo:{}", o1.getString("moreInfo"));
             }
         }
+    }
+
+    @Override
+    public boolean isFirstBindProduct(String userId) {
+        return productMapper.countProductByUserIdWithoutStatus(userId)==0;
     }
 
     /*
@@ -667,7 +673,7 @@ public class ProductServiceImpl implements ProductService {
             LOG.info("checkProductIsTrue---------------------" + ((SecurityVo) result.getData()).getProdName());
             LOG.info("checkProductIsTrue----------------" + ((SecurityVo) result.getData()).getBarCode());
         } catch (Exception e) {
-            LOG.error(e.getMessage());
+            LOG.error(e.getMessage(),e);
             result.setReturnMsg("查询失败!");
             result.setReturnCode(Constant.FAIL);
         }

@@ -1,6 +1,7 @@
 package com.ziwow.scrmapp.wechat.schedule;
 
 import com.ziwow.scrmapp.common.bean.pojo.EvaluateParam;
+import com.ziwow.scrmapp.common.bean.vo.WechatOrderVo;
 import com.ziwow.scrmapp.common.constants.Constant;
 import com.ziwow.scrmapp.common.constants.SystemConstants;
 import com.ziwow.scrmapp.common.persistence.entity.QyhUserAppraisal;
@@ -36,8 +37,8 @@ public class AutoAppraisalScheduledTask {
         }
         logger.info("自动评论定时任务开始......");
         //查询7天前没完成评价的工单
-        List<WechatOrders> ordersList = wechatOrdersMapper.findBeforeSevenDaysOrders();
-        for (WechatOrders wechatOrders : ordersList) {
+        List<WechatOrderVo> ordersList = wechatOrdersMapper.findBeforeSevenDaysOrders();
+        for (WechatOrderVo wechatOrders : ordersList) {
             try {
                 //首先调用沁园同步接口
                 EvaluateParam evaluateParam = new EvaluateParam();
@@ -52,6 +53,10 @@ public class AutoAppraisalScheduledTask {
                 evaluateParam.setNumber_type(orderType);
                 evaluateParam.setEvaluate_note("");
                 evaluateParam.setNumber(wechatOrders.getOrdersNo());
+                evaluateParam.setIs_attitude(wechatOrders.getIs_attitude());
+                evaluateParam.setIs_specialty(wechatOrders.getIs_specialty());
+                evaluateParam.setIs_integrity(wechatOrders.getIs_integrity());
+                evaluateParam.setIs_recommend(wechatOrders.getIs_recommend());
                 Result invokeResult = wechatUserService.invokeCssEvaluate(evaluateParam);
 
                 if (Constant.SUCCESS == invokeResult.getReturnCode()) {

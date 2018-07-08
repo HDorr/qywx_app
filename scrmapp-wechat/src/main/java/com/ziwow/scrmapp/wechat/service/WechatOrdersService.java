@@ -8,10 +8,7 @@ import com.ziwow.scrmapp.common.bean.pojo.DispatchDotParam;
 import com.ziwow.scrmapp.common.bean.pojo.DispatchMasterParam;
 import com.ziwow.scrmapp.common.bean.pojo.DispatchOrderParam;
 import com.ziwow.scrmapp.common.bean.pojo.WechatOrdersParam;
-import com.ziwow.scrmapp.common.bean.vo.ProductVo;
-import com.ziwow.scrmapp.common.bean.vo.QyhUserVo;
-import com.ziwow.scrmapp.common.bean.vo.WechatOrderMsgVo;
-import com.ziwow.scrmapp.common.bean.vo.WechatOrdersVo;
+import com.ziwow.scrmapp.common.bean.vo.*;
 import com.ziwow.scrmapp.common.exception.ParamException;
 import com.ziwow.scrmapp.common.persistence.entity.WechatOrders;
 import com.ziwow.scrmapp.common.result.Result;
@@ -21,6 +18,8 @@ import com.ziwow.scrmapp.common.result.Result;
  */
 public interface WechatOrdersService {
     WechatOrders getWechatOrdersByCode(String ordersCode);
+
+    WechatOrderVo getWechatOrdersVoByCode(String ordersCode);
 
 
     /**
@@ -38,7 +37,7 @@ public interface WechatOrdersService {
     List<ProductVo> getProductInfoById(String productIds);
 
     //新增一单多产品接口
-    WechatOrders saveOrdersMultiProduct(WechatOrders wechatOrders,String productIds);
+    WechatOrders saveOrdersMultiProduct(WechatOrders wechatOrders, String productIds);
 
     List<WechatOrdersVo> findByUserId(String userId);
     WechatOrdersVo getVoByOrdersCode(String ordersCode);

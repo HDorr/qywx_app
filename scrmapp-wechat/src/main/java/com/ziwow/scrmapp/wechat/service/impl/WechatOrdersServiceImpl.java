@@ -108,7 +108,12 @@ public class WechatOrdersServiceImpl implements WechatOrdersService {
 
     @Override
     public WechatOrders getWechatOrdersByCode(String ordersCode) {
-        return wechatOrdersMapper.getWechatOrdersByCode(ordersCode);
+        return wechatOrdersMapper.getWechatOrdersVoByCode(ordersCode);
+    }
+
+    @Override
+    public WechatOrderVo getWechatOrdersVoByCode(String ordersCode) {
+        return wechatOrdersMapper.getWechatOrdersVoByCode(ordersCode);
     }
 
     /**
@@ -276,7 +281,7 @@ public class WechatOrdersServiceImpl implements WechatOrdersService {
                     for (ProductAppealVo appealVo : appealList) {
                         //判断工单号在数据库是否存在，如果存在。修改工单所属用户
                         String ordersCode = appealVo.getAppealNo();
-                        WechatOrders wechatOrders = wechatOrdersMapper.getWechatOrdersByCode(ordersCode);
+                        WechatOrders wechatOrders = wechatOrdersMapper.getWechatOrdersVoByCode(ordersCode);
                         List<AppealProduct> products = appealVo.getProducts();
                         if (null == wechatOrders) {
                             Long orderId = null;
