@@ -93,6 +93,23 @@
   display: block;
   margin: 0 auto;
   margin-top: 0.73333333rem;
+  color: #ccc;
+  background-color: #8a8a8a;
+  width: 6.933333rem;
+  height: 1.2rem;
+  border-radius: 0.6rem;
+  font-size: 0.48rem;
+}
+.container .bigBtnAbleClick {
+  display: block;
+  margin: 0 auto;
+  margin-top: 0.73333333rem;
+  color: #fff;
+  background-color: #666666;
+  width: 6.933333rem;
+  height: 1.2rem;
+  border-radius: 0.6rem;
+  font-size: 0.48rem;
 }
 .container #nextStepBtn {
   margin-top: 0.3rem;
@@ -265,3 +282,4 @@
   font-size: 0.3rem;
   color: #aaa;
 }
+/*# sourceMappingURL=regist_page.css.map */

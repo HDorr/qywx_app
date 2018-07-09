@@ -103,7 +103,7 @@ var registRootPath = getRootPath();
             let privateContactChecked = $("#cb_private_contact").prop("checked");
 
             if ( !privateContactChecked ){
-              warnFade("warn_text", 3000, "请阅读并同意《沁园隐私政策》")
+              // warnFade("warn_text", 3000, "请阅读并同意《沁园隐私政策》")
               return;
             }
 
@@ -303,6 +303,23 @@ var registRootPath = getRootPath();
     }
 
     function clickEvents() {
+
+          $('input:checkbox').click(function () {
+            this.blur();
+            this.focus();
+          });
+          $("#cb_private_contact").change(function() {
+            let ableClick = $("#cb_private_contact").prop("checked");
+            if (ableClick) {
+                $("#nextStepBtn").removeClass("bigBtn")
+                $("#nextStepBtn").addClass("bigBtnAbleClick")
+            }else {
+              $("#nextStepBtn").removeClass("bigBtnAbleClick")
+              $("#nextStepBtn").addClass("bigBtn")
+            }
+          });
+
+
         $(".headerUl").on('click', "li:not(:eq(2))", function(e) {
             if (!$(this).text()) {
                 return;
