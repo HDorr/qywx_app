@@ -281,5 +281,19 @@
   margin-top: 0.3rem;
   font-size: 0.3rem;
   color: #aaa;
+  display: flex;
+  padding-left: 40px;
+}
+.checkBox {
+  height: 0.3rem;
+  width: 0.3rem;
+  border-radius: 4px;
+  border: 1px solid #8a8a8a;
+  margin-right: 4px;
+}
+.checkBox.checked {
+  border: none;
+  background: url('../../images/icons/checkBox.png') no-repeat center center;
+  background-size: cover;
 }
 /*# sourceMappingURL=regist_page.css.map */

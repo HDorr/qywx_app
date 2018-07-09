@@ -100,7 +100,7 @@ var registRootPath = getRootPath();
             var code = $("#confirmCode").val();
             telNum = $("#phone_number").val().trim();
 
-            let privateContactChecked = $("#cb_private_contact").prop("checked");
+            let privateContactChecked = $("#cb_private_contact").hasClass("checked");
 
             if ( !privateContactChecked ){
               // warnFade("warn_text", 3000, "请阅读并同意《沁园隐私政策》")
@@ -304,12 +304,9 @@ var registRootPath = getRootPath();
 
     function clickEvents() {
 
-          $('input:checkbox').click(function () {
-            this.blur();
-            this.focus();
-          });
-          $("#cb_private_contact").change(function() {
-            let ableClick = $("#cb_private_contact").prop("checked");
+          $("#cb_private_contact").on('click',function() {
+            $("#cb_private_contact").toggleClass('checked')
+            let ableClick = $("#cb_private_contact").hasClass("checked");
             if (ableClick) {
                 $("#nextStepBtn").removeClass("bigBtn")
                 $("#nextStepBtn").addClass("bigBtnAbleClick")
