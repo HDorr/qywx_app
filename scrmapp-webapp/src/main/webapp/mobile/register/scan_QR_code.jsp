@@ -8,6 +8,7 @@
     <meta name="x5-fullscreen" content="true">
     <meta name="full-screen" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <script type="text/javascript" src="https://res.wx.qq.com/open/js/jweixin-1.3.2.js"></script>
     <style>
     .main-layer{
       max-width: 750px;
@@ -31,10 +32,20 @@
   </head>
   <body>
     <div class="main-layer">
-      <p class="text">您还不是粉丝哦，长按钮下方二维码进行关注</p>
+      <p class="text" id="qr"></p>
       <div class="img-box">
         <img src="${f_ctxpath}/resources/src/images/qy_QR_code.jpg${f_ver}" class="qrCode">
       </div>
     </div>
   </body>
+  <script>
+      wx.miniProgram.getEnv(function (res) {
+        var elem = document.getElementById('qr');
+        if(true===res.miniprogram){
+          elem.innerHTML="您还不是粉丝哦，长按二维码保存至本地后，扫描二维码关注沁园即可继续预约";
+        }else{
+          elem.innerHTML="您还不是粉丝哦，长按钮下方二维码进行关注";
+        }
+      })
+  </script>
 </html>
