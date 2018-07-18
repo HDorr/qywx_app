@@ -69,7 +69,7 @@ var pageUrls = IS_DEVENV ?
 }
 
 
-var queryUrls = IS_DEVENV ? 
+var queryUrls = IS_DEVENV ?
 {   //开发测试用
     getProductsList:"/resources/fakeJson/productLists.json",
     queryAddrList: "/resources/src/js/addressManage/fakeJson/addressList.json",
@@ -117,7 +117,14 @@ var queryUrls = IS_DEVENV ?
     qyhQueryRefuseOrder: rootPath + "/scrmapp/qyhuser/orders/refuse", //师傅侧拒绝工单
     qyhQueryChangeOrder: rootPath + "/scrmapp/qyhuser/orders/change/ordertime", //师傅侧更改预约时间
     qyhQueryUFinedOrderDetail: rootPath + "/scrmapp/qyhuser/orders/pending/detail", //获取待处理工单详情
-    qyhQueryFinedOrderDetail: rootPath + "/scrmapp/qyhuser/orders/finished/detail" //获取已完成工单详情
+    qyhQueryFinedOrderDetail: rootPath + "/scrmapp/qyhuser/orders/finished/detail", //获取已完成工单详情
+
+
+}
+
+var confirmUrls = {
+    qyhConfirmReceive:orderType => rootPath+`/scrmapp/qyhuser/orders/confirm/receive/${orderType}`, //师傅确认接单(1.安装单,2.维修单,3.保养单)
+    qyhConfirmArrive:orderType => rootPath+`/scrmapp/qyhuser/orders/confirm/arrive/${orderType}` //师傅确认到达现场(1.安装单,2.维修单,3.保养单)
 }
 
 //跳转至一键预约页面
@@ -138,8 +145,8 @@ function isWeiXin() {
 
 /**
  * 将url，data拼接成  http://baidu.com?key1=value1&key2=value2
- * @param {*} url 
- * @param {*} data 
+ * @param {*} url
+ * @param {*} data
  */
 function getParamStr (url,data,isEscape) {
     var isEscape = isEscape || false
@@ -224,15 +231,15 @@ var ajax = {
         var data = data || {}
         var def = $.Deferred()
         $.get(url,data).then(function(data){
-            setTimeout(function(){ 
+            setTimeout(function(){
                 $.hideLoading()
                 def.resolve(data)
-            },51)           
+            },51)
         }).fail(function(err){
             setTimeout(function(){
                 $.hideLoading()
                 def.reject(err)
-            },51)          
+            },51)
         })
         return def.promise()
     },
@@ -251,12 +258,12 @@ var ajax = {
             setTimeout(function(){
                 $.hideLoading()
                 def.resolve(data)
-            },51)   
+            },51)
         }).fail(function(err){
             setTimeout(function(){
                 $.hideLoading()
-                def.reject(err) 
-            },51)  
+                def.reject(err)
+            },51)
         })
         return def.promise()
     }
@@ -266,7 +273,7 @@ var alertMsg = {
     error :function(error){
         setTimeout(function(){
             $.alert(error.message || error.errMessage || error.statusText || error.returnMsg || '网络错误',"出错啦！")
-        },35)     
+        },35)
     }
 }
 
@@ -766,7 +773,7 @@ if (typeof Object.assign != 'function') {
       if (target == null) {
         throw new TypeError('Cannot convert undefined or null to object');
       }
-  
+
       target = Object(target);
       for (var index = 1; index < arguments.length; index++) {
         var source = arguments[index];

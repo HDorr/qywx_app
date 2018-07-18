@@ -128,6 +128,89 @@ function changeOrder(el) {
     location.href = url;
 }
 
+//确认工单流程
+function cofirmOrder(el){
+    var $el = $(el);
+    var $confirmStatus = $el.data('confirmstatus');
+    var orderType = $el.data('ordertype');
+    var params = {
+        userId: glData.userId,
+        ordersCode: $el.data("orderscode"),
+        ordersId: $el.data("ordersid"),
+        contacts: $el.data("contacts"),
+    }
+    if($confirmStatus === 1){
+        simpleConfirm($el,function () {
+            //工单状态需上传CSM
+            ajax.post(confirmUrls.qyhConfirmReceive(orderType),params).then(function (data) {
+                if(data.returnCode == 1){
+                    simpleAlert(data.returnMsg)
+                    hideAndShow($el);
+                }else {
+                    simpleAlert(data.returnMsg)
+                }
+            });
+       });
+    }else if($confirmStatus === 2){
+        simpleConfirm($el,function () {
+            //工单状态需上传CSM
+            ajax.post(confirmUrls.qyhConfirmArrive(orderType),params).then(function (data) {
+                if(data.returnCode == 1){
+                    simpleAlert(data.returnMsg);
+                    hideAndShow($el);
+                }else {
+                    simpleAlert(data.returnMsg)
+                }
+            });
+        });
+    }else if($confirmStatus === 3){
+        completeOrder(el);
+        //接口
+    }else{
+        alert("按钮功能不存在");
+    }
+}
+
+//按钮切换
+function hideAndShow($el) {
+    var $confirmStatus = $el.data('confirmstatus');
+    $confirmStatus++;
+    if($confirmStatus == 2){
+        $el.html("确认到达");
+        $el.data('confirmstatus',$confirmStatus);
+    }else if($confirmStatus == 3){
+        $el.html("完工提交");
+        $el.data('confirmstatus',$confirmStatus);
+    }
+}
+
+//简单确认框
+function simpleConfirm(h,callback){
+    var v = $(h).html();
+    if($(h).prop("id") === "arrive"){
+        v += "现场";
+    }
+    $.confirm({
+        title: '',
+        text: v +'?',
+        onOK: function () {
+            callback();
+        },
+        onCancel: function () {
+            return;
+        }
+    })
+}
+
+//简单弹框
+function simpleAlert(msg) {
+    $.alert({
+        title: '',
+        text: msg,
+        onOK:null
+    })
+}
+
 function gotoDetail(el) {
     var params = {ordersCode:$(el).data('orderscode'),userId:glData.userId,isChange:'0'}
     var url =  getParamStr(pageUrls.unfinishedWorkOrderDetail,params) 

@@ -472,7 +472,8 @@ public class ProductController {
         url = url.replace("{COMPONENT_APPID}", component_appid);
 
         String contextPath = request.getContextPath();
-        String basePath = "https" + "://" + request.getServerName() + contextPath;
+        String basePath = "http" + "://" + request.getServerName() + contextPath;
+//        String basePath = "https" + "://" + request.getServerName() + contextPath;
 //        String basePath = request.getScheme() +"://" + request.getServerName() + contextPath;
 
         

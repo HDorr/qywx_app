@@ -4,11 +4,17 @@ import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.ziwow.scrmapp.common.persistence.entity.*;
+import com.ziwow.scrmapp.common.persistence.mapper.WechatOrdersRecordMapper;
+import com.ziwow.scrmapp.qyh.constants.QyhOrderBtnStatus;
+import com.ziwow.scrmapp.qyh.constants.QyhOrderType;
+import com.ziwow.scrmapp.qyh.controller.params.QyhConfirmParams;
 import org.apache.commons.codec.Charsets;
 import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
@@ -16,11 +22,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.alibaba.druid.util.StringUtils;
@@ -34,10 +36,6 @@ import com.ziwow.scrmapp.common.bean.vo.WechatOrdersVo;
 import com.ziwow.scrmapp.common.bean.vo.WechatUserMsgVo;
 import com.ziwow.scrmapp.common.constants.Constant;
 import com.ziwow.scrmapp.common.constants.SystemConstants;
-import com.ziwow.scrmapp.common.persistence.entity.Filter;
-import com.ziwow.scrmapp.common.persistence.entity.MaintainPrice;
-import com.ziwow.scrmapp.common.persistence.entity.Product;
-import com.ziwow.scrmapp.common.persistence.entity.QyhUser;
 import com.ziwow.scrmapp.common.persistence.mapper.WechatOrdersMapper;
 import com.ziwow.scrmapp.common.result.BaseResult;
 import com.ziwow.scrmapp.common.result.Result;
@@ -78,6 +76,8 @@ public class QyhUserController {
     private QyhNoticeService qyhNoticeService;
     @Autowired
     private MobileService mobileService;
+    @Autowired
+    private WechatOrdersRecordMapper wechatOrdersRecordMapper;
 
     /**
      * 企业号个人中心数据
@@ -415,6 +415,100 @@ public class QyhUserController {
 
 
     /**
+     * 确认接单
+     *
+     * @param orderType
+     */
+    @RequestMapping(value = "/orders/confirm/receive/{orderType}", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+    @ResponseBody
+    public Result receive(@PathVariable String orderType, QyhConfirmParams params) {
+        Result result = new BaseResult();
+        if (StringUtils.isEmpty(orderType)) {
+            result.setReturnCode(Constant.FAIL);
+            result.setReturnMsg("确认接单失败，请稍后尝试");
+            return result;
+        }
+        int type = Integer.parseInt(orderType);
+        if (type == QyhOrderType.INSTALL_ORDER) {
+            //安装单确认
+            System.out.println("安装单逻辑");
+        } else if (type == QyhOrderType.REPAIR_ORDER) {
+            //维修单确认
+            System.out.println("维修单逻辑");
+        } else if (type == QyhOrderType.KEEP_ORDER) {
+            //保养单确认
+            System.out.println("保养单逻辑");
+        } else {
+            throw new RuntimeException("没有对应的工单类型");
+        }
+        //在此调用CSM接口
+
+        //给用户发送短信
+//        String msgContent = "亲爱的"+"，工程师已接单，请确保在预约的时间内家中有人，谢谢！";
+//        String engineerPhone = completeParam.getQyhUserPhone();
+//        mobileService.sendContentByEmay(engineerPhone, msgContent, Constant.CUSTOMER);
+
+        // 预约详情查看详情
+        WechatOrdersRecord wechatOrdersRecord = new WechatOrdersRecord();
+        wechatOrdersRecord.setOrderId(Long.parseLong(params.getOrdersId()));
+        wechatOrdersRecord.setRecordTime(new Date());
+        wechatOrdersRecord.setRecordContent("服务工程师已接单");
+        wechatOrdersRecordMapper.insert(wechatOrdersRecord);
+
+        //更新按钮的状态(确认接单-->确认到达)
+        wechatOrdersMapper.updateBtnStatus(QyhOrderBtnStatus.ARRIVE, params.getOrdersCode());
+
+        result.setReturnCode(Constant.SUCCESS);
+        result.setReturnMsg("您已成功确认接单");
+        return result;
+    }
+
+    /**
+     * 确认到达
+     *
+     * @param orderType
+     */
+    @RequestMapping(value = "/orders/confirm/arrive/{orderType}", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+    @ResponseBody
+    public Result arrive(@PathVariable String orderType, QyhConfirmParams params) {
+        Result result = new BaseResult();
+        if (StringUtils.isEmpty(orderType)) {
+            result.setReturnCode(Constant.FAIL);
+            result.setReturnMsg("确认到达现场失败，请稍后尝试");
+            return result;
+        }
+        int type = Integer.parseInt(orderType);
+        if (type == QyhOrderType.INSTALL_ORDER) {
+            //安装单确认
+            System.out.println("安装单逻辑");
+        } else if (type == QyhOrderType.REPAIR_ORDER) {
+            //维修单确认
+            System.out.println("维修单逻辑");
+        } else if (type == QyhOrderType.KEEP_ORDER) {
+            //保养单确认
+            System.out.println("保养单逻辑");
+        } else {
+            throw new RuntimeException("没有对应的工单类型");
+        }
+        //在此调用CSM接口
+
+        //给用户发送短信
+        //更新按钮的状态(确认到达-->完工提交)
+        wechatOrdersMapper.updateBtnStatus(QyhOrderBtnStatus.COMPLETE, params.getOrdersCode());
+
+        // 预约详情查看详情
+        WechatOrdersRecord wechatOrdersRecord = new WechatOrdersRecord();
+        wechatOrdersRecord.setOrderId(Long.parseLong(params.getOrdersId()));
+        wechatOrdersRecord.setRecordTime(new Date());
+        wechatOrdersRecord.setRecordContent("服务工程师已上门");
+        wechatOrdersRecordMapper.insert(wechatOrdersRecord);
+
+        result.setReturnCode(Constant.SUCCESS);
+        result.setReturnMsg("您已成功确认到达现场");
+        return result;
+    }
+
+    /**
      * 安装单完工
      *
      * @param request
@@ -443,7 +537,7 @@ public class QyhUserController {
                 return result;
             }
             Object appealInstallNoObj = result.getData();
-            if (appealInstallNoObj==null || StringUtils.isEmpty(appealInstallNoObj.toString())) {
+            if (appealInstallNoObj == null || StringUtils.isEmpty(appealInstallNoObj.toString())) {
                 throw new RuntimeException("工单提交失败!");
             }
             int count = qyhOrdersService.getProductStatus(completeParam.getOrdersId());
@@ -453,12 +547,12 @@ public class QyhUserController {
 //            }
         } catch (RuntimeException ex) {
             logger.error("师傅点击工单[{}]完工操作出现异常,原因:[{}]", ordersCode, ex);
-            logger.error("师傅点击工单完工操作失败:",ex);
+            logger.error("师傅点击工单完工操作失败:", ex);
             result.setReturnCode(Constant.FAIL);
             result.setReturnMsg(ex.getMessage());
         } catch (Exception e) {
             logger.error("师傅点击工单[{}]完工操作出现异常,原因:[{}]", ordersCode, e);
-            logger.error("师傅点击工单完工操作失败:",e);
+            logger.error("师傅点击工单完工操作失败:", e);
             result.setReturnCode(Constant.FAIL);
             result.setReturnMsg("请求出错,请稍后再试!");
         }

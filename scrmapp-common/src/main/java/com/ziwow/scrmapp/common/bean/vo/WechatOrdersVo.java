@@ -42,6 +42,8 @@ public class WechatOrdersVo {
     private String maintType;
     private String buyFilter;
     private String contactsTelephone;
+    private Integer confirmStatus;//按钮状态
+    private String confirmContent;//按钮内容
     
     //查看完工详情时使用
     private List<ProductFinishVo> productFinish = new ArrayList<ProductFinishVo>();
@@ -301,4 +303,28 @@ public class WechatOrdersVo {
 	public void setContactsTelephone(String contactsTelephone) {
 		this.contactsTelephone = contactsTelephone;
 	}
+
+    public Integer getConfirmStatus() {
+        return confirmStatus;
+    }
+
+    public void setConfirmStatus(Integer confirmStatus) {
+        this.confirmStatus = confirmStatus;
+    }
+
+    public String getConfirmContent() {
+        if(this.getConfirmStatus() == null || this.getConfirmStatus().intValue() == 0 || this.getConfirmStatus().intValue() == 1){
+            return "确认接单";
+        }else if(this.getConfirmStatus().intValue() == 2){
+            return "确认到达";
+        }else if(this.getConfirmStatus().intValue() == 3){
+            return "完工提交";
+        }else{
+            return "未知功能";
+        }
+    }
+
+    public void setConfirmContent(String confirmContent) {
+        this.confirmContent = confirmContent;
+    }
 }
