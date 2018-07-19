@@ -449,11 +449,11 @@ public class QyhUserController {
 //        mobileService.sendContentByEmay(engineerPhone, msgContent, Constant.CUSTOMER);
 
         // 预约详情查看详情
-        WechatOrdersRecord wechatOrdersRecord = new WechatOrdersRecord();
-        wechatOrdersRecord.setOrderId(Long.parseLong(params.getOrdersId()));
-        wechatOrdersRecord.setRecordTime(new Date());
-        wechatOrdersRecord.setRecordContent("服务工程师已接单");
-        wechatOrdersRecordMapper.insert(wechatOrdersRecord);
+//        WechatOrdersRecord wechatOrdersRecord = new WechatOrdersRecord();
+//        wechatOrdersRecord.setOrderId(Long.parseLong(params.getOrdersId()));
+//        wechatOrdersRecord.setRecordTime(new Date());
+//        wechatOrdersRecord.setRecordContent("服务工程师已接单");
+//        wechatOrdersRecordMapper.insert(wechatOrdersRecord);
 
         //更新按钮的状态(确认接单-->确认到达)
         wechatOrdersMapper.updateBtnStatus(QyhOrderBtnStatus.ARRIVE, params.getOrdersCode());
@@ -471,6 +471,19 @@ public class QyhUserController {
     @RequestMapping(value = "/orders/confirm/arrive/{orderType}", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
     @ResponseBody
     public Result arrive(@PathVariable String orderType, QyhConfirmParams params) {
+
+        if(StringUtils.isEmpty(params.getUserId())){
+            logger.error("userId为空");
+            throw new RuntimeException("userId为空");
+        }
+        String qyhUserId = null;
+        try {
+            qyhUserId = new String(Base64.decode(params.getUserId()));
+        } catch (UnsupportedEncodingException e) {
+            logger.error("userId解码失败");
+            throw new RuntimeException("userId解码失败");
+        }
+
         Result result = new BaseResult();
         if (StringUtils.isEmpty(orderType)) {
             result.setReturnCode(Constant.FAIL);
@@ -493,15 +506,18 @@ public class QyhUserController {
         //在此调用CSM接口
 
         //给用户发送短信
-        //更新按钮的状态(确认到达-->完工提交)
-        wechatOrdersMapper.updateBtnStatus(QyhOrderBtnStatus.COMPLETE, params.getOrdersCode());
 
-        // 预约详情查看详情
+        // 获取企业号用户
+        QyhUser qyhUser = qyhUserService.getQyhUserByUserIdAndCorpId(qyhUserId, corpId);
+
         WechatOrdersRecord wechatOrdersRecord = new WechatOrdersRecord();
         wechatOrdersRecord.setOrderId(Long.parseLong(params.getOrdersId()));
         wechatOrdersRecord.setRecordTime(new Date());
-        wechatOrdersRecord.setRecordContent("服务工程师已上门");
+        wechatOrdersRecord.setRecordContent("服务工程师"+qyhUser.getName()+"已上门");
         wechatOrdersRecordMapper.insert(wechatOrdersRecord);
+
+        //更新按钮的状态(确认到达-->完工提交)
+        wechatOrdersMapper.updateBtnStatus(QyhOrderBtnStatus.COMPLETE, params.getOrdersCode());
 
         result.setReturnCode(Constant.SUCCESS);
         result.setReturnMsg("您已成功确认到达现场");
