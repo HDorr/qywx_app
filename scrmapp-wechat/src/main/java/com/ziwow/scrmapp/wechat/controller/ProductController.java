@@ -709,7 +709,7 @@ public class ProductController {
      * @return
      */
     @RequestMapping("/product/bind/success/page")
-    public ModelAndView bindSuccessPage(HttpServletRequest request) {
+    public ModelAndView bindSuccessPage(HttpServletRequest request,@RequestParam(value = "scOrderItemId",required = false)String scOrderItemId) {
         ModelAndView modelAndView = new ModelAndView("/bindProduct/jsp/bindSuccess");
 
         //用户授权链接
@@ -727,11 +727,13 @@ public class ProductController {
         //-------------------------------------------------------------------------------------------------------------------------------------
         String basePath = "http" + "://" + request.getServerName() + contextPath;
 //        String basePath = request.getScheme() +"://" + request.getServerName() + contextPath;
+        if (StringUtil.isBlank(scOrderItemId)){
+            scOrderItemId="";
+        }
 
-
-        String intallBaseUrl = basePath + "/scrmapp/consumer/user/filter/reserveService/jsp/chooseProduct?orderType=1";
+        String intallBaseUrl = basePath + "/scrmapp/consumer/user/filter/reserveService/jsp/chooseProduct?orderType=1&scOrderItemId="+scOrderItemId;
         String maintainBaseUrl = basePath + "/scrmapp/consumer/user/filter/reserveService/jsp/chooseProduct?orderType=2";
-        String updateFilterBaseUrl = basePath + "/scrmapp/consumer/user/filter/reserveService/jsp/chooseProduct?orderType=4";
+        String updateFilterBaseUrl = basePath + "/scrmapp/consumer/user/filter/reserveService/jsp/chooseProduct?orderType=4&scOrderItemId="+scOrderItemId;
         String cleanBaseUrl = basePath + "/scrmapp/consumer/user/filter/reserveService/jsp/chooseProduct?orderType=3";
 
         String changeRemindBaseUrl = basePath + "/scrmapp/consumer/user/filter/myProducts/jsp/myPdtList";

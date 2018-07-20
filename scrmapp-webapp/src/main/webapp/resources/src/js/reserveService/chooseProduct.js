@@ -8,6 +8,11 @@
 		orderType = getUrlParam("orderType")-0,
       scOrderItemId= getUrlParam("scOrderItemId"),
 		addressId = localStorage.getItem('reserve_addressid') || ""
+  if (scOrderItemId!=null && scOrderItemId!=undefined && scOrderItemId!=''){
+    localStorage.setItem("scOrderItemId",scOrderItemId);
+  }else {
+    localStorage.removeItem("scOrderItemId")
+	}
 	$(function(){
 		getAndRenderList()
 		addNewPdtTrigger()

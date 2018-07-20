@@ -99,8 +99,16 @@ var registRootPath = getRootPath();
             e.preventDefault();
             var code = $("#confirmCode").val();
             telNum = $("#phone_number").val().trim();
+
+            let privateContactChecked = $("#cb_private_contact").hasClass("checked");
+
+            if ( !privateContactChecked ){
+              // warnFade("warn_text", 3000, "请阅读并同意《沁园隐私政策》")
+              return;
+            }
+
             //验证验证码格式
-            if (!reg.cfCode_reg.test(code) || !reg.phoneNum_reg.test(telNum)) {
+            if (!reg.cfCode_reg.test(code) || !reg.phoneNum_reg.test(telNum) ) {
                 warnFade("warn_text", 3000, "验证码或手机号错误")
             } else {
                 //提交
@@ -295,6 +303,20 @@ var registRootPath = getRootPath();
     }
 
     function clickEvents() {
+
+          $("#cb_private_contact").on('click',function() {
+            $("#cb_private_contact").toggleClass('checked')
+            let ableClick = $("#cb_private_contact").hasClass("checked");
+            if (ableClick) {
+                $("#nextStepBtn").removeClass("bigBtn")
+                $("#nextStepBtn").addClass("bigBtnAbleClick")
+            }else {
+              $("#nextStepBtn").removeClass("bigBtnAbleClick")
+              $("#nextStepBtn").addClass("bigBtn")
+            }
+          });
+
+
         $(".headerUl").on('click', "li:not(:eq(2))", function(e) {
             if (!$(this).text()) {
                 return;

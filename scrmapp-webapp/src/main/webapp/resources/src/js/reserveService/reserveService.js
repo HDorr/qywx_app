@@ -386,11 +386,11 @@ var flags = {
             flags.submitFlag = true;
             return ;
         }
-        if (!reserveData.description) {
-            $.alert('描述不能为空！');
-            flags.submitFlag = true;
-            return ;
-        }
+        // if (!reserveData.description) {
+        //     $.alert('描述不能为空！');
+        //     flags.submitFlag = true;
+        //     return ;
+        // }
         $.showLoading()
             $.ajax({
             url: rootUrl+'/scrmapp/consumer/wechat/orders/save',

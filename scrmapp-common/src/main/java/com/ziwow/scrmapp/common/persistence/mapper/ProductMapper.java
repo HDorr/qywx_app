@@ -70,4 +70,5 @@ public interface ProductMapper {
                                  @Param("serviceStatus")String serviceStatus, @Param("serviceFeeId")String serviceFeeId);
 
     int countProductByUserIdWithoutStatus(@Param("userId") String userId);
+
 }

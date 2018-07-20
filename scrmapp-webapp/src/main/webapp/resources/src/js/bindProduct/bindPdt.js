@@ -237,7 +237,8 @@ var flags = {
                                 // $.toast(data.returnMsg, function() {
                                 //     window.location.href = pageUrls.bindPdtLists
                                 // })
-                                window.location.href = rootUrl + "/scrmapp/consumer/product/bind/success/page?securityCode="+barCode;
+                              let scOrderItemId = localStorage.getItem("scOrderItemId");
+                                window.location.href = rootUrl + "/scrmapp/consumer/product/bind/success/page?securityCode="+barCode+"&scOrderItemId="+scOrderItemId;
                             } else {
                                 $.toast(data.returnMsg, "cancel")
                             }

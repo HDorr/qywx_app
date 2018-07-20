@@ -61,6 +61,8 @@ public interface ProductService {
 
     void syncProdUnbindToMiniApp(String userId, String productCode);
 
+    boolean isFirstBindProduct(String userId);
+
     //根据productId获取产品信息(批量)
     List<Product> getProductsByIds(List<Integer> list);
 
@@ -73,5 +75,4 @@ public interface ProductService {
 
     int updateProductById(long id, String serviceFee, String serviceStatus, String serviceFeeId);
 
-    boolean isFirstBindProduct(String userId);
 }

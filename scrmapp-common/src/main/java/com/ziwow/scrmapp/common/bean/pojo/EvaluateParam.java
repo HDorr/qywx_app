@@ -8,11 +8,14 @@ public class EvaluateParam implements java.io.Serializable {
 	private static final long serialVersionUID = 1L;
 	private int number_type;		// 单号类型  1：安装单  2：保养单  3：维修单
 	private String evaluate_note;	//评价内容
+	// 单号
 	private String number;
 	private Integer is_attitude;//服务态度
 	private Integer is_specialty;//专业度
 	private Integer is_integrity;//诚信情况
 	private Integer is_recommend;//推荐意愿
+
+
 	// 单号
 	public int getNumber_type() {
 		return number_type;
