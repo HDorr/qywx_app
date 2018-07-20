@@ -3,8 +3,10 @@ package com.ziwow.scrmapp.wechat.utils;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.ziwow.scrmapp.common.constants.Constant;
 import com.ziwow.scrmapp.common.persistence.entity.Product;
 import com.ziwow.scrmapp.common.persistence.entity.ProductFilter;
+import com.ziwow.scrmapp.tools.utils.MD5;
 import com.ziwow.scrmapp.wechat.constants.WXPayConstant;
 import com.ziwow.scrmapp.wechat.service.ProductService;
 import org.apache.http.HttpResponse;
@@ -128,14 +130,12 @@ public class JsonApache {
                 String serviceFeeId = pf.getServiceFeeId();
                 jo.put("serviceFeeID",serviceFeeId);
 
-//                for (Product p : productList) {
-//                    if (p.getId().equals(pf.getProductId())) {
-//                        jo.put("serviceFeeID", p.getServiceFeeId());
-//                    }
-//                }
                 arr[i] = jo;
             }
             jsonObject.put("data", arr);
+            long timestamp = System.currentTimeMillis();
+            jsonObject.put("timestamp", timestamp);
+            jsonObject.put("signture", MD5.toMD5(Constant.AUTH_KEY + timestamp));
             CloseableHttpClient httpClient = HttpClients.createDefault();
             HttpPost httpPost = new HttpPost(url);
             httpPost.addHeader(HTTP.CONTENT_TYPE, "application/json");
