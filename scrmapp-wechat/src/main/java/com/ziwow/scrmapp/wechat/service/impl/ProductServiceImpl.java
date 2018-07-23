@@ -696,18 +696,10 @@ public class ProductServiceImpl implements ProductService {
         return productMapper.getProductByModelName(modelName);
     }
 
-    @Override
-    public int updateProductByModelName(String modelName, String serviceFee, String serviceStatus, String serviceFeeId) {
-        return productMapper.updateProductByModelName(modelName, serviceFee, serviceStatus, serviceFeeId);
-    }
 
     @Override
     public int updateByPrimaryKeySelective(Product record) {
         return productMapper.updateByPrimaryKeySelective(record);
     }
 
-    @Override
-    public int updateProductById(long id, String serviceFee, String serviceStatus, String serviceFeeId) {
-        return productMapper.updateProductById(id, serviceFee, serviceStatus, serviceFeeId);
-    }
 }

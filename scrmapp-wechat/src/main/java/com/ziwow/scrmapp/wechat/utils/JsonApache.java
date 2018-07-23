@@ -123,8 +123,7 @@ public class JsonApache {
                 jo.put("id", pf.getId());
                 String modelName = pf.getModelName();
                 jo.put("modelName", modelName);
-                int temFee = pf.getServiceFee();
-                BigDecimal bg = new BigDecimal(String.valueOf(temFee));
+                BigDecimal bg= pf.getServiceFee();
                 String serviceFee = bg.setScale(2, BigDecimal.ROUND_CEILING).divide(new BigDecimal(100)).toString();
                 jo.put("serviceFee", serviceFee);
                 String serviceFeeId = pf.getServiceFeeId();

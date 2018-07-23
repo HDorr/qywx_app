@@ -290,15 +290,6 @@
             <if test="createTime != null">
                 #{createTime,jdbcType=DATE},
             </if>
-            <if test="serviceFee != null">
-                #{serviceFee,jdbcType=VARCHAR},
-            </if>
-            <if test="serviceStatus != null">
-                #{serviceStatus,jdbcType=VARCHAR},
-            </if>
-            <if test="serviceFeeId != null">
-                #{serviceFeeId,jdbcType=VARCHAR},
-            </if>
         </set>
         where id = #{id,jdbcType=BIGINT}
     </update>
@@ -324,9 +315,6 @@
         buyTime = #{buyTime,jdbcType=DATE},
         status = #{status,jdbcType=INTEGER},
         createTime = #{createTime,jdbcType=DATE},
-        serviceFee = #{serviceFee,jdbcType=VARCHAR},
-        serviceStatus = #{serviceStatus,jdbcType=VARCHAR},
-        serviceFeeId = #{serviceFeeId,jdbcType=VARCHAR}
         where id = #{id,jdbcType=BIGINT}
     </update>
 
@@ -336,13 +324,6 @@
         where modelName = #{modelName,jdbcType=VARCHAR}
     </update>
 
-    <update id="updateProductById">
-        update t_product
-        set serviceFee=#{serviceFee,jdbcType=VARCHAR},
-        serviceStatus=#{serviceStatus,jdbcType=VARCHAR},
-        serviceFeeId=#{serviceFeeId,jdbcType=VARCHAR}
-        where id=#{id}
-    </update>
 
     <update id="updateRemind">
         update t_product
@@ -531,10 +512,5 @@
         where productCode = #{productCode,jdbcType=VARCHAR} and smallcName is null
     </update>
 
-    <update id="updateProductByModelName" parameterType="com.ziwow.scrmapp.common.persistence.entity.Product">
-        UPDATE t_product
-        SET serviceFee=#{serviceFee,jdbcType=VARCHAR}, serviceStatus=#{serviceStatus,jdbcType=VARCHAR}, serviceFeeId=#{serviceFeeId,jdbcType=VARCHAR}
-        WHERE modelName=#{modelName,jdbcType=VARCHAR}
-    </update>
 
 </mapper>

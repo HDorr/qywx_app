@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ziwow.scrmapp.common.persistence.mapper.WechatOrderServiceFeeMapper">
+  <resultMap id="BaseResultMap" type="com.ziwow.scrmapp.common.persistence.entity.WechatOrderServiceFee">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="product_id" jdbcType="BIGINT" property="productId" />
+    <result column="order_id" jdbcType="VARCHAR" property="orderId" />
+    <result column="service_fee" jdbcType="INTEGER" property="serviceFee" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="sc_order_no" jdbcType="VARCHAR" property="scOrderNo" />
+    <result column="service_fee_id" jdbcType="VARCHAR" property="serviceFeeId" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, product_id, order_id, service_fee, create_time,sc_order_no,service_fee_id
+  </sql>
+  
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_wechat_order_service_fee
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from t_wechat_order_service_fee
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  
+  <insert id="insert" parameterType="com.ziwow.scrmapp.common.persistence.entity.WechatOrderServiceFee">
+    insert into t_wechat_order_service_fee (id, product_id, order_id,
+      service_fee, create_time,sc_order_no,service_fee_id
+      )
+    values (#{id,jdbcType=BIGINT}, #{productId,jdbcType=BIGINT}, #{orderId,jdbcType=VARCHAR},
+       #{serviceFee,jdbcType=INTEGER},
+       #{createTime,jdbcType=TIMESTAMP},
+      #{scOrderId,jdbcType=VARCHAR},#{serviceFeeId,jdbcType=VARCHAR}
+      )
+  </insert>
+
+
+</mapper>

@@ -1,5 +1,7 @@
 package com.ziwow.scrmapp.common.persistence.entity;
 
+import java.math.BigDecimal;
+
 public class ServiceFeeProduct {
 
 
@@ -12,18 +14,27 @@ public class ServiceFeeProduct {
      * scOrderNo : ESO180702182800241089
      */
 
-    private String serviceFee;
+    private String productId;
+    private BigDecimal serviceFee;
     private String serviceStatus;
     private String serviceFeeId;
     private String serviceStatusStr;
     private String serviceFeeName;
     private String scOrderNo;
 
-    public String getServiceFee() {
+    public String getProductId() {
+        return productId;
+    }
+
+    public void setProductId(String productId) {
+        this.productId = productId;
+    }
+
+    public BigDecimal getServiceFee() {
         return serviceFee;
     }
 
-    public void setServiceFee(String serviceFee) {
+    public void setServiceFee(BigDecimal serviceFee) {
         this.serviceFee = serviceFee;
     }
 

@@ -540,6 +540,7 @@
            "serviceFeeName": "MK-UF-12服务费",
            "scOrderNo": "ESO180702182800241089"
            */
+          pr.productId=product.id
           pr.serviceFee=product.serviceFee;
           pr.serviceStatus=product.serviceStatus;
           pr.serviceFeeId=product.serviceFeeId;

@@ -332,9 +332,9 @@ public class ProductController {
                 logger.error("用户查询产品列表失败，原因[{}]", "外部查询服务费状态失败");
                 return result;
             }
-            JSONObject jsonObject = JSON.parseObject(content);
-            JSONArray jsonArray = jsonObject.getJSONArray("data");
-            List<ProductFilter> productFilterList = new ArrayList<ProductFilter>();
+//            JSONObject jsonObject = JSON.parseObject(content);
+//            JSONArray jsonArray = jsonObject.getJSONArray("data");
+//            List<ProductFilter> productFilterList = new ArrayList<ProductFilter>();
 
             /**
              * 	 *
@@ -346,23 +346,22 @@ public class ProductController {
              * 	 * 7：没有关联滤芯够买记录
              * 	 * 8：没有购买过产品
              */
-            for (int i = 0; i < jsonArray.size(); i++) {
-                JSONObject jo = (JSONObject) jsonArray.get(i);
-                String temId = (String) jo.get("id");  //id为商品主键ID
-                long id = Long.parseLong(temId);
-                String modelName = (String) jo.get("modelName");
-                String serviceFee = (String) jo.get("serviceFeePrice");
-                if (serviceFee == null) {
-                    serviceFee = "0";
-                }
-                //0：已购买滤芯未购买服务 1：已购买滤芯和服务 5：没有滤芯或不能购买滤芯
-                String serviceStatus = (String) jo.get("serviceStatus");
-                String serviceFeeId = (String) jo.get("serviceFeeId");
-                if (serviceFeeId == null) {
-                    serviceFeeId = "0";
-                }
-                productService.updateProductById(id, serviceFee, serviceStatus, serviceFeeId);
-            }
+//            for (int i = 0; i < jsonArray.size(); i++) {
+//                JSONObject jo = (JSONObject) jsonArray.get(i);
+//                String temId = (String) jo.get("id");  //id为商品主键ID
+//                long id = Long.parseLong(temId);
+//                String modelName = (String) jo.get("modelName");
+//                String serviceFee = (String) jo.get("serviceFeePrice");
+//                if (serviceFee == null) {
+//                    serviceFee = "0";
+//                }
+//                //0：已购买滤芯未购买服务 1：已购买滤芯和服务 5：没有滤芯或不能购买滤芯
+//                String serviceStatus = (String) jo.get("serviceStatus");
+//                String serviceFeeId = (String) jo.get("serviceFeeId");
+//                if (serviceFeeId == null) {
+//                    serviceFeeId = "0";
+//                }
+//            }
             //对产品添加服务费和服务状态
             List<Product> products = ProductServiceParamUtil.addServiceParam(temList, content);
             result.setReturnCode(Constant.SUCCESS);

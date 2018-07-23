@@ -87,6 +87,8 @@ public class WechatOrdersController {
     private WXPayService wxPayService;
     @Autowired
     private WechatFansService wechatFansService;
+    @Autowired
+    private WechatOrderServiceFeeService wechatOrderServiceFeeService;
 
 
     /**
@@ -168,10 +170,12 @@ public class WechatOrdersController {
                 for (ServiceFeeProduct pf : serviceFeeProducts) {
                     if (pf != null) {
 
-                      BigDecimal b = new BigDecimal(pf.getServiceFee());
-                        String tp = b.setScale(2, BigDecimal.ROUND_HALF_UP).toString();
+                        String scOrderNo = pf.getScOrderNo();
+                        BigDecimal b = pf.getServiceFee();
+
+                        String tp = b.toString();
                         //由于产品型号不是唯一值，通过主键ID + 型号拼接
-                        ext =ext + " " + pf.getServiceFeeName() + " &金额:" + tp + " &关联订单号:" + pf.getScOrderNo();
+                        ext =ext + " " + pf.getServiceFeeName() + " &金额:" + tp + " &关联订单号:" + scOrderNo;
                     }
                 }
             }
@@ -215,7 +219,19 @@ public class WechatOrdersController {
             //新增一单多产品接口
             wechatOrders = wechatOrdersService.saveOrdersMultiProduct(wechatOrders, wechatOrdersParamExt.getProductIds());
 
-            if (wechatOrders.getId() != null) {
+            Long id = wechatOrders.getId();
+            if (id != null) {
+
+                //保存订单中的服务费信息
+                if (serviceFeeProducts!=null && serviceFeeProducts.size()>0){
+                    for (ServiceFeeProduct pf : serviceFeeProducts) {
+                        if (pf != null) {
+                            WechatOrderServiceFee wechatOrderServiceFee = new WechatOrderServiceFee(pf, id);
+                            wechatOrderServiceFeeService.insert(wechatOrderServiceFee);
+                        }
+                    }
+                }
+
                 int orderType = wechatOrders.getOrderType();
                 // 发送短信通知提醒
                 String serverType = OrderUtils.getServiceTypeName(orderType);

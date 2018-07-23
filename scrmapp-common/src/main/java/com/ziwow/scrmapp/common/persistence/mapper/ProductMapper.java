@@ -60,15 +60,6 @@ public interface ProductMapper {
     @Select("SELECT * FROM t_product WHERE modelName=#{modelName}")
     Product getProductByModelName(@Param("modelName")String modelName);
 
-    @Update("update t_product set serviceFee=#{serviceFee}, serviceStatus=#{serviceStatus}, serviceFeeId=#{serviceFeeId} where modelName=#{modelName}")
-    int updateProductByModelName(@Param("modelName")String modelName, @Param("serviceFee")String serviceFee,
-                                 @Param("serviceStatus")String serviceStatus, @Param("serviceFeeId")String serviceFeeId);
-
-
-    //@Update("update t_product set serviceFee=#{serviceFee}, serviceStatus=#{serviceStatus}, serviceFeeId=#{serviceFeeId} where id=#{id}")
-    int updateProductById(@Param("id")Long id, @Param("serviceFee")String serviceFee,
-                                 @Param("serviceStatus")String serviceStatus, @Param("serviceFeeId")String serviceFeeId);
-
     int countProductByUserIdWithoutStatus(@Param("userId") String userId);
 
 }

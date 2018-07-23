@@ -68,6 +68,13 @@
             </activation>
         </profile>
         <profile>
+            <!-- 预发环境 -->
+            <id>preOnline</id>
+            <properties>
+                <profiles.active>preOnline</profiles.active>
+            </properties>
+        </profile>
+        <profile>
             <!-- 生产环境 -->
             <id>production</id>
             <properties>

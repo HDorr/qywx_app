@@ -3,20 +3,27 @@ package com.ziwow.scrmapp.common.persistence.entity;
 import java.math.BigDecimal;
 import java.util.Date;
 
-public class ProductFilter {
+public class WechatOrderServiceFee {
 
     private Long id;
     private Long productId;
-    private String orderId;
-    private String refundId;
-    private String modelName;
+    private Long orderId;
     private BigDecimal serviceFee;
-    private Integer payStatus;
-    private Integer syncStatus;
     private Date createTime;
 
     private String scOrderNo;
     private String serviceFeeId;
+
+    public WechatOrderServiceFee() {
+    }
+
+    public WechatOrderServiceFee(ServiceFeeProduct pf,Long orderId) {
+        this.productId=Long.parseLong(pf.getProductId());
+        this.orderId=orderId;
+        this.serviceFee=pf.getServiceFee();
+        this.scOrderNo=pf.getScOrderNo();
+        this.serviceFeeId=pf.getServiceFeeId();
+    }
 
     public String getServiceFeeId() {
         return serviceFeeId;
@@ -51,61 +58,21 @@ public class ProductFilter {
         this.productId = productId;
     }
 
-    public String getOrderId() {
+    public Long getOrderId() {
         return orderId;
     }
 
 
-    public void setOrderId(String orderId) {
-        this.orderId = orderId == null ? null : orderId.trim();
+    public void setOrderId(Long orderId) {
+        this.orderId = orderId;
     }
-
-
-    public String getRefundId() {
-        return refundId;
-    }
-
-
-    public void setRefundId(String refundId) {
-        this.refundId = refundId == null ? null : refundId.trim();
-    }
-
-
-    public String getModelName() {
-        return modelName;
-    }
-
-
-    public void setModelName(String modelName) {
-        this.modelName = modelName == null ? null : modelName.trim();
-    }
-
 
     public BigDecimal getServiceFee() {
         return serviceFee;
     }
 
-
     public void setServiceFee(BigDecimal serviceFee) {
         this.serviceFee = serviceFee;
-    }
-
-
-    public Integer getPayStatus() {
-        return payStatus;
-    }
-
-
-    public void setPayStatus(Integer payStatus) {
-        this.payStatus = payStatus;
-    }
-
-    public Integer getSyncStatus() {
-        return syncStatus;
-    }
-
-    public void setSyncStatus(Integer syncStatus) {
-        this.syncStatus = syncStatus;
     }
 
     public Date getCreateTime() {

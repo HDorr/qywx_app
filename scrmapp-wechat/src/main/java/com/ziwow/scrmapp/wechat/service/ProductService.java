@@ -69,10 +69,7 @@ public interface ProductService {
     //根据modelName获取产品
     Product getProductByModelName(String modelName);
 
-    int updateProductByModelName(String modelName, String serviceFee, String serviceStatus, String serviceFeeId);
-
     int updateByPrimaryKeySelective(Product record);
 
-    int updateProductById(long id, String serviceFee, String serviceStatus, String serviceFeeId);
 
 }

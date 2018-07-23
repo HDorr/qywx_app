@@ -184,7 +184,7 @@ public class WXPayController {
 
         log.info("/user/auth接口调用外部接口postModelNames方法content：" + content);
 
-        int totalFee = 0; //保存付款总金额
+        BigDecimal totalFee = new BigDecimal(0); //保存付款总金额
         JSONObject jsonObject = JSON.parseObject(content);
         JSONArray jsonArray = jsonObject.getJSONArray("data");
         for (int i = 0; i < jsonArray.size(); i++) {
@@ -196,11 +196,11 @@ public class WXPayController {
                 String serviceFee = (String) jo.get("serviceFeePrice");
                 String scOrderNo = (String) jo.get("orderNo");
                 String serviceFeeId = (String) jo.get("serviceFeeId");
-                int fee;
+                BigDecimal fee;
                 if (serviceFee == null) {
                     return null;
                 } else {
-                    fee = new Double(Double.valueOf(serviceFee) * 100).intValue();
+                    fee = BigDecimal.valueOf(Double.valueOf(serviceFee));
                 }
                 ProductFilter pf = new ProductFilter();
                 for (Product product : list) {
@@ -216,10 +216,10 @@ public class WXPayController {
                 pf.setCreateTime(new Date());
                 pf.setServiceFeeId(serviceFeeId);
                 wxPayService.insert(pf);
-                totalFee = totalFee + fee;
+                totalFee = totalFee.add(fee);
             }
         }
-        if (totalFee == 0) {
+        if (totalFee .compareTo(new BigDecimal(0))<=0) {
             throw new RuntimeException("费用错误");
         }
 
@@ -593,7 +593,7 @@ public class WXPayController {
         String orderId = pf.getOrderId();
         //String modelName = productFilter.getModelName();
         int totalFee = wxPayService.getTotalFeeByOrderId(orderId);
-        int refundFee = pf.getServiceFee();
+        BigDecimal refundFee = pf.getServiceFee();
         //退款号
         String refundId = UUID.randomUUID().toString().replaceAll("-", "");
 
