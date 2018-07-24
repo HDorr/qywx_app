@@ -61,6 +61,16 @@ public class Product {
 
     private String scOrderNo;
 
+    private Date scOrderPayAt;
+
+    public Date getScOrderPayAt() {
+        return scOrderPayAt;
+    }
+
+    public void setScOrderPayAt(Date scOrderPayAt) {
+        this.scOrderPayAt = scOrderPayAt;
+    }
+
     public String getScOrderNo() {
         return scOrderNo;
     }

@@ -1,6 +1,7 @@
 package com.ziwow.scrmapp.common.persistence.entity;
 
 import java.math.BigDecimal;
+import java.util.Date;
 
 public class ServiceFeeProduct {
 
@@ -21,6 +22,15 @@ public class ServiceFeeProduct {
     private String serviceStatusStr;
     private String serviceFeeName;
     private String scOrderNo;
+    private Date scOrderPayAt;
+
+    public Date getScOrderPayAt() {
+        return scOrderPayAt;
+    }
+
+    public void setScOrderPayAt(Date scOrderPayAt) {
+        this.scOrderPayAt = scOrderPayAt;
+    }
 
     public String getProductId() {
         return productId;

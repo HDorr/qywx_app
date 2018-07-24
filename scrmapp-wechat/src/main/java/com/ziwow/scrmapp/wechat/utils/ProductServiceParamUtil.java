@@ -10,6 +10,7 @@ import com.ziwow.scrmapp.wechat.constants.WXPayConstant;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class ProductServiceParamUtil {
@@ -36,11 +37,12 @@ public class ProductServiceParamUtil {
                         p.setServiceFee(serviceFee);
                     }
                     String serviceStatus = (String) jo.get("serviceStatus");
-//                    String serviceStatus = serviceStatusCompare(tem);
                     String serviceStatusStr = (String) jo.get("serviceStatusStr");
                     String serviceFeeId = (String) jo.get("serviceFeeId");
                     String filterModel = (String) jo.get("modelName");
                     String scOrderNo = (String) jo.get("orderNo");
+                    Date scOrderPayAt = (Date) jo.get("orderPayAt");
+                    p.setScOrderPayAt(scOrderPayAt);
                     p.setScOrderNo(scOrderNo);
                     p.setServiceStatus(serviceStatus);
                     p.setServiceStatusStr(serviceStatusStr);

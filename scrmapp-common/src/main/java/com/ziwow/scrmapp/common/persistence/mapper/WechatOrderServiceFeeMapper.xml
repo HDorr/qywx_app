@@ -7,6 +7,7 @@
     <result column="order_id" jdbcType="VARCHAR" property="orderId" />
     <result column="service_fee" jdbcType="INTEGER" property="serviceFee" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="sc_order_pay_at" jdbcType="TIMESTAMP" property="sc" />
     <result column="sc_order_no" jdbcType="VARCHAR" property="scOrderNo" />
     <result column="service_fee_id" jdbcType="VARCHAR" property="serviceFeeId" />
   </resultMap>
@@ -27,12 +28,12 @@
   
   <insert id="insert" parameterType="com.ziwow.scrmapp.common.persistence.entity.WechatOrderServiceFee">
     insert into t_wechat_order_service_fee (product_id, order_id,
-      service_fee, create_time,sc_order_no,service_fee_id
+      service_fee, create_time,sc_order_no,service_fee_id,sc_order_pay_at
       )
     values ( #{productId,jdbcType=BIGINT}, #{orderId,jdbcType=VARCHAR},
        #{serviceFee,jdbcType=INTEGER},
        now(),
-      #{scOrderNo,jdbcType=VARCHAR},#{serviceFeeId,jdbcType=VARCHAR}
+      #{scOrderNo,jdbcType=VARCHAR},#{serviceFeeId,jdbcType=VARCHAR},#{scOrderPayAt,jdbcType=TIMESTAMP}
       )
   </insert>
 

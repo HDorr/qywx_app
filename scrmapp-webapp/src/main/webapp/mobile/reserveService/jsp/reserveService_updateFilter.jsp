@@ -547,6 +547,7 @@
           pr.serviceStatusStr=product.serviceStatusStr;
           pr.serviceFeeName=product.serviceFeeName;
           pr.scOrderNo=product.scOrderNo;
+          pr.scOrderPayAt=product.scOrderPayAt;
           ids.push(pr)
         }
       }

@@ -13,6 +13,7 @@ public class WechatOrderServiceFee {
 
     private String scOrderNo;
     private String serviceFeeId;
+    private Date scOrderPayAt;
 
     public WechatOrderServiceFee() {
     }
@@ -23,6 +24,15 @@ public class WechatOrderServiceFee {
         this.serviceFee=pf.getServiceFee();
         this.scOrderNo=pf.getScOrderNo();
         this.serviceFeeId=pf.getServiceFeeId();
+        this.scOrderPayAt=pf.getScOrderPayAt();
+    }
+
+    public Date getScOrderPayAt() {
+        return scOrderPayAt;
+    }
+
+    public void setScOrderPayAt(Date scOrderPayAt) {
+        this.scOrderPayAt = scOrderPayAt;
     }
 
     public String getServiceFeeId() {
