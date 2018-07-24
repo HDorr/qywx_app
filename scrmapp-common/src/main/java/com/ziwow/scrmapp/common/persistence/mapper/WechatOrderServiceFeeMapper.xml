@@ -26,12 +26,12 @@
   </delete>
   
   <insert id="insert" parameterType="com.ziwow.scrmapp.common.persistence.entity.WechatOrderServiceFee">
-    insert into t_wechat_order_service_fee (id, product_id, order_id,
+    insert into t_wechat_order_service_fee (product_id, order_id,
       service_fee, create_time,sc_order_no,service_fee_id
       )
-    values (#{id,jdbcType=BIGINT}, #{productId,jdbcType=BIGINT}, #{orderId,jdbcType=VARCHAR},
+    values ( #{productId,jdbcType=BIGINT}, #{orderId,jdbcType=VARCHAR},
        #{serviceFee,jdbcType=INTEGER},
-       #{createTime,jdbcType=TIMESTAMP},
+       now(),
       #{scOrderNo,jdbcType=VARCHAR},#{serviceFeeId,jdbcType=VARCHAR}
       )
   </insert>

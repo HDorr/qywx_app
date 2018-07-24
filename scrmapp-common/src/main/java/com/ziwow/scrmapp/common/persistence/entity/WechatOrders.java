@@ -56,6 +56,16 @@ public class WechatOrders {
     
     private String contactsTelephone;
 
+    private String scOrderNo;
+
+    public String getScOrderNo() {
+        return scOrderNo;
+    }
+
+    public void setScOrderNo(String scOrderNo) {
+        this.scOrderNo = scOrderNo;
+    }
+
     public Long getId() {
         return id;
     }

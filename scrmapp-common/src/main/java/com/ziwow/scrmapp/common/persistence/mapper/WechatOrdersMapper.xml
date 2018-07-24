@@ -164,6 +164,9 @@
             <if test="contactsTelephone != null">
                 contactsTelephone,
             </if>
+            <if test="scOrderNo != null">
+                sc_order_no,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="ordersCode != null">
@@ -234,6 +237,9 @@
             </if>
             <if test="contactsTelephone != null">
             	#{contactsTelephone,jdbcType=TIMESTAMP},
+            </if>
+            <if test="scOrderNo != null">
+                #{scOrderNo,jdbcType=VARCHAR},
             </if>
         </trim>
     </insert>

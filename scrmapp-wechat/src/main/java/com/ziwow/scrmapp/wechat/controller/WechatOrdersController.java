@@ -165,6 +165,7 @@ public class WechatOrdersController {
             }
             String ext = "";   //保持扩展信息
 
+            String scOrderNos="";
             List<ServiceFeeProduct> serviceFeeProducts = wechatOrdersParamExt.getServiceFeeProducts();
             if (serviceFeeProducts!=null && serviceFeeProducts.size()>0){
                 for (ServiceFeeProduct pf : serviceFeeProducts) {
@@ -176,9 +177,11 @@ public class WechatOrdersController {
                         String tp = b.toString();
                         //由于产品型号不是唯一值，通过主键ID + 型号拼接
                         ext =ext + " " + pf.getServiceFeeName() + " &金额:" + tp + " &关联订单号:" + scOrderNo;
+                        scOrderNos=scOrderNos+scOrderNo;
                     }
                 }
             }
+
             logger.info("生成预约单带服务费产品id："+ JSON.toJSONString(serviceFeeProducts));
             logger.info("生成预约单描述："+ext);
 
@@ -215,6 +218,7 @@ public class WechatOrdersController {
             wechatOrders.setOrderTime(DateUtil.StringToDate(wechatOrdersParamExt.getOrderTime(), "yyyy-MM-dd HH"));
             //来源是微信
             wechatOrders.setSource(SystemConstants.WEIXIN);
+            wechatOrders.setScOrderNo(scOrderNos);
 
             //新增一单多产品接口
             wechatOrders = wechatOrdersService.saveOrdersMultiProduct(wechatOrders, wechatOrdersParamExt.getProductIds());
