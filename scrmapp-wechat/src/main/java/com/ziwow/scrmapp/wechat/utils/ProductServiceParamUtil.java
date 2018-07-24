@@ -41,7 +41,7 @@ public class ProductServiceParamUtil {
                     String serviceFeeId = (String) jo.get("serviceFeeId");
                     String filterModel = (String) jo.get("modelName");
                     String scOrderNo = (String) jo.get("orderNo");
-                    Date scOrderPayAt = (Date) jo.get("orderPayAt");
+                    Long scOrderPayAt = (Long) jo.get("orderPayAt");
                     p.setScOrderPayAt(scOrderPayAt);
                     p.setScOrderNo(scOrderNo);
                     p.setServiceStatus(serviceStatus);

@@ -61,13 +61,13 @@ public class Product {
 
     private String scOrderNo;
 
-    private Date scOrderPayAt;
+    private Long scOrderPayAt;
 
-    public Date getScOrderPayAt() {
+    public Long getScOrderPayAt() {
         return scOrderPayAt;
     }
 
-    public void setScOrderPayAt(Date scOrderPayAt) {
+    public void setScOrderPayAt(Long scOrderPayAt) {
         this.scOrderPayAt = scOrderPayAt;
     }
 
