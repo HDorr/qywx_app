@@ -32,7 +32,7 @@
     values (#{id,jdbcType=BIGINT}, #{productId,jdbcType=BIGINT}, #{orderId,jdbcType=VARCHAR},
        #{serviceFee,jdbcType=INTEGER},
        #{createTime,jdbcType=TIMESTAMP},
-      #{scOrderId,jdbcType=VARCHAR},#{serviceFeeId,jdbcType=VARCHAR}
+      #{scOrderNo,jdbcType=VARCHAR},#{serviceFeeId,jdbcType=VARCHAR}
       )
   </insert>
 

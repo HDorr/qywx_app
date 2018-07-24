@@ -491,7 +491,7 @@
       if (!data.buyFilter) return "请选择是否已购买滤芯";
       if (!data.orderTime) return "请选择上门时间";
       if (!data.contacts) return "请选择有效地址";
-      if (!data.description) return "请填写保养描述";
+      // if (!data.description) return "请填写保养描述";
       return null
     }
 

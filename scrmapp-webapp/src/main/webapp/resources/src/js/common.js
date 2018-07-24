@@ -39,7 +39,7 @@ var pageUrls =  { //正式环境
     reserveUpdateFilterPage: rootPath +"/scrmapp/consumer/product/reserve/updateFilter",  //预约更换滤芯详情
     reserveMaintainPage: rootPath +"/scrmapp/consumer/product/reserve/maintain",  //预约维修详情
     reserveCleanPage: rootPath +"/scrmapp/consumer/product/reserve/clean",  //预约清洗滤芯详情
-    applyPay:rootPath+"/scrmapp/wx/user/auth"//申请支付
+    applyPay:rootPath+"/wx/user/auth"//申请支付
 }
 
 

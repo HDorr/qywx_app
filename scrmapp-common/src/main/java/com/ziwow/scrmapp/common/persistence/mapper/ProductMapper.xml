@@ -24,15 +24,12 @@
         <result column="status" jdbcType="TINYINT" property="status" />
         <result column="createTime" jdbcType="DATE" property="createTime" />
         <result column="productBarCodeTwenty" jdbcType="VARCHAR" property="productBarCodeTwenty" />
-        <result column="serviceFee" jdbcType="VARCHAR" property="serviceFee" />
-        <result column="serviceStatus" jdbcType="VARCHAR" property="serviceStatus" />
-        <result column="serviceFeeId" jdbcType="VARCHAR" property="serviceFeeId" />
     </resultMap>
     
     <sql id="Base_Column_List">
 	    id, itemKind, typeName, smallcName, modelName, levelId, levelName, productName, productCode, barCodeImage,
 	    productImage, productBarCode, shoppingOrder, saleType, o2o, buyChannel, filterRemind, 
-	    userId, buyTime, status, createTime,productBarCodeTwenty,serviceFee,serviceStatus,serviceFeeId
+	    userId, buyTime, status, createTime,productBarCodeTwenty
 	</sql>
 	
     <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">

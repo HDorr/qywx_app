@@ -227,7 +227,7 @@ public class WXPayController {
 
         //授权后要跳转的链接
         String backUri = baseUrl + "/wx/pay";
-        backUri = backUri + "?orderId=" + orderId + "&totalFee=" + totalFee + "&ids=" + ids;
+        backUri = backUri + "?orderId=" + orderId + "&totalFee=" + totalFee.multiply(new BigDecimal(100)).intValue() + "&ids=" + ids;
         //URLEncoder.encode 后可以在backUri 的url里面获取传递的所有参数
         try {
             backUri = URLEncoder.encode(backUri, "UTF-8");
@@ -479,6 +479,8 @@ public class WXPayController {
         }
     }
 
+    @Autowired
+    private MyConfig config;
 
     //页面js返回支付成功后，查询微信后台是否支付成功，然后跳转结果页面
     @RequestMapping(value = "/order/query", method = RequestMethod.GET)
@@ -486,12 +488,6 @@ public class WXPayController {
                                      HttpServletResponse response, Model model) throws IOException {
         String orderId = request.getParameter("orderId");  //订单号
         log.info("/order/query接口orderId: " + orderId);
-        MyConfig config = null;
-        try {
-            config = new MyConfig();
-        } catch (Exception e) {
-            log.error("/order/query接口异常：" + e);
-        }
         WXPay wxpay = new WXPay(config);
 
         Map<String, String> data = new HashMap<String, String>();
@@ -597,12 +593,6 @@ public class WXPayController {
         //退款号
         String refundId = UUID.randomUUID().toString().replaceAll("-", "");
 
-        MyConfig config = null;
-        try {
-            config = new MyConfig();
-        } catch (Exception e) {
-            log.error("异常：" + e);
-        }
         WXPay wxpay = new WXPay(config);
         Map<String, String> data = new HashMap<String, String>();
         data.put("out_trade_no", orderId);
