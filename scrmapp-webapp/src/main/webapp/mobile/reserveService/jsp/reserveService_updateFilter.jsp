@@ -270,7 +270,7 @@
         }
         localStorage.removeItem("isPaidSuccess");
         if (res.payProductIds!=undefined && res.payProductIds!='' ) {
-          window.location.href = "http://dev.99baby.cn/scrmapp/wx/user/auth?productIds="
+          window.location.href = pageUrls.applyPay+"?productIds="
               + res.productIds;
         }
       })
@@ -285,7 +285,7 @@
         if (productIds!=undefined && productIds!=''){
           //清楚支付状态
           localStorage.removeItem("isPaidSuccess");
-            window.location.href = "http://dev.99baby.cn/scrmapp/wx/user/auth?productIds="
+            window.location.href = pageUrls.applyPay+"?productIds="
                 + productIds;
             return
         }

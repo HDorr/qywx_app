@@ -38,7 +38,8 @@ var pageUrls =  { //正式环境
     reserveInstallPage: rootPath +"/scrmapp/consumer/product/reserve/install",           //预约安装详情
     reserveUpdateFilterPage: rootPath +"/scrmapp/consumer/product/reserve/updateFilter",  //预约更换滤芯详情
     reserveMaintainPage: rootPath +"/scrmapp/consumer/product/reserve/maintain",  //预约维修详情
-    reserveCleanPage: rootPath +"/scrmapp/consumer/product/reserve/clean"  //预约清洗滤芯详情
+    reserveCleanPage: rootPath +"/scrmapp/consumer/product/reserve/clean",  //预约清洗滤芯详情
+    applyPay:rootPath+"/scrmapp/wx/user/auth"//申请支付
 }
 
 
@@ -67,8 +68,7 @@ var queryUrls =
     qyhQueryRefuseOrder: rootPath + "/scrmapp/qyhuser/orders/refuse", //师傅侧拒绝工单
     qyhQueryChangeOrder: rootPath + "/scrmapp/qyhuser/orders/change/ordertime", //师傅侧更改预约时间
     qyhQueryUFinedOrderDetail: rootPath + "/scrmapp/qyhuser/orders/pending/detail", //获取待处理工单详情
-    qyhQueryFinedOrderDetail: rootPath + "/scrmapp/qyhuser/orders/finished/detail", //获取已完成工单详情
-        wxuserauth: rootPath + "/wx/user/auth"
+    qyhQueryFinedOrderDetail: rootPath + "/scrmapp/qyhuser/orders/finished/detail" //获取已完成工单详情
 }
 
 //跳转至一键预约页面
