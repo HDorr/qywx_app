@@ -172,6 +172,8 @@
     var scOrderItemId = getUrlParam("scOrderItemId") || localStorage.getItem('scOrderItemId') || "";
     var user_data = null
     var reserve_products = JSON.parse(localStorage.getItem('reserve_products') || "[]");
+    var isBuyFilter=localStorage.getItem("isBuyFilter") || null;
+
     var can_submit = true;
     var getData = {
       data: getShowDate()
@@ -201,6 +203,11 @@
         } else {
           var pdtInfoHtml = template('pdtInfo_template', {list: reserve_products})
           $("#pdtInfoBox").html(pdtInfoHtml)
+          if (isBuyFilter==1){
+            $('.buyed').addClass('active')
+          }else if(isBuyFilter==2){
+            $('.unbuyed').addClass('active')
+          }
         }
       })
       .fail(function (err) {
@@ -269,6 +276,7 @@
           res.payProductIds = _getPayProductsIds(reserve_products);
         }
         localStorage.removeItem("isPaidSuccess");
+        localStorage.setItem("isBuyFilter",$target.data('isbuyfilter'))
         if (res.payProductIds!=undefined && res.payProductIds!='' ) {
           window.location.href = pageUrls.applyPay+"?productIds="
               + res.productIds;

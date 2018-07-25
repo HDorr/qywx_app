@@ -33,7 +33,7 @@ var pageUrls =  { //正式环境
     unfinishedWorkOrderDetail_maintain:  rootPath + "/scrmapp/qyhuser/orders/detail/maintain",//TODO 未完成工单保养单详情
     unfinishedWorkOrderDetail_maintain_detail: rootPath + "/scrmapp/qyhuser/orders/maintain/detail",//TODO 未完成工单保养单产品详情提交
     completeWorkOrderTip:rootPath + "/mobile/qiYeHao/workOrderOperation/jsp/completeServiceTip.jsp",//完成工单后的成功提示页面
-    reserveServicePdtList:rootPath + "/scrmapp/consumer/wechat/orders/schooseProduct",
+    reserveServicePdtList:rootPath + "/scrmapp/consumer/wechat/orders/service/choice/product",
     chooseAddressPage: rootPath + "/scrmapp/consumer/wechatuser/address/index",                     //地址选择
     reserveInstallPage: rootPath +"/scrmapp/consumer/product/reserve/install",           //预约安装详情
     reserveUpdateFilterPage: rootPath +"/scrmapp/consumer/product/reserve/updateFilter",  //预约更换滤芯详情

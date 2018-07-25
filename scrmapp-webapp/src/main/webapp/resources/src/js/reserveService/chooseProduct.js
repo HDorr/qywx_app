@@ -13,6 +13,7 @@
   }else {
     localStorage.removeItem("scOrderItemId")
 	}
+	localStorage.removeItem('isBuyFilter')
 	$(function(){
 		getAndRenderList()
 		addNewPdtTrigger()
