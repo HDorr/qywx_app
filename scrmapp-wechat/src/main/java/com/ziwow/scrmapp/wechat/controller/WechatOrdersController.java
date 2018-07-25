@@ -177,7 +177,7 @@ public class WechatOrdersController {
                         String tp = b.toString();
                         //由于产品型号不是唯一值，通过主键ID + 型号拼接
                         ext =ext + " " + pf.getServiceFeeName() + " &金额:" + tp + " &关联订单号:" + scOrderNo;
-                        if (StringUtil.isBlank(scOrderNo)){
+                        if (StringUtil.isBlank(scOrderNos)){
                           scOrderNos=scOrderNo;
                         }else {
                           scOrderNos=scOrderNos+","+scOrderNo;
