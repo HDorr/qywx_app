@@ -209,6 +209,7 @@ public class WechatUserServiceImpl implements WechatUserService {
         params.put("signture", MD5.toMD5(Constant.AUTH_KEY + timestamp));
         params.put("mobile", mobile);
         params.put("unionId", unionId);
+        logger.info("注册用户信息同步到小程序,params:{}", JSONObject.fromObject(params).toString());
         String result = HttpClientUtils.postJson(syncUserUrl, JSONObject.fromObject(params).toString());
         if (StringUtils.isNotBlank(result)) {
             JSONObject o1 = JSONObject.fromObject(result);
