@@ -169,7 +169,7 @@
 
 
     var addressId = getUrlParam("addressId");
-    var scOrderItemId = getUrlParam("scOrderItemId")
+    var scOrderItemId = getUrlParam("scOrderItemId") || localStorage.getItem('scOrderItemId') || "";
     var user_data = null
     var reserve_products = JSON.parse(localStorage.getItem('reserve_products') || "[]");
     var can_submit = true;
