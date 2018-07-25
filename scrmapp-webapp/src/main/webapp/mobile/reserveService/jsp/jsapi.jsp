@@ -45,7 +45,7 @@
                                 alert(p.serviceStatus);
                             }*/
                         }
-                        alert("支付成功");
+                        // alert("支付成功");
                         localStorage.setItem('reserve_products',JSON.stringify(products));
                       localStorage.setItem('isPaidSuccess',"true");
                       <%--alert("跳转："+"${pageContext.request.contextPath}/wx/order/query?orderId="+orderId)--%>
