@@ -3,7 +3,7 @@ package com.ziwow.scrmapp.wechat.vo;
 public class MiniappSendSms {
 
 
-  private String signature;
+  private String signture;
   private String timestamp;
 
 
@@ -11,12 +11,12 @@ public class MiniappSendSms {
   private String message;
   private String phone;
 
-  public String getSignature() {
-    return signature;
+  public String getSignture() {
+    return signture;
   }
 
-  public void setSignature(String signature) {
-    this.signature = signature;
+  public void setSignture(String signature) {
+    this.signture = signature;
   }
 
   public String getTimestamp() {
