@@ -428,7 +428,7 @@ public class WechatController {
     @RequestMapping(value = {"/syncDispatchDot"}, method = {RequestMethod.POST}, produces = {"application/json;charset=UTF-8"})
     @ResponseBody
     public Result syncDispatchDot(@RequestBody DispatchDotParam dispatchDotParam) {
-        logger.info("同步400派单给网点信息,CSM推送数据dispatchDotParam:[{}]", JSON.toJSON(dispatchDotParam));
+        logger.info("同步400？派单给网点信息,CSM推送数据dispatchDotParam:[{}]", JSON.toJSON(dispatchDotParam));
         Result result = new BaseResult();
         result.setReturnMsg("400派单给网点同步成功!");
         result.setReturnCode(Constant.SUCCESS);

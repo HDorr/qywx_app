@@ -68,7 +68,13 @@ var queryUrls =
     qyhQueryRefuseOrder: rootPath + "/scrmapp/qyhuser/orders/refuse", //师傅侧拒绝工单
     qyhQueryChangeOrder: rootPath + "/scrmapp/qyhuser/orders/change/ordertime", //师傅侧更改预约时间
     qyhQueryUFinedOrderDetail: rootPath + "/scrmapp/qyhuser/orders/pending/detail", //获取待处理工单详情
-    qyhQueryFinedOrderDetail: rootPath + "/scrmapp/qyhuser/orders/finished/detail" //获取已完成工单详情
+    qyhQueryFinedOrderDetail: rootPath + "/scrmapp/qyhuser/orders/finished/detail", //获取已完成工单详情
+
+
+}
+
+var confirmUrls = {
+    qyhConfirmReceive:confirmtype => rootPath+`/scrmapp/qyhuser/orders/confirm/receive/${confirmtype}`
 }
 
 //跳转至一键预约页面

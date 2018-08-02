@@ -97,11 +97,12 @@
                             <button class="disabled">更改预约</button>
                         {{/if}}
 
-                        {{if v.btnStatus.canComplete === 1}}
-                            <button data-orderscode="{{v.ordersCode}}" data-ordertype="{{v.orderType}}" onclick="completeOrder(this)">完工提交</button>
-                        {{else}}
-                            <button class="disabled">完工提交</button>
-                        {{/if}}
+                        <%--{{if v.btnStatus.canComplete === 1}}--%>
+                            <%--<button data-orderscode="{{v.ordersCode}}" data-ordertype="{{v.orderType}}" onclick="completeOrder(this)">完工提交</button>--%>
+                        <%--{{else}}--%>
+                            <%--<button class="disabled">完工提交</button>--%>
+                        <%--{{/if}}--%>
+                        <button data-confirmstatus="{{(v.confirmStatus==null||v.confirmStatus == 0)?1:v.confirmStatus}}" data-orderscode="{{v.ordersCode}}" data-ordersid="{{v.id}}" data-ordertype="{{v.orderType}}" data-contacts="{{v.userName}}" onclick="cofirmOrder(this)">{{v.confirmContent}}</button>
                     </div>
                 </div>
             </li>

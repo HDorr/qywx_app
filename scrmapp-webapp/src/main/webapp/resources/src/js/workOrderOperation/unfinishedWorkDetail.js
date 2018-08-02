@@ -132,6 +132,76 @@ function completeOrder(el) {
     location.href = url;
 }
 
+//确认工单流程
+function cofirmOrder(el) {
+    var $el = $(el);
+    var $confirmStatus = $el.data('confirmstatus');
+    var params = {
+        userId: glData.userId,
+        ordersCode: $el.data("orderscode"),
+        ordersId: $el.data("ordersid"),
+        contacts: $el.data("contacts"),
+        contactsMobile: $el.data("contactsmobile")
+    }
+    simpleConfirm($el, function () {
+        //工单状态需上传CSM
+        if ($confirmStatus < 3) {
+            $.post(confirmUrls.qyhConfirmReceive($confirmStatus), params, function (data) {
+                if (data.returnCode == 1) {
+                    simpleAlert(data.returnMsg)
+                    hideAndShow($el);
+                } else {
+                    simpleAlert(data.returnMsg)
+                }
+            });
+        }else if($confirmStatus == 3){
+            completeOrder(el);
+        }else {
+            simpleAlert("没有对应的操作");
+        }
+    });
+}
+
+//按钮切换
+function hideAndShow($el) {
+    var $confirmStatus = $el.data('confirmstatus');
+    $confirmStatus++;
+    if ($confirmStatus == 2) {
+        $el.html("确认到达");
+        $el.data('confirmstatus', $confirmStatus);
+    } else if ($confirmStatus == 3) {
+        $el.html("完工提交");
+        $el.data('confirmstatus', $confirmStatus);
+    }
+}
+
+//简单确认框
+function simpleConfirm(h, callback) {
+    var v = $(h).html();
+    if ($(h).prop("id") === "arrive") {
+        v += "现场";
+    }
+    $.confirm({
+        title: '',
+        text: v + '?',
+        onOK: function () {
+            callback();
+        },
+        onCancel: function () {
+            return;
+        }
+    })
+}
+
+//简单弹框
+function simpleAlert(msg) {
+    $.alert({
+        title: '',
+        text: msg,
+        onOK: null
+    })
+}
+
 function getShowDate() {
     var dataArr = getFutureDate(7);
     var values = [];

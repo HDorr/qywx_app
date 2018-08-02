@@ -1,36 +1,39 @@
 var glData = {
-        userId: $("#userIdInput").val() || getUrlParam('userId'),
-        condition: $("#conditionInput").val() || "today",
-        todayDom: $("#today>ul"),
-        tomorrowDom: $("#tomorrow>ul"),
-        allDom: $("#all>ul"),
-        todayHtml: "",
-        tomorrowHtml: "",
-        allHtml: "",
-        canNav: false
-    }
-function clearOrderLocalStorage(){
+    userId: $("#userIdInput").val() || getUrlParam('userId'),
+    condition: $("#conditionInput").val() || "today",
+    todayDom: $("#today>ul"),
+    tomorrowDom: $("#tomorrow>ul"),
+    allDom: $("#all>ul"),
+    todayHtml: "",
+    tomorrowHtml: "",
+    allHtml: "",
+    canNav: false
+}
+
+function clearOrderLocalStorage() {
     window.localStorage.removeItem('unfinished_products')
 }
+
 function renderList(condition) {
-    getListData(condition).then(function(data){
-        if(data.returnCode !== ERR_OK){
-            alertMsg.error({message:data.returnMsg})
-            return 
+    getListData(condition).then(function (data) {
+        if (data.returnCode !== ERR_OK) {
+            alertMsg.error({message: data.returnMsg})
+            return
         }
-        var renderData = _setOrderStatusByProductsStatus(data.data,condition)
-        unFinishedRenderFunc(condition,renderData)
-    }).fail(function(error){
+        var renderData = _setOrderStatusByProductsStatus(data.data, condition)
+        unFinishedRenderFunc(condition, renderData)
+    }).fail(function (error) {
         alertMsg.error(error)
     })
 }
-function getListData(condition){
+
+function getListData(condition) {
     var condition = condition || "today"
     var data = {
         userId: glData.userId,
-        condition:condition
+        condition: condition
     }
-    return ajax.get(queryUrls.qyhQueryUnfinishedOrder,data)
+    return ajax.get(queryUrls.qyhQueryUnfinishedOrder, data)
 }
 
 function unFinishedRenderFunc(flag, data) {
@@ -51,7 +54,7 @@ function unFinishedRenderFunc(flag, data) {
 }
 
 function tabEvts() {
-    $(".weui-navbar .weui-navbar__item").on("click", function(e) {
+    $(".weui-navbar .weui-navbar__item").on("click", function (e) {
         var flag = $(this).data("flag");
         if (!glData[flag + "Html"]) {
             renderList(flag)
@@ -65,7 +68,7 @@ function refuseOrder(el) {
         text: "确认拒绝工单吗？",
         tip: "请先联系您所在的服务网点<br/>服务网点电话 : 021-61522809",
         textArea: true,
-        callback: function(fn, reason) {
+        callback: function (fn, reason) {
             //判断textarea里的值是否为空
             var text = reason.trim();
             if (!text) {
@@ -82,8 +85,8 @@ function refuseOrder(el) {
                 contacts: that.data("contacts"),
                 reason: text
             }
-            ajax.post(queryUrls.qyhQueryRefuseOrder,data)
-                .then(function(data){
+            ajax.post(queryUrls.qyhQueryRefuseOrder, data)
+                .then(function (data) {
                     if (data.returnCode == 1) {
                         $.toptip(data.returnMsg || '拒单成功', 2000, 'success');
                         renderList(that.data('flag'))
@@ -91,7 +94,7 @@ function refuseOrder(el) {
                         $.toptip(data.returnMsg, 2000, 'error');
                     }
                 })
-                .fail(function(error){
+                .fail(function (error) {
                     alertMsg.error(error)
                 })
         }
@@ -99,9 +102,9 @@ function refuseOrder(el) {
 }
 
 function completeOrder(el) {
-    var orderType =  $(el).data("ordertype")
+    var orderType = $(el).data("ordertype")
     var url = ''
-    switch(orderType){
+    switch (orderType) {
         case 1 :
             url = pageUrls.unfinishedWorkOrderDetail_install_detail
             break;
@@ -115,22 +118,92 @@ function completeOrder(el) {
             url = pageUrls.unfinishedWorkOrderDetail_maintain
             break
     }
-    var params = {orderType:orderType,userId:glData.userId,ordersCode:$(el).data("orderscode")}
-    url = getParamStr(url,params)
+    var params = {orderType: orderType, userId: glData.userId, ordersCode: $(el).data("orderscode")}
+    url = getParamStr(url, params)
     // var url = rootPath + "/scrmapp/qyhuser/orders/finish/detail/page?orderType=" + $(el).data("ordertype") + "&userId=" + glData.userId + "&ordersCode=" + $(el).data("orderscode")
     location.href = url;
 }
 
 function changeOrder(el) {
     var $el = $(el)
-    var params = {ordersCode:$el.data('orderscode'),userId:glData.userId,isChange:'1'}
-    var url =  getParamStr(pageUrls.unfinishedWorkOrderDetail,params)
+    var params = {ordersCode: $el.data('orderscode'), userId: glData.userId, isChange: '1'}
+    var url = getParamStr(pageUrls.unfinishedWorkOrderDetail, params)
     location.href = url;
 }
 
+//确认工单流程
+function cofirmOrder(el) {
+    var $el = $(el);
+    var $confirmStatus = $el.data('confirmstatus');
+    var params = {
+        userId: glData.userId,
+        ordersCode: $el.data("orderscode"),
+        ordersId: $el.data("ordersid"),
+        contacts: $el.data("contacts"),
+        contactsMobile: $el.data("contactsmobile")
+    }
+    simpleConfirm($el, function () {
+        //工单状态需上传CSM
+        if ($confirmStatus < 3) {
+            $.post(confirmUrls.qyhConfirmReceive($confirmStatus), params, function (data) {
+                if (data.returnCode == 1) {
+                    simpleAlert(data.returnMsg)
+                    hideAndShow($el);
+                } else {
+                    simpleAlert(data.returnMsg)
+                }
+            });
+        }else if($confirmStatus == 3){
+            completeOrder(el);
+        }else {
+            simpleAlert("没有对应的操作");
+        }
+    });
+}
+
+//按钮切换
+function hideAndShow($el) {
+    var $confirmStatus = $el.data('confirmstatus');
+    $confirmStatus++;
+    if ($confirmStatus == 2) {
+        $el.html("确认到达");
+        $el.data('confirmstatus', $confirmStatus);
+    } else if ($confirmStatus == 3) {
+        $el.html("完工提交");
+        $el.data('confirmstatus', $confirmStatus);
+    }
+}
+
+//简单确认框
+function simpleConfirm(h, callback) {
+    var v = $(h).html();
+    if ($(h).prop("id") === "arrive") {
+        v += "现场";
+    }
+    $.confirm({
+        title: '',
+        text: v + '?',
+        onOK: function () {
+            callback();
+        },
+        onCancel: function () {
+            return;
+        }
+    })
+}
+
+//简单弹框
+function simpleAlert(msg) {
+    $.alert({
+        title: '',
+        text: msg,
+        onOK: null
+    })
+}
+
 function gotoDetail(el) {
-    var params = {ordersCode:$(el).data('orderscode'),userId:glData.userId,isChange:'0'}
-    var url =  getParamStr(pageUrls.unfinishedWorkOrderDetail,params) 
+    var params = {ordersCode: $(el).data('orderscode'), userId: glData.userId, isChange: '0'}
+    var url = getParamStr(pageUrls.unfinishedWorkOrderDetail, params)
     location.href = url
 }
 
@@ -138,7 +211,7 @@ function gotoNav(el) {
     if (glData.canNav) {
         $.showLoading();
         var address = $(el).data("useraddress");
-        baiduMapUtils.getCoodByAddress(address, "", function(data) {
+        baiduMapUtils.getCoodByAddress(address, "", function (data) {
             if (data.status == 0) {
                 $.hideLoading();
                 var lat = data.result.location.lat;
@@ -162,12 +235,12 @@ function gotoNav(el) {
 }
 
 
-function _startWx(){
+function _startWx() {
     wxInit.init()
-    wx.ready(function() {
+    wx.ready(function () {
         wx.checkJsApi({
             jsApiList: ['openLocation'], // 需要检测的JS接口列表，所有JS接口列表见附录2,
-            success: function(res) {
+            success: function (res) {
                 if (res.checkResult.openLocation) {
                     glData.canNav = true;
                 } else {
@@ -177,31 +250,31 @@ function _startWx(){
             }
         });
     })
-    wx.error(function(res) {
+    wx.error(function (res) {
         $.toptip("微信地图功能调用失败", "warning")
     })
 }
 
 /**
  * 根据每个订单下每个产品的状态（status：1(正常)，2(取消)，3(完工)）来设置 订单的可操作项
- * @param {* Object} data 
+ * @param {* Object} data
  * @return {* Object} data (data.wechatOrdersVoList每一项增加了btnStatus:{"canRefuse":1,"canChangeTime":1,"canComplete":1})
  *                     1为可操作  0为不可操作
  */
-function _setOrderStatusByProductsStatus(data,condition){
+function _setOrderStatusByProductsStatus(data, condition) {
     var resData = JSON.parse(JSON.stringify(data))
     resData.flag = condition
-    if(!resData.wechatOrdersVoList) return resData
-    for(var i = 0 ; i < resData.wechatOrdersVoList.length;i++){
+    if (!resData.wechatOrdersVoList) return resData
+    for (var i = 0; i < resData.wechatOrdersVoList.length; i++) {
         var order = resData.wechatOrdersVoList[i]
-        var btnStatus = {"canRefuse":1,"canChangeTime":1,"canComplete":1}
+        var btnStatus = {"canRefuse": 1, "canChangeTime": 1, "canComplete": 1}
         /* 可加入限制按钮的逻辑  不显示相应功能按钮 至0即可 */
         order.btnStatus = btnStatus
     }
     return resData
 }
 
-(function($, window) {
+(function ($, window) {
     _startWx()
     clearOrderLocalStorage()
     var condition = "today";
@@ -211,7 +284,7 @@ function _setOrderStatusByProductsStatus(data,condition){
     renderList(condition)
     tabEvts();
 
-    
+
 })(jQuery, window)
 
 

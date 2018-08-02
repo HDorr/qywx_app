@@ -688,7 +688,7 @@ public class WechatOrdersServiceImpl implements WechatOrdersService {
         // 录入受理记录表
         WechatOrdersRecord wechatOrdersRecord = new WechatOrdersRecord();
         wechatOrdersRecord.setOrderId(wechatOrders.getId());
-        wechatOrdersRecord.setRecordContent(engineerName + "已接单");
+        wechatOrdersRecord.setRecordContent("服务工程师" + engineerName + "已接单");
         wechatOrdersRecord.setRecordTime(date);
         wechatOrdersRecordService.saveWechatOrdersRecord(wechatOrdersRecord);
         // 发送短信通知提醒
