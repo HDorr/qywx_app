@@ -2,60 +2,61 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ziwow.scrmapp.common.persistence.mapper.ProductMapper">
     <resultMap id="BaseResultMap" type="com.ziwow.scrmapp.common.persistence.entity.Product">
-        <id column="id" jdbcType="BIGINT" property="id" />
-        <result column="itemKind" jdbcType="VARCHAR" property="itemKind" />
-        <result column="typeName" jdbcType="VARCHAR" property="typeName" />
-        <result column="smallcName" jdbcType="VARCHAR" property="smallcName" />
-        <result column="modelName" jdbcType="VARCHAR" property="modelName" />
-        <result column="levelId" jdbcType="BIGINT" property="levelId" />
-        <result column="levelName" jdbcType="VARCHAR" property="levelName" />
-        <result column="productName" jdbcType="VARCHAR" property="productName" />
-        <result column="productCode" jdbcType="VARCHAR" property="productCode" />
-        <result column="productImage" jdbcType="VARCHAR" property="productImage" />
-        <result column="productBarCode" jdbcType="VARCHAR" property="productBarCode" />
-        <result column="barCodeImage" jdbcType="VARCHAR" property="barCodeImage" />
-        <result column="shoppingOrder" jdbcType="VARCHAR" property="shoppingOrder" />
-        <result column="saleType" jdbcType="TINYINT" property="saleType" />
-        <result column="o2o" jdbcType="TINYINT" property="o2o" />
-        <result column="buyChannel" jdbcType="TINYINT" property="buyChannel" />
-        <result column="filterRemind" jdbcType="TINYINT" property="filterRemind" />
-        <result column="userId" jdbcType="VARCHAR" property="userId" />
-        <result column="buyTime" jdbcType="DATE" property="buyTime" />
-        <result column="status" jdbcType="TINYINT" property="status" />
-        <result column="createTime" jdbcType="DATE" property="createTime" />
-        <result column="productBarCodeTwenty" jdbcType="VARCHAR" property="productBarCodeTwenty" />
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="itemKind" jdbcType="VARCHAR" property="itemKind"/>
+        <result column="typeName" jdbcType="VARCHAR" property="typeName"/>
+        <result column="smallcName" jdbcType="VARCHAR" property="smallcName"/>
+        <result column="modelName" jdbcType="VARCHAR" property="modelName"/>
+        <result column="levelId" jdbcType="BIGINT" property="levelId"/>
+        <result column="levelName" jdbcType="VARCHAR" property="levelName"/>
+        <result column="productName" jdbcType="VARCHAR" property="productName"/>
+        <result column="productCode" jdbcType="VARCHAR" property="productCode"/>
+        <result column="productImage" jdbcType="VARCHAR" property="productImage"/>
+        <result column="productBarCode" jdbcType="VARCHAR" property="productBarCode"/>
+        <result column="barCodeImage" jdbcType="VARCHAR" property="barCodeImage"/>
+        <result column="shoppingOrder" jdbcType="VARCHAR" property="shoppingOrder"/>
+        <result column="saleType" jdbcType="TINYINT" property="saleType"/>
+        <result column="o2o" jdbcType="TINYINT" property="o2o"/>
+        <result column="buyChannel" jdbcType="TINYINT" property="buyChannel"/>
+        <result column="filterRemind" jdbcType="TINYINT" property="filterRemind"/>
+        <result column="userId" jdbcType="VARCHAR" property="userId"/>
+        <result column="buyTime" jdbcType="DATE" property="buyTime"/>
+        <result column="status" jdbcType="TINYINT" property="status"/>
+        <result column="createTime" jdbcType="DATE" property="createTime"/>
+        <result column="productBarCodeTwenty" jdbcType="VARCHAR" property="productBarCodeTwenty"/>
     </resultMap>
-    
+
     <sql id="Base_Column_List">
 	    id, itemKind, typeName, smallcName, modelName, levelId, levelName, productName, productCode, barCodeImage,
 	    productImage, productBarCode, shoppingOrder, saleType, o2o, buyChannel, filterRemind, 
 	    userId, buyTime, status, createTime,productBarCodeTwenty
 	</sql>
-	
+
     <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
         select
-        	<include refid="Base_Column_List"/>
+        <include refid="Base_Column_List"/>
         from t_product
         where id = #{id,jdbcType=BIGINT}
     </select>
-    
+
     <select id="findByUserId" resultMap="BaseResultMap" parameterType="java.lang.String">
 	    select
 	    	id,productName,productBarCode,modelName,levelName,productImage,productBarCodeTwenty,productCode
 	    from t_product
 	    where status = 1 and userId = #{userId} order by id DESC
 	</select>
-	
+
     <select id="findBaseInfoById" parameterType="java.lang.Long" resultMap="BaseResultMap">
         select id,typeName,itemKind,productName,productBarCode,modelName,levelName,productImage,o2o,buyChannel,shoppingOrder,buyTime,saleType from t_product where id = #{productId,jdbcType=BIGINT}
     </select>
-    
+
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
         delete from t_product
         where id = #{id,jdbcType=BIGINT}
     </delete>
-    
-    <insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="com.ziwow.scrmapp.common.persistence.entity.Product">
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id"
+            parameterType="com.ziwow.scrmapp.common.persistence.entity.Product">
 	    insert into t_product (
 	    	itemKind, typeName, smallcName, modelName, levelId, levelName,
 	      	productName, productCode, productImage, productBarCode,barCodeImage, shoppingOrder, saleType,
@@ -69,7 +70,7 @@
 		    #{userId,jdbcType=VARCHAR}, #{buyTime,jdbcType=DATE}, #{status,jdbcType=INTEGER}, #{createTime,jdbcType=DATE},#{productBarCodeTwenty,jdbcType=VARCHAR}
 	    )
 	</insert>
-	
+
     <insert id="batchSave" parameterType="java.util.List">
         insert into t_product (itemKind, typeName,
         smallcName, modelName, levelId, levelName,
@@ -224,6 +225,28 @@
             </if>
         </trim>
     </insert>
+
+    <insert id="insertCrmProduct" parameterType="com.ziwow.scrmapp.common.persistence.entity.Product" useGeneratedKeys="true" keyProperty="id">
+        insert into t_product
+        (itemKind,
+        typeName,
+        modelName,
+        productName,
+        productCode,
+        productImage,
+        createTime,
+        status)
+        values
+            (#{itemKind,jdbcType=VARCHAR},
+            #{typeName,jdbcType=VARCHAR},
+            #{modelName,jdbcType=VARCHAR},
+            #{productName,jdbcType=VARCHAR},
+            #{productCode,jdbcType=VARCHAR},
+            #{productImage,jdbcType=VARCHAR},
+            #{createTime,jdbcType=TIMESTAMP},
+            2)
+    </insert>
+
     <update id="updateByPrimaryKeySelective" parameterType="com.ziwow.scrmapp.common.persistence.entity.Product">
         update t_product
         <set>
@@ -340,13 +363,13 @@
 		WHERE id = #{productId,jdbcType=BIGINT}
     </update>
 
-	<update id="updateProductBarCode" parameterType="com.ziwow.scrmapp.common.bean.vo.ProductVo">
-		UPDATE t_product
-		SET productBarCodeTwenty = #{productBarCode,jdbcType=VARCHAR}, barCodeImage = #{barCodeImage,jdbcType=VARCHAR}
-		<if test="productBarCodeTwenty != null and productBarCodeTwenty != ''">
-           ,productBarCode = #{productBarCodeTwenty,jdbcType=VARCHAR}
+    <update id="updateProductBarCode" parameterType="com.ziwow.scrmapp.common.bean.vo.ProductVo">
+        UPDATE t_product
+        SET productBarCodeTwenty = #{productBarCode,jdbcType=VARCHAR}, barCodeImage = #{barCodeImage,jdbcType=VARCHAR}
+        <if test="productBarCodeTwenty != null and productBarCodeTwenty != ''">
+            ,productBarCode = #{productBarCodeTwenty,jdbcType=VARCHAR}
         </if>
-		WHERE id = #{productId,jdbcType=BIGINT}
+        WHERE id = #{productId,jdbcType=BIGINT}
     </update>
 
     <update id="updateBarCodeImage">
@@ -417,7 +440,8 @@
         AND opr.orderId = #{ordersId}
     </select>
 
-    <select id="getProductInfoById" parameterType="java.util.List" resultType="com.ziwow.scrmapp.common.bean.vo.ProductVo">
+    <select id="getProductInfoById" parameterType="java.util.List"
+            resultType="com.ziwow.scrmapp.common.bean.vo.ProductVo">
         SELECT
         id as productId,
         levelId,
@@ -445,7 +469,8 @@
         </trim>
     </select>
 
-    <select id="getProductsByIds" parameterType="java.util.List" resultType="com.ziwow.scrmapp.common.persistence.entity.Product">
+    <select id="getProductsByIds" parameterType="java.util.List"
+            resultType="com.ziwow.scrmapp.common.persistence.entity.Product">
         SELECT
         id,
         levelId,

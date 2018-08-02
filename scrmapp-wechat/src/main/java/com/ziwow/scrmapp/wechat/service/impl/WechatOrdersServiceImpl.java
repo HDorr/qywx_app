@@ -661,10 +661,10 @@ public class WechatOrdersServiceImpl implements WechatOrdersService {
         String acceptNumber = dispatchMasterParam.getAcceptNumber();
         String engineerId = dispatchMasterParam.getEngineerId();
         String engineerName = dispatchMasterParam.getEngineerName();
-        boolean isLegal = SignUtil.checkSignature(signture, timeStamp, Constant.AUTH_KEY);
-        if (!isLegal) {
-            throw new ParamException(Constant.ILLEGAL_REQUEST);
-        }
+//        boolean isLegal = SignUtil.checkSignature(signture, timeStamp, Constant.AUTH_KEY);
+//        if (!isLegal) {
+//            throw new ParamException(Constant.ILLEGAL_REQUEST);
+//        }
         if (StringUtils.isEmpty(acceptNumber) || StringUtils.isEmpty(engineerId) || StringUtils.isEmpty(engineerName)) {
             LOG.info("受理单号、服务工程师ID或服务工程师名称为空", acceptNumber, engineerId, engineerName);
             throw new ParamException("受理单号、服务工程师ID或服务工程师名称不能为空!");
@@ -685,10 +685,10 @@ public class WechatOrdersServiceImpl implements WechatOrdersService {
         int status = SystemConstants.RECEIVE;
         Date date = new Date();
         this.dispatch(acceptNumber, engineerId, date, status);
-        // 录入受理记录表
+        // fixme 录入受理记录表
         WechatOrdersRecord wechatOrdersRecord = new WechatOrdersRecord();
         wechatOrdersRecord.setOrderId(wechatOrders.getId());
-        wechatOrdersRecord.setRecordContent("服务工程师" + engineerName + "已接单");
+        wechatOrdersRecord.setRecordContent("网点派单给工程师");
         wechatOrdersRecord.setRecordTime(date);
         wechatOrdersRecordService.saveWechatOrdersRecord(wechatOrdersRecord);
         // 发送短信通知提醒
