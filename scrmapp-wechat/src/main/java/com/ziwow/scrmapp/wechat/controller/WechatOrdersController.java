@@ -246,10 +246,9 @@ public class WechatOrdersController {
                 String serverType = OrderUtils.getServiceTypeName(orderType);
                 String mobilePhone = wechatUser.getMobilePhone();
                 String msgContent = "亲爱的用户，您预约的" + serverType + "服务已成功提交，我们将尽快为您派单。您可进入“沁园”官方微信服务号查看订单状态。";
-                //fixme 隐藏短信
-//                mobileService.sendContentByEmay(mobilePhone, msgContent, Constant.CUSTOMER);
+                mobileService.sendContentByEmay(mobilePhone, msgContent, Constant.CUSTOMER);
                 // 预约提交成功模板消息提醒
-//                wechatOrdersService.sendAppointmentTemplateMsg(wechatOrders.getOrdersCode(), serverType);
+                wechatOrdersService.sendAppointmentTemplateMsg(wechatOrders.getOrdersCode(), serverType);
                 WechatOrdersRecord wechatOrdersRecord = new WechatOrdersRecord();
                 wechatOrdersRecord.setOrderId(wechatOrders.getId());
                 wechatOrdersRecord.setRecordTime(date);

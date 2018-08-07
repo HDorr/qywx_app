@@ -28,21 +28,21 @@
                     <div class="starLevel pull-right">
                         <div class="top">
                             <span class="pull-left">服务态度：</span>
-                            <span class="pull-left attitudeRate">5</span>
-                            <div class="starBox pull-left ">
+                            <span class="pull-left attitudeRate">0</span>
+                            <div class="starBox pull-left " >
                                 <p class="attitudeRateStarBox"></p>
                             </div>
                         </div>
                         <div class="center">
                             <span class="pull-left">专业程度：</span>
-                            <span class="pull-left professionRate">5</span>
+                            <span class="pull-left professionRate">0</span>
                             <div class="starBox pull-left ">
                                 <p class="professionRateStarBox"></p>
                             </div>
                         </div>
                         <div class="bottom">
                             <span class="pull-left">诚信情况：</span>
-                            <span class="pull-left integrityRate">5</span>
+                            <span class="pull-left integrityRate">0</span>
                             <div class="starBox pull-left ">
                                <p class="integrityRateStarBox"></p>
                             </div>
@@ -93,11 +93,11 @@
                     <div class="starCon">
                         <span class="pull-left">推荐指数：</span>
                         <div class="chooseStar pull-left" data-id="recommend">
-                            <span  class="active"></span>
-                            <span  class="active"></span>
-                            <span  class="active"></span>
-                            <span  class="active"></span>
-                            <span  class="active"></span>
+                            <span  class=""></span>
+                            <span  class=""></span>
+                            <span  class=""></span>
+                            <span  class=""></span>
+                            <span  class=""></span>
                         </div>
                     </div>
                 </div>

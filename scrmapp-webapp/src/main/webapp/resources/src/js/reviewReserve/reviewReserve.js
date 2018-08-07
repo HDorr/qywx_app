@@ -1,10 +1,10 @@
 var glData = {
     sendData: {
         ordersCode: getUrlParam("ordersCode") /*"WX17041802343915"*/ , //受理单号
-        attitude: 5, // 态度
-        profession: 5, // 专业度
-        integrity: 5, // 诚信度
-        recommend: 5, // 推荐程度
+        attitude: 0, // 态度
+        profession: 0, // 专业度
+        integrity: 0, // 诚信度
+        recommend: 0, // 推荐程度
         content: "", // 评价内容
     }
 };
@@ -13,6 +13,60 @@ var glData = {
 
 (function($, window) {
     ajaxInfo(renderReview)
+
+
+  // $('.attitudeRateStarBox').parent().on('click',function (event) {
+  //   var offsetX=event.offsetX;
+  //   let offsetWidth = event.currentTarget.offsetWidth;
+  //   let number = Math.round(offsetX/(offsetWidth/5));
+  //   //服务态度
+  //   $(".attitudeRate").text(number);
+  //   $(".attitudeRateStarBox").css("width", number * 20 + "%");
+  //
+  //   if (number==0){
+  //     $(".attitudeRateStarBox").hide()
+  //   }else {
+  //     $(".attitudeRateStarBox").show()
+  //   }
+  //
+  //   glData.sendData.attitude=number;
+  //
+  // });
+  //
+  // $('.professionRateStarBox').parent().on('click',function (event) {
+  //   var offsetX=event.offsetX;
+  //   let offsetWidth = event.currentTarget.offsetWidth;
+  //   let number = Math.round(offsetX/(offsetWidth/5));
+  //   //专业程度
+  //   $(".professionRate").text(number);
+  //   $(".professionRateStarBox").css("width", number * 20 + "%");
+  //
+  //   if (number==0){
+  //     $(".professionRateStarBox").hide()
+  //   }else {
+  //     $(".professionRateStarBox").show()
+  //   }
+  //
+  //   glData.sendData.profession=number;
+  // });
+  //
+  // $('.integrityRateStarBox').parent().on('click',function (event) {
+  //   var offsetX=event.offsetX;
+  //   let offsetWidth = event.currentTarget.offsetWidth;
+  //   let number = Math.round(offsetX/(offsetWidth/5));
+  //   //诚信情况
+  //   $(".integrityRate").text(number);
+  //   $(".integrityRateStarBox").css("width", number * 20 + "%");
+  //
+  //   if (number==0){
+  //     $(".integrityRateStarBox").hide()
+  //   }else {
+  //     $(".integrityRateStarBox").show()
+  //   }
+  //
+  //   glData.sendData.integrity=number;
+  // });
+
 })(jQuery, window)
 
 
@@ -70,9 +124,9 @@ function renderReview(data) {
         strInt = "";
 
     for (var i = 0; i < 5; i++) {
-        strAtt += '<span class="active"></span>'
-        strPro += '<span class="active"></span>'
-        strInt += '<span class="active"></span>'
+        strAtt += '<span class=""></span>'
+        strPro += '<span class=""></span>'
+        strInt += '<span class=""></span>'
     }
 
     $(".chooseStar[data-id=attitude]").html(strAtt);
@@ -82,10 +136,10 @@ function renderReview(data) {
 }
 //加星减星
 function changeStar() {
-    $(".chooseStar").click(function(e) {
+    $(".chooseStar").on('click',function(e) {
         var spanEl = $(e.target);
         if (spanEl.hasClass('active')) {
-            spanEl.removeClass("active").nextAll('span').removeClass('active');
+            spanEl.nextAll('span').removeClass('active');
         } else {
             spanEl.addClass("active").prevAll('span').addClass('active');
         }
