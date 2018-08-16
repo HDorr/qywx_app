@@ -1186,6 +1186,87 @@ public class ThirdPartyServiceImpl implements ThirdPartyService {
         return result;
     }
 
+    @Override
+    public Result getCssAssetsInfo(String phone) {
+//        CssWxRequest result = null;
+//        Client client = null;
+//        List<ProductAppealVo> list = Lists.newArrayList();
+//        try {
+//            LOG.info("============开始调用csm系统的用户资产信息查询接口================");
+//            CssWxService service = this.getCssWxService();
+//            XFireProxy proxy = (XFireProxy) Proxy.getInvocationHandler(service);
+//            client = proxy.getClient();
+//            client.addOutHandler(new ClientAuthenticationHandler(authUserName, authPassword));
+//            //传条件
+//            CssWxRequest req = new CssWxRequest();
+//            req.setTel(phone);
+//            // 查询请求
+//            result = service.CssEnduserWxSearch(req);
+//            if (null != result) {
+//                // 返回信息 getStatus 0-失败 1-成功
+//                Long status = result.getStatus();
+//                String message = result.getMessage();
+//                LOG.info("用户资产信息查询接口返回信息status:[{}],message[{}]", status, message);
+//                // 判断是否成功
+//                if (status == 1) {
+//                    if (result.getOne_V_Msg().length() > 0) {
+//                        JSONArray myJsonArray = JSONArray.fromObject(result.getOne_V_Msg());
+//                        if (myJsonArray.size() > 0) {
+//                            for (int i = 0; i < myJsonArray.size(); i++) {
+//                                JSONObject dataObj = myJsonArray.getJSONObject(i);
+//                                String enduserName = dataObj.has("enduser_name") ? dataObj.getString("enduser_name") : "";// 用户姓名
+//                                String mobile = dataObj.getString("mobile"); // 电话
+//                                String enduserAddress = dataObj.getString("enduser_address"); // 地址
+//                                String provinceName = dataObj.getString("province_name");// 省
+//                                String cityName = dataObj.getString("city_name");// 市
+//                                String countyName = dataObj.getString("county_name");// 区县
+//                                Integer provinceId = dataObj.has("province_id") ? dataObj.getInt("province_id") : 0; // 省Id
+//                                Integer cityId = dataObj.has("city_id") ? dataObj.getInt("city_id") : 0;// 市Id
+//                                Integer countyId = dataObj.has("city_id") ? dataObj.getInt("county_id") : 0;// 区Id
+//                                // 封装成vo对象
+//                                ProductAppealVo productAppealVo = new ProductAppealVo();
+//                                productAppealVo.setProvinceId(provinceId);
+//                                productAppealVo.setProvinceName(provinceName);
+//                                productAppealVo.setCityId(cityId);
+//                                productAppealVo.setCityName(cityName);
+//                                productAppealVo.setCountyId(countyId);
+//                                productAppealVo.setCountyName(countyName);
+//                                productAppealVo.setMobile(mobile);
+//                                productAppealVo.setEnduserAddress(enduserAddress);
+//                                productAppealVo.setEnduserName(enduserName);
+//                                // 产品相关
+//                                List<AppealProduct> appealProductList = Lists.newArrayList();
+//                                JSONArray jsonArry = (dataObj.getJSONArray("items"));
+//                                if (jsonArry.size() > 0) {
+//                                    for (int m = 0; m < jsonArry.size(); m++) {
+//                                        JSONObject jsonObj = jsonArry.getJSONObject(m);
+//                                        String netSaleNo = jsonObj.getString("net_sale_no");    // 购买单号
+//                                        String spec = jsonObj.getString("spec");                // 产品型号
+//                                        String item_code = jsonObj.getString("item_code");      // 产品编码
+//                                        String purchDate = jsonObj.getString("purch_date");    // 购买日期
+//                                        AppealProduct appealProduct = new AppealProduct();
+//                                        appealProduct.setNetSaleNo(netSaleNo);
+//                                        appealProduct.setSpec(spec);
+//                                        appealProduct.setItem_code(item_code);
+//                                        appealProduct.setPurchDate(purchDate);
+//                                        appealProductList.add(appealProduct);
+//                                    }
+//                                }
+//                                productAppealVo.setProducts(appealProductList);
+//                                list.add(productAppealVo);
+//                            }
+//                        }
+//                    }
+//                }
+//            }
+//        } catch (Exception e) {
+//            LOG.error("用户资产信息查询接口失败:", e);
+//        } finally {
+//            client.close();
+//        }
+        return null;
+    }
+
     private static String url = "http://122.227.252.12:802/QYFWService/QYWebService.asmx";//提供接口的地址
     private static String soapaction = "http://tempuri.org/";   //域名，这是在server定义的
 }
