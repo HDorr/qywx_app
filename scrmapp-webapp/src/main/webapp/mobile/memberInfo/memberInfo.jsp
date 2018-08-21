@@ -13,6 +13,13 @@
         <link rel="stylesheet" href="${f_ctxpath}/resources/src/css/jqweui/jquery-weui.min.css">
         <link rel="stylesheet" href="${f_ctxpath}/resources/src/css/jqweui/weui.min.css">
         <link rel="stylesheet" href="${f_ctxpath}/resources/src/css/userPersonalData/userPersonalData.css${f_ver}">
+
+        <style>
+            .weui-actionsheet_toggle {
+                -webkit-transform: translateY(0);
+                transform: translateY(0);
+            }
+        </style>
     </head>
     <body>
         <div class="userInfo_main_layer">

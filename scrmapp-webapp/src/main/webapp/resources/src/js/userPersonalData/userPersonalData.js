@@ -106,8 +106,12 @@ function choseGender(that) {
                 el.text("女");
                 el.data("gender", 2)
             }
-        }]
+        }],
+      onClose:function () {
+        $('#weui-actionsheet').remove()
+      }
     });
+
 }
 
 //选择婚否
@@ -126,7 +130,10 @@ function choseIsMarriage(that) {
                 el.text("未婚");
                 el.data("maritalstatus", 2)
             }
-        }]
+        }],
+      onClose:function () {
+        $('#weui-actionsheet').remove()
+      }
     });
 }
 
@@ -155,7 +162,10 @@ function educationLevelEvt(that) {
                 })
             })
             $.actions({
-                actions: actions
+                actions: actions,
+              onClose:function () {
+                $('#weui-actionsheet').remove()
+              }
             })
         }
     })
@@ -177,7 +187,10 @@ function occupationEvt(that) {
                 })
             })
             $.actions({
-                actions: actions
+                actions: actions,
+              onClose:function () {
+                $('#weui-actionsheet').remove()
+              }
             })
         }
     })
@@ -199,7 +212,10 @@ function monthlyIncome(that) {
                 })
             })
             $.actions({
-                actions: actions
+                actions: actions,
+              onClose:function () {
+                $('#weui-actionsheet').remove()
+              }
             })
         }
     })
