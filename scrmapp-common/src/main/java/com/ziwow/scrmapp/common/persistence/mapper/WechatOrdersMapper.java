@@ -69,5 +69,4 @@ public interface WechatOrdersMapper {
 
     int updateBtnStatus(@Param("confirmStatus")Integer confirmStatus,@Param("ordersCode") String ordersCode);
 
-    String getUserIdByPhone(@Param("phone")String userPhone);
 }

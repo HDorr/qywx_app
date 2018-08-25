@@ -62,6 +62,4 @@ public interface ProductMapper {
 
     int countProductByUserIdWithoutStatus(@Param("userId") String userId);
 
-    int insertCrmProduct(Product product);
-
 }

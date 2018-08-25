@@ -57,21 +57,12 @@ public class ProductController {
     private ProductService productService;
     @Autowired
     private WechatUserService wechatUserService;
-    @Autowired
-    private WechatFansService wechatFansService;
     @Value("${wechat.appid}")
     private String appid;
     @Value("${open.weixin.component_appid}")
     private String component_appid;
-
-    //查询产品服务路径
-    @Value("${qinyuan.modelname.service.query.url}")
-    private String qinyuanModelnameServiceQuery;
-
     @Autowired
     private MobileService mobileService;
-    @Autowired
-    private WXPayService wxPayService;
 
     /**
      * 展示产品系列列表

@@ -56,7 +56,6 @@
         <result column="maintType" property="maintType" jdbcType="INTEGER"/>
         <result column="buyFilter" property="buyFilter" jdbcType="INTEGER"/>
         <result column="contactsTelephone" property="contactsTelephone" jdbcType="VARCHAR"/>
-        <result column="confirmStatus" property="confirmStatus" jdbcType="INTEGER"></result>
     </resultMap>
 
     <sql id="Base_Column_List">
@@ -466,8 +465,7 @@
          o.faultImage,
          o.maintType,
          o.buyFilter,
-         o.contactsTelephone,
-         o.confirmStatus
+         o.contactsTelephone
         FROM
             t_wechat_orders o
         WHERE
@@ -857,10 +855,6 @@
     </select>
     <select id="getDispatchOrderNumByDate" resultType="java.lang.Integer">
         select count(1) orderNum from t_wechat_orders where DATE_FORMAT(createTime,'%Y-%m-%d') = #{orderDate};
-    </select>
-
-    <select id="getUserIdByPhone" resultType="java.lang.String">
-      select userId from t_wechat_user where mobilePhone = #{phone}
     </select>
 
     <update id="updateOrdersNoAndStatus">

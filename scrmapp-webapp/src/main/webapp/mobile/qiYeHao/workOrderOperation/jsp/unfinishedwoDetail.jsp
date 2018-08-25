@@ -130,10 +130,9 @@
                     {{/each}}
                 </ul>
                 <div class="btnBox clearfix">
-                    <%--{{if btnStatus.canRefuse === 1}}--%>
-                        <%--<button class="qy-btn-180 pull-right" data-ordertype="{{orderType}}" onclick="completeOrder(this)" >完工提交</button>--%>
-                    <%--{{/if}}--%>
-                    <button  class="qy-btn-180 pull-right" data-confirmstatus="{{(confirmStatus==null||confirmStatus == 0)?1:confirmStatus}}" data-orderscode="{{ordersCode}}" data-ordersid="{{id}}" data-ordertype="{{orderType}}" data-contacts="{{userName}}" data-contactsmobile="{{userMobile}}" onclick="cofirmOrder(this)">{{confirmContent}}</button>
+                    {{if btnStatus.canRefuse === 1}}
+                        <button class="qy-btn-180 pull-right" data-ordertype="{{orderType}}" onclick="completeOrder(this)" >完工提交</button>
+                    {{/if}}
                     {{if btnStatus.canChangeTime === 1}}
                         <button class="qy-btn-cancel pull-right" id="changeOrder" data-orderscode="{{ordersCode}}" data-ordersid="{{id}}" data-ordertype="{{orderType}}" data-contacts="{{userName}}" data-oldtime="{{orderTime}}">更改预约</button>
                     {{/if}}
