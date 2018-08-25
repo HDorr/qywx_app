@@ -600,8 +600,7 @@
         o.contacts AS userName,
         o.contactsMobile AS userMobile,
         f.headimgurl AS imageUrl,
-        concat(o.province,o.city,o.area,o.address) userAddress,
-        o.confirmStatus
+        concat(o.province,o.city,o.area,o.address) userAddress
         FROM
         t_wechat_fans f,
         t_wechat_user u,
@@ -860,10 +859,5 @@
     <update id="updateOrdersNoAndStatus">
         update t_wechat_orders set ordersNo = #{ordersNo},updateTime = #{updateTime},status = #{status},endTime = #{updateTime}
         where ordersCode = #{ordersCode}
-    </update>
-    <update id="updateBtnStatus">
-         update t_wechat_orders
-         set confirmStatus = #{confirmStatus}
-         where ordersCode = #{ordersCode}
     </update>
 </mapper>

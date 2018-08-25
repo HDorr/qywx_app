@@ -67,6 +67,4 @@ public interface WechatOrdersMapper {
 
     public int getDispatchOrderNumByDate(@Param("orderDate")String orderDate);
 
-    int updateBtnStatus(@Param("confirmStatus")Integer confirmStatus,@Param("ordersCode") String ordersCode);
-
 }
