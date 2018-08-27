@@ -9,12 +9,23 @@
 package com.ziwow.scrmapp.wechat.service;
 
 import com.alibaba.fastjson.JSON;
+import com.thoughtworks.xstream.XStream;
 import com.ziwow.scrmapp.common.persistence.entity.Channel;
+import com.ziwow.scrmapp.tools.utils.CommonUtil;
+import com.ziwow.scrmapp.tools.utils.Sha1Util;
 import com.ziwow.scrmapp.tools.utils.StringUtil;
 import com.ziwow.scrmapp.tools.weixin.InMessage;
+import com.ziwow.scrmapp.tools.weixin.XStreamAdaptor;
 import com.ziwow.scrmapp.tools.weixin.XmlUtils;
+import com.ziwow.scrmapp.tools.weixin.decode.AesException;
+import com.ziwow.scrmapp.tools.weixin.decode.WXBizMsgCrypt;
+import com.ziwow.scrmapp.wechat.persistence.entity.OpenAuthorizationWeixin;
+import com.ziwow.scrmapp.wechat.persistence.entity.OpenWeixin;
 import com.ziwow.scrmapp.wechat.persistence.entity.WechatCustomerMsg;
 import com.ziwow.scrmapp.wechat.persistence.entity.WechatFans;
+import com.ziwow.scrmapp.wechat.service.impl.WeiXinWerviceImpl;
+import com.ziwow.scrmapp.wechat.vo.Articles;
+import com.ziwow.scrmapp.wechat.vo.TextOutMessage;
 import com.ziwow.scrmapp.wechat.vo.UserInfo;
 import java.io.PrintWriter;
 import java.io.Writer;
@@ -72,6 +83,16 @@ public class WeChatMessageProcessingHandler {
 
     @Value("${order.list.url}")
     private String orderlisturl;
+
+    @Value("${template.msg.url}")
+    private String msgUrl;
+
+    @Value("${register.url}")
+    private String registerUrl;
+
+    @Autowired
+    private OpenWeixinService openWeixinService;
+
     /**
      * 业务转发组件
      *
@@ -155,6 +176,7 @@ public class WeChatMessageProcessingHandler {
                                 wechatFansService.saveWechatFans(wechatFans);
                             }
                         }
+                        dealWithSubscribe(inMessage,response);
                     } else if ("unsubscribe".equals(inMessage.getEvent())) {
                         // 取消关注事件
                         LOG.info("取消关注openId=[{}]", inMessage.getFromUserName());
@@ -195,8 +217,63 @@ public class WeChatMessageProcessingHandler {
         }
     }
 
-    private void dealWithText(InMessage inMessage, HttpServletResponse response)
-        throws IOException {
+    private void dealWithSubscribe(InMessage inMessage,HttpServletResponse response) {
+        StringBuilder msgsb=new StringBuilder();
+        msgsb.append("Hi~欢迎进入沁园水健康守护基地\n")
+            .append("\n")
+            .append("点击<a href='https://open.weixin.qq.com/connect/oauth2/authorize?appid=")
+            .append(appid)
+            .append("&redirect_uri=")
+            .append(URLEncoder.encode(registerUrl))
+            .append("&response_type=code&scope=snsapi_base&state=wx44af8a387ced6117&component_appid=")
+            .append(component_appid)
+            .append("#wechat_redirect'>【会员注册】</a>")
+            .append("成为沁园会员，立享专属优惠券\n")
+            .append("\n")
+            .append("点击<a href='http://www.qinyuan.cn' data-miniprogram-appid='")
+            .append(miniappAppid)
+            .append("' data-miniprogram-path='pages/home?goto=buyfilter_element'>【绑定产品】</a>\n")
+            .append("填写产品信息，开启滤芯更换提醒，精准守护您和家人的净水健康\n")
+            .append("\n")
+            .append("点击<a href='")
+            .append(mineBaseUrl)
+            .append("/scrmapp/consumer/product/index'>【找售后•一键服务】</a>\n")
+            .append("24小时在线预约滤芯、安装、维修、清洗等售后服务\n")
+            .append("\n")
+            .append("点击<a href='http://www.qinyuanmall.com/mobile/product/filterIndex.jhtml' data-miniprogram-appid='")
+            .append(miniappAppid)
+            .append("' data-miniprogram-path='pages/home'>【要购买•微信商城】</a>\n")
+            .append("全场优惠立减，购买分享返现\n")
+            .append("\n")
+            .append("2018，沁园和您一起更净一步！");
+
+        replyMessage(inMessage, response, msgsb);
+
+
+    }
+
+    private void replyMessage (InMessage inMessage, HttpServletResponse response,
+        StringBuilder msgsb) {
+        try (PrintWriter writer = response.getWriter()){
+            TextOutMessage out = new TextOutMessage();
+            out.setToUserName(inMessage.getFromUserName());
+            out.setFromUserName(inMessage.getToUserName());
+            out.setContent(msgsb.toString());
+            out.setCreateTime(new Date().getTime());
+            XStream xs = XStreamAdaptor.createXstream();
+            xs.alias("xml", out.getClass());
+            xs.alias("item", Articles.class);
+            String xml = xs.toXML(out);
+            String encryptXML = getEncryptMessage(xml);
+            LOG.info("------------------xml明文:" + xml);
+            writer.write(encryptXML);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    private void dealWithText(final InMessage inMessage, HttpServletResponse response)
+        {
 
         String content = inMessage.getContent();
         if (StringUtil.isBlank(content)){
@@ -211,15 +288,17 @@ public class WeChatMessageProcessingHandler {
                     .append("您好，小沁在此为您服务，建议您通过官方渠道，选购您需要的产品，谢谢！\n")
                     .append("\n")
                     .append("购买机器，请点击")
-                    .append("<a href='http://www.wx.com' data-miniprogram-appid='")
+                    .append("<a href='http://www.qinyuan.cn' data-miniprogram-appid='")
                     .append(miniappAppid)
                     .append("' data-miniprogram-path='pages/home?goto=classify'>【全部商品】</a>\n")
+                    .append("\n")
                     .append("购机参考，请点击")
                     .append("<a href='")
                     .append(mendianBaseUrl)
                     .append("/crm/qiye/customized/viewCustomer'>【定制我的方案】</a>\n")
+                    .append("\n")
                     .append("购买滤芯，请点击" )
-                    .append("<a href='http://www.wx.com' data-miniprogram-appid='")
+                    .append("<a href='http://www.qinyuan.cn' data-miniprogram-appid='")
                     .append(miniappAppid)
                     .append("' data-miniprogram-path='pages/home?goto=buyfilter_element_filter'>【购买滤芯】</a>")
                     .append("\n")
@@ -234,12 +313,13 @@ public class WeChatMessageProcessingHandler {
                     .append("\n")
                     .append("未购滤芯：\n")
                     .append("购买之前，请先")
-                    .append("<a href='http://www.wx.com' data-miniprogram-appid='")
+                    .append("<a href='http://www.qinyuan.cn' data-miniprogram-appid='")
                     .append(miniappAppid)
                     .append("' data-miniprogram-path='pages/home?goto=buyfilter_element'>【绑定产品】</a>")
                     .append("\n")
+                    .append("\n")
                     .append("购买滤芯，请点击")
-                    .append("<a href='http://www.wx.com' data-miniprogram-appid='")
+                    .append("<a href='http://www.qinyuan.cn' data-miniprogram-appid='")
                     .append(miniappAppid)
                     .append("' data-miniprogram-path='pages/home?goto=buyfilter_element_filter'>【购买滤芯】</a>")
                     .append("\n")
@@ -248,7 +328,7 @@ public class WeChatMessageProcessingHandler {
                     .append("更换滤芯，请点击")
                     .append("<a href='")
                     .append(mineBaseUrl)
-                    .append("/scrmapp/scrmapp/consumer/product/index'>【预约滤芯】</a>\n")
+                    .append("/scrmapp/consumer/product/index'>【预约滤芯】</a>\n")
                     .append("\n")
                     .append("其他咨询，请输入文字\"人工客服\"\n");
             }
@@ -262,17 +342,19 @@ public class WeChatMessageProcessingHandler {
                     .append("预约机器安装，请点击")
                     .append("<a href='")
                     .append(mineBaseUrl)
-                    .append("/scrmapp/scrmapp/consumer/product/index'>【预约安装】</a>")
+                    .append("/scrmapp/consumer/product/index'>【预约安装】</a>")
+                    .append("\n")
                     .append("\n")
                     .append("预约机器保养，请点击")
                     .append("<a href='")
                     .append(mineBaseUrl)
-                    .append("/scrmapp/scrmapp/consumer/product/index'>【预约维修】</a>")
+                    .append("/scrmapp/consumer/product/index'>【预约维修】</a>")
+                    .append("\n")
                     .append("\n")
                     .append("预约机器清洗，请点击")
                     .append("<a href='")
                     .append(mineBaseUrl)
-                    .append("/scrmapp/scrmapp/consumer/product/index'>【预约清洗】</a>")
+                    .append("/scrmapp/consumer/product/index'>【预约清洗】</a>")
                     .append("\n")
                     .append("其他咨询，请输入文字\"人工客服\"\n");
             }
@@ -286,7 +368,7 @@ public class WeChatMessageProcessingHandler {
                     .append("机器安装，请点击")
                     .append("<a href='")
                     .append(mineBaseUrl)
-                    .append("/scrmapp/scrmapp/consumer/product/index'>【预约安装】</a>")
+                    .append("/scrmapp/consumer/product/index'>【预约安装】</a>")
                     .append("\n")
                     .append("其他咨询，请输入文字\"人工客服\"\n");
             }
@@ -301,17 +383,18 @@ public class WeChatMessageProcessingHandler {
                     .append("更换滤芯，请点击")
                     .append("<a href='")
                     .append(mineBaseUrl)
-                    .append("/scrmapp/scrmapp/consumer/product/index'>【预约滤芯】</a>")
+                    .append("/scrmapp/consumer/product/index'>【预约滤芯】</a>")
                     .append("\n")
                     .append("\n")
                     .append("未购滤芯：\n")
                     .append("购买之前，请先")
-                    .append("<a href='http://www.wx.com' data-miniprogram-appid='")
+                    .append("<a href='http://www.qinyuan.cn' data-miniprogram-appid='")
                     .append(miniappAppid)
                     .append("' data-miniprogram-path='pages/home?goto=buyfilter_element'>【绑定产品】</a>")
                     .append("\n")
+                    .append("\n")
                     .append("购买滤芯，请点击")
-                    .append("<a href='http://www.wx.com' data-miniprogram-appid='")
+                    .append("<a href='http://www.qinyuan.cn' data-miniprogram-appid='")
                     .append(miniappAppid)
                     .append("' data-miniprogram-path='pages/home?goto=buyfilter_element_filter'>【购买滤芯】</a>")
                     .append("\n")
@@ -328,7 +411,7 @@ public class WeChatMessageProcessingHandler {
                     .append("机器维修，请点击")
                     .append("<a href='")
                     .append(mineBaseUrl)
-                    .append("/scrmapp/scrmapp/consumer/product/index'>【预约维修】</a>")
+                    .append("/scrmapp/consumer/product/index'>【预约维修】</a>")
                     .append("\n")
                     .append("其他咨询，请输入文字\"人工客服\"\n");
             }
@@ -342,7 +425,7 @@ public class WeChatMessageProcessingHandler {
                     .append("机器保养，请点击")
                     .append("<a href='")
                     .append(mineBaseUrl)
-                    .append("/scrmapp/scrmapp/consumer/product/index'>【预约清洗】</a>")
+                    .append("/scrmapp/consumer/product/index'>【预约清洗】</a>")
                     .append("\n")
                     .append("其他咨询，请输入文字\"人工客服\"\n");
             }
@@ -366,13 +449,14 @@ public class WeChatMessageProcessingHandler {
                     .append("您好，小沁在此为您服务，沁园与你一起，健康每一天！\n")
                     .append("\n")
                     .append("商城购买：\n")
-                    .append("购买机器，请点击")
-                    .append("<a href='http://www.wx.com' data-miniprogram-appid='")
+                    .append("购买机器,请点击")
+                    .append("<a href='http://www.qinyuan.cn' data-miniprogram-appid='")
                     .append(miniappAppid)
                     .append("' data-miniprogram-path='pages/home?goto=classify'>【全部商品】</a>")
                     .append("\n")
-                    .append("购买滤芯，请点击")
-                    .append("<a href='http://www.wx.com' data-miniprogram-appid='")
+                    .append("\n")
+                    .append("购买滤芯,请点击")
+                    .append("<a href='http://www.qinyuan.cn' data-miniprogram-appid='")
                     .append(miniappAppid)
                     .append("' data-miniprogram-path='pages/home?goto=buyfilter_element_filter'>【购买滤芯】</a>")
                     .append("\n")
@@ -381,17 +465,20 @@ public class WeChatMessageProcessingHandler {
                     .append("机器安装，请点击")
                     .append("<a href='")
                     .append(mineBaseUrl)
-                    .append("/scrmapp/scrmapp/consumer/product/index'>【预约安装】</a>")
+                    .append("/scrmapp/consumer/product/index'>【预约安装】</a>")
+                    .append("\n")
                     .append("\n")
                     .append("机器保养，请点击")
                     .append("<a href='")
                     .append(mineBaseUrl)
-                    .append("/scrmapp/scrmapp/consumer/product/index'>【预约清洗】</a>")
+                    .append("/scrmapp/consumer/product/index'>【预约清洗】</a>")
+                    .append("\n")
                     .append("\n")
                     .append("机器维修，请点击")
                     .append("<a href='")
                     .append(mineBaseUrl)
-                    .append("/scrmapp/scrmapp/consumer/product/index'>【预约维修】</a>")
+                    .append("/scrmapp/consumer/product/index'>【预约维修】</a>")
+                    .append("\n")
                     .append("\n")
                     .append("预约查询，请点击")
                     .append("<a href='https://open.weixin.qq.com/connect/oauth2/authorize?appid=")
@@ -408,21 +495,24 @@ public class WeChatMessageProcessingHandler {
                 break;
         }
 
-        try (PrintWriter writer = response.getWriter()){
-            Long nowtime = System.currentTimeMillis()/1000;
-            StringBuilder resxmlsb =new StringBuilder("<xml><ToUserName><![CDATA[")
-                .append(inMessage.getFromUserName())
-                .append("]]></ToUserName><FromUserName><![CDATA[")
-                .append(inMessage.getToUserName())
-                .append("]]></FromUserName><CreateTime>")
-                .append(nowtime)
-                .append("</CreateTime><MsgType><![CDATA[text]]></MsgType><Content><![CDATA[")
-                .append(msgsb)
-                .append("]]></Content></xml>");
+        replyMessage(inMessage, response, msgsb);
 
-            writer.write(resxmlsb.toString());
-          LOG.info("------------------------输出:" + resxmlsb);
+    }
+
+
+    private String getEncryptMessage(String replyMsg) {
+        OpenWeixin ow = openWeixinService.getOpenWeixin();
+        String encodingAesKey = ow.getComponent_key();
+        String token = ow.getComponent_token();
+        String appid = ow.getComponent_appid();
+        String encryptMessage = null;
+        try {
+            WXBizMsgCrypt pc = new WXBizMsgCrypt(token, encodingAesKey, appid);
+            encryptMessage = pc.encryptMsg(replyMsg, Sha1Util.getTimeStamp(), CommonUtil.CreateNoncestr());
+        } catch (AesException e) {
+            e.printStackTrace();
         }
+        return encryptMessage;
     }
 
 }

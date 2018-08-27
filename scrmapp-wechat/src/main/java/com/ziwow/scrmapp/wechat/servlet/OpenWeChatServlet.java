@@ -141,7 +141,7 @@ public class OpenWeChatServlet extends HttpServlet {
 			// xml = weChat.processing(decryptMsg);
 			// String encryptXML = getEncryptMessage(xmlMsg);
 			weChatMessageProcessingHandler.manageMessage(decryptMsg, request, response);
-			LOGGER.info("OpenWX回复给微信的xml明文:" + xml);
+//			LOGGER.info("OpenWX回复给微信的xml明文:" + xml);
 			// LOGGER.info("OpenWX回复给微信的xml密文:"+encryptXML);
 			// response.getWriter().write(encryptXML);
 		}
