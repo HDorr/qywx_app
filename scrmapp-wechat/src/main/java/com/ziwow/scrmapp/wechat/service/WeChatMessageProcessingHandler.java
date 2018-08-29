@@ -225,7 +225,7 @@ public class WeChatMessageProcessingHandler {
             .append(appid)
             .append("&redirect_uri=")
             .append(URLEncoder.encode(registerUrl))
-            .append("&response_type=code&scope=snsapi_base&state=wx44af8a387ced6117&component_appid=")
+            .append("&response_type=code&scope=snsapi_base&component_appid=")
             .append(component_appid)
             .append("#wechat_redirect'>【会员注册】</a>")
             .append("成为沁园会员，立享专属优惠券\n")
@@ -281,10 +281,9 @@ public class WeChatMessageProcessingHandler {
         }
         StringBuilder msgsb=new StringBuilder();
 
+        //链接后面的无效参数是为了避免微信前端点击粘连
         if (content.contains("购买")){
-          msgsb.append("Demo：\n")
-              .append("\n")
-              .append("您好,小沁在此为您服务,建议您通过官方渠道选购您需要的产品,谢谢！\n")
+          msgsb.append("您好,小沁在此为您服务,建议您通过官方渠道选购您需要的产品,谢谢！\n")
               .append("\n")
               .append("购买机器,请点击")
               .append("<a href='http://www.qinyuan.cn' data-miniprogram-appid='")
@@ -301,11 +300,10 @@ public class WeChatMessageProcessingHandler {
               .append(miniappAppid)
               .append("' data-miniprogram-path='pages/home?goto=buyfilter_element_filter'>【购买滤芯】</a>")
               .append("\n")
+              .append("\n")
               .append("其他咨询,请输入文字\"人工客服\"\n");
         }else if (content.contains("滤芯")){
-          msgsb.append("Demo：\n")
-              .append("\n")
-              .append("您好,小沁在此为您服务,建议您通过官方渠道选购您需要的滤芯,谢谢！\n")
+          msgsb.append("您好,小沁在此为您服务,建议您通过官方渠道选购您需要的滤芯,谢谢！\n")
               .append("\n")
               .append("未购滤芯：\n")
               .append("购买之前,请先")
@@ -328,32 +326,29 @@ public class WeChatMessageProcessingHandler {
               .append("\n")
               .append("其他咨询,请输入文字\"人工客服\"\n");
         }else if (content.contains("预约")){
-          msgsb.append("Demo：\n")
-              .append("\n")
-              .append("您好,小沁在此为您服务！\n")
+          msgsb.append("您好,小沁在此为您服务！\n")
               .append("\n")
               .append("预约机器安装,请点击")
               .append("<a href='")
               .append(mineBaseUrl)
-              .append("/scrmapp/consumer/product/index'>【预约安装】</a>")
+              .append("/scrmapp/consumer/product/index?1'>【预约安装】</a>")
               .append("\n")
               .append("\n")
               .append("预约机器保养,请点击")
               .append("<a href='")
               .append(mineBaseUrl)
-              .append("/scrmapp/consumer/product/index'>【预约维修】</a>")
+              .append("/scrmapp/consumer/product/index?2'>【预约维修】</a>")
               .append("\n")
               .append("\n")
               .append("预约机器清洗,请点击")
               .append("<a href='")
               .append(mineBaseUrl)
-              .append("/scrmapp/consumer/product/index'>【预约清洗】</a>")
+              .append("/scrmapp/consumer/product/index?3'>【预约清洗】</a>")
+              .append("\n")
               .append("\n")
               .append("其他咨询,请输入文字\"人工客服\"\n");
         }else if (content.contains("安装")){
-          msgsb.append("Demo：\n")
-              .append("\n")
-              .append("您好,小沁在此为您服务！\n")
+          msgsb.append("您好,小沁在此为您服务！\n")
               .append("\n")
               .append("机器安装,请点击")
               .append("<a href='")
@@ -362,9 +357,7 @@ public class WeChatMessageProcessingHandler {
               .append("\n")
               .append("其他咨询,请输入文字\"人工客服\"\n");
         }else if (content.contains("更换")){
-          msgsb.append("Demo：\n")
-              .append("\n")
-              .append("您好,小沁在此为您服务！\n")
+          msgsb.append("您好,小沁在此为您服务！\n")
               .append("\n")
               .append("已购滤芯：\n")
               .append("更换滤芯,请点击")
@@ -381,16 +374,14 @@ public class WeChatMessageProcessingHandler {
               .append("\n")
               .append("\n")
               .append("购买滤芯,请点击")
-              .append("<a href='http://www.qinyuan.cn' data-miniprogram-appid='")
+              .append("<a data-miniprogram-appid='")
               .append(miniappAppid)
-              .append("' data-miniprogram-path='pages/home?goto=buyfilter_element_filter'>【购买滤芯】</a>")
+              .append("' data-miniprogram-path='pages/home?goto=buyfilter_element_filter'  href='http://www.qinyuan.cn?1'>【购买滤芯】</a>")
               .append("\n")
               .append("\n")
               .append("其他咨询,请输入文字\"人工客服\"\n");
         }else if (content.contains("维修")){
-          msgsb.append("Demo：\n")
-              .append("\n")
-              .append("您好,小沁在此为您服务！\n")
+          msgsb.append("您好,小沁在此为您服务！\n")
               .append("\n")
               .append("机器维修,请点击")
               .append("<a href='")
@@ -399,9 +390,7 @@ public class WeChatMessageProcessingHandler {
               .append("\n")
               .append("其他咨询,请输入文字\"人工客服\"\n");
         }else if (content.contains("保养")){
-          msgsb.append("Demo：\n")
-              .append("\n")
-              .append("您好,小沁在此为您服务！\n")
+          msgsb.append("您好,小沁在此为您服务！\n")
               .append("\n")
               .append("机器保养,请点击")
               .append("<a href='")
@@ -410,16 +399,12 @@ public class WeChatMessageProcessingHandler {
               .append("\n")
               .append("其他咨询,请输入文字\"人工客服\"\n");
         }else if (content.contains("投诉")){
-          msgsb.append("Demo：\n")
-              .append("\n")
-              .append("您好,小沁在此为您服务,非常抱歉给您带来不便了！为了更快处理好您的问题,如需反馈相关的投诉问题您可以直接输入\"人工客服\",会尽快给您受理的哦~\n");
+          msgsb.append("您好,小沁在此为您服务,非常抱歉给您带来不便了！为了更快处理好您的问题,如需反馈相关的投诉问题您可以直接输入\"人工客服\",会尽快给您受理的哦~\n");
         }else if (content.contains("人工客服")){
           msgsb.append("正在为您转接人工客服,请耐心等待！");
-//          msgsb.append("您好,欢迎您选用人工客服,请输入您要咨询的问题。我们的工作时间是每天8点-20点,您的留言我们会尽快回复,感谢您的耐心等待。您也可以拨打我们的全国统一服务热线：400 111 1222,谢谢。\n");
+//          msgsb.append("您好,欢迎您选用人工客服,请输入您要咨询的问题。我们的工作时间是每天8点-20点,您的留言我们会尽快回复,感谢您的耐心等待。您也可以拨打我们的全国统一服务热线：400-111-1222,谢谢。\n");
         }else {
-          msgsb.append("Demo：\n")
-              .append("\n")
-              .append("您好,小沁在此为您服务,沁园与你一起,健康每一天！\n")
+          msgsb.append("您好,小沁在此为您服务,沁园与你一起,健康每一天！\n")
               .append("\n")
               .append("商城购买：\n")
               .append("购买机器,请点击")
@@ -438,27 +423,30 @@ public class WeChatMessageProcessingHandler {
               .append("机器安装,请点击")
               .append("<a href='")
               .append(mineBaseUrl)
-              .append("/scrmapp/consumer/product/index'>【预约安装】</a>")
+              .append("/scrmapp/consumer/product/index?1'>【预约安装】</a>")
               .append("\n")
               .append("\n")
               .append("机器保养,请点击")
               .append("<a href='")
               .append(mineBaseUrl)
-              .append("/scrmapp/consumer/product/index'>【预约清洗】</a>")
+              .append("/scrmapp/consumer/product/index?2'>【预约清洗】</a>")
               .append("\n")
               .append("\n")
               .append("机器维修,请点击")
               .append("<a href='")
               .append(mineBaseUrl)
-              .append("/scrmapp/consumer/product/index'>【预约维修】</a>")
+              .append("/scrmapp/consumer/product/index?3'>【预约维修】</a>")
               .append("\n")
               .append("\n")
               .append("预约查询,请点击")
+//              .append("<a href='")
+//              .append(orderlisturl)
+//              .append("'>【工单查询】</a>")
               .append("<a href='https://open.weixin.qq.com/connect/oauth2/authorize?appid=")
               .append(appid)
               .append("&redirect_uri=")
               .append(URLEncoder.encode(orderlisturl))
-              .append("&response_type=code&scope=snsapi_base&state=wx44af8a387ced6117&component_appid=")
+              .append("&response_type=code&scope=snsapi_base&component_appid=")
               .append(component_appid)
               .append("#wechat_redirect'>【工单查询】</a>")
               .append("\n")
