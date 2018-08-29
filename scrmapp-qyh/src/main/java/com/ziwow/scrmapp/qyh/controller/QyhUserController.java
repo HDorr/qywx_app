@@ -197,7 +197,7 @@ public class QyhUserController {
                 String serviceType = OrderUtils.getServiceTypeName(ordersType);
                 QyhUser qyhUser = qyhUserService.getQyhUserByUserIdAndCorpId(qyhUserId, corpId);
                 String mobilePhone = (null != qyhUser) ? qyhUser.getMobile() : "";
-                String msgContent = "您已拒绝" + contacts + "用户预约的" + serviceType + "服务，您可进入“沁园”微信企业号查看该工单详情！";
+                String msgContent = "您已拒绝" + contacts + "用户预约的" + serviceType + "服务，您可进入“沁园”WX企业号查看该工单详情！";
                 mobileService.sendContentByEmay(mobilePhone, msgContent, Constant.ENGINEER);
                 // 服务工程师修改预约时间给自己发送通知
                 String url = orderDetailUrl + "?userId=" + qyhUserId + "&ordersCode=" + ordersCode;
@@ -391,7 +391,7 @@ public class QyhUserController {
         if (!regMobile.equalsIgnoreCase(dispatchMobile)) {
             // 服务工程师提交完工后给用户发送短信通知
             String serviceType = OrderUtils.getServiceTypeName(completeParam.getOrderType());
-            String msgContent = "亲爱的用户，您预约的" + serviceType + "服务已完成，欢迎进入“沁园”官方微信服务号对工程师的服务进行评价，谢谢！如已评价，可忽视该消息。";
+            String msgContent = "亲爱的用户，您预约的" + serviceType + "服务已完成，欢迎进入“沁园”官方WX服务号对工程师的服务进行评价，谢谢！如已评价，可忽视该消息。";
             mobileService.sendContentByEmay(regMobile, msgContent, Constant.CUSTOMER);
             // 服务工程师提交完工后给用户发送模板消息
             WechatUserMsgVo wechatUserMsgVo = new WechatUserMsgVo();

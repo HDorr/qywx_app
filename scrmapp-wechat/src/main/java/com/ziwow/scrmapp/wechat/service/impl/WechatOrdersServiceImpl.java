@@ -526,7 +526,7 @@ public class WechatOrdersServiceImpl implements WechatOrdersService {
         qyhUserMsgVo.setUserId(engineerId);
         qyhUserMsgVo.setContent(content);
         qyhUserMsgVo.setQyhUserMobile(engineerPhone);
-        String msgContent = "您收到一条新工单！类型：" + serviceType + "；服务时间：" + orderTime + "。您可进入“沁园”微信企业号查看该工单详情！";
+        String msgContent = "您收到一条新工单！类型：" + serviceType + "；服务时间：" + orderTime + "。您可进入“沁园”WX企业号查看该工单详情！";
         qyhUserMsgVo.setMsgContent(msgContent);
         EngineerQueue.getQueueInstance().add(qyhUserMsgVo);
     }
@@ -538,7 +538,7 @@ public class WechatOrdersServiceImpl implements WechatOrdersService {
             String openId = wechatFans.getOpenId();
             String nickName = wechatFans.getWfNickName();
             String title = "亲爱的" + nickName + "，沁先生已成功处理您的工程师发起的更改预约。为您送上新的订单信息：";
-            String remark = "记得保持电话畅通，我们的工程师傅会尽快与您联系。如工程师更改预约前未跟您电话沟通，您可拨打电话400-888-5263或400-672-2266，沁先生的好朋友会帮您处理。";
+            String remark = "记得保持电话畅通，我们的工程师傅会尽快与您联系。如工程师更改预约前未跟您电话沟通，您可拨打电话400-111-1222，沁先生的好朋友会帮您处理。";
             wechatTemplateService.changeAppointmentTemplate(openId, null, title, orderType, ordersCode, orderTime, qyhUserName, qyhUserPhone, remark);
         }
     }

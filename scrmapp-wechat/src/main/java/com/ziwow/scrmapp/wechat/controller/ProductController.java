@@ -582,9 +582,9 @@ public class ProductController {
 
         String contextPath = request.getContextPath();
         String basePath = "https" + "://" + request.getServerName() + contextPath;
-        if (!"wx66c97d1778ea9bd3".equals(appid)){
-            basePath="http" + "://" + request.getServerName() + contextPath;
-        }
+//        if (!"wx66c97d1778ea9bd3".equals(appid)){
+//            basePath="http" + "://" + request.getServerName() + contextPath;
+//        }
         //-------------------------------------------------------------------------------------------------------------------------------------
         //-------------------------------------------------------------------------------------------------------------------------------------
         //-------------------------------------------------------------------------------------------------------------------------------------
@@ -722,9 +722,9 @@ public class ProductController {
 
         String contextPath = request.getContextPath();
         String basePath = "https" + "://" + request.getServerName() + contextPath;
-        if (!"wx66c97d1778ea9bd3".equals(appid)){
-            basePath="http" + "://" + request.getServerName() + contextPath;
-        }
+//        if (!"wx66c97d1778ea9bd3".equals(appid)){
+//            basePath="http" + "://" + request.getServerName() + contextPath;
+//        }
         //-------------------------------------------------------------------------------------------------------------------------------------
         //-------------------------------------------------------------------------------------------------------------------------------------
         //-------------------------------------------------------------------------------------------------------------------------------------
