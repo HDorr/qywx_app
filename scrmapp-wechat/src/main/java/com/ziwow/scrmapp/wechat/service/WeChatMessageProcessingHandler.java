@@ -232,7 +232,7 @@ public class WeChatMessageProcessingHandler {
             .append("\n")
             .append("点击<a href='http://www.qinyuan.cn' data-miniprogram-appid='")
             .append(miniappAppid)
-            .append("' data-miniprogram-path='pages/home?goto=buyfilter_element'>【绑定产品】</a>\n")
+            .append("' data-miniprogram-path='pages/home?goto=bind_product'>【绑定产品】</a>\n")
             .append("填写产品信息，开启滤芯更换提醒，精准守护您和家人的净水健康\n")
             .append("\n")
             .append("点击<a href='")
@@ -248,8 +248,6 @@ public class WeChatMessageProcessingHandler {
             .append("2018，沁园和您一起更净一步！");
 
         replyMessage(inMessage, response, msgsb);
-
-
     }
 
     private void replyMessage (InMessage inMessage, HttpServletResponse response,
@@ -309,7 +307,7 @@ public class WeChatMessageProcessingHandler {
               .append("购买之前,请先")
               .append("<a href='http://www.qinyuan.cn' data-miniprogram-appid='")
               .append(miniappAppid)
-              .append("' data-miniprogram-path='pages/home?goto=buyfilter_element'>【绑定产品】</a>")
+              .append("' data-miniprogram-path='pages/home?goto=bind_product'>【绑定产品】</a>")
               .append("\n")
               .append("\n")
               .append("购买滤芯,请点击")
@@ -370,7 +368,7 @@ public class WeChatMessageProcessingHandler {
               .append("购买之前,请先")
               .append("<a href='http://www.qinyuan.cn' data-miniprogram-appid='")
               .append(miniappAppid)
-              .append("' data-miniprogram-path='pages/home?goto=buyfilter_element'>【绑定产品】</a>")
+              .append("' data-miniprogram-path='pages/home?goto=bind_product'>【绑定产品】</a>")
               .append("\n")
               .append("\n")
               .append("购买滤芯,请点击")
@@ -399,7 +397,7 @@ public class WeChatMessageProcessingHandler {
               .append("\n")
               .append("其他咨询,请输入文字\"人工客服\"\n");
         }else if (content.contains("投诉")){
-          msgsb.append("您好,小沁在此为您服务,非常抱歉给您带来不便了！为了更快处理好您的问题,如需反馈相关的投诉问题您可以直接输入\"人工客服\",会尽快给您受理的哦~\n");
+          msgsb.append("您好,小沁在此为您服务,非常抱歉给您带来不便了！为了更快处理好您的问题,如需反馈相关的投诉问题您可以直接输入问题,我们会尽快给您受理的哦~（在线客服工作时间为：每天8点-20点）");
         }else if (content.contains("人工客服")){
           msgsb.append("正在为您转接人工客服,请耐心等待！");
 //          msgsb.append("您好,欢迎您选用人工客服,请输入您要咨询的问题。我们的工作时间是每天8点-20点,您的留言我们会尽快回复,感谢您的耐心等待。您也可以拨打我们的全国统一服务热线：400-111-1222,谢谢。\n");
