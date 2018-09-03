@@ -265,7 +265,7 @@ public class QyhUserController {
                 String mobilePhone = (null != qyhUser) ? qyhUser.getMobile() : "";
                 String qyhUserName = (null != qyhUser) ? qyhUser.getName() : "";
                 String msgContent = "您已将" + contacts + "用户预约的" + serviceTypeName + "服务的上门服务时间由" + oldTime + "更改到" + updateTime
-                        + "！您可进入“沁园”微信企业号查看该工单详情！";
+                        + "！您可进入“沁园”WX企业号查看该工单详情！";
                 mobileService.sendContentByEmay(mobilePhone, msgContent, Constant.ENGINEER);
                 // 服务工程师修改预约时间给自己发送通知
                 String url = orderDetailUrl + "?userId=" + qyhUserId + "&ordersCode=" + ordersCode;
@@ -402,7 +402,7 @@ public class QyhUserController {
             UserQueue.getQueueInstance().add(wechatUserMsgVo);
         }
         // 服务工程师提交完工后给自己发送短信通知
-        String msgContent = "您已成功提交工单，记得让用户给你好评哦！您可进入“沁园”微信企业号查看该工单详情！";
+        String msgContent = "您已成功提交工单，记得让用户给你好评哦！您可进入“沁园”WX企业号查看该工单详情！";
         String engineerPhone = completeParam.getQyhUserPhone();
         mobileService.sendContentByEmay(engineerPhone, msgContent, Constant.ENGINEER);
         // 服务工程师提交完工后给自己发送公告通知
