@@ -326,19 +326,19 @@ public class WeChatMessageProcessingHandler {
         }else if (content.contains("预约")){
           msgsb.append("您好,小沁在此为您服务！\n")
               .append("\n")
-              .append("预约机器安装,请点击")
+              .append("机器安装,请点击")
               .append("<a href='")
               .append(mineBaseUrl)
               .append("/scrmapp/consumer/product/index?1'>【预约安装】</a>")
               .append("\n")
               .append("\n")
-              .append("预约机器保养,请点击")
+              .append("机器维修,请点击")
               .append("<a href='")
               .append(mineBaseUrl)
               .append("/scrmapp/consumer/product/index?2'>【预约维修】</a>")
               .append("\n")
               .append("\n")
-              .append("预约机器清洗,请点击")
+              .append("机器清洗,请点击")
               .append("<a href='")
               .append(mineBaseUrl)
               .append("/scrmapp/consumer/product/index?3'>【预约清洗】</a>")
@@ -390,14 +390,14 @@ public class WeChatMessageProcessingHandler {
         }else if (content.contains("保养")){
           msgsb.append("您好,小沁在此为您服务！\n")
               .append("\n")
-              .append("机器保养,请点击")
+              .append("机器清洗,请点击")
               .append("<a href='")
               .append(mineBaseUrl)
               .append("/scrmapp/consumer/product/index'>【预约清洗】</a>")
               .append("\n")
               .append("其他咨询,请输入文字\"人工客服\"\n");
         }else if (content.contains("投诉")){
-          msgsb.append("您好,小沁在此为您服务,非常抱歉给您带来的不便！\n为了尽快处理好您的问题,您可以直接输入投诉问题,我们会尽快给您受理的哦~\n在线工作时间：8:00AM-20:00PM");
+          msgsb.append("您好,小沁在此为您服务,非常抱歉给您带来的不便！\n您可以直接输入投诉问题,我们会尽快给您受理的哦~\n全国服务热线：400 111 1222\n在线工作时间：8:00AM-20:00PM");
         }else if (content.contains("人工客服")){
           msgsb.append("正在为您转接人工客服,请耐心等待！");
         }else {
@@ -423,7 +423,7 @@ public class WeChatMessageProcessingHandler {
               .append("/scrmapp/consumer/product/index?1'>【预约安装】</a>")
               .append("\n")
               .append("\n")
-              .append("机器保养,请点击")
+              .append("机器清洗,请点击")
               .append("<a href='")
               .append(mineBaseUrl)
               .append("/scrmapp/consumer/product/index?2'>【预约清洗】</a>")
