@@ -291,7 +291,7 @@ public class WeChatMessageProcessingHandler {
               .append("购机参考,请点击")
               .append("<a href='")
               .append(mendianBaseUrl)
-              .append("/crm/qiye/customized/viewCustomer'>【定制我的方案】</a>\n")
+              .append("/crm/wechat/customized/viewCustomer'>【定制我的方案】</a>\n")
               .append("\n")
               .append("购买滤芯,请点击" )
               .append("<a href='http://www.qinyuan.cn' data-miniprogram-appid='")
@@ -400,7 +400,6 @@ public class WeChatMessageProcessingHandler {
           msgsb.append("您好,小沁在此为您服务,非常抱歉给您带来的不便！\n为了尽快处理好您的问题,您可以直接输入投诉问题,我们会尽快给您受理的哦~\n在线工作时间：8:00AM-20:00PM");
         }else if (content.contains("人工客服")){
           msgsb.append("正在为您转接人工客服,请耐心等待！");
-//          msgsb.append("您好,欢迎您选用人工客服,请输入您要咨询的问题。我们的工作时间是每天8点-20点,您的留言我们会尽快回复,感谢您的耐心等待。您也可以拨打我们的全国统一服务热线：400-111-1222,谢谢。\n");
         }else {
           msgsb.append("您好,小沁在此为您服务,沁园与你一起,健康每一天！\n")
               .append("\n")
