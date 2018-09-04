@@ -1,0 +1,171 @@
+@media screen and (min-width: 320px) {
+    html {
+        font-size: 12px;
+    }
+}
+
+@media screen and (min-width: 360px) {
+    html {
+        font-size: 14px;
+    }
+}
+
+@media screen and (min-width: 400px) {
+    html {
+        font-size: 16px;
+    }
+}
+
+@media screen and (min-width: 440px) {
+    html {
+        font-size: 18px;
+    }
+}
+
+@media screen and (min-width: 480px) {
+    html {
+        font-size: 20px;
+    }
+}
+
+@media screen and (min-width: 640px) {
+    html {
+        font-size: 26px;
+    }
+}
+
+.t-container {
+    width: 100%;
+    height: 8rem;
+    box-sizing: border-box;
+    border-bottom: 1px solid #e2e2e2;
+}
+
+.t-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 6rem;
+}
+
+.t-body {
+    align-items: center;
+}
+
+.t-question, .t-select {
+    box-sizing: border-box;
+    font-size: 1rem;
+}
+
+.t-question {
+    width: 70%;
+}
+
+.t-select {
+    width: 30%;
+    display: flex;
+}
+
+.t-radio {
+    flex: 1;
+    display: inline-block;
+    border: 1px solid #999999;
+    box-sizing: border-box;
+    text-align: center;
+    border-radius: 9px;
+    margin: 0 0.2rem;
+}
+
+.t-checked {
+    background-color: #019CDE;
+    border: 1px solid #019CDE;
+    color: #fff;
+}
+
+.t-row {
+    width: 100%;
+    height: 50%;
+    box-sizing: border-box;
+    align-items: center;
+    display: flex;
+}
+
+.t-row-2 {
+    align-items: start;
+}
+
+.t-label {
+    flex: 1;
+}
+
+.t-img {
+    flex: 2.5;
+    display: flex;
+    align-items: center;
+
+}
+
+.t-show {
+    flex: 1;
+    text-align: center;
+    color: #009BDF;
+}
+
+.t-img img {
+    width: 2rem;
+    height: 2rem;
+    margin: 0 0.3rem;
+}
+
+.t-row-1 span {
+    display: inline-block;
+}
+
+.t-row-2 p {
+    -webkit-transform-origin-x: 0;
+    -webkit-transform: scale(0.9);
+    color: #939393;
+}
+
+.t-content-area {
+    width: 100%;
+    justify-content: center;
+    position: relative;
+}
+
+.t-content-area textarea {
+    width: 100%;
+    height: 100%;
+    box-sizing: border-box;
+    border-radius: 4px;
+    font-size: 1rem;
+    resize: none;
+}
+
+.t-limit {
+    box-sizing: border-box;
+    position: absolute;
+    z-index: 1;
+    right: 0.1rem;
+    bottom: 0.1rem;
+    color: #9d9d9d;
+}
+
+.t-footer {
+    width: 100%;
+    height: 6rem;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.t-submit {
+    width: 95%;
+    height: 3rem;
+    background-color: #019CDE;
+    text-align: center;
+    line-height: 3rem;
+    color: #fff;
+    border-radius: 20px;
+}

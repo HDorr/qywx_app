@@ -52,5 +52,12 @@ public class SystemConstants {
      */
     public static final int CSM = 1, WEIXIN = 2;
 
-
+    /**
+     * 评价界面类型
+     * INSTALL_APPRAISE 安装评价
+     * REPAIR_APPRAISE 维修评价
+     * FILTER_APPRAISE 滤芯评价
+     * CLEAN_APPRAISE 清洗评价
+     */
+    public static final int INSTALL_APPRAISE = 1, REPAIR_APPRAISE = 2, CLEAN_APPRAISE = 3, FILTER_APPRAISE = 4;
 }

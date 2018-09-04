@@ -11,6 +11,7 @@ import java.util.UUID;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.ziwow.scrmapp.common.enums.Appraise_Enum;
 import com.ziwow.scrmapp.common.persistence.entity.*;
 import com.ziwow.scrmapp.wechat.constants.WXPayConstant;
 import com.ziwow.scrmapp.wechat.persistence.entity.WechatFans;
@@ -899,8 +900,44 @@ public class WechatOrdersController {
      * @return
      */
     @RequestMapping(value = "/wechat/orders/appraisal/page")
-    public ModelAndView toOrdersAppraisalPage() {
-        ModelAndView modelAndView = new ModelAndView("/reserveReview/jsp/reviewReserve");
+    public ModelAndView toOrdersAppraisalPage(@RequestParam String ordersCode, @RequestParam Integer orderType, @RequestParam Integer maintType) {
+        ModelAndView modelAndView = new ModelAndView("/reserveReview/jsp/appraise");
+        int code = getTypeByOtherTypes(orderType, maintType);
+        modelAndView.addObject("appraiseType", code);
+        modelAndView.addObject("appraiseTypeName", Appraise_Enum.getNameByCode(code));
+        modelAndView.addObject("ordersCode", ordersCode);
         return modelAndView;
     }
+
+    /**
+     * 新版用户评价
+     *
+     * @return Result
+     */
+    @RequestMapping(value = "/wechat/orders/user/newAppraisal", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+    @ResponseBody
+    public Result newAppraise(@RequestBody WechatOrderAppraise wechatOrderAppraise) {
+        Result result = new BaseResult();
+        result.setReturnCode(Constant.SUCCESS);
+        result.setData("评分完成!");
+        return result;
+    }
+
+
+    //根据类型判断评价显示的界面
+    private int getTypeByOtherTypes(int orderType, int maintType) {
+        if (SystemConstants.INSTALL == orderType) {
+            return SystemConstants.INSTALL_APPRAISE;
+        } else if (SystemConstants.REPAIR == orderType) {
+            return SystemConstants.REPAIR_APPRAISE;
+        } else if (SystemConstants.MAINTAIN == orderType) {
+            if (1 == maintType) {
+                return SystemConstants.CLEAN_APPRAISE;
+            } else if (2 == maintType) {
+                return SystemConstants.FILTER_APPRAISE;
+            }
+        }
+        return -1;
+    }
+
 }

@@ -386,6 +386,7 @@
         END AS orderStatus,
          o.contacts AS userName,
          o.contactsMobile AS userMobile,
+         o.maintType,
          f.headimgurl AS imageUrl,
          concat(
             o.province,
