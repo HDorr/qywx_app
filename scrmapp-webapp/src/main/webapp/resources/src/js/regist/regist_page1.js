@@ -386,8 +386,8 @@ var registRootPath = getRootPath();
             if (!ableClick ||  (!pwd && ismallMember==0)) {
               return;
             }
-          
-          
+
+            let isMallMember = $("#totalSubmit").data("ismallmember");
             var spanDom = $("#show_contact");
             var permitFlag = true;
             var errorStr = "";
