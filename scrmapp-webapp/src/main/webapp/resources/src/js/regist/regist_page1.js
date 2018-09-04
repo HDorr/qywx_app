@@ -134,7 +134,10 @@ var registRootPath = getRootPath();
                             }
                             toggleStep();
                         }
-                    }
+                    },
+                  complete:function (data) {
+                    $(".loadEffect").removeClass("on");
+                  }
                 })
             }
 
@@ -295,6 +298,13 @@ var registRootPath = getRootPath();
             $(".choseAreaBox").fadeOut(200, function() {
                 $(".container").show()
             })
+
+          let pwd = $("#custmPsw").val();
+          let ismallMember = $("#totalSubmit").data("ismallmember");
+          if (pwd || ismallMember==1) {
+            $("#totalSubmit").removeClass("bigBtn")
+            $("#totalSubmit").addClass("bigBtnAbleClick")
+          }
         } else {
             $(".choseAreaBox").fadeOut(200, function() {
                 $(".container").show()
@@ -369,10 +379,18 @@ var registRootPath = getRootPath();
         })
 
         $("#totalSubmit").click(function() {
+
+            let ableClick = $("#totalSubmit").hasClass("bigBtnAbleClick");
+          let pwd = $("#custmPsw").val();
+          let ismallMember = $("#totalSubmit").data("ismallmember");
+            if (!ableClick ||  (!pwd && ismallMember==0)) {
+              return;
+            }
+          
+          
             var spanDom = $("#show_contact");
             var permitFlag = true;
             var errorStr = "";
-            var isMallMember = $("#totalSubmit").data("ismallmember");
             if (isMallMember == 0) {
                 window.finaldata = {
                     openId: openid,
