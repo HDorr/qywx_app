@@ -187,7 +187,7 @@
         <script type="text/html" id="hasNoAddressList">
             <div class="hasNoAddrBox">
                 <div class="noAddrImg">
-                    <img id="hasNoAddressListImg" src="/scrmapp/resources/images/hasNoAddressYet.png">
+                    <img id="hasNoAddressListImg" src="${f_ctxpath}/resources/src/images/icons/hasNoAddressYet.png">
                 </div>
                 <p class="noAddrText">您目前还没有添加地址哟，现在来添加新地址吧</p>
                 <a class="noAddrBtn qyBlue" href={{"#/addrAdd?userId="+userId}} >新增地址</a>

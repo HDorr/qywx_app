@@ -42,8 +42,8 @@
  </div>
  <div class="polic-nav-box">
   <div class="polic-left polic-text polic-blue polic-margin">一、适用范围</div>
-  <div class="polic-left polic-text">个人信息是<text>指以电子或者其他方式记录的能够单独或者与其他信息结合识别特定自然人身份或者反映特定自然人活动情况的各种信息。</text>本隐私保护声明适用沁园集团所属企业所收集的与其提供的产品或服务有关的个人信息（您可以通过网站：http://www.qinyuan.cn/about.aspx了解更多有关沁园集团的信息）。上述个人信息包括我们通过线上、线下渠道，沁园官网、官方商城等网站，应用程序，微博、微信及第三方平台之上的品牌页面所收集的个人信息。</div>
-  <div class="polic-left polic-text polic-margin">本隐私保护声明同样适用于沁园发送的针对性信息，包括沁园（或服务提供方代表沁园）基于您的网站使用信息（定义请见下文）自第三方网站、平台及应用程序（以下统称“第三方网站”）向您发送的产品及服务的订单、广告。由于第三方网站可能保有自己的隐私保护条款和条件，我们建议您在使用第三方网站时，请先阅读相关隐私保护条款。</div>
+  <div class="polic-left polic-text">个人信息是<text>指以电子或者其他方式记录的能够单独或者与其他信息结合识别特定自然人身份或者反映特定自然人活动情况的各种信息。</text>本隐私保护声明适用沁园集团所属企业所收集的与其提供的产品或服务有关的个人信息（您可以通过网站：http://www.qinyuan.cn/about.aspx了解更多有关沁园集团的信息）。上述个人信息包括我们通过线上、线下渠道，沁园官网、官方商城等网站，应用程序，微博、微信及第三方平台之上的品牌页面等所收集的个人信息。</div>
+  <div class="polic-left polic-text polic-margin">本隐私保护声明同样适用于沁园发送的针对性信息，包括沁园（或服务提供方代表沁园）基于您的网站使用信息（定义请见下文）自第三方网站、平台及应用程序（以下统称“<strong>第三方网站</strong>”）向您发送的产品及服务的订单、广告。由于第三方网站可能保有自己的隐私保护条款和条件，我们建议您在使用第三方网站时，请先阅读相关隐私保护条款。</div>
   <!-- <div class="polic-left polic-text">所有有关使用沁园网站的条款和条件中均应当包括作为其组成部分的本隐私保护声明。如欲了解更多关于有责任保护您的个人信息的沁园所属企业，请参阅下述如何联系我们。</div> -->
   <div class="polic-left polic-text polic-blue polic-margin">二、您的授权同意</div>
   <div class="polic-left polic-text">当您使用沁园网站，或应用程序，或您另行确认接受本隐私政策，您即授权同意相关沁园所属企业根据本隐私保护声明收集、使用、共享、转让、公开披露和跨境转移您的个人信息。若您不同意在此情况下收集、使用、共享、转让、公开披露和跨境转移您的个人信息，请不要使用沁园网站或向沁园或与沁园相关的公司提供您的个人信息。</div>
@@ -65,7 +65,7 @@
   <div class="polic-left polic-text">如果我们发现未获得监护人的事先同意而收集了儿童的个人信息，我们将会尽快删除该等信息。</div>
   <!-- <div class="polic-left polic-text polic-margin">沁园网站某些部分的访问可能仅限于某一特定年龄以上的用户。我们可能会使用您的个人信息进行年龄验证和核查以执行我们的年龄限制规定。</div> -->
   <div class="polic-left polic-text polic-blue polic-margin">四、我们如何收集您的个人信息</div>
-  <div class="polic-left polic-text polic-bold-nav">在本隐私保护声明中，您的“个人信息”是指能够使您被识别的信息或多条信息。该信息典型地包括诸如您的姓名、地址、用户名、个人图片、电子邮件地址以及电话号码等信息，但是也可以包括诸如IP地址、购物习惯以及关于您的生活方式或爱好（例如您的业余爱好和兴趣）的信息。我们可以从以下不同来源收集您的个人信息：</div>
+  <div class="polic-left polic-text ">在本隐私保护声明中，您的“个人信息”是指能够使您被识别的信息或多条信息。该信息典型地包括诸如您的姓名、地址、用户名、个人图片、电子邮件地址以及电话号码等信息，但是也可以包括诸如IP地址、购物习惯以及关于您的生活方式或爱好（例如您的业余爱好和兴趣）的信息。我们可以从以下不同来源收集您的个人信息：</div>
   <div class="polic-left polic-text polic-margin">（一）                 您直接向我们提供的信息</div>
   <div class="polic-box">
    <div class="polic-left polic-text">当您向我们提供个人信息时，例如当您通过沁园官网、官方微信、官方商城和电商平台店铺、官方客服热线等进行报装、报修或提交产品保养需求信息，填写经销商加盟资料，及通过邮件形式联系我们的时候，我们会直接向您收集信息。我们会直接向您收集的信息类型可能包括您的：</div>
@@ -103,7 +103,7 @@
       </div>
       <div class="polic-left polic-text polic-margin">（四）                 您使用我们的移动应用服务时我们自动收集的信息</div>
       <div class="polic-box">
-        <div class="polic-left polic-text">当您使用我们的移动应用时，我们（及代表沁园的第三方服务提供商）会在遵守本隐私保护声明和所适用的法律法规的前提下自动地上传网络日志文件。 我们可以自该等来源收集的个人信息类型可能包括您的：</div>
+        <div class="polic-left polic-text">当您使用我们的移动应用时，我们（及代表沁园的第三方服务提供商）会在遵守本隐私保护声明和所适用的法律法规的前提下自动地上传网络日志文件。 我们可以自该等来源收集的个人信息类型可能包括：</div>
         <div class="polic-left polic-text"><text class="icon">·</text>您的移动设备型号</div>
         <div class="polic-left polic-text"><text class="icon">·</text>您的移动设备系统版本号</div>
         <div class="polic-left polic-text"><text class="icon">·</text>您连接的WiFi</div>
@@ -132,15 +132,15 @@
   </div>
   <div class="polic-left polic-text polic-blue polic-margin">五、我们如何使用您的个人信息</div>
   <div class="polic-left polic-text">我们可能将您的个人信息用于：</div>
-  <div class="polic-left polic-text polic-margin">（一）                 改进我们的产品和提升您在沁园网站的用户体验</div>
+  <div class="polic-left polic-text polic-margin">（一）                 改进我们的产品和提升您在沁园网站和应用程序的用户体验</div>
   <div class="polic-box">
    <div class="polic-left polic-text">我们可能将您的个人信息用于：</div>
-   <div class="polic-left polic-text"><text class="icon">·</text>评估沁园网站、产品以及服务的使用</div>
+   <div class="polic-left polic-text"><text class="icon">·</text>评估沁园网站、应用程序、产品以及服务的使用</div>
    <div class="polic-left polic-text"><text class="icon">·</text>分析我们的广告、竞赛以及促销的有效性</div>
    <div class="polic-left polic-text"><text class="icon">·</text>形成用户画像</div>
-   <div class="polic-left polic-text"><text class="icon">·</text>个性化您的网站体验，以及对网站活动的评估统计（匿名且总计数据），例如，您访问的时间、您是否之前访问过以及什么站点将您指引到网站</div>
-   <div class="polic-left polic-text"><text class="icon">·</text>使沁园网站的使用更轻松并且更好地设计研发沁园网站，以满足您的兴趣和选择</div>
-   <div class="polic-left polic-text"><text class="icon">·</text>加速您在沁园网站上的未来活动和经验。例如，网站识别您曾经提供了个人信息就不再第二次请求相同信息</div>
+   <div class="polic-left polic-text"><text class="icon">·</text>个性化您的网站和应用程序体验，以及对网站活动和应用程序活动的评估统计（匿名且总计数据），例如，您访问的时间、您是否之前访问过以及什么站点将您指引到网站</div>
+   <div class="polic-left polic-text"><text class="icon">·</text>使沁园网站和应用程序的使用更轻松并且更好地设计研发沁园网站，以满足您的兴趣和选择</div>
+   <div class="polic-left polic-text"><text class="icon">·</text>加速您在沁园网站和应用程序上的未来活动和经验。例如，网站识别您曾经提供了个人信息就不再第二次请求相同信息</div>
    <!-- <div class="polic-left polic-text"><text class="icon">·</text> 收集您用于浏览沁园网站的设备的相关信息，例如，您的IP地址或互联网浏览器类型或您所使用的操作系统，并且将之与您的个人信息相联系，以便确保沁园为您提供最佳的网站体验</div> -->
   </div>
   <div class="polic-left polic-text polic-margin">（二）    仅当我们已经获得您的同意后或您之前提出对于我们提供的产品或服务的请求，就您可能感兴趣的产品和服务与您进行联络，且此等联络在适用法律的规定的合理时间期限内与前述的请求相关或存在关联</div>
@@ -185,8 +185,8 @@
   <div class="polic-left polic-text">2)         基于法律的披露：在法律、法律程序、诉讼或政府主管部门强制性要求的情况下，我们可能会公开披露您的个人信息。</div>
   <div class="polic-left polic-text polic-blue polic-margin">八、我们如何对您的个人信息进行跨境转移</div>
   <div class="polic-left polic-text polic-bold-nav">原则上，我们在中华人民共和国境内收集和产生的个人信息，将存储在中华人民共和国境内。</div>
-  <div class="polic-left polic-text polic-bold-nav polic-margin">我们可能将您的个人信息转移存储至您所居住国家以外的服务器或转移至位于其他国家的关联企业或可靠的第三方以便代表我们处理您的个人信息。同时，我们承诺，在跨境转移个人信息之前优先考虑实施数据去标识化、匿名化等安全措施。对于沁园网站的使用或向沁园提供您的个人信息即表明您授权同意我们按照本隐私保护声明和所适用的个人信息保护的法律法规对您的个人信息进行跨境转移。</div>
-  <div class="polic-left polic-text polic-bold-nav">您应当了解，不同于您可能在您的来源国所享受的个人信息法律保护，许多国家不提供相同的法律保护。当您信息存储于另一国家时，该国的法院、执法机构或安全机关可能根据该国法律查询您的个人信息。对于此等合法查询要求，我们承诺，处理您的个人信息的任何人将会被要求采取措施以保护您的个人信息且仅有权根据沁园的指示处理您的个人信息。</div>
+  <div class="polic-left polic-text polic-bold-nav polic-margin">我们可能将您的个人信息转移存储至境外的服务器或转移至位于其他国家或地区的关联企业或可靠的第三方以便代表我们处理您的个人信息。同时，我们承诺，在跨境转移个人信息之前优先考虑实施数据去标识化、匿名化等安全措施。对于沁园网站的使用或向沁园提供您的个人信息即表明您授权同意我们按照本隐私保护声明和所适用的个人信息保护的法律法规对您的个人信息进行跨境转移。</div>
+  <div class="polic-left polic-text polic-bold-nav">您应当了解，不同于您可能在您的来源国所享受的个人信息法律保护，许多国家或地区不提供相同的法律保护。当您信息存储于另一国家或地区时，该国或地区的法院、执法机构或安全机关可能根据该国法律查询您的个人信息。对于此等合法查询要求，我们承诺，处理您的个人信息的任何人将会被要求采取措施以保护您的个人信息且仅有权根据沁园的指示处理您的个人信息。</div>
   <div class="polic-left polic-text polic-blue polic-margin">九、我们如何保护您的个人信息</div>
   <div class="polic-left polic-text">我们将会采取所有合理可行的措施确保未收集无关的个人信息，保护您的个人信息安全并且要求所有办理或处理您的个人信息的第三方为我们采取同等的措施。为防止未经授权的访问、修改或滥用，对您的个人信息的查询是严格限制的，并且仅允许需要知道的我们的员工和代理人访问您的个人信息。</div>
   <div class="polic-left polic-text polic-margin">在不幸发生个人信息安全事件后，我们将按照法律法规的要求向您告知：安全事件的基本情况和可能的影响、我们已采取或将要采取的处置措施、您可自主防范和降低风险的建议、对您的补救措施等。事件相关情况我们将以邮件、信函、电话、推送通知等方式告知您，难以逐一告知个人信息主体时，我们会采取合理、有效的方式发布公告。同时，我们还将按照监管部门要求，上报个人信息安全事件的处置情况。</div>
@@ -199,7 +199,7 @@
   <div class="polic-left polic-text polic-padding"><text class="icon-clone">·</text>希望举报任何滥用您个人信息的行为</div>
   <div class="polic-left polic-text polic-margin">为协助我们处理您的要求，请提供您的全名和联系详情。此外，在某些情况下，我们可能还会先要求您验证自己的身份。</div>
   <div class="polic-left polic-text">一般情况下，我们会在三十天内回复。</div>
-  <div class="polic-left polic-text polic-margin">如果您对我们的回复不满意，特别是您认为我们的个人信息处理行为损害了您的合法权益，您还可以向网信、电信、公安及工商等监管部门进行投诉或举报。</div>
+  <div class="polic-left polic-text polic-margin">如果您对我们的回复不满意，特别是您认为我们的个人信息处理行为损害了您的合法权益，您还可以向网信、电信、公安、市场监管等部门进行投诉或举报。</div>
   <div class="polic-left polic-text polic-blue polic-margin">十一、   我们隐私保护声明的变更</div>
   <div class="polic-left polic-text">我们可以通过在沁园网站上发布隐私保护声明的更新版本而随时修订本隐私保护声明。如果有任何重大变更，我们将会对您进行合理地通知（例如，我们可能会通过电子邮件通知您重大变更之处）。</div>
   <div class="polic-left polic-text polic-margin">本隐私保护声明所指的重大变更包括但不限于：</div>
