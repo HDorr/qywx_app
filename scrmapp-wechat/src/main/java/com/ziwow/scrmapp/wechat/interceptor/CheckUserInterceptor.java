@@ -76,7 +76,7 @@ public class CheckUserInterceptor implements HandlerInterceptor {
         //保存实际页面
         String requestURL = request.getRequestURL().toString();
         if (requestURL.startsWith(mineBaseUrl)){
-            requestURL.replace("http://","https://");
+            requestURL=requestURL.replace("http://","https://");
         }
 
         //获得微信客户端传回的code
