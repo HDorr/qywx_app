@@ -23,6 +23,7 @@ import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -43,6 +44,9 @@ public class CheckUserInterceptor implements HandlerInterceptor {
 
     @Autowired
     ThirdPartyService thirdPartyService;
+
+    @Value("${mine.baseUrl}")
+    private String mineBaseUrl;
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
@@ -71,6 +75,9 @@ public class CheckUserInterceptor implements HandlerInterceptor {
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
         //保存实际页面
         String requestURL = request.getRequestURL().toString();
+        if (requestURL.startsWith(mineBaseUrl)){
+            requestURL.replace("http://","https://");
+        }
 
         //获得微信客户端传回的code
         String code = request.getParameter("code");
