@@ -1,10 +1,12 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+
 <html>
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>个人中心</title>
-    <meta name="viewport" content="initial-scale=1, maximum-scale=1,user-scalable=no,viewport-fit=cover">
+    <meta name="viewport" content="width=750,maximum-scale=1.3,user-scalable=no">
+    <%--<meta name="viewport" content="initial-scale=1, maximum-scale=1,user-scalable=no,viewport-fit=cover">--%>
     <meta name="x5-fullscreen" content="true">
     <meta name="full-screen" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -82,6 +84,20 @@
 <script src="${f_ctxpath}/resources/thirdparty/jquery/dist/jquery.min.js"></script>
 <script src="${f_ctxpath}/resources/thirdparty/jqweui/jquery-weui.min.js"></script>
 <script>
+
+  // (function (doc, win) {
+  //   var docEl = doc.documentElement;
+  //   resizeEvt = 'orientationchange' in window ? 'orientationchange' : 'resize';
+  //   recalc = function () {
+  //     var clientWidth = docEl.clientWidth;
+  //     if (!clientWidth) return;
+  //     docEl.style.fontSize = 50 * (clientWidth / 750) + 'px';
+  //   };
+  //   if (!doc.addEventListener) return;
+  //   win.addEventListener(resizeEvt, recalc, false);
+  //   doc.addEventListener('DOMContentLoaded', recalc, false);
+  // }(document,window));
+
     var gridEl = document.querySelectorAll(".weui-grid");
     for(var i = 0 ;i<gridEl.length;i++){
         gridEl[i].addEventListener("touchstart",function(e){
