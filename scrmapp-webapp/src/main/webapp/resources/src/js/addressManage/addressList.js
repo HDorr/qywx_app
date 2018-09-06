@@ -135,7 +135,7 @@ function showAddrList() {
             } else {
                 var html = template("hasNoAddressList", data);
                 $("#centerArea").html(html);
-                $("#hasNoAddressListImg").attr("src","/resources/src/images/icons/hasNoAddressYet.png");
+                // $("#hasNoAddressListImg").attr("src","/resources/src/images/icons/hasNoAddressYet.png");
             }
 
         } else {
