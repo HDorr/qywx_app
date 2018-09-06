@@ -16,16 +16,16 @@
 <body>
 <div class="main_layer">
     <div class="head_banner">
-        <img class="bannerImg" src="${f_ctxpath}/resources/images/home_banner.png${f_ver}">
+        <img class="bannerImg" src="${f_ctxpath}/resources/images/top_info.png${f_ver}">
         <div class="headerImg" style="background-image: url('${data.headimgurl}')">
         </div>
-        <p>${data.nickName}</p>
+        <%--<p>${data.nickName}</p>--%>
     </div>
 
     <div class="menu_area weui-grids">
         <a href="${f_ctxpath}/scrmapp/consumer/user/memberInfo/index"  class="weui-grid js_grid">
             <div class="weui-grid__icon">
-                <img src="${f_ctxpath}/resources/images/home_menu/personalDate.png${f_ver}" alt="">
+                <img src="${f_ctxpath}/resources/images/home_menu/user_info_blue.png${f_ver}" alt="">
             </div>
             <p class="weui-grid__label">
                 个人资料
@@ -34,7 +34,7 @@
         </a>
         <a href="${f_ctxpath}/scrmapp/consumer/wechatuser/address/index" class="weui-grid js_grid">
             <div class="weui-grid__icon">
-                <img src="${f_ctxpath}/resources/images/home_menu/addressIcon.png${f_ver}" alt="">
+                <img src="${f_ctxpath}/resources/images/home_menu/my_address_blue.png${f_ver}" alt="">
             </div>
             <p class="weui-grid__label">
                 我的地址
@@ -43,7 +43,7 @@
         </a>
         <a href="${f_ctxpath}/scrmapp/consumer/user/filter/myProducts/jsp/myPdtList" class="weui-grid js_grid">
             <div class="weui-grid__icon">
-                <img src="${f_ctxpath}/resources/images/home_menu/myProduct.png${f_ver}" alt="">
+                <img src="${f_ctxpath}/resources/images/home_menu/my_product_blue.png${f_ver}" alt="">
             </div>
             <p class="weui-grid__label">
                 我的产品
@@ -52,7 +52,7 @@
         </a>
         <a href="${f_ctxpath}/scrmapp/consumer/user/filter/myOrder/jsp/myOrderList" class="weui-grid js_grid">
             <div class="weui-grid__icon">
-                <img src="${f_ctxpath}/resources/images/home_menu/myBook.png${f_ver}" alt="">
+                <img src="${f_ctxpath}/resources/images/home_menu/my_order_blue.png${f_ver}" alt="">
             </div>
             <p class="weui-grid__label">
                 我的预约
