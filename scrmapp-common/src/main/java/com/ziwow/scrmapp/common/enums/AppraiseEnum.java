@@ -5,7 +5,7 @@ package com.ziwow.scrmapp.common.enums;
  * @Date: 18-9-3 下午1:50
  * @Description: 评价显示类型
  */
-public enum Appraise_Enum {
+public enum AppraiseEnum {
 
     INSTALL_APPRAISE(1, "安装服务评价"),
     REPAIR_APPRAISE(2, "维修服务评价"),
@@ -15,7 +15,7 @@ public enum Appraise_Enum {
     private int code;
     private String codeName;
 
-    Appraise_Enum(int code, String codeName) {
+    AppraiseEnum(int code, String codeName) {
         this.code = code;
         this.codeName = codeName;
     }
@@ -29,8 +29,8 @@ public enum Appraise_Enum {
     }
 
     public static String getNameByCode(int code) {
-        Appraise_Enum[] appraise_enums = Appraise_Enum.values();
-        for (Appraise_Enum a : appraise_enums) {
+        AppraiseEnum[] appraise_enums = AppraiseEnum.values();
+        for (AppraiseEnum a : appraise_enums) {
             if (a.getCode() == code) {
                 return a.getCodeName();
             }

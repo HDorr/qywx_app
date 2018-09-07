@@ -43,8 +43,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.UnsupportedEncodingException;
+import java.math.BigDecimal;
 import java.net.URLEncoder;
 import java.sql.SQLDataException;
+import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -110,6 +112,9 @@ public class WechatOrdersServiceImpl implements WechatOrdersService {
 
     @Value("${miniapp.product.cancelmakeAppointment}")
     private String cancelmakeAppointmentUrl;
+
+    @Autowired
+    private WechatUserService wechatUserService;
 
     @Override
     public WechatOrders getWechatOrdersByCode(String ordersCode) {
@@ -511,6 +516,87 @@ public class WechatOrdersServiceImpl implements WechatOrdersService {
         wechatTemplateService.servicesToNoticeTemplate(openId, null, title, orderType, orderCode, orderTime, engineerName, mobilePhone, remark);
     }*/
 
+    //检查是否为空
+    private <T> T checkNull(T o) throws ParamException {
+        if (o == null) {
+            throw new ParamException("接口参数为空");
+        } else if (o.getClass() == String.class) {
+            if (o == "") {
+                throw new ParamException("接口必填字段不能为空");
+            }
+        }
+        return o;
+    }
+
+    //0和1布尔值转换
+    private Boolean convertBoolean(String number) {
+        return "0".equals(number) ? false : true;
+    }
+
+    @Override
+    public void syncAddAppraise(AppraiseParam appraiseParam) throws ParamException {
+        appraiseParam = checkNull(appraiseParam);
+        String ordersCode = checkNull(appraiseParam.getOrderCode());
+        String attitudeStr = checkNull(appraiseParam.getAttitude());
+        String professionStr = checkNull(appraiseParam.getProfession());
+        String is_order = checkNull(appraiseParam.getIs_order());
+
+        WechatOrders wechatOrders = this.getWechatOrdersByCode(ordersCode);
+        if (wechatOrders == null) {
+            throw new ParamException("受理单号在微信端不存在");
+        }
+        //判断预约单状态是否可以评论
+        if (SystemConstants.COMPLETE != wechatOrders.getStatus()) {
+            throw new ParamException("该订单的状态没有完成,不能进行评价");
+        }
+
+        if (StringUtils.isEmpty(appraiseParam.getIs_repair())
+                && SystemConstants.REPAIR == wechatOrders.getOrderType()) {
+            throw new ParamException("该订单是维修单，但是字段is_repair为空");
+        }
+        //保存评价信息
+        BigDecimal attitude = BigDecimal.valueOf(Double.parseDouble(attitudeStr));
+        BigDecimal profession = BigDecimal.valueOf(Double.parseDouble(professionStr));
+        String userId = wechatOrders.getUserId();
+        QyhUserAppraisalVo qyhUserAppraisalVo = new QyhUserAppraisalVo();
+        qyhUserAppraisalVo.setOrderId(wechatOrders.getId());
+        qyhUserAppraisalVo.setAttitude(attitude);
+        qyhUserAppraisalVo.setProfession(profession);
+        qyhUserAppraisalVo.setContent(appraiseParam.getContent());
+        qyhUserAppraisalVo.setQyhUserId(wechatOrders.getQyhUserId());
+        qyhUserAppraisalVo.setUserId(userId);
+        qyhUserAppraisalVo.setIs_order(convertBoolean(is_order));
+        if (SystemConstants.REPAIR == wechatOrders.getOrderType()) {
+            qyhUserAppraisalVo.setIs_repair(convertBoolean(appraiseParam.getIs_repair()));
+        }
+        int count = wechatUserService.saveVo(qyhUserAppraisalVo);
+        Date date = new Date();
+        if (count > 0) {
+            //修改预约单状态为已评价
+            this.updateOrdersStatus(ordersCode, userId, date, SystemConstants.APPRAISE);
+            WechatOrdersRecord wechatOrdersRecord = new WechatOrdersRecord();
+            wechatOrdersRecord.setOrderId(wechatOrders.getId());
+            wechatOrdersRecord.setRecordTime(date);
+            wechatOrdersRecord.setRecordContent("用户评分完成");
+            wechatOrdersRecordService.saveWechatOrdersRecord(wechatOrdersRecord);
+        }
+        // 给工程师发送短信通知
+        String engineerMsgContent = "您服务的工单" + ordersCode + "，用户已经评价啦，谢谢提供服务！请登录“沁园服务之家”的售后服务个人中心，可以查看评分。";
+        QyhUser qyhUser = wechatQyhUserService.getQyhUser(wechatOrders.getQyhUserId());
+        String qyhUserMobile = (null != qyhUser) ? qyhUser.getMobile() : "";
+        try {
+            mobileService.sendContentByEmay(qyhUserMobile, engineerMsgContent, Constant.ENGINEER);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        // 给用户发送模板通知
+        this.sendAppraiseFinishTemplateMsg(
+                wechatOrders.getOrdersCode(), userId, DateUtil.DateToString(wechatOrders.getOrderTime(), DateUtil.YYYY_MM_DD_HH_MM_SS));
+
+
+    }
+
     @Override
     public void sendEngineerMsgText(String engineerId, String engineerPhone, WechatOrders wechatOrders) {
         String ordersCode = wechatOrders.getOrdersCode();
@@ -532,7 +618,8 @@ public class WechatOrdersServiceImpl implements WechatOrdersService {
     }
 
     @Override
-    public void changeAppointmentTemplate(String userId, String orderType, String ordersCode, String orderTime, String qyhUserName, String qyhUserPhone) {
+    public void changeAppointmentTemplate(String userId, String orderType, String ordersCode, String
+            orderTime, String qyhUserName, String qyhUserPhone) {
         WechatFans wechatFans = wechatFansService.getWechatFansByUserId(userId);
         if (null != wechatFans) {
             String openId = wechatFans.getOpenId();
@@ -769,8 +856,8 @@ public class WechatOrdersServiceImpl implements WechatOrdersService {
     @Override
     @Async
     public void syncMakeAppointment(String scOrderItemId, String ordersCode,
-        String serviceFeeIds) {
-        LOG.info("预约信息同步到小程序,scOrderItemId:"+ scOrderItemId+"   ordersCode:"+ordersCode+"   serviceFeeIds:"+serviceFeeIds);
+                                    String serviceFeeIds) {
+        LOG.info("预约信息同步到小程序,scOrderItemId:" + scOrderItemId + "   ordersCode:" + ordersCode + "   serviceFeeIds:" + serviceFeeIds);
         // 异步推送给小程序对接方
         Map<String, Object> params = new HashMap<String, Object>();
         long timestamp = System.currentTimeMillis();

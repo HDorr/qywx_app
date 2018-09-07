@@ -2,6 +2,7 @@ package com.ziwow.scrmapp.common.persistence.mapper;
 
 
 import com.ziwow.scrmapp.common.persistence.entity.QyhUserAppraisal;
+import com.ziwow.scrmapp.common.persistence.entity.QyhUserAppraisalVo;
 
 public interface QyhUserAppraisalMapper {
     int deleteByPrimaryKey(Long id);
@@ -15,4 +16,6 @@ public interface QyhUserAppraisalMapper {
     int updateByPrimaryKeySelective(QyhUserAppraisal record);
 
     int updateByPrimaryKey(QyhUserAppraisal record);
+
+    int insertVo(QyhUserAppraisalVo qyhUserAppraisalVo);
 }
