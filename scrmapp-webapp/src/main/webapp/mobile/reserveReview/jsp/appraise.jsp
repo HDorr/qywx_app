@@ -4,6 +4,8 @@
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
     <title>${appraiseTypeName}</title>
+    <link rel="stylesheet" href="${f_ctxpath}/resources/src/css/jqweui/weui.min.css">
+    <link rel="stylesheet" href="${f_ctxpath}/resources/src/css/jqweui/jquery-weui.css">
     <link rel="stylesheet" href="${f_ctxpath}/resources/src/css/reserveReview/appraise.css${f_ver}">
 </head>
 <body>
@@ -55,6 +57,7 @@
     </div>
 </footer>
 <script src="${f_ctxpath}/resources/thirdparty/jquery/dist/jquery.min.js"></script>
+<script src="${f_ctxpath}/resources/thirdparty/jqweui/jquery-weui.min.js"></script>
 <script src="${f_ctxpath}/resources/src/js/common.js${f_ver}"></script>
 <script src="${f_ctxpath}/resources/src/js/reviewReserve/appraise.js${f_ver}"></script>
 </body>

@@ -122,11 +122,11 @@ function submitData() {
     var attitude = $(".t-star-1").attr("attitude");
     var profession = $(".t-star-2").attr("profession");
     if (attitude == 0) {
-        alert("请您为服务礼仪点亮星星")
+        $.alert("请您为服务礼仪点亮星星")
         return;
     }
     if (profession == 0) {
-        alert("请您为专业技能点亮星星")
+        $.alert("请您为专业技能点亮星星")
         return;
     }
 
@@ -162,14 +162,39 @@ function submitData() {
         "orderCode": orderCode,
         "appraiseType": appraiseType
     }
-
+    $.showLoading("数据提交中");
     $.ajax({
         type: "POST",
         url: queryUrls.newAppraisal,
         contentType: "application/json; charset=utf-8",
         data: JSON.stringify(params),
-        success: function (data) {
-            console.log(data.data);
+        success: function(data) {
+            if (data.returnCode == 1) {
+                $.hideLoading();
+                praiseSuccess();
+            } else {
+                $.hideLoading();
+                $.toast(data.returnMsg, "cancel")
+            }
+        },
+        error: function(data) {
+            $.hideLoading();
+            $.toast("网络错误", "cancel")
         }
     });
+}
+
+function praiseSuccess() {
+    var htmlStr = "<div class=\"t-success\">\n" +
+        "    <div class=\"t-success-img\">\n" +
+        "        <img src=\"/scrmapp/resources/src/images/icons/smill_new.png\">\n" +
+        "    </div>\n" +
+        "    <p>感谢您对这次服务进行评价！</p>\n" +
+        "    <p>感谢您评价完成！</p>\n" +
+        "    <div id=\"t-back\" class=\"t-back\">返回我的订单列表</div>\n" +
+        "</div>"
+    $("body").html(htmlStr);
+    $("#t-back").click(function () {
+        location.href = pageUrls.orderList;
+    })
 }
