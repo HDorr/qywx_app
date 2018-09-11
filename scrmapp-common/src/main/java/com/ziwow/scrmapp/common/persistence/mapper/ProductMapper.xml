@@ -404,6 +404,7 @@
         p.levelId as levelId,
         p.itemKind as itemKind,
         p.o2o,
+        p.buyTime,
         p.shoppingOrder,
         p.buyChannel,
         p.saleType,

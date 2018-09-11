@@ -389,7 +389,7 @@ public class WechatOrdersController {
             }
 
             /*  重新生成受理单 查询之前受理单的数据*/
-            wechatOrdersParam.setOrderTime(updateTime.substring(0, 10));
+            wechatOrdersParam.setOrderTime(updateTime.substring(0, 13));
             wechatOrdersParam.setTel(wechatUser.getMobilePhone());
             //调用沁园接口，生成受理单
             result = wechatOrdersService.geneatorCode(wechatOrdersParam);
