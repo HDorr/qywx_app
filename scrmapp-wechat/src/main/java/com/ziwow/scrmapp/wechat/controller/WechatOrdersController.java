@@ -1,6 +1,8 @@
 package com.ziwow.scrmapp.wechat.controller;
 
 import com.alibaba.fastjson.JSON;
+
+import java.lang.reflect.Field;
 import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.util.Date;
@@ -9,6 +11,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.ziwow.scrmapp.common.bean.vo.*;
 import com.ziwow.scrmapp.common.enums.AppraiseEnum;
 import com.ziwow.scrmapp.common.persistence.entity.*;
 import com.ziwow.scrmapp.wechat.service.*;
@@ -538,7 +541,7 @@ public class WechatOrdersController {
                     String serverType = OrderUtils.getServiceTypeName(orderType);
                     // 给用户发送发送短信提醒
                     String mobile = wechatUser.getMobilePhone();
-                    String msgContent = "亲爱的用户，您预约的" + serverType + "服务已撤销。如须重新预约，您可进入“沁园”官方WX服务号进行操作。";
+                    String msgContent = "亲爱的用户，您预约的" + serverType + "服务已撤销。如须重新预约，您可进入“沁园”官方微信服务号进行操作。";
                     mobileService.sendContentByEmay(mobile, msgContent, Constant.CUSTOMER);
                     // 给用户发送发送模板消息
                     wechatOrdersService.sendOrderCancelTemplateMsg(userId, serverType);
@@ -726,7 +729,7 @@ public class WechatOrdersController {
             }
 
             //判断预约单状态是否可以评论
-            WechatOrders wechatOrders = wechatOrdersService.getWechatOrdersByCode(ordersCode);
+            WechatOrderVo wechatOrders = wechatOrdersService.getWechatOrdersVoByCode(ordersCode);
             if (SystemConstants.COMPLETE != wechatOrders.getStatus()) {
                 result.setReturnCode(Constant.FAIL);
                 result.setReturnMsg("现在不能评分!");
@@ -752,11 +755,14 @@ public class WechatOrdersController {
             }
             evaluateParam.setNumber_type(orderType);
             evaluateParam.setEvaluate_note(content);
-            evaluateParam.setNumber(wechatOrders.getOrdersNo());
+            evaluateParam.setNumber(wechatOrders.getOrdersCode());
             evaluateParam.setIs_attitude(inValidNotNUll(attitude));
             evaluateParam.setIs_specialty(inValidNotNUll(profession));
-            evaluateParam.setIs_integrity(inValidNotNUll(integrity));
-            evaluateParam.setIs_recommend(inValidNotNUll(recommend));
+//            evaluateParam.setIs_integrity(inValidNotNUll(integrity));
+//            evaluateParam.setIs_recommend(inValidNotNUll(recommend));
+            evaluateParam.setIs_wxgz(inValidNotNUll(wechatOrders.getIs_repair()));
+            evaluateParam.setIs_wxzs(inValidNotNUll(wechatOrders.getIs_order()));
+
             Result invokeResult = wechatUserService.invokeCssEvaluate(evaluateParam);
 
             if (Constant.SUCCESS == invokeResult.getReturnCode()) {
@@ -793,6 +799,10 @@ public class WechatOrdersController {
                 QyhUser qyhUser = wechatQyhUserService.getQyhUser(wechatOrders.getQyhUserId());
                 String qyhUserMobile = (null != qyhUser) ? qyhUser.getMobile() : "";
                 mobileService.sendContentByEmay(qyhUserMobile, engineerMsgContent, Constant.ENGINEER);
+
+                // 给用户发送模板通知
+                wechatOrdersService.sendAppraiseFinishTemplateMsg(
+                        wechatOrders.getOrdersCode(), userId, DateUtil.DateToString(wechatOrders.getOrderTime(), DateUtil.YYYY_MM_DD_HH_MM_SS));
             } else {
                 return invokeResult;
             }
@@ -812,6 +822,13 @@ public class WechatOrdersController {
             return  0;
         }
         return bigDecimal.intValue();
+    }
+
+    private int inValidNotNUll(Integer args) {
+        if (args == null) {
+            return 0;
+        }
+        return args;
     }
 
 
@@ -942,47 +959,53 @@ public class WechatOrdersController {
                 return result;
             }
 
-            //fixme 这里调用CSM接口，返回成功则
+            //fixme 这里调用CSM接口
+            Result invokeResult = csmExecute(wechatOrderAppraise);
+            if (Constant.SUCCESS == invokeResult.getReturnCode()) {
 
-            //保存评价信息
-            BigDecimal attitude = BigDecimal.valueOf(Double.parseDouble(wechatOrderAppraise.getAttitude()));
-            BigDecimal profession = BigDecimal.valueOf(Double.parseDouble(wechatOrderAppraise.getProfession()));
-            QyhUserAppraisalVo qyhUserAppraisalVo = new QyhUserAppraisalVo();
-            qyhUserAppraisalVo.setOrderId(wechatOrders.getId());
-            qyhUserAppraisalVo.setAttitude(attitude);
-            qyhUserAppraisalVo.setProfession(profession);
-            qyhUserAppraisalVo.setContent(wechatOrderAppraise.getContent());
-            qyhUserAppraisalVo.setQyhUserId(wechatOrders.getQyhUserId());
-            qyhUserAppraisalVo.setUserId(userId);
-            qyhUserAppraisalVo.setIs_order(convertBoolean(wechatOrderAppraise.getOrder()));
-            qyhUserAppraisalVo.setIs_repair(convertBoolean(wechatOrderAppraise.getRepair()));
+                //保存评价信息
+                BigDecimal attitude = BigDecimal.valueOf(Double.parseDouble(wechatOrderAppraise.getAttitude()));
+                BigDecimal profession = BigDecimal.valueOf(Double.parseDouble(wechatOrderAppraise.getProfession()));
+                QyhUserAppraisalVo qyhUserAppraisalVo = new QyhUserAppraisalVo();
+                qyhUserAppraisalVo.setOrderId(wechatOrders.getId());
+                qyhUserAppraisalVo.setAttitude(attitude);
+                qyhUserAppraisalVo.setProfession(profession);
+                qyhUserAppraisalVo.setContent(wechatOrderAppraise.getContent());
+                qyhUserAppraisalVo.setQyhUserId(wechatOrders.getQyhUserId());
+                qyhUserAppraisalVo.setUserId(userId);
+                qyhUserAppraisalVo.setIs_order(convertBoolean(wechatOrderAppraise.getOrder()));
+                qyhUserAppraisalVo.setIs_repair(convertBoolean(wechatOrderAppraise.getRepair()));
 
-            int count = wechatUserService.saveVo(qyhUserAppraisalVo);
-            Date date = new Date();
-            if (count > 0) {
-                //修改预约单状态为已评价
-                wechatOrdersService.updateOrdersStatus(ordersCode, userId, date, SystemConstants.APPRAISE);
+                int count = wechatUserService.saveVo(qyhUserAppraisalVo);
+                Date date = new Date();
+                if (count > 0) {
+                    //修改预约单状态为已评价
+                    wechatOrdersService.updateOrdersStatus(ordersCode, userId, date, SystemConstants.APPRAISE);
+                } else {
+                    throw new SQLException("qyhUserAppraisalVo:" + JSONObject.toJSONString(qyhUserAppraisalVo));
+                }
+                WechatOrdersRecord wechatOrdersRecord = new WechatOrdersRecord();
+                wechatOrdersRecord.setOrderId(wechatOrders.getId());
+                wechatOrdersRecord.setRecordTime(date);
+                wechatOrdersRecord.setRecordContent("用户评分完成");
+                wechatOrdersRecordService.saveWechatOrdersRecord(wechatOrdersRecord);
+
+                result.setReturnCode(Constant.SUCCESS);
+                result.setData("评分完成!");
+
+                // 给工程师发送短信通知
+                String engineerMsgContent = "您服务的工单" + ordersCode + "，用户已经评价啦，谢谢提供服务！请登录“沁园服务之家”的售后服务个人中心，可以查看评分。";
+                QyhUser qyhUser = wechatQyhUserService.getQyhUser(wechatOrders.getQyhUserId());
+                String qyhUserMobile = (null != qyhUser) ? qyhUser.getMobile() : "";
+                mobileService.sendContentByEmay(qyhUserMobile, engineerMsgContent, Constant.ENGINEER);
+
+                // 给用户发送模板通知
+                wechatOrdersService.sendAppraiseFinishTemplateMsg(
+                        wechatOrders.getOrdersCode(), userId, DateUtil.DateToString(wechatOrders.getOrderTime(), DateUtil.YYYY_MM_DD_HH_MM_SS));
             } else {
-                throw new SQLException("qyhUserAppraisalVo:" + JSONObject.toJSONString(qyhUserAppraisalVo));
+                result.setReturnCode(Constant.FAIL);
+                result.setReturnMsg("用户评分失败!");
             }
-            WechatOrdersRecord wechatOrdersRecord = new WechatOrdersRecord();
-            wechatOrdersRecord.setOrderId(wechatOrders.getId());
-            wechatOrdersRecord.setRecordTime(date);
-            wechatOrdersRecord.setRecordContent("用户评分完成");
-            wechatOrdersRecordService.saveWechatOrdersRecord(wechatOrdersRecord);
-
-            result.setReturnCode(Constant.SUCCESS);
-            result.setData("评分完成!");
-
-            // 给工程师发送短信通知
-            String engineerMsgContent = "您服务的工单" + ordersCode + "，用户已经评价啦，谢谢提供服务！请登录“沁园服务之家”的售后服务个人中心，可以查看评分。";
-            QyhUser qyhUser = wechatQyhUserService.getQyhUser(wechatOrders.getQyhUserId());
-            String qyhUserMobile = (null != qyhUser) ? qyhUser.getMobile() : "";
-            mobileService.sendContentByEmay(qyhUserMobile, engineerMsgContent, Constant.ENGINEER);
-
-            // 给用户发送模板通知
-            wechatOrdersService.sendAppraiseFinishTemplateMsg(
-                    wechatOrders.getOrdersCode(), userId, DateUtil.DateToString(wechatOrders.getOrderTime(), DateUtil.YYYY_MM_DD_HH_MM_SS));
         } catch (Exception e) {
             logger.error("用户评分失败,原因[{}]", e);
             result.setReturnCode(Constant.FAIL);
@@ -991,6 +1014,36 @@ public class WechatOrdersController {
         return result;
     }
 
+    private Integer covertStringToInt(String str){
+        if(StringUtils.isNotEmpty(str)){
+            return Integer.parseInt(str);
+        }
+        return 0;
+    }
+
+    private Result csmExecute(WechatOrderAppraise appraise) {
+        //首先调用沁园同步接口
+        EvaluateParam evaluateParam = new EvaluateParam();
+        int orderType = covertStringToInt(appraise.getAppraiseType());
+        if (SystemConstants.INSTALL_APPRAISE == orderType) {
+            orderType = SystemConstants.INSTALL;
+        } else if (SystemConstants.REPAIR_APPRAISE == orderType) {
+            orderType = SystemConstants.REPAIR;
+        } else if (SystemConstants.FILTER_APPRAISE == orderType || SystemConstants.CLEAN_APPRAISE == orderType) {
+            orderType = SystemConstants.MAINTAIN;
+        }
+        evaluateParam.setNumber_type(orderType);
+        evaluateParam.setEvaluate_note(appraise.getContent());
+        evaluateParam.setNumber(appraise.getOrderCode());
+        evaluateParam.setIs_attitude(covertStringToInt(appraise.getAttitude()));
+        evaluateParam.setIs_specialty(covertStringToInt(appraise.getProfession()));
+        evaluateParam.setIs_integrity(0);
+        evaluateParam.setIs_recommend(0);
+        evaluateParam.setIs_wxgz(covertStringToInt(appraise.getRepair()));
+        evaluateParam.setIs_wxzs(covertStringToInt(appraise.getOrder()));
+
+        return wechatUserService.invokeCssEvaluate(evaluateParam);
+    }
 
     //根据类型判断评价显示的界面
     private int getTypeByOtherTypes(int orderType, int maintType) {

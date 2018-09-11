@@ -535,12 +535,13 @@ public class WechatOrdersServiceImpl implements WechatOrdersService {
 
     @Override
     public void syncAddAppraise(AppraiseParam appraiseParam) throws ParamException {
+        boolean isLegal = SignUtil.checkSignature(appraiseParam.getSignature(), appraiseParam.getTimeStamp(), Constant.AUTH_KEY);
+        if (!(isLegal)) {
+            throw new ParamException(Constant.ILLEGAL_REQUEST);
+        }
         appraiseParam = checkNull(appraiseParam);
         String ordersCode = checkNull(appraiseParam.getOrderCode());
-        String attitudeStr = checkNull(appraiseParam.getAttitude());
-        String professionStr = checkNull(appraiseParam.getProfession());
         String is_order = checkNull(appraiseParam.getIs_order());
-
         WechatOrders wechatOrders = this.getWechatOrdersByCode(ordersCode);
         if (wechatOrders == null) {
             throw new ParamException("受理单号在微信端不存在");
@@ -550,25 +551,14 @@ public class WechatOrdersServiceImpl implements WechatOrdersService {
             throw new ParamException("该订单的状态没有完成,不能进行评价");
         }
 
-        if (StringUtils.isEmpty(appraiseParam.getIs_repair())
-                && SystemConstants.REPAIR == wechatOrders.getOrderType()) {
-            throw new ParamException("该订单是维修单，但是字段is_repair为空");
-        }
         //保存评价信息
-        BigDecimal attitude = BigDecimal.valueOf(Double.parseDouble(attitudeStr));
-        BigDecimal profession = BigDecimal.valueOf(Double.parseDouble(professionStr));
         String userId = wechatOrders.getUserId();
         QyhUserAppraisalVo qyhUserAppraisalVo = new QyhUserAppraisalVo();
         qyhUserAppraisalVo.setOrderId(wechatOrders.getId());
-        qyhUserAppraisalVo.setAttitude(attitude);
-        qyhUserAppraisalVo.setProfession(profession);
-        qyhUserAppraisalVo.setContent(appraiseParam.getContent());
         qyhUserAppraisalVo.setQyhUserId(wechatOrders.getQyhUserId());
         qyhUserAppraisalVo.setUserId(userId);
         qyhUserAppraisalVo.setIs_order(convertBoolean(is_order));
-        if (SystemConstants.REPAIR == wechatOrders.getOrderType()) {
-            qyhUserAppraisalVo.setIs_repair(convertBoolean(appraiseParam.getIs_repair()));
-        }
+        qyhUserAppraisalVo.setIs_source(1);//400评价来源默认是1
         int count = wechatUserService.saveVo(qyhUserAppraisalVo);
         Date date = new Date();
         if (count > 0) {
@@ -589,11 +579,9 @@ public class WechatOrdersServiceImpl implements WechatOrdersService {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
         // 给用户发送模板通知
         this.sendAppraiseFinishTemplateMsg(
                 wechatOrders.getOrdersCode(), userId, DateUtil.DateToString(wechatOrders.getOrderTime(), DateUtil.YYYY_MM_DD_HH_MM_SS));
-
 
     }
 

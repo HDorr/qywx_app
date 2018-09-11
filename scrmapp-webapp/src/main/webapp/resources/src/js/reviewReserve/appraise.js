@@ -1,3 +1,5 @@
+const appraiseType = $("#hidden_question").data("appraisetype");
+
 $(function () {
     //动态添加节点
     addNode();
@@ -9,39 +11,29 @@ $(function () {
 function addNode() {
     var header_question = $("#header_question");
     header_question.html("");
-    var appraiseType = $("#hidden_question").data("appraisetype");
-    if (appraiseType !== 2) {
-        header_question.html(
-            "<div class=\"t-container t-header\">\n" +
-            "        <div class=\"t-question\">\n" +
-            "            <span>工程师是否与您及时预约并准时上门？</span>\n" +
-            "        </div>\n" +
-            "        <div class=\"t-select\" order=\"1\">\n" +
-            "            <span class=\"t-radio t-checked\" choose=\"1\">是</span>\n" +
-            "            <span class=\"t-radio\" choose=\"0\">否</span>\n" +
-            "        </div>\n" +
-            "    </div>");
-    } else {
-        header_question.html(
+    if (appraiseType === 2) {
+        header_question.append(
             "<div class=\"t-container t-header\">\n" +
             "        <div class=\"t-question\">\n" +
             "            <span>您报修的故障是否已经完全排除？</span>\n" +
             "        </div>\n" +
             "        <div class=\"t-select\" repair=\"1\">\n" +
-            "            <span class=\"t-radio t-checked\" choose=\"1\">是</span>\n" +
-            "            <span class=\"t-radio\" choose=\"0\">否</span>\n" +
+            "            <span class=\"t-radio\" choose=\"1\" id='t-repair-choosed'>是</span>\n" +
+            "            <span class=\"t-radio\" choose=\"0\" id='t-repair-unchoosed'>否</span>\n" +
             "        </div>\n" +
-            "    </div>\n" +
-            "    <div class=\"t-container t-header\">\n" +
-            "        <div class=\"t-question\">\n" +
-            "            <span>工程师是否与您及时预约并准时上门？</span>\n" +
-            "        </div>\n" +
-            "        <div class=\"t-select\" order=\"1\">\n" +
-            "            <span class=\"t-radio t-checked\" choose=\"1\">是</span>\n" +
-            "            <span class=\"t-radio\" choose=\"0\">否</span>\n" +
-            "        </div>\n" +
-            "    </div>");
+            "    </div>\n"
+        );
     }
+    header_question.append(
+        "<div class=\"t-container t-header\">\n" +
+        "        <div class=\"t-question\">\n" +
+        "            <span>工程师是否与您及时预约并准时上门？</span>\n" +
+        "        </div>\n" +
+        "        <div class=\"t-select\" order=\"1\">\n" +
+        "            <span class=\"t-radio\" choose=\"1\" id='t-order-choosed'>是</span>\n" +
+        "            <span class=\"t-radio\" choose=\"0\" id='t-order-unchoosed'>否</span>\n" +
+        "        </div>\n" +
+        "    </div>");
 }
 
 //添加事件
@@ -50,10 +42,7 @@ function addEvent() {
     $(".t-select").on("click", function (e) {
         var t = $(e.target);
         if (t.hasClass("t-radio")) {
-            if (t.hasClass("t-checked")) {
-                t.siblings(".t-radio").addClass("t-checked");
-                t.removeClass("t-checked");
-            } else {
+            if (!t.hasClass("t-checked")) {
                 t.siblings(".t-radio").removeClass("t-checked");
                 t.addClass("t-checked");
             }
@@ -121,14 +110,25 @@ function submitData() {
     //获得服务礼仪和专业度值
     var attitude = $(".t-star-1").attr("attitude");
     var profession = $(".t-star-2").attr("profession");
+    if (appraiseType === 2) {
+        if (!$("#t-repair-choosed").hasClass("t-checked") && !$("#t-repair-unchoosed").hasClass("t-checked")) {
+            $.alertNew("报修故障是否已排除?");
+            return;
+        }
+    }
+    if (!$("#t-order-choosed").hasClass("t-checked") && !$("#t-order-unchoosed").hasClass("t-checked")) {
+        $.alertNew("工程师是否如约而至?");
+        return;
+    }
     if (attitude == 0) {
-        $.alert("请您为服务礼仪点亮星星")
+        $.alertNew("请您为服务礼仪点亮星星");
         return;
     }
     if (profession == 0) {
-        $.alert("请您为专业技能点亮星星")
+        $.alertNew("请您为专业技能点亮星星");
         return;
     }
+
 
     //获得问题的选择值
     var questions = $(".t-checked");
@@ -150,7 +150,6 @@ function submitData() {
     //获得订单号和订单类型
     var hidden_question = $("#hidden_question");
     var orderCode = hidden_question.data("orderscode");
-    var appraiseType = hidden_question.data("appraisetype");
 
     //参数
     var params = {
@@ -168,7 +167,7 @@ function submitData() {
         url: queryUrls.newAppraisal,
         contentType: "application/json; charset=utf-8",
         data: JSON.stringify(params),
-        success: function(data) {
+        success: function (data) {
             if (data.returnCode == 1) {
                 $.hideLoading();
                 praiseSuccess();
@@ -177,7 +176,7 @@ function submitData() {
                 $.toast(data.returnMsg, "cancel")
             }
         },
-        error: function(data) {
+        error: function (data) {
             $.hideLoading();
             $.toast("网络错误", "cancel")
         }

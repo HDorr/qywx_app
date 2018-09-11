@@ -123,6 +123,9 @@
         <if test="is_order != null" >
           is_order,
         </if>
+        <if test="is_source != null" >
+          is_source,
+        </if>
       </trim>
       <trim prefix="values (" suffix=")" suffixOverrides="," >
         <if test="orderId != null" >
@@ -154,6 +157,9 @@
         </if>
         <if test="is_order != null" >
           #{is_order},
+        </if>
+        <if test="is_source != null" >
+          #{is_source},
         </if>
       </trim>
 

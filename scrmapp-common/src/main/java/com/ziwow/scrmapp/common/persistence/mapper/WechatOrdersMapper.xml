@@ -33,6 +33,9 @@
         <result column="profession" property="is_specialty" jdbcType="VARCHAR"/>
         <result column="integrity" property="is_integrity" jdbcType="VARCHAR"/>
         <result column="recommend" property="is_recommend" jdbcType="VARCHAR"/>
+        <result column="is_order" property="is_order" jdbcType="INTEGER"/>
+        <result column="is_repair" property="is_repair"/>
+
     </resultMap>
 
     <resultMap id="orderMap" type="com.ziwow.scrmapp.common.bean.vo.WechatOrdersVo">
@@ -62,19 +65,19 @@
 	    id, ordersCode,ordersNo, productId, contacts, contactsMobile, province, city, area, address, orderType, orderTime, createTime, updateTime, description, faultImage,
 	    status, source, userId, qyhUserId, endTime,contactsTelephone
 	</sql>
-	
+
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long">
         select
         <include refid="Base_Column_List"/>
         from t_wechat_orders
         where id = #{id,jdbcType=BIGINT}
     </select>
-    
+
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
         delete from t_wechat_orders
         where id = #{id,jdbcType=BIGINT}
     </delete>
-    
+
     <insert id="insert" parameterType="com.ziwow.scrmapp.common.persistence.entity.WechatOrders" useGeneratedKeys="true"
             keyProperty="id">
 	    insert into t_wechat_orders (ordersCode,ordersNo,
@@ -90,7 +93,7 @@
 	      #{description,jdbcType=VARCHAR}, #{faultImage,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER},
 	      #{source,jdbcType=INTEGER},#{userId,jdbcType=VARCHAR}, #{qyhUserId,jdbcType=VARCHAR}, #{endTime,jdbcType=TIMESTAMP})
 	</insert>
-	
+
     <insert id="insertSelective" parameterType="com.ziwow.scrmapp.common.persistence.entity.WechatOrders"
             useGeneratedKeys="true" keyProperty="id">
         insert into t_wechat_orders
@@ -236,7 +239,7 @@
                 #{endTime,jdbcType=TIMESTAMP},
             </if>
             <if test="contactsTelephone != null">
-            	#{contactsTelephone,jdbcType=TIMESTAMP},
+                #{contactsTelephone,jdbcType=TIMESTAMP},
             </if>
             <if test="scOrderNo != null">
                 #{scOrderNo,jdbcType=VARCHAR},
@@ -342,7 +345,7 @@
     where id = #{id,jdbcType=BIGINT}
   </update>
     <select id="getWechatOrdersVoByCode" parameterType="java.lang.String" resultMap="BaseResultMapVo">
-        select o.id,o.ordersCode,o.ordersNo,o.orderType,o.userId,o.qyhUserId,a.attitude,a.profession,a.integrity,a.recommend,o.status
+        select o.id,o.ordersCode,o.ordersNo,o.orderType,o.orderTime,o.userId,o.qyhUserId,a.attitude,a.profession,a.integrity,a.recommend,a.is_order,a.is_repair,o.status,o.contacts,o.contactsMobile,o.province,o.city,o.area,o.address
         FROM
         t_wechat_orders o
         left join t_qyh_user_appraisal a
@@ -466,7 +469,8 @@
          o.faultImage,
          o.maintType,
          o.buyFilter,
-         o.contactsTelephone
+         o.contactsTelephone,
+         o.confirmStatus
         FROM
             t_wechat_orders o
         WHERE
@@ -601,7 +605,8 @@
         o.contacts AS userName,
         o.contactsMobile AS userMobile,
         f.headimgurl AS imageUrl,
-        concat(o.province,o.city,o.area,o.address) userAddress
+        concat(o.province,o.city,o.area,o.address) userAddress,
+        o.confirmStatus
         FROM
         t_wechat_fans f,
         t_wechat_user u,
@@ -670,7 +675,7 @@
     </select>
 
     <update id="updateOrdersStatus">
-        update t_wechat_orders set qyhUserId = NULL,refuseReason = #{reason},updateTime = #{updateTime}
+        update t_wechat_orders set qyhUserId = NULL,status = 3,confirmStatus = 0,refuseReason = #{reason},updateTime = #{updateTime}
         where qyhUserId = #{qyhUserId} and id = #{ordersId}
     </update>
 
@@ -860,5 +865,15 @@
     <update id="updateOrdersNoAndStatus">
         update t_wechat_orders set ordersNo = #{ordersNo},updateTime = #{updateTime},status = #{status},endTime = #{updateTime}
         where ordersCode = #{ordersCode}
+    </update>
+
+    <select id="getUserIdByPhone" resultType="java.lang.String">
+      select userId from t_wechat_user where mobilePhone = #{phone}
+    </select>
+
+    <update id="updateBtnStatus">
+         update t_wechat_orders
+         set confirmStatus = #{confirmStatus}
+         where ordersCode = #{ordersCode}
     </update>
 </mapper>
