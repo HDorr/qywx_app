@@ -325,7 +325,7 @@ public class WechatUserController {
             // 将注册信息同步给第三方沁园商城
             thirdPartyService.registerMember(mobile, password, openIdDes);
             // 异步同步该用户的历史产品信息
-            productService.syncHistroyProductItem(mobile, userId);
+            productService.syncHistroyProductItemFromCem(mobile, userId);
             // 异步同步该用户的历史受理单信息
             wechatOrdersService.syncHistoryAppInfo(mobile, userId);
             // 异步推送给小程序
