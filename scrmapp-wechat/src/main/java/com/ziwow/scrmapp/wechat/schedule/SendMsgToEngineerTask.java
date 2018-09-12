@@ -33,7 +33,7 @@ public class SendMsgToEngineerTask {
         }
         logger.info("定时发送短信给沁园工程师......");
         List<QyhUser> users = qyhUserMapper.getActiveUser();
-        String content = "美好的一天又开始了，请记得登录“沁园服务之家”微信企业号，查看是否有工单等待您的处理！";
+        String content = "美好的一天又开始了，请记得登录“沁园服务之家”WX企业号，查看是否有工单等待您的处理！";
         for (QyhUser qyhUser : users) {
             try {
                 mobileService.sendContentByEmay(qyhUser.getMobile(), content, Constant.ENGINEER);

@@ -39,7 +39,7 @@
                     <div class="warn-box">
                         <p id="warn_text"></p>
                     </div>
-                    <button class="bigBtn qyBlue" id="nextStepBtn">下一步</button>
+                    <button class="bigBtn qyBlue" id="nextStepBtn">注册</button>
                     <div    class="private_contact ">
                         <div id="cb_private_contact" class="checkBox"  ></div>已阅读并同意<a href="${f_ctxpath}/scrmapp/consumer/user/filter/register/private_contact" style="color: #aaa"><u>《沁园隐私政策》</u></a>
                     </div>

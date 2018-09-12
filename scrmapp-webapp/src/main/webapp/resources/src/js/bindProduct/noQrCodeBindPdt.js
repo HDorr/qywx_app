@@ -305,8 +305,8 @@
                         if (data.returnCode === 1) {
                             $.toast("查询成功", function() {
                                 var modelName = escape(data.data.modelName);
-                                // window.location.href = rootUrl + "/scrmapp/consumer/product/query/page?modelName=" + modelName;
-                                window.location.href = pageUrls.bindPdtMain + "?modelName=" + encodeURI(modal);
+                                window.location.href = rootUrl + "/scrmapp/consumer/product/query/page?modelName=" + modelName;
+                                // window.location.href = pageUrls.bindPdtMain + "?modelName=" + encodeURI(modelName);
                             });
                         } else {
                             // $.toast(data.returnMsg, "cancel");

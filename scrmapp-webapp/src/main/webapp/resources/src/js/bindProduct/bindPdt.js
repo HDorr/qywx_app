@@ -3,7 +3,7 @@ var flags = {
 };
 (function($, window) {
     $.toast.prototype.defaults.duration = 1000;
-    var model = decodeURI(getUrlParam("modelName")),
+    var model = getUrlParam("modelName"),
         barCode = getUrlParam("productBarCode")||$('#barCodeIdInput').val(),
         securityCode = $('#securityCodeInput').val()
         rootUrl = getRootPath(),

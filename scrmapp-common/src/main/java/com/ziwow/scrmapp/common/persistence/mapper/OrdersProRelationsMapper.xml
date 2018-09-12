@@ -13,7 +13,7 @@
 	</sql>
 
     <select id="findByOrderId" resultMap="BaseResultMap" parameterType="java.lang.Long">
-        select * from t_orders_pro_relations where ordersId = #{orderId}
+        select * from t_orders_pro_relations where orderId = #{orderId}
     </select>
 
     <insert id="batchInsert" parameterType="java.util.List">

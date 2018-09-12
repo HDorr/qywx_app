@@ -132,7 +132,8 @@ var registRootPath = getRootPath();
                             } else {
                                 $("#totalSubmit").data("ismallmember", "0")
                             }
-                            toggleStep();
+                            $("#totalSubmit").click()
+                            // toggleStep();
                         }
                     },
                   complete:function (data) {
@@ -380,14 +381,14 @@ var registRootPath = getRootPath();
 
         $("#totalSubmit").click(function() {
 
-            let ableClick = $("#totalSubmit").hasClass("bigBtnAbleClick");
-          let pwd = $("#custmPsw").val();
-          let ismallMember = $("#totalSubmit").data("ismallmember");
-            if (!ableClick ||  (!pwd && ismallMember==0)) {
-              return;
-            }
-
-            let isMallMember = $("#totalSubmit").data("ismallmember");
+            // let ableClick = $("#totalSubmit").hasClass("bigBtnAbleClick");
+          // let pwd = $("#custmPsw").val();
+          let isMallMember = $("#totalSubmit").data("ismallmember");
+            // if (!ableClick ||  (!pwd && ismallMember==0)) {
+            //   return;
+            // }
+          
+          
             var spanDom = $("#show_contact");
             var permitFlag = true;
             var errorStr = "";
@@ -395,20 +396,20 @@ var registRootPath = getRootPath();
                 window.finaldata = {
                     openId: openid,
                     mobile: telNum,
-                    provinceId: spanDom.data("provinceid"),
-                    cityId: spanDom.data("cityid"),
-                    areaId: spanDom.data("areaid"),
+                    // provinceId: spanDom.data("provinceid"),
+                    // cityId: spanDom.data("cityid"),
+                    // areaId: spanDom.data("areaid"),
                     //userName: $("#custmName").val(),
-                    password: $("#custmPsw").val(),
+                    // password: $("#custmPsw").val(),
                     isMallMember: false
                 }
             } else {
                 window.finaldata = {
                     openId: openid,
                     mobile: telNum,
-                    provinceId: spanDom.data("provinceid"),
-                    cityId: spanDom.data("cityid"),
-                    areaId: spanDom.data("areaid"),
+                    // provinceId: spanDom.data("provinceid"),
+                    // cityId: spanDom.data("cityid"),
+                    // areaId: spanDom.data("areaid"),
                     isMallMember: true
                         //userName: $("#custmName").val(),
                 }

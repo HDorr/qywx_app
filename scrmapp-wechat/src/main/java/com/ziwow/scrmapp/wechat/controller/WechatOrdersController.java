@@ -245,7 +245,7 @@ public class WechatOrdersController {
                 // 发送短信通知提醒
                 String serverType = OrderUtils.getServiceTypeName(orderType);
                 String mobilePhone = wechatUser.getMobilePhone();
-                String msgContent = "亲爱的用户，您预约的" + serverType + "服务已成功提交，我们将尽快为您派单。您可进入“沁园”官方微信服务号查看订单状态。";
+                String msgContent = "亲爱的用户，您预约的" + serverType + "服务已成功提交，我们将尽快为您派单。您可进入“沁园”官方WX服务号查看订单状态。";
                 mobileService.sendContentByEmay(mobilePhone, msgContent, Constant.CUSTOMER);
                 // 预约提交成功模板消息提醒
                 wechatOrdersService.sendAppointmentTemplateMsg(wechatOrders.getOrdersCode(), serverType);
@@ -389,7 +389,7 @@ public class WechatOrdersController {
             }
 
             /*  重新生成受理单 查询之前受理单的数据*/
-            wechatOrdersParam.setOrderTime(updateTime.substring(0, 10));
+            wechatOrdersParam.setOrderTime(updateTime.substring(0, 13));
             wechatOrdersParam.setTel(wechatUser.getMobilePhone());
             //调用沁园接口，生成受理单
             result = wechatOrdersService.geneatorCode(wechatOrdersParam);
@@ -542,7 +542,7 @@ public class WechatOrdersController {
                     String serverType = OrderUtils.getServiceTypeName(orderType);
                     // 给用户发送发送短信提醒
                     String mobile = wechatUser.getMobilePhone();
-                    String msgContent = "亲爱的用户，您预约的" + serverType + "服务已撤销。如须重新预约，您可进入“沁园”官方微信服务号进行操作。";
+                    String msgContent = "亲爱的用户，您预约的" + serverType + "服务已撤销。如须重新预约，您可进入“沁园”官方WX服务号进行操作。";
                     mobileService.sendContentByEmay(mobile, msgContent, Constant.CUSTOMER);
                     // 给用户发送发送模板消息
                     wechatOrdersService.sendOrderCancelTemplateMsg(userId, serverType);
@@ -550,7 +550,7 @@ public class WechatOrdersController {
                     String engineerId = wechatOrders.getQyhUserId();
                     if (StringUtils.isNotEmpty(engineerId)) {
                         // 给工程师发送短信通知
-                        String engineerMsgContent = "请注意，" + contacts + "用户已取消" + serverType + "服务！您可进入“沁园”微信企业号查看该工单详情！";
+                        String engineerMsgContent = "请注意，" + contacts + "用户已取消" + serverType + "服务！您可进入“沁园”WX企业号查看该工单详情！";
                         QyhUser qyhUser = wechatQyhUserService.getQyhUser(engineerId);
                         String qyhUserMobile = (null != qyhUser) ? qyhUser.getMobile() : "";
                         mobileService.sendContentByEmay(qyhUserMobile, engineerMsgContent, Constant.ENGINEER);

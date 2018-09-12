@@ -15,6 +15,7 @@ import net.sf.json.JSONObject;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
+import org.bouncycastle.jce.provider.JCEBlockCipher.DESCBC;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
@@ -57,7 +58,7 @@ public class OpenWeChatServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		wxUtil.connect(req, resp);
-		super.doGet(req, resp);
+//		super.doGet(req, resp);
 	}
 
 	@Override
@@ -75,7 +76,11 @@ public class OpenWeChatServlet extends HttpServlet {
 		LOGGER.info("OpenWX输入消息:[" + xmlMsg + "]");
 		String decryptMsg = getDecryptMessage(signature, timestamp, nonce, xmlMsg);
 
+		if (decryptMsg==null){
+			decryptMsg=xmlMsg;
+		}
 		InMessage oi = XmlUtils.xmlToObject(decryptMsg, InMessage.class);
+
 		String xml = "";
 		// 全网发布使用
 		if (oi.getToUserName().equals("gh_3c884a361561")) {
@@ -136,7 +141,7 @@ public class OpenWeChatServlet extends HttpServlet {
 			// xml = weChat.processing(decryptMsg);
 			// String encryptXML = getEncryptMessage(xmlMsg);
 			weChatMessageProcessingHandler.manageMessage(decryptMsg, request, response);
-			LOGGER.info("OpenWX回复给微信的xml明文:" + xml);
+//			LOGGER.info("OpenWX回复给微信的xml明文:" + xml);
 			// LOGGER.info("OpenWX回复给微信的xml密文:"+encryptXML);
 			// response.getWriter().write(encryptXML);
 		}

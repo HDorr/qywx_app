@@ -168,3 +168,10 @@ Network Trash Folder
 Temporary Items
 .apdisk
 
+/scrmapp-webapp/scrmapp-webapp.iml
+/scrmapp-wechat/scrmapp-wechat.iml
+
+
+target/
+*.map
+resources/rebel.xml
