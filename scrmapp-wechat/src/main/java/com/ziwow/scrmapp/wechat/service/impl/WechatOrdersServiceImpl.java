@@ -530,7 +530,7 @@ public class WechatOrdersServiceImpl implements WechatOrdersService {
 
     //0和1布尔值转换
     private Boolean convertBoolean(String number) {
-        return "0".equals(number) ? false : true;
+        return "1".equals(number) ? true : false;
     }
 
     @Override
@@ -541,14 +541,14 @@ public class WechatOrdersServiceImpl implements WechatOrdersService {
         }
         appraiseParam = checkNull(appraiseParam);
         String ordersCode = checkNull(appraiseParam.getOrderCode());
-        String is_order = checkNull(appraiseParam.getIs_order());
+//        String is_order = checkNull(appraiseParam.getIs_order());
         WechatOrders wechatOrders = this.getWechatOrdersByCode(ordersCode);
         if (wechatOrders == null) {
             throw new ParamException("受理单号在微信端不存在");
         }
         //判断预约单状态是否可以评论
         if (SystemConstants.COMPLETE != wechatOrders.getStatus()) {
-            throw new ParamException("该订单的状态没有完成,不能进行评价");
+            throw new ParamException("该订单的状态不是完成状态,不能进行评价");
         }
 
         //保存评价信息
@@ -557,7 +557,7 @@ public class WechatOrdersServiceImpl implements WechatOrdersService {
         qyhUserAppraisalVo.setOrderId(wechatOrders.getId());
         qyhUserAppraisalVo.setQyhUserId(wechatOrders.getQyhUserId());
         qyhUserAppraisalVo.setUserId(userId);
-        qyhUserAppraisalVo.setIs_order(convertBoolean(is_order));
+        qyhUserAppraisalVo.setIs_order(convertBoolean(appraiseParam.getIs_order()));
         qyhUserAppraisalVo.setIs_source(1);//400评价来源默认是1
         int count = wechatUserService.saveVo(qyhUserAppraisalVo);
         Date date = new Date();
