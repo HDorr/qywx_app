@@ -4,10 +4,7 @@ import java.sql.SQLDataException;
 import java.util.Date;
 import java.util.List;
 
-import com.ziwow.scrmapp.common.bean.pojo.DispatchDotParam;
-import com.ziwow.scrmapp.common.bean.pojo.DispatchMasterParam;
-import com.ziwow.scrmapp.common.bean.pojo.DispatchOrderParam;
-import com.ziwow.scrmapp.common.bean.pojo.WechatOrdersParam;
+import com.ziwow.scrmapp.common.bean.pojo.*;
 import com.ziwow.scrmapp.common.bean.vo.*;
 import com.ziwow.scrmapp.common.exception.ParamException;
 import com.ziwow.scrmapp.common.persistence.entity.WechatOrders;
@@ -67,4 +64,6 @@ public interface WechatOrdersService {
     void updateMakeAppointment(String oldOrderCode, String newOrdersCode);
 
     void cancelMakeAppointment(String ordersCode);
+
+    void syncAddAppraise(AppraiseParam appraiseParam) throws ParamException;
 }

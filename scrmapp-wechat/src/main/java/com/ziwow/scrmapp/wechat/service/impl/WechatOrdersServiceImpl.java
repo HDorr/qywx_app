@@ -579,10 +579,6 @@ public class WechatOrdersServiceImpl implements WechatOrdersService {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        // 给用户发送模板通知
-        this.sendAppraiseFinishTemplateMsg(
-                wechatOrders.getOrdersCode(), userId, DateUtil.DateToString(wechatOrders.getOrderTime(), DateUtil.YYYY_MM_DD_HH_MM_SS));
-
     }
 
     @Override

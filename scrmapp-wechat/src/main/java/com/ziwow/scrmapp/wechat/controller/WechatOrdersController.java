@@ -799,10 +799,6 @@ public class WechatOrdersController {
                 QyhUser qyhUser = wechatQyhUserService.getQyhUser(wechatOrders.getQyhUserId());
                 String qyhUserMobile = (null != qyhUser) ? qyhUser.getMobile() : "";
                 mobileService.sendContentByEmay(qyhUserMobile, engineerMsgContent, Constant.ENGINEER);
-
-                // 给用户发送模板通知
-                wechatOrdersService.sendAppraiseFinishTemplateMsg(
-                        wechatOrders.getOrdersCode(), userId, DateUtil.DateToString(wechatOrders.getOrderTime(), DateUtil.YYYY_MM_DD_HH_MM_SS));
             } else {
                 return invokeResult;
             }
@@ -998,10 +994,6 @@ public class WechatOrdersController {
                 QyhUser qyhUser = wechatQyhUserService.getQyhUser(wechatOrders.getQyhUserId());
                 String qyhUserMobile = (null != qyhUser) ? qyhUser.getMobile() : "";
                 mobileService.sendContentByEmay(qyhUserMobile, engineerMsgContent, Constant.ENGINEER);
-
-                // 给用户发送模板通知
-                wechatOrdersService.sendAppraiseFinishTemplateMsg(
-                        wechatOrders.getOrdersCode(), userId, DateUtil.DateToString(wechatOrders.getOrderTime(), DateUtil.YYYY_MM_DD_HH_MM_SS));
             } else {
                 result.setReturnCode(Constant.FAIL);
                 result.setReturnMsg("用户评分失败!");
