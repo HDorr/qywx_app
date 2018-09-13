@@ -43,10 +43,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.UnsupportedEncodingException;
-import java.math.BigDecimal;
 import java.net.URLEncoder;
 import java.sql.SQLDataException;
-import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -602,8 +600,7 @@ public class WechatOrdersServiceImpl implements WechatOrdersService {
     }
 
     @Override
-    public void changeAppointmentTemplate(String userId, String orderType, String ordersCode, String
-            orderTime, String qyhUserName, String qyhUserPhone) {
+    public void changeAppointmentTemplate(String userId, String orderType, String ordersCode, String orderTime, String qyhUserName, String qyhUserPhone) {
         WechatFans wechatFans = wechatFansService.getWechatFansByUserId(userId);
         if (null != wechatFans) {
             String openId = wechatFans.getOpenId();
@@ -840,8 +837,8 @@ public class WechatOrdersServiceImpl implements WechatOrdersService {
     @Override
     @Async
     public void syncMakeAppointment(String scOrderItemId, String ordersCode,
-                                    String serviceFeeIds) {
-        LOG.info("预约信息同步到小程序,scOrderItemId:" + scOrderItemId + "   ordersCode:" + ordersCode + "   serviceFeeIds:" + serviceFeeIds);
+        String serviceFeeIds) {
+        LOG.info("预约信息同步到小程序,scOrderItemId:"+ scOrderItemId+"   ordersCode:"+ordersCode+"   serviceFeeIds:"+serviceFeeIds);
         // 异步推送给小程序对接方
         Map<String, Object> params = new HashMap<String, Object>();
         long timestamp = System.currentTimeMillis();

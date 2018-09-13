@@ -146,11 +146,6 @@ public class WechatUserServiceImpl implements WechatUserService {
     }
 
     @Override
-    public int saveSelective(QyhUserAppraisal qyhUserAppraisal) {
-        return qyhUserAppraisalMapper.insertSelective(qyhUserAppraisal);
-    }
-
-    @Override
     @Transactional
     public int save(String ordersCode, Date updateTime, QyhUserAppraisal qyhUserAppraisal, WechatOrdersRecord wechatOrdersRecord) {
         int count = 0;

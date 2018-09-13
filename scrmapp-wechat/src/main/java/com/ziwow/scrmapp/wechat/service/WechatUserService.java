@@ -40,8 +40,6 @@ public interface WechatUserService {
 
     int save(QyhUserAppraisal qyhUserAppraisal);
 
-    int saveSelective(QyhUserAppraisal qyhUserAppraisal);
-
     int saveVo(QyhUserAppraisalVo qyhUserAppraisalVo);
 
     int save(String ordersCode, Date updateTime, QyhUserAppraisal qyhUserAppraisal, WechatOrdersRecord wechatOrdersRecord);

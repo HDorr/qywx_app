@@ -55,7 +55,8 @@ var queryUrls =
     orderCancel: rootPath + "/scrmapp/consumer/wechat/orders/cancel",
     orderUpdate: rootPath + "/scrmapp/consumer/wechat/orders/update",
     getReserveData: rootPath + "/scrmapp/consumer/wechat/orders/qyh/info", //获取预约请假详情
-    reservationAppraisal: rootPath + "/scrmapp/consumer/wechat/orders/user/appraisal", //提交预约评价qyhGetRepairItem: rootPath + "/scrmapp/qyhuser/orders/repairItem/get", //获取维修措施列表
+    reservationAppraisal: rootPath + "/scrmapp/consumer/wechat/orders/user/appraisal", //提交预约评价
+    qyhGetRepairItem: rootPath + "/scrmapp/qyhuser/orders/repairItem/get", //获取维修措施列表
     newAppraisal: rootPath + "/scrmapp/consumer/wechat/orders/user/newAppraisal", //新版提交预约评价
     qyhGetRepairPart: rootPath + "/scrmapp/qyhuser/orders/repairPart/get", //获取维修配件列表
     qyhGetMaintainAndFilter: rootPath + "/scrmapp/qyhuser/orders/miantain/get", //获取保养项和滤芯列表

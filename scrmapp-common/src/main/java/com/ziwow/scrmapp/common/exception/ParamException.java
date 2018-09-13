@@ -22,6 +22,4 @@ public class ParamException extends RuntimeException {
     public ParamException(Throwable cause) {
         super(cause);
     }
-
-
 }
