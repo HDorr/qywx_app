@@ -326,7 +326,7 @@ public class WechatUserController {
 //            thirdPartyService.registerMember(mobile, password, openIdDes);
             thirdPartyService.registerMember(mobile, null, openIdDes);
             // 异步同步该用户的历史产品信息
-            productService.syncHistroyProductItem(mobile, userId);
+            productService.syncHistroyProductItemFromCemTemp(mobile, userId);
             // 异步同步该用户的历史受理单信息
             wechatOrdersService.syncHistoryAppInfo(mobile, userId);
             // 异步推送给小程序

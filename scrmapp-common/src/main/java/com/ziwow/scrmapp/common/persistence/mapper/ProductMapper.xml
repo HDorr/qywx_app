@@ -79,14 +79,14 @@
         userId, buyTime, status, createTime)
         values
         <foreach collection="list" item="item" index="index" separator=",">
-            (#{item.itemKind,jdbcType=VARCHAR}, #{item.typeName,jdbcType=VARCHAR}, #{item.smallcName,jdbcType=VARCHAR}
+            (#{item.itemKind,jdbcType=VARCHAR}, #{item.typeName,jdbcType=VARCHAR}, #{item.smallcName,jdbcType=VARCHAR},
             #{item.modelName,jdbcType=VARCHAR}, #{item.levelId,jdbcType=BIGINT}, #{item.levelName,jdbcType=VARCHAR},
             #{item.productName,jdbcType=VARCHAR}, #{item.productCode,jdbcType=VARCHAR},
             #{item.productImage,jdbcType=VARCHAR},#{item.productBarCode,jdbcType=VARCHAR},
-            #{barCodeImage,jdbcType=VARCHAR},#{item.shoppingOrder,jdbcType=VARCHAR},#{item.saleType,jdbcType=CHAR},
+            #{item.barCodeImage,jdbcType=VARCHAR},#{item.shoppingOrder,jdbcType=VARCHAR},#{item.saleType,jdbcType=CHAR},
             #{item.o2o,jdbcType=INTEGER}, #{item.buyChannel,jdbcType=INTEGER}, #{item.filterRemind,jdbcType=INTEGER},
             #{item.userId,jdbcType=VARCHAR}, #{item.buyTime,jdbcType=DATE}, #{item.status,jdbcType=INTEGER},
-            #{createTime,jdbcType=DATE}
+            #{item.createTime,jdbcType=DATE}
             )
         </foreach>
     </insert>

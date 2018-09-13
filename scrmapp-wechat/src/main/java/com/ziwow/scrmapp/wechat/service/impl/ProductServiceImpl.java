@@ -9,6 +9,8 @@ import com.google.common.collect.Maps;
 import com.ziwow.scrmapp.common.bean.pojo.ProductFilterGradeParam;
 import com.ziwow.scrmapp.common.bean.pojo.ProductParam;
 import com.ziwow.scrmapp.common.bean.vo.SecurityVo;
+import com.ziwow.scrmapp.common.bean.vo.cem.BuyDevicesBean;
+import com.ziwow.scrmapp.common.bean.vo.cem.CemProductInfo;
 import com.ziwow.scrmapp.common.bean.vo.csm.ProductFilterGrade;
 import com.ziwow.scrmapp.common.bean.vo.csm.ProductItem;
 import com.ziwow.scrmapp.common.bean.vo.mall.MallOrderVo;
@@ -77,6 +79,11 @@ public class ProductServiceImpl implements ProductService {
 
     @Value("${miniapp.product.unbind}")
     private String delProdBindUrl;
+
+    @Value("${mine.baseUrl}")
+    private String mineBaseUrl;
+
+
 //    public List<ProductSeries> getAllProductSeries() {
 //        return seriesMapper.findAll();
 //    }
@@ -419,6 +426,7 @@ public class ProductServiceImpl implements ProductService {
                     }
                     String itemCodes = Joiner.on(",").skipNulls().join(itemLst);
                     List<ProductItem> prodList = thirdPartyService.getProductList(itemCodes);
+
                     LOG.info("从csm系统的批量获取产品编码为[{}]的产品信息为:[{}]", itemCodes, JSON.toJSONString(prodList));
                     for (ProductItem productItem : prodList) {
                         // 通过产品型号查询csm的产品信息
@@ -456,6 +464,152 @@ public class ProductServiceImpl implements ProductService {
             LOG.error("同步用户历史购买产品信息接口失败:", e);
         }
     }
+
+    /**
+     * 用户注册完毕后将历史产品信息同步到系统
+     * fixme 临时接口，等cem数据整理好之后废弃
+     */
+    @Async
+    @Override
+    public void syncHistroyProductItemFromCemTemp(String mobilePhone, String userId) {
+        try {
+            List<Product> prodLst = Lists.newArrayList();
+
+            Result cemAssetsInfo = thirdPartyService.getCemAssetsInfo(mobilePhone);
+            List<List<BuyDevicesBean>> devicesBeanList = (List<List<BuyDevicesBean>> ) cemAssetsInfo.getData();
+
+            List<FilterLevel> filterLevels = new ArrayList<FilterLevel>();
+            if (null != devicesBeanList && !devicesBeanList.isEmpty()) {
+                for (List<BuyDevicesBean> buyDevicesBeanInfoList : devicesBeanList) {
+
+                    String buyTime ="";
+                    String productCode= "";
+                    for (BuyDevicesBean buyDevicesBean : buyDevicesBeanInfoList) {
+                        if ("购买日期".equals(buyDevicesBean.getName())){
+                          buyTime=buyDevicesBean.getValue();
+                            continue;
+                        }else if ("产品编码".equals(buyDevicesBean.getName())){
+                            productCode=buyDevicesBean.getValue();
+                            continue;
+                        }
+                    }
+
+
+                    List<ProductItem> prodList = thirdPartyService.getProductList(productCode);
+                    LOG.info("从cem系统获取产品编码为[{}]", productCode);
+                    LOG.info("从csm系统获取产品信息为:[{}]", JSON.toJSONString(prodList));
+                    for (ProductItem productItem : prodList) {
+                        // 通过产品型号查询csm的产品信息
+                        Product product = new Product();
+                        product.setTypeName(productItem.getBigcName());
+                        product.setModelName(productItem.getSpec());
+                        product.setItemKind(productItem.getItemKind());
+                        product.setLevelId(Long.getLong(productItem.getFilterGradeId() + ""));
+                        product.setLevelName(productItem.getFilterGrade());
+                        product.setProductName(productItem.getItemName());
+                        product.setSaleType(productItem.getFromChannel());
+                        product.setProductCode(productItem.getItemCode());
+                        product.setUserId(userId);
+                        product.setO2o(BuyChannel.ONQINYUAN.getO2o());  // 线上、线下
+                        product.setBuyChannel(BuyChannel.ONQINYUAN.getChannelId());  // 购买渠道
+                        product.setCreateTime(new Date());
+                        if (StringUtils.isEmpty(buyTime)) {
+                            product.setBuyTime(new Date());
+                        } else {
+                            product.setBuyTime(DateUtil.StringToDate(buyTime, DateUtil.YYYY_MM_DD));
+                        }
+                        product.setStatus(1);
+                        product.setFilterRemind(2);
+                        product.setProductImage(mineBaseUrl+"/resources/images/defaultPdtImg.jpg");
+
+                        prodLst.add(product);
+
+                        //增加滤芯级别
+                        filterLevels.add(new FilterLevel(product.getLevelId(), product.getLevelName()));
+                    }
+                }
+            }
+            // 将数据存入到系统的t_product表中
+            if (!prodLst.isEmpty()) {
+                batchSave(prodLst, filterLevels);
+            }
+        } catch (Exception e) {
+            LOG.error("同步用户历史购买产品信息接口失败:", e);
+        }
+    }
+
+
+    /**
+     * 用户注册完毕后将历史产品信息同步到系统
+     */
+    @Async
+    @Override
+    public void syncHistroyProductItemFromCem(String mobilePhone, String userId) {
+        try {
+            List<Product> prodLst = Lists.newArrayList();
+
+            Result cemAssetsInfo = thirdPartyService.getCemAssetsInfo(mobilePhone);
+            List<List<BuyDevicesBean>> devicesBeanList = (List<List<BuyDevicesBean>> ) cemAssetsInfo.getData();
+
+            List<FilterLevel> filterLevels = new ArrayList<FilterLevel>();
+            if (null != devicesBeanList && !devicesBeanList.isEmpty()) {
+                for (List<BuyDevicesBean> buyDevicesBeanInfoList : devicesBeanList) {
+
+                    String createDate ="";
+                    String productCode= "";
+                    String bigType="";
+                    String buyChannel="";
+                    for (BuyDevicesBean buyDevicesBean : buyDevicesBeanInfoList) {
+                        if ("购买日期".equals(buyDevicesBean.getName())){
+                            createDate=buyDevicesBean.getValue();
+                            continue;
+                        }else if ("产品编码".equals(buyDevicesBean.getName())){
+                            productCode=buyDevicesBean.getValue();
+                            continue;
+                        }else if ("产品大类".equals(buyDevicesBean.getName())){
+                            bigType=buyDevicesBean.getValue();
+                            continue;
+                        }else if ("购买渠道".equals(buyDevicesBean.getName())){
+                            buyChannel=buyDevicesBean.getValue();
+                            continue;
+                        }
+                    }
+
+                    Result cemProductInfoResult = thirdPartyService.getCemProductInfo(productCode);
+                    CemProductInfo productItem = (CemProductInfo) cemProductInfoResult.getData();
+
+                    // 通过产品型号查询cem的产品信息
+                    Product product = new Product();
+                    product.setTypeName(bigType);
+                    product.setModelName(productItem.getModel());
+                    product.setItemKind(productItem.getPro_org());
+                    product.setProductName(productItem.getName());
+//                    product.setSaleType(productItem.getChannel());
+                    product.setProductCode(productCode);
+                    product.setUserId(userId);
+//                    product.setO2o(BuyChannel.ONQINYUAN.getO2o());  // 线上、线下
+//                    product.setBuyChannel(BuyChannel.ONQINYUAN.getChannelId());  // 购买渠道
+                    if (StringUtils.isEmpty(createDate)) {
+                        product.setBuyTime(new Date());
+                    } else {
+                        product.setBuyTime(DateUtil.StringToDate(createDate, DateUtil.YYYY_MM_DD));
+                    }
+                    product.setStatus(1);
+                    prodLst.add(product);
+
+                    //增加滤芯级别
+//                    filterLevels.add(new FilterLevel(product.getLevelId(), product.getLevelName()));
+                }
+            }
+            // 将数据存入到系统的t_product表中
+            if (!prodLst.isEmpty()) {
+                batchSave(prodLst, filterLevels);
+            }
+        } catch (Exception e) {
+            LOG.error("同步用户历史购买产品信息接口失败:", e);
+        }
+    }
+
 
     @Override
     public void productBindTemplateMsg(Product product) {
