@@ -1,6 +1,7 @@
 package com.ziwow.scrmapp.common.service.impl;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.TypeReference;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.net.HttpHeaders;
@@ -25,7 +26,9 @@ import com.ziwow.scrmapp.common.result.BaseResult;
 import com.ziwow.scrmapp.common.result.Result;
 import com.ziwow.scrmapp.common.service.ThirdPartyService;
 import com.ziwow.scrmapp.common.utils.HttpKit;
+import com.ziwow.scrmapp.common.utils.JsonUtil;
 import com.ziwow.scrmapp.common.utils.MD5;
+import java.io.Console;
 import java.io.IOException;
 import java.util.Date;
 import net.sf.json.JSONArray;
@@ -1235,7 +1238,7 @@ public class ThirdPartyServiceImpl implements ThirdPartyService {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        CemResp<CemAssertInfo> cemResp = JSON.parseObject(content, CemResp.class);
+        CemResp<CemAssertInfo> cemResp = JSON.parseObject(content, new TypeReference<CemResp<CemAssertInfo>>(){});
         if (cemResp!=null){
             if (CemResp.STATUS_SUCCESS.equals(cemResp.getStatus().getCode())){
                 result.setData(cemResp.getData().getBasicInfo().getBuy_devices());
@@ -1268,7 +1271,7 @@ public class ThirdPartyServiceImpl implements ThirdPartyService {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        CemResp<CemProductInfo> cemResp = JSON.parseObject(content, CemResp.class);
+        CemResp<CemProductInfo> cemResp = JSON.parseObject(content, new TypeReference<CemResp<CemProductInfo>>(){});
         if (cemResp!=null){
             if (CemResp.STATUS_SUCCESS.equals(cemResp.getStatus().getCode())){
                 result.setData(cemResp.getData());

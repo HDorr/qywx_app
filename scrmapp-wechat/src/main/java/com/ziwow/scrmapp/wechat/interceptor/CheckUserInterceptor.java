@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.ziwow.scrmapp.common.bean.vo.cem.CemResp;
 import com.ziwow.scrmapp.common.service.ThirdPartyService;
 import com.ziwow.scrmapp.tools.utils.MD5;
+import com.ziwow.scrmapp.wechat.service.ProductService;
 import java.io.IOException;
 import java.util.Date;
 import java.util.HashMap;
@@ -45,6 +46,9 @@ public class CheckUserInterceptor implements HandlerInterceptor {
     @Autowired
     ThirdPartyService thirdPartyService;
 
+    @Autowired
+    ProductService productService;
+
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         //为false时，方法直接return;
@@ -80,7 +84,8 @@ public class CheckUserInterceptor implements HandlerInterceptor {
         WechatFansVo wechatFansVo = wechatFansService.getOAuthUserInfo(code, request, response);
 
 
-        thirdPartyService.getCemProductInfo("104011-0003");
+//        thirdPartyService.getCemProductInfo("104011-0003");
+//        productService.syncHistroyProductItemFromCemTemp("15207105539", "iqCjJfmk");
 
         /**
          * fixme 测试数据

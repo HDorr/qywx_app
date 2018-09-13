@@ -49,6 +49,7 @@ public interface ProductService {
 
     void syncHistroyProductItem(String mobilePhone, String userId);
     void syncHistroyProductItemFromCem(String mobilePhone, String userId);
+    void syncHistroyProductItemFromCemTemp(String mobilePhone, String userId);
 
     void productBindTemplateMsg(Product product);
 
