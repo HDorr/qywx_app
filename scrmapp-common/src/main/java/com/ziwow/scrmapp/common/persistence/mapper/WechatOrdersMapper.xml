@@ -866,14 +866,4 @@
         update t_wechat_orders set ordersNo = #{ordersNo},updateTime = #{updateTime},status = #{status},endTime = #{updateTime}
         where ordersCode = #{ordersCode}
     </update>
-
-    <select id="getUserIdByPhone" resultType="java.lang.String">
-      select userId from t_wechat_user where mobilePhone = #{phone}
-    </select>
-
-    <update id="updateBtnStatus">
-         update t_wechat_orders
-         set confirmStatus = #{confirmStatus}
-         where ordersCode = #{ordersCode}
-    </update>
 </mapper>
