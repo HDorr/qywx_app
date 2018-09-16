@@ -19,8 +19,9 @@
 <div class="main_layer">
     <div class="head_banner">
         <img class="bannerImg" src="${f_ctxpath}/resources/images/top_info.png${f_ver}">
-        <div class="headerImg" style="background-image: url('${data.headimgurl}')">
-        </div>
+        <div class="headerImg" style="background-image: url('${data.headimgurl}')"></div>
+        <div class="nickName" >${data.nickName}</div>
+        <%--<div class="bindPhoneText" >绑定手机完成注册</div>--%>
         <%--<p>${data.nickName}</p>--%>
     </div>
 
