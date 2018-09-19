@@ -19,16 +19,15 @@ import com.ziwow.scrmapp.tools.weixin.XStreamAdaptor;
 import com.ziwow.scrmapp.tools.weixin.XmlUtils;
 import com.ziwow.scrmapp.tools.weixin.decode.AesException;
 import com.ziwow.scrmapp.tools.weixin.decode.WXBizMsgCrypt;
-import com.ziwow.scrmapp.wechat.persistence.entity.OpenAuthorizationWeixin;
 import com.ziwow.scrmapp.wechat.persistence.entity.OpenWeixin;
 import com.ziwow.scrmapp.wechat.persistence.entity.WechatCustomerMsg;
 import com.ziwow.scrmapp.wechat.persistence.entity.WechatFans;
-import com.ziwow.scrmapp.wechat.service.impl.WeiXinWerviceImpl;
+import com.ziwow.scrmapp.wechat.persistence.entity.WechatUser;
 import com.ziwow.scrmapp.wechat.vo.Articles;
 import com.ziwow.scrmapp.wechat.vo.TextOutMessage;
 import com.ziwow.scrmapp.wechat.vo.UserInfo;
+import com.ziwow.scrmapp.wechat.vo.callCenter.CallCenterMessage;
 import java.io.PrintWriter;
-import java.io.Writer;
 import java.net.URLEncoder;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
@@ -92,6 +91,9 @@ public class WeChatMessageProcessingHandler {
 
     @Autowired
     private OpenWeixinService openWeixinService;
+
+    @Autowired
+    private WechatUserService wechatUserService;
 
     /**
      * 业务转发组件
@@ -199,7 +201,9 @@ public class WeChatMessageProcessingHandler {
                     record.setIsRead(0);
                     customerMsgService.insertSelective(record);
 
-                    dealWithText(inMessage,response);
+                    dealWithText(inMessage,response);//关键词回复
+
+                    pushMessageToCallCenter(inMessage);//推送消息到呼叫中心
                 } else if ("image".equals(inMessage.getMsgType())) {
                     WechatCustomerMsg record = new WechatCustomerMsg();
                     record.setOpenid(inMessage.getFromUserName());
@@ -209,12 +213,55 @@ public class WeChatMessageProcessingHandler {
                     record.setMessageType(1);
                     record.setIsRead(0);
                     customerMsgService.insertSelective(record);
+
+                    pushMessageToCallCenter(inMessage);//推送消息到呼叫中心
+                }else if ("voice".equals(inMessage.getMsgType())) {
+                    pushMessageToCallCenter(inMessage);//推送消息到呼叫中心
+                }else if ("video".equals(inMessage.getMsgType())) {
+                    pushMessageToCallCenter(inMessage);//推送消息到呼叫中心
+
                 }
             }
         } catch (Exception e) {
             System.out.println("requestStr=[" + requestStr + "]");
             e.printStackTrace();
         }
+    }
+
+    /**
+     * 推送消息到呼叫中心
+     * @param inMessage
+     */
+    private void pushMessageToCallCenter(InMessage inMessage) {
+        switch (inMessage.getMsgType()){
+            case "image":
+            case "video":
+            case "vioce":
+                inMessage.setContent(wechatMediaService.downLoadMedia(inMessage.getMediaId()));
+            break;
+        }
+        CallCenterMessage callCenterMessage=new CallCenterMessage(inMessage);
+        String userOpenId = inMessage.getFromUserName();
+        WechatFans wechatFans = wechatFansService.getWechatFans(userOpenId);
+        if (wechatFans!=null){
+            callCenterMessage.setUserName(wechatFans.getWfNickName());
+            WechatUser wechatUser = wechatUserService.getUserByOpenId(userOpenId);
+            if (wechatUser!=null){
+                callCenterMessage.setPhone(wechatUser.getMobilePhone());
+                callCenterMessage.setUserStatus(String.valueOf(wechatUser.getStatus()));
+            }
+        }
+        callCenterMessage.setChatUrl(mineBaseUrl+"/weixin/callCenter/receiveMessage");
+
+
+        XStream xs = XStreamAdaptor.createXstream();
+        xs.alias("xml", callCenterMessage.getClass());
+        xs.alias("item", Articles.class);
+        String xml = xs.toXML(callCenterMessage);
+
+
+        LOG.info("转发至呼叫中心的数据：[{}]",xml);
+
     }
 
     private void dealWithSubscribe(InMessage inMessage,HttpServletResponse response) {
