@@ -532,6 +532,10 @@ public class ProductServiceImpl implements ProductService {
             // 将数据存入到系统的t_product表中
             if (!prodLst.isEmpty()) {
                 batchSave(prodLst, filterLevels);
+                // 绑定产品成功后异步推送给小程序
+                for (int i = 0; i < prodLst.size(); i++) {
+                    syncProdBindToMiniApp(userId, prodLst.get(i).getProductCode(),i==0);
+                }
             }
         } catch (Exception e) {
             LOG.error("同步用户历史购买产品信息接口失败:", e);
