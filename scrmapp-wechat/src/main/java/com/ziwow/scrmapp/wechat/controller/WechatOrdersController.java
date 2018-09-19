@@ -968,7 +968,9 @@ public class WechatOrdersController {
                 qyhUserAppraisalVo.setQyhUserId(wechatOrders.getQyhUserId());
                 qyhUserAppraisalVo.setUserId(userId);
                 qyhUserAppraisalVo.setIs_order(convertBoolean(wechatOrderAppraise.getOrder()));
-                qyhUserAppraisalVo.setIs_repair(convertBoolean(wechatOrderAppraise.getRepair()));
+                if(SystemConstants.REPAIR_APPRAISE == covertStringToInt(wechatOrderAppraise.getAppraiseType())){
+                    qyhUserAppraisalVo.setIs_repair(convertBoolean(wechatOrderAppraise.getRepair()));
+                }
 
                 int count = wechatUserService.saveVo(qyhUserAppraisalVo);
                 Date date = new Date();
