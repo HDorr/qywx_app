@@ -117,6 +117,7 @@ public class CheckUserInterceptor implements HandlerInterceptor {
         if (0 == fanCode) {
             //跳转到二维码页面
             modelAndView.setViewName("/register/scan_QR_code");
+            modelAndView.addObject("url", requestURL);
         }
 
         //用户还未注册
