@@ -79,19 +79,19 @@
   </body>
   <script>
       wx.miniProgram.getEnv(function (res) {
-        var elem = document.getElementById('qr');
-        // if(true===res.miniprogram){
-        //   elem.innerHTML="您还不是粉丝哦，长按二维码保存至本地后，扫描二维码关注沁园即可继续预约";
-        // }else{
+        if(true===res.miniprogram){
           let fromUrl =document.getElementById('formUrl').value;
-          if (fromUrl.indexOf("myPdtList")!=-1 || fromUrl.indexOf("myOrderList")!=-1){
+          // if (fromUrl.indexOf("myPdtList")!=-1 || fromUrl.indexOf("myOrderList")!=-1){
             document.getElementById("defaultChannelPage").style.display="none";
             document.getElementById("newChannelPage").style.display="inline";
-          }else {
+          // }else {
+          //   document.getElementById("newChannelPage").style.display="none";
+          //   document.getElementById("defaultChannelPage").style.display="inline";
+          // }
+        }else{
             document.getElementById("newChannelPage").style.display="none";
             document.getElementById("defaultChannelPage").style.display="inline";
-          }
-        // }
+        }
       })
   </script>
 </html>
