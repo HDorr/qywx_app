@@ -194,6 +194,6 @@ function praiseSuccess() {
         "</div>"
     $("body").html(htmlStr);
     $("#t-back").click(function () {
-        location.replace(pageUrls.orderList);
+        window.history.go(-1);
     })
 }
