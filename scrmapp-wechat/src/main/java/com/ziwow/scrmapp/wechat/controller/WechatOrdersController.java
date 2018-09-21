@@ -1055,7 +1055,7 @@ public class WechatOrdersController {
 
     //0 和 1 布尔值转换
     private Boolean convertBoolean(String number) {
-        return "0".equals(number) ? false : true;
+        return "1".equals(number) ? true : false;
     }
 
 }

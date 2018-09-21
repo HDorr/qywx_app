@@ -519,7 +519,7 @@ public class WechatOrdersServiceImpl implements WechatOrdersService {
         if (o == null) {
             throw new ParamException("接口参数为空");
         } else if (o.getClass() == String.class) {
-            if (o == "") {
+            if ("".equals((String) o)) {
                 throw new ParamException("接口必填字段不能为空");
             }
         }
@@ -555,7 +555,8 @@ public class WechatOrdersServiceImpl implements WechatOrdersService {
         qyhUserAppraisalVo.setOrderId(wechatOrders.getId());
         qyhUserAppraisalVo.setQyhUserId(wechatOrders.getQyhUserId());
         qyhUserAppraisalVo.setUserId(userId);
-        qyhUserAppraisalVo.setIs_order(convertBoolean(appraiseParam.getIs_order()));
+        String is_order = appraiseParam.getIs_order();
+        qyhUserAppraisalVo.setIs_order(StringUtils.isEmpty(is_order) ? null : convertBoolean(is_order));//400回访is_order为非必填字段
         qyhUserAppraisalVo.setIs_source(1);//400评价来源默认是1
         int count = wechatUserService.saveVo(qyhUserAppraisalVo);
         Date date = new Date();
@@ -837,14 +838,14 @@ public class WechatOrdersServiceImpl implements WechatOrdersService {
     @Override
     @Async
     public void syncMakeAppointment(String scOrderItemId, String ordersCode,
-        String serviceFeeIds) {
-        LOG.info("预约信息同步到小程序,scOrderItemId:"+ scOrderItemId+"   ordersCode:"+ordersCode+"   serviceFeeIds:"+serviceFeeIds);
+                                    String serviceFeeIds) {
+        LOG.info("预约信息同步到小程序,scOrderItemId:" + scOrderItemId + "   ordersCode:" + ordersCode + "   serviceFeeIds:" + serviceFeeIds);
         // 异步推送给小程序对接方
         Map<String, Object> params = new HashMap<String, Object>();
         long timestamp = System.currentTimeMillis();
         params.put("orderItemId", scOrderItemId);
         params.put("serviceFeeIds", serviceFeeIds);
-        params.put("ordersCode",ordersCode);
+        params.put("ordersCode", ordersCode);
         params.put("timestamp", timestamp);
         params.put("signture", MD5.toMD5(Constant.AUTH_KEY + timestamp));
         String result = HttpClientUtils.postJson(makeAppointmentUrl, JSONObject.fromObject(params).toString());
