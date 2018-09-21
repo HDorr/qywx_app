@@ -28,23 +28,69 @@
     .main-layer .img-box .qrCode{
     width: 100%;
     }
+
+
+    .main-layer-new{
+      max-width: 750px;
+      margin:0 auto;
+    }
+    .main-layer-new p:nth-child(1){
+      margin-top: 100px;
+    }
+    .main-layer-new .text{
+      width: 100%;
+      text-align:center;
+      /*font-size: 18px;*/
+      /*font-weight: bold;*/
+      margin-top: 20px;
+    }
+    .main-layer-new .img-box{
+      /*width: 80%;*/
+      /*margin: 40px auto 0 auto;*/
+      text-align:center;
+      margin-top:40px;
+    }
+    .main-layer-new .img-box .qrCode{
+      width: 60%;
+    }
+      .main-layer-new .icon{
+        margin-right: 10px;
+      }
     </style>
   </head>
   <body>
-    <div class="main-layer">
-      <p class="text" id="qr"></p>
+  <%--<input type="hidden" value="myPdtList" id="formUrl" />--%>
+  <input type="hidden" value="${url}" hidden="hidden" id="formUrl" />
+    <div class="main-layer" hidden="hidden" id="defaultChannelPage">
+      <p class="text" id="qr">您还不是粉丝哦，长按钮下方二维码进行关注</p>
       <div class="img-box">
         <img src="${f_ctxpath}/resources/src/images/qy_QR_code.jpg${f_ver}" class="qrCode">
+      </div>
+    </div>
+
+    <div class="main-layer-new" hidden="hidden" id="newChannelPage">
+      <p class="text" >关注沁园官方微信即可查询</p>
+      <p class="text"><text class="icon">●</text>长按二维码保存图片</p>
+      <p class="text"><text class="icon">●</text>打开识别，点击关注</p>
+      <div class="img-box">
+        <img src="${f_ctxpath}/resources/src/images/qy_qrcode_new_channel.png${f_ver}" class="newQrCode">
       </div>
     </div>
   </body>
   <script>
       wx.miniProgram.getEnv(function (res) {
-        var elem = document.getElementById('qr');
         if(true===res.miniprogram){
-          elem.innerHTML="您还不是粉丝哦，长按二维码保存至本地后，扫描二维码关注沁园即可继续预约";
+          let fromUrl =document.getElementById('formUrl').value;
+          // if (fromUrl.indexOf("myPdtList")!=-1 || fromUrl.indexOf("myOrderList")!=-1){
+            document.getElementById("defaultChannelPage").style.display="none";
+            document.getElementById("newChannelPage").style.display="inline";
+          // }else {
+          //   document.getElementById("newChannelPage").style.display="none";
+          //   document.getElementById("defaultChannelPage").style.display="inline";
+          // }
         }else{
-          elem.innerHTML="您还不是粉丝哦，长按钮下方二维码进行关注";
+            document.getElementById("newChannelPage").style.display="none";
+            document.getElementById("defaultChannelPage").style.display="inline";
         }
       })
   </script>
