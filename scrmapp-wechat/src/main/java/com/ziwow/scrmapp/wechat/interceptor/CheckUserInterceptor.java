@@ -1,7 +1,10 @@
 package com.ziwow.scrmapp.wechat.interceptor;
 
+import com.alibaba.fastjson.JSON;
+import com.ziwow.scrmapp.common.bean.vo.cem.CemResp;
 import com.ziwow.scrmapp.common.service.ThirdPartyService;
 import com.ziwow.scrmapp.tools.utils.MD5;
+import com.ziwow.scrmapp.wechat.service.ProductService;
 import java.io.IOException;
 import java.util.Date;
 import java.util.HashMap;
@@ -10,7 +13,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.ziwow.scrmapp.tools.utils.Base64;
-import net.sf.json.JSON;
 import net.sf.json.JSONObject;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -47,6 +49,9 @@ public class CheckUserInterceptor implements HandlerInterceptor {
 
     @Value("${mine.baseUrl}")
     private String mineBaseUrl;
+
+    @Autowired
+    ProductService productService;
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
@@ -86,8 +91,8 @@ public class CheckUserInterceptor implements HandlerInterceptor {
         WechatFansVo wechatFansVo = wechatFansService.getOAuthUserInfo(code, request, response);
 
 
-//        thirdPartyService.getCssAssetsInfo("15521397212");
-//        getAssetsInfo("15521397212");
+//        thirdPartyService.getCemProductInfo("104011-0003");
+//        productService.syncHistroyProductItemFromCemTemp("15207105539", "iqCjJfmk");
 
         /**
          * fixme 测试数据
@@ -112,6 +117,7 @@ public class CheckUserInterceptor implements HandlerInterceptor {
         if (0 == fanCode) {
             //跳转到二维码页面
             modelAndView.setViewName("/register/scan_QR_code");
+            modelAndView.addObject("url", requestURL);
         }
 
         //用户还未注册
@@ -151,40 +157,6 @@ public class CheckUserInterceptor implements HandlerInterceptor {
 
     }
 
-    private void getAssetsInfo(String phone) throws IOException {
-//        aid:10002   key:9f98fe60b56d1b11
-        String baseUrl = "https://cem.qinyuan.cn/!/cem/api/api/getUserInfoByWeChatMobile";
-        String aid = "10002";
-        String secretKey = "q6hdi4xposvg1w54";
-        String segmentId="SG1052";
-
-        long ts = new Date().getTime() / 1000;
-
-        String sign = MD5.toMD5("aid" + aid +"mobile"+phone+ "ts" + ts +secretKey);
-
-        final String url = baseUrl ;
-
-        HttpClient client = new DefaultHttpClient();
-        HttpPost httpPost = new HttpPost(url);
-
-        Map<String,String> params=new HashMap<String, String>();
-        params.put("aid",aid);
-        params.put("mobile",phone);
-//        params.put("secretKey",secretKey);
-        params.put("ts",ts+"");
-        params.put("sign",sign);
-        JSONObject jsonBody =JSONObject.fromObject(params);
-
-        HttpEntity reqEntity = new StringEntity(jsonBody.toString(),"UTF-8");
-        httpPost.setEntity(reqEntity);
-        httpPost.setHeader("Content-Type", "application/json;charset=UTF-8");
-        System.out.println("--------------------------http post:" + url);
-        final HttpResponse response = client.execute(httpPost);
-        HttpEntity entity = response.getEntity();
-        String content = EntityUtils.toString(entity, "UTF-8");
-        System.out.println(content);
-
-    }
 
     @Override
     public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
