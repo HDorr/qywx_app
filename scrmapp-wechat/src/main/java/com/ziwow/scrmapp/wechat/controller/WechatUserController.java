@@ -434,6 +434,9 @@ public class WechatUserController {
                 wechatUser.setMobilePhone(mobile.trim());
                 wechatUserService.syncUserFromMiniApp(wechatFans, wechatUser);
 
+              // 刷新短信营销记录
+              smsSendRecordService.updateSmsRecordRegTime(mobile);
+
               // 异步同步该用户的历史产品信息
               productService.syncHistroyProductItemFromCemTemp(mobile.trim(), userId);
               // 异步同步该用户的历史受理单信息
