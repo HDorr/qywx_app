@@ -190,16 +190,16 @@ public class WeChatMessageProcessingHandler {
                         LOG.info("菜单点击事件=[" + requestStr + "]");
                     }
                 } else if ("text".equals(inMessage.getMsgType())) {
-                    WechatCustomerMsg record = new WechatCustomerMsg();
-                    record.setOpenid(inMessage.getFromUserName());
-                    record.setMessageSource(1);
-                    record.setMessage(inMessage.getContent());
-                    record.setCreateTime(new Date());
-                    record.setMessageType(0);
-                    record.setIsRead(0);
-                    customerMsgService.insertSelective(record);
+                  boolean isPick = dealWithText(inMessage, response);
 
-                    dealWithText(inMessage,response);
+                  WechatCustomerMsg record = new WechatCustomerMsg();
+                  record.setOpenid(inMessage.getFromUserName());
+                  record.setMessageSource(1);
+                  record.setMessage(inMessage.getContent());
+                  record.setCreateTime(new Date());
+                  record.setMessageType(0);
+                  record.setIsRead(isPick?1:0);
+                  customerMsgService.insertSelective(record);
                 } else if ("image".equals(inMessage.getMsgType())) {
                     WechatCustomerMsg record = new WechatCustomerMsg();
                     record.setOpenid(inMessage.getFromUserName());
@@ -266,17 +266,20 @@ public class WeChatMessageProcessingHandler {
         }
     }
 
-    private void dealWithText(final InMessage inMessage, HttpServletResponse response)
+    private boolean dealWithText(final InMessage inMessage, HttpServletResponse response)
         {
+
+          boolean isPick=false;
 
         String content = inMessage.getContent();
         if (StringUtil.isBlank(content)){
-            return;
+            return isPick;
         }
         StringBuilder msgsb=new StringBuilder();
 
         //链接后面的无效参数是为了避免微信前端点击粘连
         if (content.contains("购买")){
+          isPick=true;
           msgsb.append("您好,小沁在此为您服务,建议您通过官方渠道选购您需要的产品,谢谢！\n")
               .append("\n")
               .append("购买机器,请点击")
@@ -297,6 +300,7 @@ public class WeChatMessageProcessingHandler {
               .append("\n")
               .append("其他咨询,请输入文字\"人工客服\"\n");
         }else if (content.contains("滤芯")){
+          isPick=true;
           msgsb.append("您好,小沁在此为您服务,建议您通过官方渠道选购您需要的滤芯,谢谢！\n")
               .append("\n")
               .append("未购滤芯：\n")
@@ -320,6 +324,7 @@ public class WeChatMessageProcessingHandler {
               .append("\n")
               .append("其他咨询,请输入文字\"人工客服\"\n");
         }else if (content.contains("预约")){
+          isPick=true;
           msgsb.append("您好,小沁在此为您服务！\n")
               .append("\n")
               .append("机器安装,请点击")
@@ -342,6 +347,7 @@ public class WeChatMessageProcessingHandler {
               .append("\n")
               .append("其他咨询,请输入文字\"人工客服\"\n");
         }else if (content.contains("安装")){
+          isPick=true;
           msgsb.append("您好,小沁在此为您服务！\n")
               .append("\n")
               .append("机器安装,请点击")
@@ -351,6 +357,7 @@ public class WeChatMessageProcessingHandler {
               .append("\n")
               .append("其他咨询,请输入文字\"人工客服\"\n");
         }else if (content.contains("更换")){
+          isPick=true;
           msgsb.append("您好,小沁在此为您服务！\n")
               .append("\n")
               .append("已购滤芯：\n")
@@ -375,6 +382,7 @@ public class WeChatMessageProcessingHandler {
               .append("\n")
               .append("其他咨询,请输入文字\"人工客服\"\n");
         }else if (content.contains("维修")){
+          isPick=true;
           msgsb.append("您好,小沁在此为您服务！\n")
               .append("\n")
               .append("机器维修,请点击")
@@ -384,6 +392,7 @@ public class WeChatMessageProcessingHandler {
               .append("\n")
               .append("其他咨询,请输入文字\"人工客服\"\n");
         }else if (content.contains("保养")){
+          isPick=true;
           msgsb.append("您好,小沁在此为您服务！\n")
               .append("\n")
               .append("机器清洗,请点击")
@@ -393,6 +402,7 @@ public class WeChatMessageProcessingHandler {
               .append("\n")
               .append("其他咨询,请输入文字\"人工客服\"\n");
         }else if (content.contains("投诉")){
+          isPick=true;
           msgsb.append("您好,非常抱歉给您带来的不便！\n您可以直接输入投诉问题,我们会尽快给您受理的哦\n全国服务热线：400 111 1222\n在线工作时间：8:00AM-20:00PM");
         }else if (content.contains("人工客服")){
           msgsb.append("正在为您转接人工客服,请耐心等待！");
@@ -448,7 +458,7 @@ public class WeChatMessageProcessingHandler {
         }
 
         replyMessage(inMessage, response, msgsb);
-
+        return isPick;
     }
 
 
