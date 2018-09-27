@@ -1020,15 +1020,15 @@ public class WechatOrdersController {
         if (SystemConstants.INSTALL_APPRAISE == orderType) {
             orderType = SystemConstants.INSTALL;
         } else if (SystemConstants.REPAIR_APPRAISE == orderType) {
-            orderType = SystemConstants.REPAIR;
-        } else if (SystemConstants.FILTER_APPRAISE == orderType || SystemConstants.CLEAN_APPRAISE == orderType) {
             orderType = SystemConstants.MAINTAIN;
+        } else if (SystemConstants.FILTER_APPRAISE == orderType || SystemConstants.CLEAN_APPRAISE == orderType) {
+            orderType = SystemConstants.REPAIR;
         }
         evaluateParam.setNumber_type(orderType);
         evaluateParam.setEvaluate_note(appraise.getContent());
         evaluateParam.setNumber(appraise.getOrderCode());
-        evaluateParam.setIs_attitude(covertStringToInt(appraise.getAttitude()));
-        evaluateParam.setIs_specialty(covertStringToInt(appraise.getProfession()));
+        evaluateParam.setIs_attitude(covertStringToInt(appraise.getAttitude()) + 1);
+        evaluateParam.setIs_specialty(covertStringToInt(appraise.getProfession()) + 1);
         evaluateParam.setIs_integrity(0);
         evaluateParam.setIs_recommend(0);
         evaluateParam.setIs_wxgz(covertStringToInt(appraise.getRepair()));
