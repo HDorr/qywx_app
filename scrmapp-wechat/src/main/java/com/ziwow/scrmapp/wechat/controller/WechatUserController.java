@@ -319,6 +319,15 @@ public class WechatUserController {
                     }
                 }
             });
+            // 异步推送给小程序
+            final String unionId = wechatFans.getUnionId();
+            executorService.execute(new Runnable() {
+                @Override
+                public void run() {
+                    wechatUserService.syncUserToMiniApp(unionId, msgMobile);
+                }
+            });
+
             // 刷新短信营销记录
             smsSendRecordService.updateSmsRecordRegTime(mobile);
 
@@ -329,14 +338,7 @@ public class WechatUserController {
             productService.syncHistroyProductItemFromCemTemp(mobile, userId);
             // 异步同步该用户的历史受理单信息
             wechatOrdersService.syncHistoryAppInfo(mobile, userId);
-            // 异步推送给小程序
-            final String unionId = wechatFans.getUnionId();
-            executorService.execute(new Runnable() {
-                @Override
-                public void run() {
-                    wechatUserService.syncUserToMiniApp(unionId, msgMobile);
-                }
-            });
+
             result.setReturnMsg(Constant.OK);
             result.setReturnCode(Constant.SUCCESS);
             return result;
