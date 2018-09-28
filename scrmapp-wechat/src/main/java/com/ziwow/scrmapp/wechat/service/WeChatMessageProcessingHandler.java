@@ -11,6 +11,7 @@ package com.ziwow.scrmapp.wechat.service;
 import com.alibaba.fastjson.JSON;
 import com.thoughtworks.xstream.XStream;
 import com.ziwow.scrmapp.common.persistence.entity.Channel;
+import com.ziwow.scrmapp.common.redis.RedisService;
 import com.ziwow.scrmapp.tools.utils.CommonUtil;
 import com.ziwow.scrmapp.tools.utils.Sha1Util;
 import com.ziwow.scrmapp.tools.utils.StringUtil;
@@ -19,6 +20,7 @@ import com.ziwow.scrmapp.tools.weixin.XStreamAdaptor;
 import com.ziwow.scrmapp.tools.weixin.XmlUtils;
 import com.ziwow.scrmapp.tools.weixin.decode.AesException;
 import com.ziwow.scrmapp.tools.weixin.decode.WXBizMsgCrypt;
+import com.ziwow.scrmapp.wechat.constants.RedisKeyConstants;
 import com.ziwow.scrmapp.wechat.persistence.entity.OpenAuthorizationWeixin;
 import com.ziwow.scrmapp.wechat.persistence.entity.OpenWeixin;
 import com.ziwow.scrmapp.wechat.persistence.entity.WechatCustomerMsg;
@@ -92,6 +94,9 @@ public class WeChatMessageProcessingHandler {
 
     @Autowired
     private OpenWeixinService openWeixinService;
+
+    @Autowired
+    private RedisService redisService;
 
     /**
      * 业务转发组件
@@ -190,7 +195,13 @@ public class WeChatMessageProcessingHandler {
                         LOG.info("菜单点击事件=[" + requestStr + "]");
                     }
                 } else if ("text".equals(inMessage.getMsgType())) {
-                  boolean isPick = dealWithText(inMessage, response);
+                    dealWithText(inMessage, response);
+
+                    //从redis判断聊天状态
+                    boolean isInChat=checkChatStatus(inMessage.getFromUserName());
+                    if (isInChat){
+                        redisService.set(RedisKeyConstants.getScrmappWechatCustomermsg()+inMessage.getFromUserName(),true,60L);
+                    }
 
                   WechatCustomerMsg record = new WechatCustomerMsg();
                   record.setOpenid(inMessage.getFromUserName());
@@ -198,16 +209,23 @@ public class WeChatMessageProcessingHandler {
                   record.setMessage(inMessage.getContent());
                   record.setCreateTime(new Date());
                   record.setMessageType(0);
-                  record.setIsRead(isPick?1:0);
+                  record.setIsRead(isInChat?0:1);
+                  record.setIsHide(isInChat?0:1);
                   customerMsgService.insertSelective(record);
                 } else if ("image".equals(inMessage.getMsgType())) {
+                    boolean isInChat=checkChatStatus(inMessage.getFromUserName());
+                    if (isInChat){
+                        redisService.set(RedisKeyConstants.getScrmappWechatCustomermsg()+inMessage.getFromUserName(),true,60L);
+                    }
+
                     WechatCustomerMsg record = new WechatCustomerMsg();
                     record.setOpenid(inMessage.getFromUserName());
                     record.setMessageSource(1);
                     record.setMessage(wechatMediaService.downLoadMedia(inMessage.getMediaId()));
                     record.setCreateTime(new Date());
                     record.setMessageType(1);
-                    record.setIsRead(0);
+                    record.setIsRead(isInChat?0:1);
+                    record.setIsHide(isInChat?0:1);
                     customerMsgService.insertSelective(record);
                 }
             }
@@ -215,6 +233,14 @@ public class WeChatMessageProcessingHandler {
             System.out.println("requestStr=[" + requestStr + "]");
             e.printStackTrace();
         }
+    }
+
+    private boolean checkChatStatus(String openId) {
+        Object obj = redisService.get(RedisKeyConstants.getScrmappWechatCustomermsg() + openId);
+        if (obj==null){
+            return false;
+        }
+        return (boolean)obj;
     }
 
     private void dealWithSubscribe(InMessage inMessage,HttpServletResponse response) {
@@ -266,20 +292,18 @@ public class WeChatMessageProcessingHandler {
         }
     }
 
-    private boolean dealWithText(final InMessage inMessage, HttpServletResponse response)
+    private void dealWithText(final InMessage inMessage, HttpServletResponse response)
         {
 
-          boolean isPick=false;
 
         String content = inMessage.getContent();
         if (StringUtil.isBlank(content)){
-            return isPick;
+            return ;
         }
         StringBuilder msgsb=new StringBuilder();
 
         //链接后面的无效参数是为了避免微信前端点击粘连
         if (content.contains("购买")){
-          isPick=true;
           msgsb.append("您好,小沁在此为您服务,建议您通过官方渠道选购您需要的产品,谢谢！\n")
               .append("\n")
               .append("购买机器,请点击")
@@ -300,7 +324,6 @@ public class WeChatMessageProcessingHandler {
               .append("\n")
               .append("其他咨询,请输入文字\"人工客服\"\n");
         }else if (content.contains("滤芯")){
-          isPick=true;
           msgsb.append("您好,小沁在此为您服务,建议您通过官方渠道选购您需要的滤芯,谢谢！\n")
               .append("\n")
               .append("未购滤芯：\n")
@@ -324,7 +347,6 @@ public class WeChatMessageProcessingHandler {
               .append("\n")
               .append("其他咨询,请输入文字\"人工客服\"\n");
         }else if (content.contains("预约")){
-          isPick=true;
           msgsb.append("您好,小沁在此为您服务！\n")
               .append("\n")
               .append("机器安装,请点击")
@@ -347,7 +369,6 @@ public class WeChatMessageProcessingHandler {
               .append("\n")
               .append("其他咨询,请输入文字\"人工客服\"\n");
         }else if (content.contains("安装")){
-          isPick=true;
           msgsb.append("您好,小沁在此为您服务！\n")
               .append("\n")
               .append("机器安装,请点击")
@@ -357,7 +378,6 @@ public class WeChatMessageProcessingHandler {
               .append("\n")
               .append("其他咨询,请输入文字\"人工客服\"\n");
         }else if (content.contains("更换")){
-          isPick=true;
           msgsb.append("您好,小沁在此为您服务！\n")
               .append("\n")
               .append("已购滤芯：\n")
@@ -382,7 +402,6 @@ public class WeChatMessageProcessingHandler {
               .append("\n")
               .append("其他咨询,请输入文字\"人工客服\"\n");
         }else if (content.contains("维修")){
-          isPick=true;
           msgsb.append("您好,小沁在此为您服务！\n")
               .append("\n")
               .append("机器维修,请点击")
@@ -392,7 +411,6 @@ public class WeChatMessageProcessingHandler {
               .append("\n")
               .append("其他咨询,请输入文字\"人工客服\"\n");
         }else if (content.contains("保养")){
-          isPick=true;
           msgsb.append("您好,小沁在此为您服务！\n")
               .append("\n")
               .append("机器清洗,请点击")
@@ -402,10 +420,11 @@ public class WeChatMessageProcessingHandler {
               .append("\n")
               .append("其他咨询,请输入文字\"人工客服\"\n");
         }else if (content.contains("投诉")){
-          isPick=true;
           msgsb.append("您好,非常抱歉给您带来的不便！\n您可以直接输入投诉问题,我们会尽快给您受理的哦\n全国服务热线：400 111 1222\n在线工作时间：8:00AM-20:00PM");
         }else if (content.contains("人工客服")){
           msgsb.append("正在为您转接人工客服,请耐心等待！");
+
+          redisService.set(RedisKeyConstants.getScrmappWechatCustomermsg()+inMessage.getFromUserName(),true,600L);
         }else {
           msgsb.append("您好,小沁在此为您服务,沁园与你一起,健康每一天！\n")
               .append("\n")
@@ -458,7 +477,6 @@ public class WeChatMessageProcessingHandler {
         }
 
         replyMessage(inMessage, response, msgsb);
-        return isPick;
     }
 
 

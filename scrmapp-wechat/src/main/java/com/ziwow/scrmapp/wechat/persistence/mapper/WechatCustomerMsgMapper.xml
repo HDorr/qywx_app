@@ -115,6 +115,9 @@
       <if test="isRead != null" >
         is_read,
       </if>
+      <if test="isHide != null" >
+        is_hide,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -140,6 +143,9 @@
       </if>
       <if test="isRead != null" >
         #{isRead,jdbcType=INTEGER},
+      </if>
+      <if test="isHide != null" >
+        #{isHide,jdbcType=INTEGER},
       </if>
     </trim>
   </insert>
