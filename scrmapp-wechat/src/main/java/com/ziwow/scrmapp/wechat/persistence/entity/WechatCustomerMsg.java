@@ -23,6 +23,16 @@ public class WechatCustomerMsg implements Serializable{
 
     private Integer isRead;
 
+    private Integer isHide;
+
+    public Integer getIsHide() {
+        return isHide;
+    }
+
+    public void setIsHide(Integer isHide) {
+        this.isHide = isHide;
+    }
+
     public Long getId() {
         return id;
     }

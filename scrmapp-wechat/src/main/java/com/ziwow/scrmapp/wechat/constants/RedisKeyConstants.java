@@ -14,7 +14,9 @@ public class RedisKeyConstants {
 	private final static String SCRMAPP_USER_REGISTER_SENDMSG = "string.scrmapp.user.sendmsg."; // 用户注册时发送验证码
 	private final static String SCRMAPP_WEIXIN_MSG_TEMPLATEID = "string.scrmapp.weixin.msg.templateid."; // 获取templateid
 	private final static String SCRMAPP_WECHAT_ACCESSTOKEN="string:scrmapp:wechat:accesstoken";// 公众号的基础accesstoken
-	
+
+	private final static String SCRMAPP_WECHAT_CUSTOMERMSG="boolean:scrmapp:wechat:customermsg";// 客服介入状态
+
 	public static String getOpenWxComponentAccesstokenPrefixKey() {
 		return OPEN_WEXIN_COMPONENT_ACCESSTOKEN_PREFIX;
 	}
@@ -34,4 +36,6 @@ public class RedisKeyConstants {
 	public static String getWechatAccesstokenKey() {
 		return SCRMAPP_WECHAT_ACCESSTOKEN;
 	}
+
+	public static String getScrmappWechatCustomermsg(){return SCRMAPP_WECHAT_CUSTOMERMSG;}
 }
