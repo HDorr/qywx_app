@@ -200,7 +200,7 @@ public class WeChatMessageProcessingHandler {
                     //从redis判断聊天状态
                     boolean isInChat=checkChatStatus(inMessage.getFromUserName());
                     if (isInChat){
-                        redisService.set(RedisKeyConstants.getScrmappWechatCustomermsg()+inMessage.getFromUserName(),true,60L);
+                        redisService.set(RedisKeyConstants.getScrmappWechatCustomermsg()+inMessage.getFromUserName(),true,14400L);
                     }
 
                   WechatCustomerMsg record = new WechatCustomerMsg();
@@ -215,7 +215,7 @@ public class WeChatMessageProcessingHandler {
                 } else if ("image".equals(inMessage.getMsgType())) {
                     boolean isInChat=checkChatStatus(inMessage.getFromUserName());
                     if (isInChat){
-                        redisService.set(RedisKeyConstants.getScrmappWechatCustomermsg()+inMessage.getFromUserName(),true,60L);
+                        redisService.set(RedisKeyConstants.getScrmappWechatCustomermsg()+inMessage.getFromUserName(),true,14400L);
                     }
 
                     WechatCustomerMsg record = new WechatCustomerMsg();
@@ -424,7 +424,7 @@ public class WeChatMessageProcessingHandler {
         }else if (content.contains("人工客服")){
           msgsb.append("正在为您转接人工客服,请耐心等待！");
 
-          redisService.set(RedisKeyConstants.getScrmappWechatCustomermsg()+inMessage.getFromUserName(),true,600L);
+          redisService.set(RedisKeyConstants.getScrmappWechatCustomermsg()+inMessage.getFromUserName(),true,14400L);
         }else {
           msgsb.append("您好,小沁在此为您服务,沁园与你一起,健康每一天！\n")
               .append("\n")
