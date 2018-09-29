@@ -1172,6 +1172,7 @@ public class ThirdPartyServiceImpl implements ThirdPartyService {
             call.setUseSOAPAction(true);
             call.setSOAPActionURI(soapaction + "getProItem");
 
+            LOG.info("调用防伪码查询接口:barcode[{}]", barcode);
             String str = (String) call.invoke(new Object[]{barcode, userMsg, area, ciphertext});//调用方法并传递参数
             LOG.info("防伪码查询结果:[{}]", str);
             JSONArray jsonArray = JSONArray.fromObject(str);
