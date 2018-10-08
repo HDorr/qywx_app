@@ -41,7 +41,10 @@
 	</select>
 
     <select id="getBaseUserInfoByUserId" resultType="com.ziwow.scrmapp.wechat.vo.WechatUserVo">
-        SELECT u.mobilePhone,p.province provinceName,u.nickName,c.city cityName FROM t_province p,t_city c,t_wechat_user u WHERE  u.cityId = c.cityid and u.provinceId = p.provinceid and u.status=0 and u.userId = #{userId}
+        SELECT u.mobilePhone,p.province provinceName,u.nickName,c.city cityName FROM t_wechat_user u
+        left join t_city c on u.cityId = c.cityid
+        left join t_province p on u.provinceId = p.provinceid
+        WHERE  u.status=0 and u.userId = #{userId}
     </select>
 
     <select id="getUserByMobilePhone" resultMap="wechatUserMap">

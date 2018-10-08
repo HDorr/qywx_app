@@ -39,6 +39,9 @@ public interface ThirdPartyService {
 	Result getInstallPart(String modelName);
 	Result getRepairPart(String modelName);
 	Result securityQuery(String barcode, String userMsg, String area, String ciphertext);
-	Result getCssAssetsInfo(String phone);
 
+	//cem
+	Result getCemAssetsInfo(String phone);
+
+	Result getCemProductInfo(String productCode);
 }

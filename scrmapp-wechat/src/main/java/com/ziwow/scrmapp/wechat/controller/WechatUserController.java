@@ -319,16 +319,6 @@ public class WechatUserController {
                     }
                 }
             });
-            // 刷新短信营销记录
-            smsSendRecordService.updateSmsRecordRegTime(mobile);
-
-            // 将注册信息同步给第三方沁园商城
-//            thirdPartyService.registerMember(mobile, password, openIdDes);
-            thirdPartyService.registerMember(mobile, null, openIdDes);
-            // 异步同步该用户的历史产品信息
-            productService.syncHistroyProductItem(mobile, userId);
-            // 异步同步该用户的历史受理单信息
-            wechatOrdersService.syncHistoryAppInfo(mobile, userId);
             // 异步推送给小程序
             final String unionId = wechatFans.getUnionId();
             executorService.execute(new Runnable() {
@@ -337,6 +327,18 @@ public class WechatUserController {
                     wechatUserService.syncUserToMiniApp(unionId, msgMobile);
                 }
             });
+
+            // 刷新短信营销记录
+            smsSendRecordService.updateSmsRecordRegTime(mobile);
+
+            // 将注册信息同步给第三方沁园商城
+//            thirdPartyService.registerMember(mobile, password, openIdDes);
+            thirdPartyService.registerMember(mobile, null, openIdDes);
+            // 异步同步该用户的历史产品信息
+            productService.syncHistroyProductItemFromCemTemp(mobile, userId);
+            // 异步同步该用户的历史受理单信息
+            wechatOrdersService.syncHistoryAppInfo(mobile, userId);
+
             result.setReturnMsg(Constant.OK);
             result.setReturnCode(Constant.SUCCESS);
             return result;
@@ -433,6 +435,14 @@ public class WechatUserController {
                 wechatUser.setUserId(userId);
                 wechatUser.setMobilePhone(mobile.trim());
                 wechatUserService.syncUserFromMiniApp(wechatFans, wechatUser);
+
+              // 刷新短信营销记录
+              smsSendRecordService.updateSmsRecordRegTime(mobile);
+
+              // 异步同步该用户的历史产品信息
+              productService.syncHistroyProductItemFromCemTemp(mobile.trim(), userId);
+              // 异步同步该用户的历史受理单信息
+              wechatOrdersService.syncHistoryAppInfo(mobile.trim(), userId);
             }
             result.setReturnCode(Constant.SUCCESS);
             result.setReturnMsg("同步用户信息成功!");

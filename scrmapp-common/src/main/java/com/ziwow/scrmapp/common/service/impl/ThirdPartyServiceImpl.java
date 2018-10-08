@@ -1,6 +1,7 @@
 package com.ziwow.scrmapp.common.service.impl;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.TypeReference;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.net.HttpHeaders;
@@ -8,6 +9,9 @@ import com.sinocc.service.*;
 import com.ziwow.scrmapp.common.aop.LoginRequired;
 import com.ziwow.scrmapp.common.bean.pojo.*;
 import com.ziwow.scrmapp.common.bean.vo.SecurityVo;
+import com.ziwow.scrmapp.common.bean.vo.cem.CemAssertInfo;
+import com.ziwow.scrmapp.common.bean.vo.cem.CemProductInfo;
+import com.ziwow.scrmapp.common.bean.vo.cem.CemResp;
 import com.ziwow.scrmapp.common.bean.vo.csm.AppealProduct;
 import com.ziwow.scrmapp.common.bean.vo.csm.ProductAppealVo;
 import com.ziwow.scrmapp.common.bean.vo.csm.ProductFilterGrade;
@@ -22,11 +26,25 @@ import com.ziwow.scrmapp.common.result.BaseResult;
 import com.ziwow.scrmapp.common.result.Result;
 import com.ziwow.scrmapp.common.service.ThirdPartyService;
 import com.ziwow.scrmapp.common.utils.HttpKit;
+import com.ziwow.scrmapp.common.utils.JsonUtil;
+import com.ziwow.scrmapp.common.utils.MD5;
+import java.io.Console;
+import java.io.IOException;
+import java.util.Date;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import net.sf.json.JsonConfig;
 import org.apache.axis.client.Call;
 import org.apache.commons.lang.StringUtils;
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.util.EntityUtils;
+import org.bouncycastle.jce.provider.JDKMessageDigest;
 import org.codehaus.xfire.client.Client;
 import org.codehaus.xfire.client.XFireProxy;
 import org.codehaus.xfire.client.XFireProxyFactory;
@@ -70,6 +88,17 @@ public class ThirdPartyServiceImpl implements ThirdPartyService {
     private String authUserName;
     @Value("${csm.client.auth.password}")
     private String authPassword;
+
+    @Value("${cem.aid}")
+    private String cemAid;
+    @Value("${cem.secretKey}")
+    private String cemSecretKey;
+    @Value("${cem.segmentId}")
+    private String cemSegmentId;
+    @Value("${cem.assets.url}")
+    private String cemAssetsUrl;
+    @Value("${cem.productInfo.url}")
+    private String cemProductInfoUrl;
 
     @Override
     public boolean registerCheck(String userName) {
@@ -1143,6 +1172,7 @@ public class ThirdPartyServiceImpl implements ThirdPartyService {
             call.setUseSOAPAction(true);
             call.setSOAPActionURI(soapaction + "getProItem");
 
+            LOG.info("调用防伪码查询接口:barcode[{}]", barcode);
             String str = (String) call.invoke(new Object[]{barcode, userMsg, area, ciphertext});//调用方法并传递参数
             LOG.info("防伪码查询结果:[{}]", str);
             JSONArray jsonArray = JSONArray.fromObject(str);
@@ -1187,84 +1217,102 @@ public class ThirdPartyServiceImpl implements ThirdPartyService {
     }
 
     @Override
-    public Result getCssAssetsInfo(String phone) {
-//        CssWxRequest result = null;
-//        Client client = null;
-//        List<ProductAppealVo> list = Lists.newArrayList();
-//        try {
-//            LOG.info("============开始调用csm系统的用户资产信息查询接口================");
-//            CssWxService service = this.getCssWxService();
-//            XFireProxy proxy = (XFireProxy) Proxy.getInvocationHandler(service);
-//            client = proxy.getClient();
-//            client.addOutHandler(new ClientAuthenticationHandler(authUserName, authPassword));
-//            //传条件
-//            CssWxRequest req = new CssWxRequest();
-//            req.setTel(phone);
-//            // 查询请求
-//            result = service.CssEnduserWxSearch(req);
-//            if (null != result) {
-//                // 返回信息 getStatus 0-失败 1-成功
-//                Long status = result.getStatus();
-//                String message = result.getMessage();
-//                LOG.info("用户资产信息查询接口返回信息status:[{}],message[{}]", status, message);
-//                // 判断是否成功
-//                if (status == 1) {
-//                    if (result.getOne_V_Msg().length() > 0) {
-//                        JSONArray myJsonArray = JSONArray.fromObject(result.getOne_V_Msg());
-//                        if (myJsonArray.size() > 0) {
-//                            for (int i = 0; i < myJsonArray.size(); i++) {
-//                                JSONObject dataObj = myJsonArray.getJSONObject(i);
-//                                String enduserName = dataObj.has("enduser_name") ? dataObj.getString("enduser_name") : "";// 用户姓名
-//                                String mobile = dataObj.getString("mobile"); // 电话
-//                                String enduserAddress = dataObj.getString("enduser_address"); // 地址
-//                                String provinceName = dataObj.getString("province_name");// 省
-//                                String cityName = dataObj.getString("city_name");// 市
-//                                String countyName = dataObj.getString("county_name");// 区县
-//                                Integer provinceId = dataObj.has("province_id") ? dataObj.getInt("province_id") : 0; // 省Id
-//                                Integer cityId = dataObj.has("city_id") ? dataObj.getInt("city_id") : 0;// 市Id
-//                                Integer countyId = dataObj.has("city_id") ? dataObj.getInt("county_id") : 0;// 区Id
-//                                // 封装成vo对象
-//                                ProductAppealVo productAppealVo = new ProductAppealVo();
-//                                productAppealVo.setProvinceId(provinceId);
-//                                productAppealVo.setProvinceName(provinceName);
-//                                productAppealVo.setCityId(cityId);
-//                                productAppealVo.setCityName(cityName);
-//                                productAppealVo.setCountyId(countyId);
-//                                productAppealVo.setCountyName(countyName);
-//                                productAppealVo.setMobile(mobile);
-//                                productAppealVo.setEnduserAddress(enduserAddress);
-//                                productAppealVo.setEnduserName(enduserName);
-//                                // 产品相关
-//                                List<AppealProduct> appealProductList = Lists.newArrayList();
-//                                JSONArray jsonArry = (dataObj.getJSONArray("items"));
-//                                if (jsonArry.size() > 0) {
-//                                    for (int m = 0; m < jsonArry.size(); m++) {
-//                                        JSONObject jsonObj = jsonArry.getJSONObject(m);
-//                                        String netSaleNo = jsonObj.getString("net_sale_no");    // 购买单号
-//                                        String spec = jsonObj.getString("spec");                // 产品型号
-//                                        String item_code = jsonObj.getString("item_code");      // 产品编码
-//                                        String purchDate = jsonObj.getString("purch_date");    // 购买日期
-//                                        AppealProduct appealProduct = new AppealProduct();
-//                                        appealProduct.setNetSaleNo(netSaleNo);
-//                                        appealProduct.setSpec(spec);
-//                                        appealProduct.setItem_code(item_code);
-//                                        appealProduct.setPurchDate(purchDate);
-//                                        appealProductList.add(appealProduct);
-//                                    }
-//                                }
-//                                productAppealVo.setProducts(appealProductList);
-//                                list.add(productAppealVo);
-//                            }
-//                        }
-//                    }
-//                }
-//            }
-//        } catch (Exception e) {
-//            LOG.error("用户资产信息查询接口失败:", e);
-//        } finally {
-//            client.close();
-//        }
-        return null;
+    public Result getCemAssetsInfo(String phone) {
+        Result result = new BaseResult();
+        result.setReturnCode(Constant.FAIL);
+        String baseUrl = cemAssetsUrl;
+        String aid = cemAid;
+        String secretKey = cemSecretKey;
+
+        long ts = new Date().getTime() / 1000;
+
+        String sign = MD5.toMD5("aid" + aid +"mobile"+phone+ "ts" + ts +secretKey);
+
+        Map<String,String> params=new HashMap<String, String>();
+        params.put("aid",aid);
+        params.put("mobile",phone);
+        params.put("ts",String.valueOf(ts));
+        params.put("sign",sign);
+        String content = null;
+        try {
+            content = cemPost(baseUrl, params);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        CemResp<CemAssertInfo> cemResp = JSON.parseObject(content, new TypeReference<CemResp<CemAssertInfo>>(){});
+        if (cemResp!=null){
+            if (CemResp.STATUS_SUCCESS.equals(cemResp.getStatus().getCode())){
+                result.setData(cemResp.getData().getBasicInfo().getBuy_devices());
+                result.setReturnCode(Constant.SUCCESS);
+            }else {
+                result.setReturnMsg(cemResp.getStatus().getMessage());
+                result.setReturnCode(Constant.FAIL);
+            }
+        }
+        return result;
+    }
+
+    @Override
+    public Result getCemProductInfo(String productCode) {
+        Result result = new BaseResult();
+        result.setReturnCode(Constant.FAIL);
+
+        String baseUrl = cemProductInfoUrl;
+        String aid = cemAid;
+        String secretKey = cemSecretKey;
+
+        long ts = new Date().getTime() / 1000;
+
+        String sign = MD5.toMD5("aid" + aid +"procode"+productCode+ "ts" + ts +secretKey);
+
+        String url=baseUrl+"?aid="+aid+"&procode="+productCode+"&ts="+ts+"&sign="+sign;
+        String content = null;
+        try {
+            content = cemGet(url);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        CemResp<CemProductInfo> cemResp = JSON.parseObject(content, new TypeReference<CemResp<CemProductInfo>>(){});
+        if (cemResp!=null){
+            if (CemResp.STATUS_SUCCESS.equals(cemResp.getStatus().getCode())){
+                result.setData(cemResp.getData());
+                result.setReturnCode(Constant.SUCCESS);
+            }else {
+                result.setReturnMsg(cemResp.getStatus().getMessage());
+                result.setReturnCode(Constant.FAIL);
+            }
+        }
+        return result;
+    }
+
+    private String cemGet(String url) throws IOException {
+        HttpClient client = new DefaultHttpClient();
+        HttpGet httpGet=new HttpGet(url);
+
+        httpGet.setHeader("Content-Type", "application/json;charset=UTF-8");
+        LOG.info("调用cem接口：http get:[{}]", url);
+        final HttpResponse response = client.execute(httpGet);
+        HttpEntity entity = response.getEntity();
+        String result = EntityUtils.toString(entity, "UTF-8");
+        LOG.info("调用cem接口返回值：[{}]", result);
+        return result;
+    }
+
+    private String cemPost(String url, Map<String, String> params) throws IOException {
+        JSONObject jsonBody =JSONObject.fromObject(params);
+
+        HttpClient client = new DefaultHttpClient();
+        HttpPost httpPost = new HttpPost(url);
+
+        HttpEntity reqEntity = new StringEntity(jsonBody.toString(),"UTF-8");
+        httpPost.setEntity(reqEntity);
+        httpPost.setHeader("Content-Type", "application/json;charset=UTF-8");
+        LOG.info("调用cem接口：http post:[{}]", url);
+        final HttpResponse response = client.execute(httpPost);
+        HttpEntity entity = response.getEntity();
+        String result = EntityUtils.toString(entity, "UTF-8");
+        LOG.info("调用cem接口返回值：[{}]", result);
+        return result;
     }
 
     private static String url = "http://122.227.252.12:802/QYFWService/QYWebService.asmx";//提供接口的地址
