@@ -33,6 +33,13 @@ import java.io.PrintWriter;
 import java.net.URLEncoder;
 import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.lang.StringUtils;
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -75,6 +82,9 @@ public class WeChatMessageProcessingHandler {
     @Value("${mine.baseUrl}")
     private String mineBaseUrl;
 
+    @Value("${mine.basePcUrl}")
+    private String mineBasePcUrl;
+
     @Value("${wechat.appid}")
     private String appid;
 
@@ -90,6 +100,12 @@ public class WeChatMessageProcessingHandler {
 
     @Value("${register.url}")
     private String registerUrl;
+
+    @Value("${callCenter.url}")
+    private String callCenterUrl;
+
+    @Value("${callCenter.tenantId}")
+    private String callCenterTenantId;
 
     @Autowired
     private OpenWeixinService openWeixinService;
@@ -203,7 +219,7 @@ public class WeChatMessageProcessingHandler {
                     //从redis判断聊天状态
                     boolean isInChat=checkChatStatus(inMessage.getFromUserName());
                     if (isInChat){
-                        redisService.set(RedisKeyConstants.getScrmappWechatCustomermsg()+inMessage.getFromUserName(),true,14400L);
+                        redisService.set(RedisKeyConstants.getScrmappWechatCustomermsg()+inMessage.getFromUserName(),true,60L);
                     }
 
                   WechatCustomerMsg record = new WechatCustomerMsg();
@@ -218,25 +234,28 @@ public class WeChatMessageProcessingHandler {
                 } else if ("image".equals(inMessage.getMsgType())) {
                     boolean isInChat=checkChatStatus(inMessage.getFromUserName());
                     if (isInChat){
-                        redisService.set(RedisKeyConstants.getScrmappWechatCustomermsg()+inMessage.getFromUserName(),true,14400L);
+                        redisService.set(RedisKeyConstants.getScrmappWechatCustomermsg()+inMessage.getFromUserName(),true,60L);
                     }
 
                     WechatCustomerMsg record = new WechatCustomerMsg();
                     record.setOpenid(inMessage.getFromUserName());
                     record.setMessageSource(1);
-                    record.setMessage(wechatMediaService.downLoadMedia(inMessage.getMediaId()));
+                    String mediaUrl = wechatMediaService.downLoadMedia(inMessage.getMediaId());
+                    record.setMessage(mediaUrl);
                     record.setCreateTime(new Date());
                     record.setMessageType(1);
                     record.setIsRead(isInChat?0:1);
                     record.setIsHide(isInChat?0:1);
                     customerMsgService.insertSelective(record);
 
+                    inMessage.setContent(mediaUrl);
                     pushMessageToCallCenter(inMessage);//推送消息到呼叫中心
                 }else if ("voice".equals(inMessage.getMsgType())) {
+                    inMessage.setContent(wechatMediaService.downLoadMedia(inMessage.getMediaId()));
                     pushMessageToCallCenter(inMessage);//推送消息到呼叫中心
                 }else if ("video".equals(inMessage.getMsgType())) {
+                    inMessage.setContent(wechatMediaService.downLoadMedia(inMessage.getMediaId()));
                     pushMessageToCallCenter(inMessage);//推送消息到呼叫中心
-
                 }
             }
         } catch (Exception e) {
@@ -258,6 +277,7 @@ public class WeChatMessageProcessingHandler {
                 break;
         }
         CallCenterMessage callCenterMessage = new CallCenterMessage(inMessage);
+        callCenterMessage.setTenantId(callCenterTenantId);
         String userOpenId = inMessage.getFromUserName();
         WechatFans wechatFans = wechatFansService.getWechatFans(userOpenId);
         if (wechatFans != null) {
@@ -268,7 +288,17 @@ public class WeChatMessageProcessingHandler {
                 callCenterMessage.setUserStatus(String.valueOf(wechatUser.getStatus()));
             }
         }
-        callCenterMessage.setChatUrl(mineBaseUrl + "/weixin/callCenter/receiveMessage");
+        callCenterMessage.setChatUrl(mineBasePcUrl+"/customerMsg/callCenter/pushMessage");
+
+
+//        callCenterMessage.setToUserName("系统");
+//        callCenterMessage.setSource("webchat");
+//        callCenterMessage.setEmail("");
+//        callCenterMessage.setPhone("15972123446");
+//        callCenterMessage.setFromUserName("15972123446");
+//        callCenterMessage.setClientLevel("1");
+//    this.CreateTime=0000000000000L;
+
 
         XStream xs = XStreamAdaptor.createXstream();
         xs.alias("xml", callCenterMessage.getClass());
@@ -467,8 +497,23 @@ public class WeChatMessageProcessingHandler {
         }else if (content.contains("人工客服")){
           msgsb.append("正在为您转接人工客服,请耐心等待！");
 
-          redisService.set(RedisKeyConstants.getScrmappWechatCustomermsg()+inMessage.getFromUserName(),true,14400L);
+            boolean isInChat=checkChatStatus(inMessage.getFromUserName());
+            if (isInChat){
+                redisService.set(RedisKeyConstants.getScrmappWechatCustomermsg()+inMessage.getFromUserName(),true,60L);
+                return;
+            }
+
+          redisService.set(RedisKeyConstants.getScrmappWechatCustomermsg()+inMessage.getFromUserName(),true,60L);
+            //调用呼叫中心转人工
+            LOG.info("调用呼叫中心转人工接口");
+            inMessage.setContent("转人工");
+            pushMessageToCallCenter(inMessage);//推送消息到呼叫中心
         }else {
+            boolean isInChat=checkChatStatus(inMessage.getFromUserName());
+            if (isInChat){
+                redisService.set(RedisKeyConstants.getScrmappWechatCustomermsg()+inMessage.getFromUserName(),true,60L);
+                return;
+            }
           msgsb.append("您好,小沁在此为您服务,沁园与你一起,健康每一天！\n")
               .append("\n")
               .append("商城购买：\n")

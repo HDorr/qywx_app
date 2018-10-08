@@ -46,12 +46,11 @@ public class CallCenterMessage {
   String TenantId="qinyuan";//固定传qinyuan
 
   @NotNull
-  @XStreamCDATA
   Long CreateTime;//创建时间
 
   @NotNull
   @XStreamCDATA
-  MsgTypes MsgType;//消息类型
+  String MsgType;//消息类型
 
   @NotNull
   @XStreamCDATA
@@ -70,7 +69,7 @@ public class CallCenterMessage {
   String Source="serviceAccount";//来源：服务号("serviceAccount")
 
   @XStreamCDATA
-  String BizType;//业务类型：暂时没有定义
+  String BizType="egoo_xa";//业务类型：暂时没有定义
 
   @XStreamCDATA
   String Phone;//手机号
@@ -84,7 +83,6 @@ public class CallCenterMessage {
   @XStreamCDATA
   String UserStatus;//用户状态：暂时没有定义
 
-  @XStreamCDATA
   String ClientLevel;//客户等级：暂时没有定义
 
   @XStreamCDATA
@@ -104,6 +102,12 @@ public class CallCenterMessage {
 
   @XStreamCDATA
   String Reserve5;
+
+
+  @XStreamCDATA
+  String SkillGroup="egoo_xa";
+
+
   public CallCenterMessage() {
   }
 
@@ -111,7 +115,7 @@ public class CallCenterMessage {
     this.ToUserName=inMessage.getToUserName();
     this.FromUserName=inMessage.getFromUserName();
     this.CreateTime=inMessage.getCreateTime();
-    this.MsgType=MsgTypes.valueOf(inMessage.getMsgType());
+    this.MsgType=inMessage.getMsgType();
     this.Content=inMessage.getContent();
     this.MsgId=inMessage.getMsgID();
   }
@@ -148,11 +152,11 @@ public class CallCenterMessage {
     CreateTime = createTime;
   }
 
-  public MsgTypes getMsgType() {
+  public String getMsgType() {
     return MsgType;
   }
 
-  public void setMsgType(MsgTypes msgType) {
+  public void setMsgType(String msgType) {
     MsgType = msgType;
   }
 
@@ -282,5 +286,13 @@ public class CallCenterMessage {
 
   public void setReserve5(String reserve5) {
     Reserve5 = reserve5;
+  }
+
+  public String getSkillGroup() {
+    return SkillGroup;
+  }
+
+  public void setSkillGroup(String skillGroup) {
+    SkillGroup = skillGroup;
   }
 }

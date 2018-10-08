@@ -11,7 +11,6 @@ package com.ziwow.scrmapp.wechat.controller;
 import com.alibaba.fastjson.JSON;
 import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
-import com.sun.tools.jxc.apt.Const;
 import com.ziwow.scrmapp.common.bean.pojo.DispatchDotParam;
 import com.ziwow.scrmapp.common.bean.pojo.DispatchMasterParam;
 import com.ziwow.scrmapp.common.bean.pojo.DispatchOrderParam;
@@ -19,7 +18,6 @@ import com.ziwow.scrmapp.common.bean.vo.csm.ProductItem;
 import com.ziwow.scrmapp.common.bean.vo.mall.MallOrderVo;
 import com.ziwow.scrmapp.common.bean.vo.mall.OrderItem;
 import com.ziwow.scrmapp.common.constants.Constant;
-import com.ziwow.scrmapp.common.exception.ParamException;
 import com.ziwow.scrmapp.common.persistence.entity.FilterLevel;
 import com.ziwow.scrmapp.common.persistence.entity.Product;
 import com.ziwow.scrmapp.common.result.BaseResult;
@@ -30,6 +28,8 @@ import com.ziwow.scrmapp.tools.thirdParty.SignUtil;
 import com.ziwow.scrmapp.tools.utils.DateUtil;
 import com.ziwow.scrmapp.tools.utils.StringUtil;
 import com.ziwow.scrmapp.tools.utils.UniqueIDBuilder;
+import com.ziwow.scrmapp.tools.weixin.Tools;
+import com.ziwow.scrmapp.tools.weixin.XmlUtils;
 import com.ziwow.scrmapp.wechat.constants.WeChatConstants;
 import com.ziwow.scrmapp.wechat.enums.BuyChannel;
 import com.ziwow.scrmapp.wechat.persistence.entity.MallPcUser;
@@ -40,6 +40,7 @@ import com.ziwow.scrmapp.wechat.utils.BarCodeConvert;
 import com.ziwow.scrmapp.wechat.vo.MiniappSendSms;
 import com.ziwow.scrmapp.wechat.vo.WechatFansVo;
 import com.ziwow.scrmapp.wechat.vo.WechatJSSdkSignVO;
+import javax.servlet.ServletInputStream;
 import net.sf.json.JSONArray;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
@@ -594,5 +595,19 @@ public class WechatController {
 
     @Value("${open.weixin.component_appid}")
     private String component_appid;
+
+
+    @RequestMapping("/callCenter/pushMessage")
+    public void receiveCallCenterMessage(HttpServletRequest request, HttpServletResponse response){
+        try(ServletInputStream in = request.getInputStream()){
+
+            String xmlMsg = Tools.inputStream2String(in);
+//            CallCenterReplyMessage callCenterReplyMessage = XmlUtils.xmlToObject(xmlMsg, CallCenterReplyMessage.class);
+//            logger.info("接收呼叫中心信息:{}", JSON.toJSONString(callCenterReplyMessage));
+
+        }catch (Exception e) {
+            logger.error(e.getMessage(),e);
+        }
+    }
 
 }
