@@ -1027,12 +1027,12 @@ public class WechatOrdersController {
         evaluateParam.setNumber_type(orderType);
         evaluateParam.setEvaluate_note(appraise.getContent());
         evaluateParam.setNumber(appraise.getOrderCode());
-        evaluateParam.setIs_attitude(covertStringToInt(appraise.getAttitude()) + 1);
-        evaluateParam.setIs_specialty(covertStringToInt(appraise.getProfession()) + 1);
+        evaluateParam.setIs_attitude(covertStringToInt(appraise.getAttitude()));
+        evaluateParam.setIs_specialty(covertStringToInt(appraise.getProfession()));
         evaluateParam.setIs_integrity(0);
         evaluateParam.setIs_recommend(0);
-        evaluateParam.setIs_wxgz(covertStringToInt(appraise.getRepair()));
-        evaluateParam.setIs_wxzs(covertStringToInt(appraise.getOrder()));
+        evaluateParam.setIs_wxgz(covertStringToInt(appraise.getRepair()) + 1);
+        evaluateParam.setIs_wxzs(covertStringToInt(appraise.getOrder()) + 1);
 
         return wechatUserService.invokeCssEvaluate(evaluateParam);
     }
