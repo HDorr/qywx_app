@@ -8,10 +8,13 @@
  */
 package com.ziwow.scrmapp.wechat.service;
 
+import static com.ziwow.scrmapp.tools.oss.CallCenterOssUtil.DOWNLOAD_URL;
+
 import com.alibaba.fastjson.JSON;
 import com.thoughtworks.xstream.XStream;
 import com.ziwow.scrmapp.common.persistence.entity.Channel;
 import com.ziwow.scrmapp.common.redis.RedisService;
+import com.ziwow.scrmapp.tools.oss.CallCenterOssUtil;
 import com.ziwow.scrmapp.tools.utils.CommonUtil;
 import com.ziwow.scrmapp.tools.utils.Sha1Util;
 import com.ziwow.scrmapp.tools.utils.StringUtil;
@@ -213,13 +216,13 @@ public class WeChatMessageProcessingHandler {
                         LOG.info("菜单点击事件=[" + requestStr + "]");
                     }
                 } else if ("text".equals(inMessage.getMsgType())) {
-                    dealWithText(inMessage,response);//关键词回复
+                    boolean isPushToCallCenter = dealWithText(inMessage, response);//关键词回复
 
-                    pushMessageToCallCenter(inMessage);//推送消息到呼叫中心
                     //从redis判断聊天状态
                     boolean isInChat=checkChatStatus(inMessage.getFromUserName());
-                    if (isInChat){
-                        redisService.set(RedisKeyConstants.getScrmappWechatCustomermsg()+inMessage.getFromUserName(),true,60L);
+                    if (!isPushToCallCenter && isInChat){//没有推送过并且处于会话中
+                      pushMessageToCallCenter(inMessage);//推送消息到呼叫中心
+//                        redisService.set(RedisKeyConstants.getScrmappWechatCustomermsg()+inMessage.getFromUserName(),true,60L);
                     }
 
                   WechatCustomerMsg record = new WechatCustomerMsg();
@@ -233,14 +236,13 @@ public class WeChatMessageProcessingHandler {
                   customerMsgService.insertSelective(record);
                 } else if ("image".equals(inMessage.getMsgType())) {
                     boolean isInChat=checkChatStatus(inMessage.getFromUserName());
-                    if (isInChat){
-                        redisService.set(RedisKeyConstants.getScrmappWechatCustomermsg()+inMessage.getFromUserName(),true,60L);
-                    }
 
                     WechatCustomerMsg record = new WechatCustomerMsg();
                     record.setOpenid(inMessage.getFromUserName());
                     record.setMessageSource(1);
-                    String mediaUrl = wechatMediaService.downLoadMedia(inMessage.getMediaId());
+//                    String mediaUrl = wechatMediaService.downLoadMedia(inMessage.getMediaId());
+                    String fileName = wechatMediaService.downLoadMediaForCallCenter(inMessage.getMediaId());
+                    String mediaUrl=DOWNLOAD_URL+"?filename=" +fileName;
                     record.setMessage(mediaUrl);
                     record.setCreateTime(new Date());
                     record.setMessageType(1);
@@ -248,15 +250,22 @@ public class WeChatMessageProcessingHandler {
                     record.setIsHide(isInChat?0:1);
                     customerMsgService.insertSelective(record);
 
-                    inMessage.setContent(mediaUrl);
-                    pushMessageToCallCenter(inMessage);//推送消息到呼叫中心
-                }else if ("voice".equals(inMessage.getMsgType())) {
-                    inMessage.setContent(wechatMediaService.downLoadMedia(inMessage.getMediaId()));
-                    pushMessageToCallCenter(inMessage);//推送消息到呼叫中心
-                }else if ("video".equals(inMessage.getMsgType())) {
-                    inMessage.setContent(wechatMediaService.downLoadMedia(inMessage.getMediaId()));
-                    pushMessageToCallCenter(inMessage);//推送消息到呼叫中心
+
+                    inMessage.setContent(fileName);
+
+                    if (isInChat){
+                        pushMessageToCallCenter(inMessage);//推送消息到呼叫中心
+//                        redisService.set(RedisKeyConstants.getScrmappWechatCustomermsg()+inMessage.getFromUserName(),true,60L);
+                    }
+
                 }
+//                else if ("voice".equals(inMessage.getMsgType())) {
+//                    inMessage.setContent(wechatMediaService.downLoadMedia(inMessage.getMediaId()));
+//                    pushMessageToCallCenter(inMessage);//推送消息到呼叫中心
+//                }else if ("video".equals(inMessage.getMsgType())) {
+//                    inMessage.setContent(wechatMediaService.downLoadMedia(inMessage.getMediaId()));
+//                    pushMessageToCallCenter(inMessage);//推送消息到呼叫中心
+//                }
             }
         } catch (Exception e) {
             System.out.println("requestStr=[" + requestStr + "]");
@@ -269,14 +278,14 @@ public class WeChatMessageProcessingHandler {
      * @param inMessage
      */
     private void pushMessageToCallCenter(InMessage inMessage) {
-        switch (inMessage.getMsgType()) {
-            case "image":
-            case "video":
-            case "vioce":
-                inMessage.setContent(wechatMediaService.downLoadMedia(inMessage.getMediaId()));
-                break;
-        }
-        CallCenterMessage callCenterMessage = new CallCenterMessage(inMessage);
+//        switch (inMessage.getMsgType()) {
+//            case "image":
+////            case "video":
+////            case "vioce":
+//                inMessage.setContent(wechatMediaService.downLoadMedia(inMessage.getMediaId()));
+//                break;
+//        }
+        CallCenterMessage callCenterMessage=new CallCenterMessage(inMessage);
         callCenterMessage.setTenantId(callCenterTenantId);
         String userOpenId = inMessage.getFromUserName();
         WechatFans wechatFans = wechatFansService.getWechatFans(userOpenId);
@@ -290,30 +299,34 @@ public class WeChatMessageProcessingHandler {
         }
         callCenterMessage.setChatUrl(mineBasePcUrl+"/customerMsg/callCenter/pushMessage");
 
-
-//        callCenterMessage.setToUserName("系统");
-//        callCenterMessage.setSource("webchat");
-//        callCenterMessage.setEmail("");
-//        callCenterMessage.setPhone("15972123446");
-//        callCenterMessage.setFromUserName("15972123446");
-//        callCenterMessage.setClientLevel("1");
-//    this.CreateTime=0000000000000L;
-
-
         XStream xs = XStreamAdaptor.createXstream();
         xs.alias("xml", callCenterMessage.getClass());
         xs.alias("item", Articles.class);
         String xml = xs.toXML(callCenterMessage);
 
-        LOG.info("转发至呼叫中心的数据：[{}]", xml);
+        LOG.info("转发至呼叫中心的数据：[{}],[{}]",callCenterUrl,xml);
+        try {
+            HttpClient client = new DefaultHttpClient();
+            HttpPost httpPost=new HttpPost(callCenterUrl);
+            HttpEntity reqEntity = new StringEntity(xml,"UTF-8");
+            httpPost.setEntity(reqEntity);
+            httpPost.setHeader("Content-Type", "text/xml");
+            final HttpResponse response = client.execute(httpPost);
+            HttpEntity entity = response.getEntity();
+            String content = EntityUtils.toString(entity, "UTF-8");
+            LOG.info("呼叫中心响应：[{}],[{}]",response.getStatusLine().getStatusCode(),content);
+        }catch (Exception e){
+            LOG.info("消息转发呼叫中心失败：[{}],[{}]",callCenterUrl,xml);
+        }
+
     }
 
     private boolean checkChatStatus(String openId) {
         Object obj = redisService.get(RedisKeyConstants.getScrmappWechatCustomermsg() + openId);
-        if (obj==null){
+        if (obj == null) {
             return false;
         }
-        return (boolean)obj;
+        return (boolean) obj;
     }
 
     private void dealWithSubscribe(InMessage inMessage,HttpServletResponse response) {
@@ -365,13 +378,13 @@ public class WeChatMessageProcessingHandler {
         }
     }
 
-    private void dealWithText(final InMessage inMessage, HttpServletResponse response)
+    private boolean dealWithText(final InMessage inMessage, HttpServletResponse response)
         {
 
 
         String content = inMessage.getContent();
         if (StringUtil.isBlank(content)){
-            return ;
+            return false;
         }
         StringBuilder msgsb=new StringBuilder();
 
@@ -496,23 +509,34 @@ public class WeChatMessageProcessingHandler {
           msgsb.append("您好,非常抱歉给您带来的不便！\n您可以直接输入投诉问题,我们会尽快给您受理的哦\n全国服务热线：400 111 1222\n在线工作时间：8:00AM-20:00PM");
         }else if (content.contains("人工客服")){
           msgsb.append("正在为您转接人工客服,请耐心等待！");
+          replyMessage(inMessage, response, msgsb);
+//            boolean isInChat=checkChatStatus(inMessage.getFromUserName());
+//            if (isInChat){
+//                redisService.set(RedisKeyConstants.getScrmappWechatCustomermsg()+inMessage.getFromUserName(),true,60L);
+//                return false;
+//            }
 
-            boolean isInChat=checkChatStatus(inMessage.getFromUserName());
-            if (isInChat){
-                redisService.set(RedisKeyConstants.getScrmappWechatCustomermsg()+inMessage.getFromUserName(),true,60L);
-                return;
-            }
-
-          redisService.set(RedisKeyConstants.getScrmappWechatCustomermsg()+inMessage.getFromUserName(),true,60L);
+//            redisService.set(RedisKeyConstants.getScrmappWechatCustomermsg()+inMessage.getFromUserName(),true,60L);
             //调用呼叫中心转人工
             LOG.info("调用呼叫中心转人工接口");
             inMessage.setContent("转人工");
             pushMessageToCallCenter(inMessage);//推送消息到呼叫中心
+            return true;
         }else {
+
+            if (content.equals("completechat")){
+                redisService.set(RedisKeyConstants.getScrmappWechatCustomermsg()+inMessage.getFromUserName(),false,60L);
+                inMessage.setMsgType("completechat");
+                pushMessageToCallCenter(inMessage);//推送消息到呼叫中心
+                return true;
+            }
+
+
+
             boolean isInChat=checkChatStatus(inMessage.getFromUserName());
             if (isInChat){
-                redisService.set(RedisKeyConstants.getScrmappWechatCustomermsg()+inMessage.getFromUserName(),true,60L);
-                return;
+//                redisService.set(RedisKeyConstants.getScrmappWechatCustomermsg()+inMessage.getFromUserName(),true,60L);
+                return false;
             }
           msgsb.append("您好,小沁在此为您服务,沁园与你一起,健康每一天！\n")
               .append("\n")
@@ -565,6 +589,7 @@ public class WeChatMessageProcessingHandler {
         }
 
         replyMessage(inMessage, response, msgsb);
+        return false;
     }
 
 

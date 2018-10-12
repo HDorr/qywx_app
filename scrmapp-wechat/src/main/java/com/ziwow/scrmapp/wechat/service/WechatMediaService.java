@@ -18,4 +18,6 @@ package com.ziwow.scrmapp.wechat.service;
 public interface WechatMediaService {
 
 	public String downLoadMedia(String media_id);
+
+  public String downLoadMediaForCallCenter(String mediaId);
 }

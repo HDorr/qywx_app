@@ -43,7 +43,7 @@ public class CallCenterMessage {
 
   @NotNull
   @XStreamCDATA
-  String TenantId="qinyuan";//固定传qinyuan
+  String TenantId;//固定传qinyuan
 
   @NotNull
   Long CreateTime;//创建时间
@@ -72,16 +72,16 @@ public class CallCenterMessage {
   String BizType="egoo_xa";//业务类型：暂时没有定义
 
   @XStreamCDATA
-  String Phone;//手机号
+  String Phone="";//手机号
 
   @XStreamCDATA
-  String Email;//邮箱
+  String Email="";//邮箱
 
   @XStreamCDATA
   String UserName;//用户名
 
   @XStreamCDATA
-  String UserStatus;//用户状态：暂时没有定义
+  String UserStatus="";//用户状态：暂时没有定义
 
   String ClientLevel;//客户等级：暂时没有定义
 

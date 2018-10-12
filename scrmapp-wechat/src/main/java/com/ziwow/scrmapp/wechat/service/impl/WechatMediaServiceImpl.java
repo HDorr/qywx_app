@@ -8,6 +8,7 @@
 */
 package com.ziwow.scrmapp.wechat.service.impl;
 
+import com.ziwow.scrmapp.tools.oss.CallCenterOssUtil;
 import javax.annotation.Resource;
 
 import org.slf4j.Logger;
@@ -59,6 +60,28 @@ public class WechatMediaServiceImpl implements WechatMediaService{
 				return res.getError();
 			}
 			
+		}catch (Exception e) {
+			logger.error("下载图片失败,[{}]",e);
+		}
+		return null;
+	}
+
+
+	@Override
+	public String downLoadMediaForCallCenter(String media_id) {
+		String url = WeChatConstants.WECHAT_MADIA_DOWNLOAD.replace("ACCESS_TOKEN", weiXinService.getAccessToken(appid, secret))
+				.replace("MEDIA_ID", media_id);
+
+		try{
+			Attachment res = HttpKit.download(url);
+			logger.info("下载图片，返回结果[{}]",JSON.toJSON(res));
+			if(res !=null && res.getError()==null){
+				String resUrl = CallCenterOssUtil.uploadFile(res.getFileStream(), res.getSuffix());
+				return resUrl;
+			}else{
+				return res.getError();
+			}
+
 		}catch (Exception e) {
 			logger.error("下载图片失败,[{}]",e);
 		}
