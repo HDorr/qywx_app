@@ -866,4 +866,9 @@
         update t_wechat_orders set ordersNo = #{ordersNo},updateTime = #{updateTime},status = #{status},endTime = #{updateTime}
         where ordersCode = #{ordersCode}
     </update>
+
+    <update id="updateOrderStatus">
+        update t_wechat_orders set status = #{status},updateTime = #{date}
+        where id = #{ordersId}
+    </update>
 </mapper>

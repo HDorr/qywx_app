@@ -29,6 +29,7 @@
                                 :key="product.productId" 
                                 :product="product"
                                 @cancel="cancelProductHandler"
+                                @refuse="refuseSingleProductHandler"
                                 @complete="completeProductHandler">
                     </product>
                 </div>
@@ -66,7 +67,8 @@
         <script type="text/x-template" id="product_template">
             <div class="infoBox">
                 <div class="product">
-                    <button v-if="product.status != 1" class="cannotOptBtn">{{product.status == 2 ? '已退单' :'已完工'}}</button>
+                    <%--<button v-if="product.status != 1" class="cannotOptBtn">{{product.status == 2 ? '已退单' :'已完工'}}</button>--%>
+                    <button v-if="product.status != 1" class="cannotOptBtn">{{product.status == 2 ? '已取消' :'已完工'}}</button>
                     <div class="line" >
                         <span>名称：</span>
                         <span>{{product.productName}}</span>
@@ -80,7 +82,8 @@
                         <span>{{product.status == 1 ? product.productBarCode : product.productBarCodeTwenty }}</span>
                     </div>
                     <div class="btnBox" v-if="product.status == 1">
-                        <button  v-if="false" @click="cancelProductHandler">退单</button>
+                        <%--<button  v-if="false" @click="cancelProductHandler">退单</button>--%>
+                        <button class="cancel" @click="refuseProduct" >取消</button>
                         <button @click="completeWorkHandler">完工提交</button>
                     </div>
                 </div>

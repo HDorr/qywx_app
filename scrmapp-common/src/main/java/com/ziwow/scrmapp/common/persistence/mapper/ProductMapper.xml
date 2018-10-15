@@ -510,5 +510,15 @@
         where productCode = #{productCode,jdbcType=VARCHAR} and smallcName is null
     </update>
 
+    <update id="updateProductStatus">
+        update t_orders_pro_relations set status = 2
+        where orderId = #{ordersId,jdbcType=BIGINT}
+        and productId = #{productId,jdbcType=BIGINT}
+    </update>
+    <select id="getAllStatus" resultType="java.lang.Integer">
+        select status
+        from t_orders_pro_relations
+        where orderId = #{ordersId,jdbcType=BIGINT}
+    </select>
 
 </mapper>

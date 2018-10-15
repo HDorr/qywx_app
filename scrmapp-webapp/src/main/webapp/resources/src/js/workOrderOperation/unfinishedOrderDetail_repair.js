@@ -56,6 +56,12 @@ var Product = {
             $.confirm("确定退单吗", function() {
                 _this.$emit('cancel',_this.product)
             });         
+        },
+        refuseProduct:function () {
+            var _this = this
+            $.confirm("确定取消吗", function() {
+                _this.$emit('refuse',_this.product)
+            });
         }
     }
 }
@@ -173,6 +179,21 @@ var app = new Vue({
                 })
                 .fail(function(error){
                     alertMsg.error(error)
+                })
+        },
+        refuseSingleProductHandler:function(product){
+            var refuseData = {
+                ordersId:this.detail.id,
+                ordersCode:ORDERSCODE || this.detail.ordersCode,
+                productId:product.productId
+            }
+            ajax.post(queryUrls.qyhCancelSingleOrder_repair,refuseData)
+                .then(function(res){
+                    location.reload();
+                    return
+                })
+                .fail(function(error){
+                    alertMsg.error("请求出错,请稍后尝试!")
                 })
         },
         _getProductsStatus(products){

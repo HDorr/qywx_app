@@ -1,5 +1,7 @@
 package com.ziwow.scrmapp.qyh.service.impl;
 
+import com.ziwow.scrmapp.common.constants.CancelConstant;
+import com.ziwow.scrmapp.qyh.service.QyhProductService;
 import com.ziwow.scrmapp.tools.utils.HttpClientUtils;
 import com.ziwow.scrmapp.tools.utils.MD5;
 import java.math.BigDecimal;
@@ -143,6 +145,9 @@ public class QyhOrdersServiceImpl implements QyhOrdersService {
 
     @Autowired
     private QyhUserService qyhUserService;
+
+    @Autowired
+    private QyhProductService qyhProductService;
 
     @Autowired
     private MobileService mobileService;
@@ -634,8 +639,8 @@ public class QyhOrdersServiceImpl implements QyhOrdersService {
             //更新工单状态和工单记录
             finishWechatOrders(productMap, completeParam, result.getData().toString());
             //更新产品条码和图片
-            updateProductBarCodeAndImg(productVo);
             if (maintainRecords.size() > 0) {
+                updateProductBarCodeAndImg(productVo);
                 //批量保存保养项
                 maintainRecordMapper.batchSave(maintainRecords);
             }
@@ -1240,6 +1245,76 @@ public class QyhOrdersServiceImpl implements QyhOrdersService {
         if (repairItemList.size() > 0) {
             repairItemMapper.batchSave(repairItemList);
         }
+    }
+
+    @Transactional
+    @Override
+    public int doCancel(Long ordersId, Long productId,String ordersCode) {
+        if (ordersId == null || productId == null) {
+            throw new RuntimeException("入参为空");
+        }
+        //更新工单对应产品的状态
+        qyhProductService.updateProductStatus(ordersId, productId);
+        //获取当前工单产品所有状态
+        if(isAllCancel(qyhProductService.getAllStatus(ordersId))){
+            //工单产品全部取消,则改变工单状态为重新处理,工单状态为3代表重新处理,即拒绝工单
+            wechatOrdersMapper.updateOrderStatus(ordersId, SystemConstants.REDEAL, new Date());
+            return CancelConstant.CANCEL_REFUND;
+        }
+        //如果当前工单产品都为取消且有一个以上完工,则工单算作完工
+        if(isFinish(qyhProductService.getAllStatus(ordersId))){
+            wechatOrdersMapper.updateOrderStatus(ordersId, SystemConstants.COMPLETE, new Date());
+            CompleteParam completeParam = getCompleteParamByOrdersCode(ordersCode);
+            updateOrderRecord(completeParam);
+        }
+        return CancelConstant.CANCEL_ONLY;
+    }
+
+    /**
+     * 工单产品是否全部取消
+     * @param list
+     * @return
+     */
+    private boolean isAllCancel(List<Integer> list){
+        for (Integer status : list){
+            //如果产品有状态不为"取消"
+            if(status != Constant.CANCEL){
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * 工单是否算完工
+     * @param productStatus
+     * @return
+     */
+    @Override
+    public boolean isFinish(List<Integer> productStatus){
+        boolean isFinish = false;
+        for (Integer status : productStatus){
+            if(status == Constant.COMPLETE){
+                isFinish = true;
+                continue;
+            }
+            if(!(status == Constant.CANCEL || status == Constant.COMPLETE)){
+                return false;
+            }
+        }
+        return isFinish;
+    }
+
+    /**
+     * 更新工单记录
+     * @param completeParam
+     */
+    public void updateOrderRecord(CompleteParam completeParam) {
+        WechatOrdersRecord wechatOrdersRecord = new WechatOrdersRecord();
+        wechatOrdersRecord.setRecordTime(new Date());
+        wechatOrdersRecord.setRecordContent("师傅点击完工!");
+        wechatOrdersRecord.setOrderId(completeParam.getOrdersId());
+        wechatOrdersRecordMapper.insert(wechatOrdersRecord);
     }
 
 

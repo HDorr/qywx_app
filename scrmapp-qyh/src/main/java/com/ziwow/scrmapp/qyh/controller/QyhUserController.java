@@ -4,11 +4,13 @@ import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.ziwow.scrmapp.common.constants.CancelConstant;
 import org.apache.commons.codec.Charsets;
 import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
@@ -443,7 +445,7 @@ public class QyhUserController {
                 return result;
             }
             Object appealInstallNoObj = result.getData();
-            if (appealInstallNoObj==null || StringUtils.isEmpty(appealInstallNoObj.toString())) {
+            if (appealInstallNoObj == null || StringUtils.isEmpty(appealInstallNoObj.toString())) {
                 throw new RuntimeException("工单提交失败!");
             }
             int count = qyhOrdersService.getProductStatus(completeParam.getOrdersId());
@@ -453,12 +455,12 @@ public class QyhUserController {
 //            }
         } catch (RuntimeException ex) {
             logger.error("师傅点击工单[{}]完工操作出现异常,原因:[{}]", ordersCode, ex);
-            logger.error("师傅点击工单完工操作失败:",ex);
+            logger.error("师傅点击工单完工操作失败:", ex);
             result.setReturnCode(Constant.FAIL);
             result.setReturnMsg(ex.getMessage());
         } catch (Exception e) {
             logger.error("师傅点击工单[{}]完工操作出现异常,原因:[{}]", ordersCode, e);
-            logger.error("师傅点击工单完工操作失败:",e);
+            logger.error("师傅点击工单完工操作失败:", e);
             result.setReturnCode(Constant.FAIL);
             result.setReturnMsg("请求出错,请稍后再试!");
         }
@@ -501,10 +503,15 @@ public class QyhUserController {
                 throw new RuntimeException("工单提交失败!");
             }
             // 全部完工,发送模板消息
-            int count = qyhOrdersService.getProductStatus(completeParam.getOrdersId());
-            if (count == 0) {
+//            int count = qyhOrdersService.getProductStatus(completeParam.getOrdersId());
+//            if (count == 0) {
+//                sendTemplate(completeParam);
+//            }
+            //如果产品状态全部为取消或完工,则工单算作完工状态,发送短信和消息模板
+            if (qyhOrdersService.isFinish(qyhProductService.getAllStatus(completeParam.getOrdersId()))) {
                 sendTemplate(completeParam);
             }
+
         } catch (RuntimeException ex) {
             logger.error("师傅点击工单[{}]完工操作出现异常,原因:[{}]", ordersCode, ex);
             result.setReturnCode(Constant.FAIL);
@@ -513,6 +520,43 @@ public class QyhUserController {
             logger.error("师傅点击工单[{}]完工操作出现异常,原因:[{}]", ordersCode, e);
             result.setReturnCode(Constant.FAIL);
             result.setReturnMsg("请求出错,请稍后再试!");
+        }
+        return result;
+    }
+
+    /**
+     * 维修单取消单个产品
+     *
+     * @param request
+     * @param response
+     * @param ordersId
+     * @param productId
+     * @return
+     */
+    @RequestMapping(value = "/orders/cancelSingle/repair", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+    @ResponseBody
+    public Result repairCancelSingle(HttpServletRequest request,
+                                     HttpServletResponse response,
+                                     @RequestParam Long ordersId,
+                                     @RequestParam Long productId,
+                                     @RequestParam String ordersCode) {
+        logger.info("调用维修单取消单个产品接口,ordersId={},productId={}", ordersId, productId);
+        Result result = new BaseResult();
+        result.setReturnCode(Constant.FAIL);
+        result.setReturnMsg("取消失败!");
+        int code = qyhOrdersService.doCancel(ordersId, productId, ordersCode);
+        if (code == CancelConstant.CANCEL_ONLY) {
+            result.setReturnCode(Constant.SUCCESS);
+            result.setReturnMsg("取消成功!");
+        } else if (code == CancelConstant.CANCEL_REFUND) {
+            //调用拒绝工单接口
+        } else if (code == CancelConstant.CANCEL_COMPLETE) {
+            CompleteParam completeParam = qyhOrdersService.getCompleteParamByOrdersCode(ordersCode);
+            try {
+                sendTemplate(completeParam);
+            } catch (Exception e) {
+                logger.error("发送短信消息模板失败", e);
+            }
         }
         return result;
     }
@@ -689,7 +733,7 @@ public class QyhUserController {
                 nameDecode = URLDecoder.decode(name, "utf-8");
             }
         } catch (UnsupportedEncodingException e) {
-            logger.error(e.getMessage(),e);
+            logger.error(e.getMessage(), e);
         }
         Result result = qyhOrdersService.findRepairItem(typeNameDecode, smallcNameDecode, nameDecode);
         return result;
@@ -717,7 +761,7 @@ public class QyhUserController {
                 nameDecode = URLDecoder.decode(name, "utf-8");
             }
         } catch (UnsupportedEncodingException e) {
-            logger.error(e.getMessage(),e);
+            logger.error(e.getMessage(), e);
         }
         Result result = qyhOrdersService.findInstallPart(modelNameDecode, nameDecode);
         return result;
@@ -744,7 +788,7 @@ public class QyhUserController {
                 nameDecode = URLDecoder.decode(name, "utf-8");
             }
         } catch (UnsupportedEncodingException e) {
-            logger.error(e.getMessage(),e);
+            logger.error(e.getMessage(), e);
         }
         Result result = qyhOrdersService.findRepairPart(modelNameDecode, nameDecode);
         return result;

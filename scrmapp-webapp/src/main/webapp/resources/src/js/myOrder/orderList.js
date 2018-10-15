@@ -60,7 +60,7 @@ function orderDetail(ele) {
 
 function reviewOrder(ele) {
     //alert($(ele).data("orderscode"))
-    window.location.href = pageUrls.reviewPraide + "?ordersCode=" + $(ele).data("orderscode") + "&orderType=" + $(ele).data("ordertype") + "&maintType=" + $(ele).data("mainttype")
+    window.location.replace(pageUrls.reviewPraide + "?ordersCode=" + $(ele).data("orderscode") + "&orderType=" + $(ele).data("ordertype") + "&maintType=" + $(ele).data("mainttype"))
 }
 
 function _comfirmCancelAlert(){

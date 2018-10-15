@@ -63,6 +63,7 @@ var queryUrls =
     qyhQueryUnfinishedOrder: rootPath + "/scrmapp/qyhuser/orders/condition/count", //获取待处理订单
     qyhSubmitOrder_install: rootPath + "/scrmapp/qyhuser/orders/finish/install", //安装单完工提交
     qyhSubmitOrder_repair: rootPath + "/scrmapp/qyhuser/orders/finish/repair", //维修单完工提交
+    qyhCancelSingleOrder_repair:rootPath + "/scrmapp/qyhuser/orders/cancelSingle/repair",//维修单取消单个产品
     qyhSubmitOrder_maintain: rootPath + "/scrmapp/qyhuser/orders/finish/maintain", //保养单完工提交
     qyhQueryFinishedOrder: rootPath + "/scrmapp/qyhuser/orders/finished/list", //获取已完成工单
     qyhCancelOrderProduct:rootPath + "/scrmapp/qyhuser/orders/cancel/product",//师傅侧工单取消产品
