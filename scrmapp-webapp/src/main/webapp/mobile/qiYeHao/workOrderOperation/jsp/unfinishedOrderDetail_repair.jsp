@@ -67,6 +67,10 @@
         <script type="text/x-template" id="product_template">
             <div class="infoBox">
                 <div class="product">
+                    <div hidden="hidden" class="productStatus">
+                        <p>{{product.productId}}</p>
+                        <span>{{product.status}}</span>
+                    </div>
                     <%--<button v-if="product.status != 1" class="cannotOptBtn">{{product.status == 2 ? '已退单' :'已完工'}}</button>--%>
                     <button v-if="product.status != 1" class="cannotOptBtn">{{product.status == 2 ? '已取消' :'已完工'}}</button>
                     <div class="line" >

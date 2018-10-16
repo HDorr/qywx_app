@@ -754,6 +754,8 @@ public class WechatOrdersServiceImpl implements WechatOrdersService {
         int status = SystemConstants.RECEIVE;
         Date date = new Date();
         this.dispatch(acceptNumber, engineerId, date, status);
+        //更新产品关联表
+        ordersProRelationsMapper.updateStatusByOrdersId(wechatOrders.getId());
         // 录入受理记录表
         WechatOrdersRecord wechatOrdersRecord = new WechatOrdersRecord();
         wechatOrdersRecord.setOrderId(wechatOrders.getId());

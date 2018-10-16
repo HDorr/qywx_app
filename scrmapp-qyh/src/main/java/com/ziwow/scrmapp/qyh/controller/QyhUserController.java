@@ -525,43 +525,6 @@ public class QyhUserController {
     }
 
     /**
-     * 维修单取消单个产品
-     *
-     * @param request
-     * @param response
-     * @param ordersId
-     * @param productId
-     * @return
-     */
-    @RequestMapping(value = "/orders/cancelSingle/repair", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
-    @ResponseBody
-    public Result repairCancelSingle(HttpServletRequest request,
-                                     HttpServletResponse response,
-                                     @RequestParam Long ordersId,
-                                     @RequestParam Long productId,
-                                     @RequestParam String ordersCode) {
-        logger.info("调用维修单取消单个产品接口,ordersId={},productId={}", ordersId, productId);
-        Result result = new BaseResult();
-        result.setReturnCode(Constant.FAIL);
-        result.setReturnMsg("取消失败!");
-        int code = qyhOrdersService.doCancel(ordersId, productId, ordersCode);
-        if (code == CancelConstant.CANCEL_ONLY) {
-            result.setReturnCode(Constant.SUCCESS);
-            result.setReturnMsg("取消成功!");
-        } else if (code == CancelConstant.CANCEL_REFUND) {
-            //调用拒绝工单接口
-        } else if (code == CancelConstant.CANCEL_COMPLETE) {
-            CompleteParam completeParam = qyhOrdersService.getCompleteParamByOrdersCode(ordersCode);
-            try {
-                sendTemplate(completeParam);
-            } catch (Exception e) {
-                logger.error("发送短信消息模板失败", e);
-            }
-        }
-        return result;
-    }
-
-    /**
      * 保养单完工
      *
      * @param request
@@ -598,11 +561,14 @@ public class QyhUserController {
                 throw new RuntimeException("工单提交失败!");
             }
             // 全部完工,发送模板消息
-            int count = qyhOrdersService.getProductStatus(completeParam.getOrdersId());
-            if (count == 0) {
+//            int count = qyhOrdersService.getProductStatus(completeParam.getOrdersId());
+//            if (count == 0) {
+//                sendTemplate(completeParam);
+//            }
+            //如果产品状态全部为取消或完工,则工单算作完工状态,发送短信和消息模板
+            if (qyhOrdersService.isFinish(qyhProductService.getAllStatus(completeParam.getOrdersId()))) {
                 sendTemplate(completeParam);
             }
-
             qyhOrdersService.finishMakeAppointment(completeParam.getOrdersCode());
         } catch (RuntimeException ex) {
             logger.error("师傅点击工单[{}]完工操作出现异常,原因:[{}]", ordersCode, ex);
@@ -615,6 +581,78 @@ public class QyhUserController {
         }
         return result;
     }
+
+    /**
+     * 维修或保养单取消单个产品
+     *
+     * @param request
+     * @param response
+     * @param ordersId
+     * @param productId
+     * @return
+     */
+    @RequestMapping(value = "/orders/cancelSingle/repair_maintain", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+    @ResponseBody
+    public Result repairCancelSingle(HttpServletRequest request,
+                                     HttpServletResponse response,
+                                     @RequestParam Long ordersId,
+                                     @RequestParam Long productId,
+                                     @RequestParam String ordersCode) {
+        logger.info("调用维修或保养单取消单个产品接口,ordersId={},productId={}", ordersId, productId);
+        Result result = new BaseResult();
+        result.setReturnCode(Constant.FAIL);
+        result.setReturnMsg("取消失败!");
+        int code = qyhOrdersService.doCancel(ordersId, productId, ordersCode);
+        if (code != CancelConstant.CANCEL_ONLY) {
+            CompleteParam completeParam = qyhOrdersService.getCompleteParamByOrdersCode(ordersCode);
+            if (code == CancelConstant.CANCEL_REFUND) {
+                //调用拒绝工单接口
+                refundOrder(completeParam);
+            } else if (code == CancelConstant.CANCEL_COMPLETE) {
+                try {
+                    sendTemplate(completeParam);
+                } catch (Exception e) {
+                    logger.error("发送短信消息模板失败", e);
+
+                }
+            }
+        }
+        result.setReturnCode(Constant.SUCCESS);
+        result.setReturnMsg("取消成功!");
+        return result;
+    }
+
+    //全部取消产品调用拒绝工单接口
+    private void refundOrder(CompleteParam completeParam) {
+        String qyhUserId = String.valueOf(completeParam.getQyhUserId());
+        Long ordersId = completeParam.getOrdersId();
+        String ordersCode = completeParam.getOrdersCode();
+        int ordersType = completeParam.getOrderType();
+        String contacts = completeParam.getUserName();
+        Result result = qyhOrdersService.refuseOrders(ordersId, ordersCode, qyhUserId, "");
+        if (Constant.SUCCESS == result.getReturnCode()) {
+            // 服务工程师撤销预约给自己发送短信通知提醒
+            String serviceType = OrderUtils.getServiceTypeName(ordersType);
+            QyhUser qyhUser = qyhUserService.getQyhUserByUserIdAndCorpId(qyhUserId, corpId);
+            String mobilePhone = (null != qyhUser) ? qyhUser.getMobile() : "";
+            String msgContent = "您已拒绝" + contacts + "用户预约的" + serviceType + "服务，您可进入“沁园”WX企业号查看该工单详情！";
+            try {
+                mobileService.sendContentByEmay(mobilePhone, msgContent, Constant.ENGINEER);
+            } catch (Exception e) {
+                logger.error("发送短信失败", e);
+            }
+            // 服务工程师修改预约时间给自己发送通知
+            String url = orderDetailUrl + "?userId=" + qyhUserId + "&ordersCode=" + ordersCode;
+            String content = "工单撤销通知！\n" +
+                    "您已成功拒绝" + contacts + "用户预约的" + serviceType + "服务！\n" +
+                    "1、点击<a href='" + url + "'>【待处理工单】</a>查看该工单详情！";
+            qyhNoticeService.qyhSendMsgText(qyhUserId, content);
+            result.setReturnCode(Constant.SUCCESS);
+            result.setReturnMsg("已拒单成功!");
+            logger.info(qyhUserId + "师傅拒单操作成功!");
+        }
+    }
+
 
     private void completeCheck(CompleteParam completeParam, String userId) throws UnsupportedEncodingException {
         String qyhUserId = new String(Base64.decode(userId));
@@ -871,6 +909,7 @@ public class QyhUserController {
             logger.info("待处理订单列表页面获取员工授权信息,[{}]", JSON.toJSON(qyhUser));
             //把加密后企业号userId传到页面
             String userId = Base64.encode(qyhUser.getUserid().getBytes());
+//            String userId = Base64.encode("72247".getBytes());
             modelAndView.addObject("userId", userId);
         } else {
             modelAndView.addObject("userId", qyhUserId);
