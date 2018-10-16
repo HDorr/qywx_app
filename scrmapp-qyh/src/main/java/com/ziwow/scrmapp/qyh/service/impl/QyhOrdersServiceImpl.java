@@ -1256,13 +1256,14 @@ public class QyhOrdersServiceImpl implements QyhOrdersService {
         //更新工单对应产品的状态
         qyhProductService.updateProductStatus(ordersId, productId);
         //获取当前工单产品所有状态
-        if(isAllCancel(qyhProductService.getAllStatus(ordersId))){
+        List<Integer> allStatus = qyhProductService.getAllStatus(ordersId);
+        if(isAllCancel(allStatus)){
             //工单产品全部取消,则改变工单状态为重新处理,工单状态为3代表重新处理,即拒绝工单
             wechatOrdersMapper.updateOrderStatus(ordersId, SystemConstants.REDEAL, new Date());
             return CancelConstant.CANCEL_REFUND;
         }
         //如果当前工单产品都为取消且有一个以上完工,则工单算作完工
-        if(isFinish(qyhProductService.getAllStatus(ordersId))){
+        if(isFinish(allStatus)){
             wechatOrdersMapper.updateOrderStatus(ordersId, SystemConstants.COMPLETE, new Date());
             CompleteParam completeParam = getCompleteParamByOrdersCode(ordersCode);
             updateOrderRecord(completeParam);
