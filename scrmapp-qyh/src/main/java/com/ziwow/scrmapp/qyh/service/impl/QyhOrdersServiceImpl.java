@@ -1267,6 +1267,7 @@ public class QyhOrdersServiceImpl implements QyhOrdersService {
             wechatOrdersMapper.updateOrderStatus(ordersId, SystemConstants.COMPLETE, new Date());
             CompleteParam completeParam = getCompleteParamByOrdersCode(ordersCode);
             updateOrderRecord(completeParam);
+            return CancelConstant.CANCEL_COMPLETE;
         }
         return CancelConstant.CANCEL_ONLY;
     }
