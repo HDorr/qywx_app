@@ -310,13 +310,9 @@ public class WechatUserController {
             executorService.execute(new Runnable() {
                 @Override
                 public void run() {
-                    String msgContent = "亲爱的沁园用户，您已成功注册成为沁园会员！更多资讯和优惠，请持续关注“沁园”官方WX服务号。";
-                    try {
-                        wechatUserService.sendRegisterTemplateMsg(tmplateOpenId, nikeName);
-                        mobileService.sendContentByEmay(msgMobile, msgContent, Constant.CUSTOMER);
-                    } catch (Exception e) {
-                        logger.info("注册成功异步发送短信提示及模板消息失败:", e);
-                    }
+//                    String msgContent = "亲爱的沁园用户，您已成功注册成为沁园会员！更多资讯和优惠，请持续关注“沁园”官方WX服务号。";
+                    wechatUserService.sendRegisterTemplateMsg(tmplateOpenId, nikeName);
+//                    mobileService.sendContentByEmay(msgMobile, msgContent, Constant.CUSTOMER);
                 }
             });
             // 异步推送给小程序

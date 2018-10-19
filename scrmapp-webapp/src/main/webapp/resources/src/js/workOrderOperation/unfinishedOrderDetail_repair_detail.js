@@ -375,7 +375,9 @@ var app = new Vue({
             var _this = this
             this._checkData()
                 .then(function(){
-                    var queryData = _this._normalizeComfirmData(_this.curProduct,_this.repairItemStr,_this.repairParts) 
+                    var queryData = _this._normalizeComfirmData(_this.curProduct,_this.repairItemStr,_this.repairParts)
+                    //加弹出框,防止表单进行重复提交
+                    $.showLoading()
                     return  ajax.post(queryUrls.qyhSubmitOrder_repair,queryData)
                 })
                 .then(function(data){
@@ -394,6 +396,9 @@ var app = new Vue({
                 })
                 .fail(function(error){
                     alertMsg.error(error)
+                })
+                .always(function () {
+                    $.hideLoading()
                 })
         },
         _checkData: function () {

@@ -63,6 +63,8 @@ public class Product {
 
     private Long scOrderPayAt;
 
+    private Integer isAutoBind;
+
     public Long getScOrderPayAt() {
         return scOrderPayAt;
     }
@@ -291,4 +293,12 @@ public class Product {
     public String getServiceFeeId() { return serviceFeeId; }
 
     public void setServiceFeeId(String serviceFeeId) { this.serviceFeeId = serviceFeeId; }
+
+    public Integer getIsAutoBind() {
+        return isAutoBind;
+    }
+
+    public void setIsAutoBind(Integer isAutoBind) {
+        this.isAutoBind = isAutoBind;
+    }
 }

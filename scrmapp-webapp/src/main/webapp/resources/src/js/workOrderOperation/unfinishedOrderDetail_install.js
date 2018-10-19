@@ -296,6 +296,8 @@ var app = new Vue({
                 return 
             }
             var submitData = this._normalizeSubmitData(this.comfirmedProducts,this.cancelReasons)
+            //加弹出框,防止表单进行重复提交
+            $.showLoading()
             ajax.post(queryUrls.qyhSubmitOrder_install,submitData).then(function(data){
                 if(data.returnCode !== ERR_OK){
                     alertMsg.error(data)
@@ -305,6 +307,8 @@ var app = new Vue({
                 location.href = jumpTo
             }).fail(function(error){
                 alertMsg.error(error)
+            }).always(function () {
+                $.hideLoading()
             })
         },
         initCancelReasonSelect:function(){
