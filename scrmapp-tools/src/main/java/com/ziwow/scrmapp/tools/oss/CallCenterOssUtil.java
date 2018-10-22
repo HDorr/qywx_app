@@ -62,7 +62,7 @@ public class CallCenterOssUtil {
   public static String uploadFile(InputStream input, String fileType) {
     try {
       byte[] bytes = toByteArray(input);
-      return upload(bytes);
+      return upload(bytes,fileType);
     } catch (IOException e) {
       e.printStackTrace();
       logger.info("流转字节数组失败");
@@ -96,10 +96,10 @@ public class CallCenterOssUtil {
    *
    * @Description: 上传文件
    */
-  public static String upload(byte[] input){
+  public static String upload(byte[] input, String fileType){
     CloseableHttpClient httpClient = null;
     CloseableHttpResponse response = null;
-    String url = UPLOAD_URL+"?filechannel=h5&filetype=jpg&tenantid=egoo";
+    String url = UPLOAD_URL+"?filechannel=h5&tenantid=egoo&filetype="+fileType;
     try {
       httpClient = HttpClients.createDefault();
 
@@ -155,5 +155,7 @@ public class CallCenterOssUtil {
       }
     }
   }
+
+
 
 }

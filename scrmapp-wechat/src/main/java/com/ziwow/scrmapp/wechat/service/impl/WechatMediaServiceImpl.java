@@ -9,6 +9,14 @@
 package com.ziwow.scrmapp.wechat.service.impl;
 
 import com.ziwow.scrmapp.tools.oss.CallCenterOssUtil;
+import com.ziwow.scrmapp.tools.oss.ChangeAudioFormat;
+import com.ziwow.scrmapp.tools.utils.StringUtil;
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import javax.annotation.Resource;
 
 import org.slf4j.Logger;
@@ -71,11 +79,27 @@ public class WechatMediaServiceImpl implements WechatMediaService{
 	public String downLoadMediaForCallCenter(String media_id) {
 		String url = WeChatConstants.WECHAT_MADIA_DOWNLOAD.replace("ACCESS_TOKEN", weiXinService.getAccessToken(appid, secret))
 				.replace("MEDIA_ID", media_id);
-
+    String tempDir = System.getProperty("java.io.tmpdir")+"/";
+    String fileName="";
+    BufferedInputStream in=null;
 		try{
 			Attachment res = HttpKit.download(url);
-			logger.info("下载图片，返回结果[{}]",JSON.toJSON(res));
+			logger.info("下载多媒体文件，返回结果[{}]",JSON.toJSON(res));
 			if(res !=null && res.getError()==null){
+        if ("amr".equals(res.getSuffix())){
+          fileName=res.getFileName();
+          res.setSuffix("mp3");
+          String mp3Path = saveImageToDisk(res.getFileStream(), fileName,
+              tempDir);
+          if (StringUtil.isBlank(mp3Path)){
+            return null;
+          }
+          logger.info("保存mp3音频成功[{}]",mp3Path);
+          in=new BufferedInputStream(new FileInputStream(mp3Path),8*1024);
+          res.getFileStream().close();
+          res.setFileStream(in);
+        }
+
 				String resUrl = CallCenterOssUtil.uploadFile(res.getFileStream(), res.getSuffix());
 				return resUrl;
 			}else{
@@ -84,8 +108,44 @@ public class WechatMediaServiceImpl implements WechatMediaService{
 
 		}catch (Exception e) {
 			logger.error("下载图片失败,[{}]",e);
-		}
+		}finally {
+      new File(tempDir+fileName+".amr").delete();
+      new File(tempDir+fileName+".mp3").delete();
+      try {
+        if(in!=null){
+          in.close();
+        }
+      } catch (IOException e) {
+        e.printStackTrace();
+      }
+    }
 		return null;
 	}
+
+
+  public  String saveImageToDisk(InputStream inputStream, String picName, String picPath)
+      throws Exception {
+    String filePath = picPath+picName+".amr";
+    byte[] data = new byte[10240];
+    int len = 0;
+    try(FileOutputStream fileOutputStream =new FileOutputStream(filePath)) {
+      while ((len = inputStream.read(data)) != -1) {
+        fileOutputStream.write(data, 0, len);
+      }
+    } catch (IOException e) {
+      e.printStackTrace();
+    } finally {
+      if (inputStream != null) {
+        try {
+          inputStream.close();
+        } catch (IOException e) {
+          e.printStackTrace();
+        }
+      }
+      //生成对应mp3格式
+      return  ChangeAudioFormat.changeToMp3(filePath, picPath + picName + ".mp3");
+    }
+  }
+
 
 }

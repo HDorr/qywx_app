@@ -47,6 +47,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -222,7 +223,6 @@ public class WeChatMessageProcessingHandler {
                     boolean isInChat=checkChatStatus(inMessage.getFromUserName());
                     if (!isPushToCallCenter && isInChat){//没有推送过并且处于会话中
                       pushMessageToCallCenter(inMessage);//推送消息到呼叫中心
-//                        redisService.set(RedisKeyConstants.getScrmappWechatCustomermsg()+inMessage.getFromUserName(),true,60L);
                     }
 
                   WechatCustomerMsg record = new WechatCustomerMsg();
@@ -235,37 +235,37 @@ public class WeChatMessageProcessingHandler {
                   record.setIsHide(isInChat?0:1);
                   customerMsgService.insertSelective(record);
                 } else if ("image".equals(inMessage.getMsgType())) {
+                    response.getWriter().write("");
+                    response.getWriter().close();
                     boolean isInChat=checkChatStatus(inMessage.getFromUserName());
 
-                    WechatCustomerMsg record = new WechatCustomerMsg();
-                    record.setOpenid(inMessage.getFromUserName());
-                    record.setMessageSource(1);
-//                    String mediaUrl = wechatMediaService.downLoadMedia(inMessage.getMediaId());
-                    String fileName = wechatMediaService.downLoadMediaForCallCenter(inMessage.getMediaId());
-                    String mediaUrl=DOWNLOAD_URL+"?filename=" +fileName;
-                    record.setMessage(mediaUrl);
-                    record.setCreateTime(new Date());
-                    record.setMessageType(1);
-                    record.setIsRead(isInChat?0:1);
-                    record.setIsHide(isInChat?0:1);
-                    customerMsgService.insertSelective(record);
-
-
-                    inMessage.setContent(fileName);
 
                     if (isInChat){
-                        pushMessageToCallCenter(inMessage);//推送消息到呼叫中心
-//                        redisService.set(RedisKeyConstants.getScrmappWechatCustomermsg()+inMessage.getFromUserName(),true,60L);
+                        pushMediaMessageToCallCenter(inMessage);
+                    }else {
+                        WechatCustomerMsg record = new WechatCustomerMsg();
+                        record.setOpenid(inMessage.getFromUserName());
+                        record.setMessageSource(1);
+                        String mediaUrl = wechatMediaService.downLoadMedia(inMessage.getMediaId());
+//                        String fileName = wechatMediaService.downLoadMediaForCallCenter(inMessage.getMediaId());
+//                        String mediaUrl=DOWNLOAD_URL+"?filename=" +fileName;
+                        record.setMessage(mediaUrl);
+                        record.setCreateTime(new Date());
+                        record.setMessageType(1);
+                        record.setIsRead(isInChat?0:1);
+                        record.setIsHide(isInChat?0:1);
+                        customerMsgService.insertSelective(record);
                     }
-
                 }
-//                else if ("voice".equals(inMessage.getMsgType())) {
-//                    inMessage.setContent(wechatMediaService.downLoadMedia(inMessage.getMediaId()));
-//                    pushMessageToCallCenter(inMessage);//推送消息到呼叫中心
-//                }else if ("video".equals(inMessage.getMsgType())) {
-//                    inMessage.setContent(wechatMediaService.downLoadMedia(inMessage.getMediaId()));
-//                    pushMessageToCallCenter(inMessage);//推送消息到呼叫中心
-//                }
+                else if ("voice".equals(inMessage.getMsgType())) {
+                    response.getWriter().write("");
+                    response.getWriter().close();
+                    pushMediaMessageToCallCenter(inMessage);
+                }else if ("video".equals(inMessage.getMsgType())) {
+                    response.getWriter().write("");
+                    response.getWriter().close();
+                    pushMediaMessageToCallCenter(inMessage);
+                }
             }
         } catch (Exception e) {
             System.out.println("requestStr=[" + requestStr + "]");
@@ -274,17 +274,21 @@ public class WeChatMessageProcessingHandler {
     }
 
     /**
+     * 异步推送到呼叫中心
+     * @param inMessage
+     */
+    @Async
+    private void pushMediaMessageToCallCenter(InMessage inMessage) {
+        String fileName = wechatMediaService.downLoadMediaForCallCenter(inMessage.getMediaId());
+        inMessage.setContent(fileName);
+        pushMessageToCallCenter(inMessage);//推送消息到呼叫中心
+    }
+
+    /**
      * 推送消息到呼叫中心
      * @param inMessage
      */
     private void pushMessageToCallCenter(InMessage inMessage) {
-//        switch (inMessage.getMsgType()) {
-//            case "image":
-////            case "video":
-////            case "vioce":
-//                inMessage.setContent(wechatMediaService.downLoadMedia(inMessage.getMediaId()));
-//                break;
-//        }
         CallCenterMessage callCenterMessage=new CallCenterMessage(inMessage);
         callCenterMessage.setTenantId(callCenterTenantId);
         String userOpenId = inMessage.getFromUserName();
