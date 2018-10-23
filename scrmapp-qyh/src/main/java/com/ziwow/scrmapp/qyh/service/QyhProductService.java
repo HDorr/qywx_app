@@ -30,4 +30,8 @@ public interface QyhProductService {
     String queryProductImage(String modelName);
 
     List<ProductVo> findByOrdersId(Long ordersId);
+
+    int updateProductStatus(Long ordersId,Long productId);
+
+    List<Integer> getAllStatus(Long ordersId);
 }

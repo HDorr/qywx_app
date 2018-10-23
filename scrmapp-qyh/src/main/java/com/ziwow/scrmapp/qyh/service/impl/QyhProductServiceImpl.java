@@ -118,6 +118,16 @@ public class QyhProductServiceImpl implements QyhProductService {
         return productMapper.selectByOrdersId(ordersId);
     }
 
+    @Override
+    public int updateProductStatus(Long ordersId, Long productId) {
+        return productMapper.updateProductStatus(ordersId, productId);
+    }
+
+    @Override
+    public List<Integer> getAllStatus(Long ordersId) {
+        return productMapper.getAllStatus(ordersId);
+    }
+
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void updateProductImage(String modelName, String productImg) {
         productMapper.updateProductImg(modelName, productImg);

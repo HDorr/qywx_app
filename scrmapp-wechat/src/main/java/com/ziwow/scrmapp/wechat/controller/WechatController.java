@@ -12,6 +12,7 @@ import com.alibaba.fastjson.JSON;
 import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
 import com.sun.tools.jxc.apt.Const;
+import com.ziwow.scrmapp.common.bean.pojo.AppraiseParam;
 import com.ziwow.scrmapp.common.bean.pojo.DispatchDotParam;
 import com.ziwow.scrmapp.common.bean.pojo.DispatchMasterParam;
 import com.ziwow.scrmapp.common.bean.pojo.DispatchOrderParam;
@@ -442,13 +443,34 @@ public class WechatController {
         return result;
     }
 
+    @RequestMapping(value = {"/syncAddAppraise"}, method = {RequestMethod.POST}, produces = {"application/json;charset=UTF-8"})
+    @ResponseBody
+    public Result syncAddAppraise(@RequestBody AppraiseParam appraiseParam) {
+        logger.info("同步400评价信息内容,syncAddAppraise:[{}]", JSON.toJSON(appraiseParam));
+        Result result = new BaseResult();
+        result.setReturnMsg("400评价成功!");
+        result.setReturnCode(Constant.SUCCESS);
+        try {
+            wechatOrdersService.syncAddAppraise(appraiseParam);
+        } catch (ParamException e) {
+            logger.info("400评价失败!", e);
+            result.setReturnCode(Constant.FAIL);
+            result.setReturnMsg("400评价失败:[" + e.getMessage() + "]");
+        } catch (Exception e) {
+            logger.info("400评价失败!", e);
+            result.setReturnCode(Constant.FAIL);
+            result.setReturnMsg("400评价失败,其他原因:[" + e.getMessage() + "]");
+        }
+        return result;
+    }
+
+
     @RequestMapping(value = "/syncDispatchDot2")
-    public void syncDispatchDotTest(@RequestParam("ordersType")Integer ordersType, @RequestParam("mobile")String mobile) {
+    public void syncDispatchDotTest(@RequestParam("ordersType") Integer ordersType, @RequestParam("mobile") String mobile) {
         wechatOrdersService.testSendSms(ordersType, mobile);
     }
 
     /**
-     *
      * @param dispatchMasterParam
      * @return
      */

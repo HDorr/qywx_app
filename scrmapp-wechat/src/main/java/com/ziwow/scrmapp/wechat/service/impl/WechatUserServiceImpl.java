@@ -11,6 +11,7 @@ import com.ziwow.scrmapp.common.constants.Constant;
 import com.ziwow.scrmapp.common.constants.SystemConstants;
 import com.ziwow.scrmapp.common.persistence.entity.QyhUser;
 import com.ziwow.scrmapp.common.persistence.entity.QyhUserAppraisal;
+import com.ziwow.scrmapp.common.persistence.entity.QyhUserAppraisalVo;
 import com.ziwow.scrmapp.common.persistence.entity.WechatOrdersRecord;
 import com.ziwow.scrmapp.common.persistence.mapper.QyhUserAppraisalMapper;
 import com.ziwow.scrmapp.common.persistence.mapper.QyhUserMapper;
@@ -136,6 +137,12 @@ public class WechatUserServiceImpl implements WechatUserService {
     @Override
     public int save(QyhUserAppraisal qyhUserAppraisal) {
         return qyhUserAppraisalMapper.insert(qyhUserAppraisal);
+    }
+
+    @Transactional
+    @Override
+    public int saveVo(QyhUserAppraisalVo qyhUserAppraisalVo) {
+        return qyhUserAppraisalMapper.insertVo(qyhUserAppraisalVo);
     }
 
     @Override

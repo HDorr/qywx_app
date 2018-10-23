@@ -122,7 +122,7 @@
     <update id="updateStatusByOrdersId" parameterType="java.lang.Long">
         update t_orders_pro_relations
         set status = 1
-        where orderId = #{orderId,jdbcType=BIGINT}
+        where orderId = #{orderId,jdbcType=BIGINT} and status = 2
     </update>
 
     <update id="updateByPrimaryKey" parameterType="com.ziwow.scrmapp.common.persistence.entity.OrdersProRelations">

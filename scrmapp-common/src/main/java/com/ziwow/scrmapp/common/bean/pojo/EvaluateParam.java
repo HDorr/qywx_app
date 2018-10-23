@@ -14,6 +14,8 @@ public class EvaluateParam implements java.io.Serializable {
 	private Integer is_specialty;//专业度
 	private Integer is_integrity;//诚信情况
 	private Integer is_recommend;//推荐意愿
+	private Integer is_wxzs;//
+	private Integer is_wxgz;
 
 
 	// 单号
@@ -66,5 +68,21 @@ public class EvaluateParam implements java.io.Serializable {
 
 	public void setIs_recommend(Integer is_recommend) {
 		this.is_recommend = is_recommend;
+	}
+
+	public Integer getIs_wxzs() {
+		return is_wxzs;
+	}
+
+	public void setIs_wxzs(Integer is_wxzs) {
+		this.is_wxzs = is_wxzs;
+	}
+
+	public Integer getIs_wxgz() {
+		return is_wxgz;
+	}
+
+	public void setIs_wxgz(Integer is_wxgz) {
+		this.is_wxgz = is_wxgz;
 	}
 }

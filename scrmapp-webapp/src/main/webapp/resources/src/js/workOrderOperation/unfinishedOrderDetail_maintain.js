@@ -55,6 +55,28 @@ var Product = {
                 _this.$emit('cancel',_this.product)
             });
             
+        },
+        refuseProduct:function () {
+            var _this = this;
+            var currentProduct = _this.product;
+            $.confirm("确定取消吗", function() {
+                //当前产品以外其他的产品是否全部为取消
+                let b = true;
+                $(".productStatus").each(function () {
+                    if($(this).find("p").text() != currentProduct.productId
+                        && $(this).find("span").text() != 2){
+                        b = false;
+                        return false;
+                    }
+                });
+                if(b){
+                    $.confirm("确定拒绝当前工单?",function () {
+                        _this.$emit('refuse',_this.product,true)
+                    })
+                }else {
+                    _this.$emit('refuse',_this.product)
+                }
+            });
         }
     }
 }
@@ -169,6 +191,27 @@ var app = new Vue({
                 })
                 .fail(function(error){
                     alertMsg.error(error)
+                })
+        },
+        refuseSingleProductHandler:function(product,isAllRefund){
+            var refuseData = {
+                ordersId:this.detail.id,
+                ordersCode:ORDERSCODE || this.detail.ordersCode,
+                productId:product.productId
+            }
+            ajax.post(queryUrls.qyhCancelSingleOrder_repair_maintain,refuseData)
+                .then(function(res){
+                    if(isAllRefund){
+                        var params = {"userId":USERID,"ordersCode":ORDERSCODE}
+                        var url =  getParamStr(pageUrls.unfinishedWorkOrderDetail_repair,params)
+                        location.replace(url);
+                        return
+                    }
+                    location.reload();
+                    return
+                })
+                .fail(function(error){
+                    alertMsg.error("请求出错,请稍后尝试!")
                 })
         },
         completeProductHandler:function(product){
