@@ -1,9 +1,11 @@
 package com.ziwow.scrmapp.wechat.vo.callCenter;
 
 import com.sun.istack.NotNull;
+import com.ziwow.scrmapp.tools.utils.StringUtil;
 import com.ziwow.scrmapp.tools.weixin.InMessage;
 import com.ziwow.scrmapp.tools.weixin.XStreamCDATA;
 import com.ziwow.scrmapp.tools.weixin.enums.MsgTypes;
+import com.ziwow.scrmapp.wechat.utils.Emotions4WeChat;
 
 public class CallCenterMessage {
 
@@ -118,6 +120,12 @@ public class CallCenterMessage {
     this.MsgType=inMessage.getMsgType();
     this.Content=inMessage.getContent();
     this.MsgId=inMessage.getMsgID();
+    if ("text".equals(inMessage.getMsgType())){
+      String content = Emotions4WeChat.ClientGet(inMessage.getContent());
+      if (StringUtil.isNotBlank(content)){
+        this.Content=content;
+      }
+    }
   }
 
   public String getToUserName() {
