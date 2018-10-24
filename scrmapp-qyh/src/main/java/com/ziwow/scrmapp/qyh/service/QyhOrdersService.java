@@ -153,4 +153,8 @@ public interface QyhOrdersService {
     public int getProductStatus(Long orderId);
 
     void finishMakeAppointment(String ordersCode);
+
+    int doCancel(Long ordersId, Long productId,String ordersCode);
+
+    boolean isFinish(List<Integer> productStatus);
 }

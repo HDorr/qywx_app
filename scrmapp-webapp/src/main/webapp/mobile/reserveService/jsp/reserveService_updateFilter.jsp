@@ -106,7 +106,7 @@
 <!-- 预约信息-template -->
 <script type="text/html" id="reserveInfo_template">
     <header class="title">
-        <img src="${f_ctxpath}/resources/src/images/icons/reserve.png">re
+        <img src="${f_ctxpath}/resources/src/images/icons/reserve.png">
         预约信息
     </header>
     <div class="timePickerContainer">

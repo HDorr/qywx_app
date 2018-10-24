@@ -111,6 +111,9 @@ public class WechatOrdersServiceImpl implements WechatOrdersService {
     @Value("${miniapp.product.cancelmakeAppointment}")
     private String cancelmakeAppointmentUrl;
 
+    @Autowired
+    private WechatUserService wechatUserService;
+
     @Override
     public WechatOrders getWechatOrdersByCode(String ordersCode) {
         return wechatOrdersMapper.getWechatOrdersVoByCode(ordersCode);
@@ -511,6 +514,72 @@ public class WechatOrdersServiceImpl implements WechatOrdersService {
         wechatTemplateService.servicesToNoticeTemplate(openId, null, title, orderType, orderCode, orderTime, engineerName, mobilePhone, remark);
     }*/
 
+    //检查是否为空
+    private <T> T checkNull(T o) throws ParamException {
+        if (o == null) {
+            throw new ParamException("接口参数为空");
+        } else if (o.getClass() == String.class) {
+            if ("".equals((String) o)) {
+                throw new ParamException("接口必填字段不能为空");
+            }
+        }
+        return o;
+    }
+
+    //0和1布尔值转换
+    private Boolean convertBoolean(String number) {
+        return "1".equals(number) ? true : false;
+    }
+
+    @Override
+    public void syncAddAppraise(AppraiseParam appraiseParam) throws ParamException {
+        boolean isLegal = SignUtil.checkSignature(appraiseParam.getSignature(), appraiseParam.getTimeStamp(), Constant.AUTH_KEY);
+        if (!(isLegal)) {
+            throw new ParamException(Constant.ILLEGAL_REQUEST);
+        }
+        appraiseParam = checkNull(appraiseParam);
+        String ordersCode = checkNull(appraiseParam.getOrderCode());
+//        String is_order = checkNull(appraiseParam.getIs_order());
+        WechatOrders wechatOrders = this.getWechatOrdersByCode(ordersCode);
+        if (wechatOrders == null) {
+            throw new ParamException("受理单号在微信端不存在");
+        }
+        //判断预约单状态是否可以评论
+        if (SystemConstants.COMPLETE != wechatOrders.getStatus()) {
+            throw new ParamException("该订单的状态不是完成状态,不能进行评价");
+        }
+
+        //保存评价信息
+        String userId = wechatOrders.getUserId();
+        QyhUserAppraisalVo qyhUserAppraisalVo = new QyhUserAppraisalVo();
+        qyhUserAppraisalVo.setOrderId(wechatOrders.getId());
+        qyhUserAppraisalVo.setQyhUserId(wechatOrders.getQyhUserId());
+        qyhUserAppraisalVo.setUserId(userId);
+        String is_order = appraiseParam.getIs_order();
+        qyhUserAppraisalVo.setIs_order(StringUtils.isEmpty(is_order) ? null : convertBoolean(is_order));//400回访is_order为非必填字段
+        qyhUserAppraisalVo.setIs_source(1);//400评价来源默认是1
+        int count = wechatUserService.saveVo(qyhUserAppraisalVo);
+        Date date = new Date();
+        if (count > 0) {
+            //修改预约单状态为已评价
+            this.updateOrdersStatus(ordersCode, userId, date, SystemConstants.APPRAISE);
+            WechatOrdersRecord wechatOrdersRecord = new WechatOrdersRecord();
+            wechatOrdersRecord.setOrderId(wechatOrders.getId());
+            wechatOrdersRecord.setRecordTime(date);
+            wechatOrdersRecord.setRecordContent("用户评分完成");
+            wechatOrdersRecordService.saveWechatOrdersRecord(wechatOrdersRecord);
+        }
+        // 给工程师发送短信通知
+        String engineerMsgContent = "您服务的工单" + ordersCode + "，用户已经评价啦，谢谢提供服务！请登录“沁园服务之家”的售后服务个人中心，可以查看评分。";
+        QyhUser qyhUser = wechatQyhUserService.getQyhUser(wechatOrders.getQyhUserId());
+        String qyhUserMobile = (null != qyhUser) ? qyhUser.getMobile() : "";
+        try {
+            mobileService.sendContentByEmay(qyhUserMobile, engineerMsgContent, Constant.ENGINEER);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     @Override
     public void sendEngineerMsgText(String engineerId, String engineerPhone, WechatOrders wechatOrders) {
         String ordersCode = wechatOrders.getOrdersCode();
@@ -685,6 +754,8 @@ public class WechatOrdersServiceImpl implements WechatOrdersService {
         int status = SystemConstants.RECEIVE;
         Date date = new Date();
         this.dispatch(acceptNumber, engineerId, date, status);
+        //更新产品关联表
+        ordersProRelationsMapper.updateStatusByOrdersId(wechatOrders.getId());
         // 录入受理记录表
         WechatOrdersRecord wechatOrdersRecord = new WechatOrdersRecord();
         wechatOrdersRecord.setOrderId(wechatOrders.getId());
@@ -769,14 +840,14 @@ public class WechatOrdersServiceImpl implements WechatOrdersService {
     @Override
     @Async
     public void syncMakeAppointment(String scOrderItemId, String ordersCode,
-        String serviceFeeIds) {
-        LOG.info("预约信息同步到小程序,scOrderItemId:"+ scOrderItemId+"   ordersCode:"+ordersCode+"   serviceFeeIds:"+serviceFeeIds);
+                                    String serviceFeeIds) {
+        LOG.info("预约信息同步到小程序,scOrderItemId:" + scOrderItemId + "   ordersCode:" + ordersCode + "   serviceFeeIds:" + serviceFeeIds);
         // 异步推送给小程序对接方
         Map<String, Object> params = new HashMap<String, Object>();
         long timestamp = System.currentTimeMillis();
         params.put("orderItemId", scOrderItemId);
         params.put("serviceFeeIds", serviceFeeIds);
-        params.put("ordersCode",ordersCode);
+        params.put("ordersCode", ordersCode);
         params.put("timestamp", timestamp);
         params.put("signture", MD5.toMD5(Constant.AUTH_KEY + timestamp));
         String result = HttpClientUtils.postJson(makeAppointmentUrl, JSONObject.fromObject(params).toString());

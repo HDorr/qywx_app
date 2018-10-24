@@ -17,7 +17,7 @@
     .main-layer .text{
       width: 100%;
       text-align:center;
-      font-size: 18px;
+      font-size: 15px;
       font-weight: bold;
       margin-top: 40px;
     }
@@ -61,10 +61,10 @@
   <body>
   <%--<input type="hidden" value="myPdtList" id="formUrl" />--%>
   <input type="hidden" value="${url}" hidden="hidden" id="formUrl" />
-    <div class="main-layer" hidden="hidden" id="defaultChannelPage">
+    <div class="main-layer" hidden="" id="defaultChannelPage">
       <p class="text" id="qr">您还不是粉丝哦，长按钮下方二维码进行关注</p>
       <div class="img-box">
-        <img src="${f_ctxpath}/resources/src/images/qy_QR_code.jpg${f_ver}" class="qrCode">
+        <img src="${f_ctxpath}/resources/src/images/qy_QR_code.png${f_ver}" class="qrCode">
       </div>
     </div>
 

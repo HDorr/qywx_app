@@ -26,7 +26,7 @@
                 </div>
                 <div class="bloque orderInfo">
                     <v-title title="工单产品信息" icon="${f_ctxpath}/resources/src/images/icons/pdtInfo.png"></v-title>
-                    <product v-for="(product,index) in products" :key="product.productId" :product="product" @comfirm="completeProductHandler" @cancel="cancelProductHandler">
+                    <product v-for="(product,index) in products" :key="product.productId" :product="product" @comfirm="completeProductHandler" @cancel="cancelProductHandler" @refuse="refuseSingleProductHandler">
                     </product>
                 </div>
                 <refuse-order v-show="isShowRefuse" @cancel="isShowRefuse = false" @comfirm="refuseOrderHandler"></refuse-order>
@@ -55,7 +55,12 @@
         <script type="text/x-template" id="product_template">
             <div class="infoBox">
                 <div class="product">
-                    <button v-if="product.status != 1" class="cannotOptBtn">{{product.status == 2 ? '已退单' :'已完工'}}</button>
+                    <div hidden="hidden" class="productStatus">
+                        <p>{{product.productId}}</p>
+                        <span>{{product.status}}</span>
+                    </div>
+                    <button v-if="product.status != 1" class="cannotOptBtn">{{product.status == 2 ? '已取消' :'已完工'}}</button>
+                    <%--<button v-if="product.status != 1" class="cannotOptBtn">{{product.status == 2 ? '已退单' :'已完工'}}</button>--%>
                     <div class="line" >
                         <span>名称：</span>
                         <span>{{product.productName}}</span>
@@ -69,7 +74,8 @@
                         <span>{{product.status == 1 ? product.productBarCode : product.productBarCodeTwenty }}</span>
                     </div>
                     <div class="btnBox" v-if="product.status == 1">
-                        <button  v-if="false" @click="cancelHandler" >退单</button>
+                        <%--<button  v-if="false" @click="cancelHandler" >退单</button>--%>
+                        <button class="cancel" @click="refuseProduct" >取消</button>
                         <button @click="comfirmHandler">完工提交</button>
                     </div>
                 </div>
