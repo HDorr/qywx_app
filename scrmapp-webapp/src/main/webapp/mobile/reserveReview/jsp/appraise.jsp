@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="${f_ctxpath}/resources/src/css/reserveReview/appraise.css${f_ver}">
 </head>
 <body>
+<span id="relative_path" data-relativepath="${f_ctxpath}" hidden="hidden"></span>
 <span id="hidden_question" data-appraisetype="${appraiseType}" data-orderscode="${ordersCode}" hidden="hidden"></span>
 <header id="header_question">
     <%--添加提问--%>
