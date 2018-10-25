@@ -1,6 +1,7 @@
 var ORDERSCODE = $("#ordersCodeInput").val() || getUrlParam("ordersCode")
 var USERID = $("#userIdInput").val() || getUrlParam("userId")
 var ORDERTYPE = getUrlParam('orderType') || ''
+var isSubmitting = false;
 var CANCEL_REASONS = {
     title: "取消原因",
     items: [
@@ -291,6 +292,11 @@ var app = new Vue({
             this.isShowRefuse = false
         },
         handleCompleteOrder:function(){
+            if (isSubmitting) {
+                return;
+            } else {
+                isSubmitting = true;
+            }
             if(!this._isAllCompleted()){
                 $.toast('您还有产品未确认','cancel')
                 return 
@@ -309,6 +315,7 @@ var app = new Vue({
                 alertMsg.error(error)
             }).always(function () {
                 $.hideLoading()
+                isSubmitting = false;
             })
         },
         initCancelReasonSelect:function(){

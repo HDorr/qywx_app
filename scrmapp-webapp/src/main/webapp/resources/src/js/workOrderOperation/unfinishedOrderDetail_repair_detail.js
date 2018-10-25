@@ -4,6 +4,7 @@ var STORAGE_PRODUCTS = JSON.parse(window.localStorage.getItem('unfinished_produc
 var STORAGE_CURPRODUCT_ID = window.localStorage.getItem('unfinished_cur_productId')
 var WX_READY = false
 var WX_CAN_SCAN = false
+var isSubmitting = false;;
 
 wxInit_promise.init().then(function(){
     WX_READY = true
@@ -372,6 +373,11 @@ var app = new Vue({
             this.showPage = 1
         },
         comfirmHandler: function () {
+            if (isSubmitting) {
+                return;
+            } else {
+                isSubmitting = true;
+            }
             var _this = this
             this._checkData()
                 .then(function(){
@@ -399,6 +405,7 @@ var app = new Vue({
                 })
                 .always(function () {
                     $.hideLoading()
+                    isSubmitting = false;
                 })
         },
         _checkData: function () {

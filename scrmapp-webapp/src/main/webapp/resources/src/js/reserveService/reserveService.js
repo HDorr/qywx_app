@@ -404,6 +404,7 @@ var flags = {
             // contentType:'application/json',
             success: function (res) {
                 $.hideLoading()
+                isSubmitting = false;
                 setTimeout(function () {
                     if (res.returnCode == 1) {
                         var address = escape(addressData.provinceName + addressData.cityName + addressData.areaName + addressData.streetName);
@@ -418,6 +419,7 @@ var flags = {
             },
             error: function (data) {
                 $.hideLoading()
+                isSubmitting = false;
                 setTimeout(function () {
                     $.toast("网络错误", "cancel")
                     flags.submitFlag = true;
