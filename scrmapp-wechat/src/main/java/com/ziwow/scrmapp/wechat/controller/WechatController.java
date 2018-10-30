@@ -549,11 +549,11 @@ public class WechatController {
         }
 
         if (miniappSendSms.getType()==3){//绑定有礼
-            String msgContent = "亲爱的会员，恭喜您已成功绑定产品，小沁送您用户尊享满200立减50元优惠券一张，购买微商城内任意商品通用哦。进入沁园WX号（qy_serve ），点击<要购买-WX商城>进入<我的>即可查看，还有更多用户尊享服务一键预约快速达。即刻开启您的专享优惠通道吧~回复TD退订";
+            String msgContent = "亲爱的会员，恭喜您已成功绑定产品，小沁送您用户尊享满200立减50元滤芯优惠券一张，可进入沁园WX号（qy_serve ），点击<我的沁园>进入<优惠券>即可查看，还有更多用户尊享服务一键预约快速达。即刻开启您的专享优惠通道吧~回复TD退订";
             mobileService.sendContentByEmay(miniappSendSms.getPhone(),msgContent, Constant.BIND_GIFT );
         }else if (miniappSendSms.getType()==4){//注册有礼
 //            String msgContent = "嗨，欢迎进入沁园水健康守护基地，恭喜您已完成会员注册。小沁送您会员尊享立减100元优惠券一张，购买微商城内任意净水器通用哦。进入沁园WX号（qy_serve ），点击<要购买-WX商城>进入<我的>即可查看。立即绑定产品，还有更多滤芯优惠券等着您！即刻开启您的专享优惠通道吧~回复TD退订";
-            String msgContent = "嗨，欢迎进入沁园水健康守护基地，恭喜您已完成会员注册。小沁送您会员尊享立减100元优惠券一张，购买微商城内任意净水器通用哦。进入沁园WX号（qy_serve ），点击<要购买-WX商城>进入<我的>即可查看。即刻开启您的专享优惠通道吧~回复TD退订";
+            String msgContent = "嗨，欢迎进入沁园水健康守护基地，恭喜您已完成会员注册。小沁送您会员尊享立减100元优惠券一张，购买微商城内任意净水器通用哦。进入沁园WX号（qy_serve ），点击<我的沁园>进入<优惠券>即可查看。即刻开启您的专享优惠通道吧~回复TD退订";
             mobileService.sendContentByEmay(miniappSendSms.getPhone(), msgContent,Constant.REGISTER_GIFT);
         }
 

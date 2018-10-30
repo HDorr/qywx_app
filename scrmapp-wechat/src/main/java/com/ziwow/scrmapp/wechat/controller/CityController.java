@@ -1,5 +1,8 @@
 package com.ziwow.scrmapp.wechat.controller;
 
+import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -119,6 +122,7 @@ public class CityController {
             }
 
             List<WechatArea> areaLst = wechatCityService.getArea(cityId);
+            areaLst = filterList(areaLst,"市辖区","areaName");
             if (areaLst != null && !areaLst.isEmpty()) {
                 result.setReturnMsg(Constant.OK);
                 result.setReturnCode(Constant.SUCCESS);
@@ -133,4 +137,42 @@ public class CityController {
         return result;
     }
 
+    /**
+     * 过滤list
+     * @param list
+     * @param filterContent 过滤掉的内容,不为null
+     * @param filterField 需要进行过滤的字段名
+     * @param <T>
+     * @param <V>
+     * @return
+     */
+    private <T, V>  List<T> filterList(List<T> list, V filterContent, String filterField) {
+        if (list == null || list.size() == 0) {
+            return list;
+        }
+        try {
+            Iterator<T> iterator = list.iterator();
+            T t;
+            while (iterator.hasNext()) {
+                t = iterator.next();
+                Field field = t.getClass().getDeclaredField(filterField);
+                if (field == null) {
+                    continue;
+                }
+                field.setAccessible(true);
+                V value = (V) field.get(t);
+                if (value == null) {
+                    continue;
+                }
+                if (value == filterContent || filterContent.equals(value)) {
+                    iterator.remove();
+                }
+            }
+        } catch (NoSuchFieldException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
 }

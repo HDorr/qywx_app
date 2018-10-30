@@ -1,4 +1,5 @@
 const appraiseType = $("#hidden_question").data("appraisetype");
+const relativePath = $("#relative_path").data("relativepath");
 
 $(function () {
     //动态添加节点
@@ -170,7 +171,7 @@ function submitData() {
         success: function (data) {
             if (data.returnCode == 1) {
                 $.hideLoading();
-                praiseSuccess();
+                praiseSuccess(relativePath);
             } else {
                 $.hideLoading();
                 $.toast(data.returnMsg, "cancel")
@@ -183,10 +184,10 @@ function submitData() {
     });
 }
 
-function praiseSuccess() {
+function praiseSuccess(src) {
     var htmlStr = "<div class=\"t-success\">\n" +
         "    <div class=\"t-success-img\">\n" +
-        "        <img src=\"/scrmapp/resources/src/images/icons/smill_new.png\">\n" +
+        "        <img src=\""+src+"/resources/src/images/icons/smill_new.png"+"\">\n" +
         "    </div>\n" +
         "    <p>感谢您对这次服务进行评价！</p>\n" +
         "    <p>感谢您评价完成！</p>\n" +
