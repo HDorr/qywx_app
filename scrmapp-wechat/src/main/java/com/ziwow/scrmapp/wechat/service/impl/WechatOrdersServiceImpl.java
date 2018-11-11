@@ -309,6 +309,8 @@ public class WechatOrdersServiceImpl implements WechatOrdersService {
                                 wechatOrders.setOrderType(2);
                             } else if (type == 5) {
                                 wechatOrders.setOrderType(3);
+                            }else if(type==9||type==11||type==13){
+                                wechatOrders.setOrderType(5);
                             }
                             wechatOrders.setDescription(appealVo.getAppealContent());
                             wechatOrders.setUserId(userId);
