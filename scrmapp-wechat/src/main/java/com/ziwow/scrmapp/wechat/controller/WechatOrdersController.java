@@ -1,11 +1,15 @@
 package com.ziwow.scrmapp.wechat.controller;
 
 import com.alibaba.fastjson.JSON;
+import com.ziwow.scrmapp.wechat.enums.SmsMarketingEmus;
+import com.ziwow.scrmapp.wechat.enums.SmsMarketingEmus.SmsTypeEnum;
+import com.ziwow.scrmapp.wechat.schedule.SmsMarketingTask;
 import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.util.Date;
 import java.util.List;
 
+import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -86,6 +90,8 @@ public class WechatOrdersController {
     private WechatFansService wechatFansService;
     @Autowired
     private WechatOrderServiceFeeService wechatOrderServiceFeeService;
+    @Autowired
+    private SmsMarketingService smsMarketingService;
 
 
     /**
@@ -240,10 +246,12 @@ public class WechatOrdersController {
 
                 int orderType = wechatOrders.getOrderType();
                 // 发送短信通知提醒
+                Map<Integer, SmsMarketing> smsTemplateMap = smsMarketingService.getCacheSmsMarketing();
                 String serverType = OrderUtils.getServiceTypeName(orderType);
                 String mobilePhone = wechatUser.getMobilePhone();
-                String msgContent = "亲爱的用户，您预约的" + serverType + "服务已成功提交，我们将尽快为您派单。您可进入“沁园”官方WX服务号查看订单状态。";
-                mobileService.sendContentByEmay(mobilePhone, msgContent, Constant.CUSTOMER);
+                int originalType = SmsMarketingTask.convertOriginalType(SmsTypeEnum.TODAY.getCode(), orderType);
+                SmsMarketing smsMarketing = smsTemplateMap.get(originalType);
+                mobileService.sendContentByEmay(mobilePhone, smsMarketing.getSmsContent(), Constant.CUSTOMER);
                 // 预约提交成功模板消息提醒
                 wechatOrdersService.sendAppointmentTemplateMsg(wechatOrders.getOrdersCode(), serverType);
                 WechatOrdersRecord wechatOrdersRecord = new WechatOrdersRecord();
