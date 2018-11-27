@@ -20,6 +20,7 @@ import com.ziwow.scrmapp.common.bean.vo.csm.ProductItem;
 import com.ziwow.scrmapp.common.bean.vo.mall.MallOrderVo;
 import com.ziwow.scrmapp.common.bean.vo.mall.OrderItem;
 import com.ziwow.scrmapp.common.constants.Constant;
+import com.ziwow.scrmapp.common.exception.ParamException;
 import com.ziwow.scrmapp.common.persistence.entity.FilterLevel;
 import com.ziwow.scrmapp.common.persistence.entity.Product;
 import com.ziwow.scrmapp.common.result.BaseResult;
@@ -620,17 +621,5 @@ public class WechatController {
     private String component_appid;
 
 
-    @RequestMapping("/callCenter/pushMessage")
-    public void receiveCallCenterMessage(HttpServletRequest request, HttpServletResponse response){
-        try(ServletInputStream in = request.getInputStream()){
-
-            String xmlMsg = Tools.inputStream2String(in);
-//            CallCenterReplyMessage callCenterReplyMessage = XmlUtils.xmlToObject(xmlMsg, CallCenterReplyMessage.class);
-//            logger.info("接收呼叫中心信息:{}", JSON.toJSONString(callCenterReplyMessage));
-
-        }catch (Exception e) {
-            logger.error(e.getMessage(),e);
-        }
-    }
 
 }

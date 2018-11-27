@@ -21,6 +21,7 @@ import javax.annotation.Resource;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -40,19 +41,32 @@ import com.ziwow.scrmapp.wechat.service.WeiXinService;
  * 
  */
 @Service
-public class WechatMediaServiceImpl implements WechatMediaService{
+public class WechatMediaServiceImpl implements WechatMediaService,InitializingBean {
 
 	private static final Logger logger = LoggerFactory.getLogger(WechatMediaServiceImpl.class);
 	
 	@Resource
 	private WeiXinService weiXinService;
-	
-	
+
+  @Value("${callCenter.file.url}")
+  private String callCenterFileUrl;
+
 	@Value("${wechat.appid}")
 	private String appid;
 	@Value("${wechat.appSecret}")
 	private String secret;
-	
+
+
+  /***
+   * 在bean装配完成之后将呼叫中心文件服务器的地址注入到工具类{link com.ziwow.scrmapp.tools.oss.CallCenterOssUtil}
+   * @throws Exception
+   */
+  @Override
+  public void afterPropertiesSet() throws Exception {
+    CallCenterOssUtil.setDownloadUrl(callCenterFileUrl);
+    CallCenterOssUtil.setUploadUrl(callCenterFileUrl);
+  }
+
 	@Override
 	public String downLoadMedia(String media_id) {
 		String url = WeChatConstants.WECHAT_MADIA_DOWNLOAD.replace("ACCESS_TOKEN", weiXinService.getAccessToken(appid, secret))

@@ -47,8 +47,16 @@ import org.springframework.beans.factory.annotation.Value;
 public class CallCenterOssUtil {
   private static final Logger logger = LoggerFactory.getLogger(CallCenterOssUtil.class);
 
-  public static final String UPLOAD_URL="http://222.73.213.180:10002/put";
-  public static final String DOWNLOAD_URL="http://222.73.213.180:10002/get";
+   private static  String UPLOAD_URL;
+   private static  String DOWNLOAD_URL;
+
+  public static void setUploadUrl(String uploadUrl) {
+    UPLOAD_URL = uploadUrl+"/put";
+  }
+
+  public static void setDownloadUrl(String downloadUrl) {
+    DOWNLOAD_URL = downloadUrl+"/get";
+  }
 
   /**
    *
