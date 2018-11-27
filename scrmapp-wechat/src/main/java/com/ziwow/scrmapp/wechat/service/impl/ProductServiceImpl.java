@@ -513,6 +513,7 @@ public class ProductServiceImpl implements ProductService {
                         product.setO2o(BuyChannel.ONQINYUAN.getO2o());  // 线上、线下
                         product.setBuyChannel(BuyChannel.ONQINYUAN.getChannelId());  // 购买渠道
                         product.setCreateTime(new Date());
+                        product.setIsAutoBind(1);//状态1代表自动绑定
                         if (StringUtils.isEmpty(buyTime)) {
                             product.setBuyTime(new Date());
                         } else {

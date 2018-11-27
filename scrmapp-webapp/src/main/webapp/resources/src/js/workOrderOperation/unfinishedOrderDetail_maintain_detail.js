@@ -4,13 +4,14 @@ var STORAGE_PRODUCTS = JSON.parse(window.localStorage.getItem('unfinished_produc
 var STORAGE_CURPRODUCT_ID = window.localStorage.getItem('unfinished_cur_productId')
 var WX_READY = false
 var WX_CAN_SCAN = false
+var isSubmitting = false;
 
 wxInit_promise.init().then(function(){
     WX_READY = true
-    return wxInit_promise.checkApi(['scanQRCode'])   
+    return wxInit_promise.checkApi(['scanQRCode'])
 }).then(function(checkResult){
     if(checkResult.scanQRCode){
-        WX_CAN_SCAN = true 
+        WX_CAN_SCAN = true
     }else{
         $.toptip("当前手机不支持扫一扫功能", "warning")
     }
@@ -69,7 +70,7 @@ var Barcode = {
             var _this = this
             if(!WX_READY && !IS_DEVENV){
                 $.toptip("上传图片初始化中，请稍后再试", "warning")
-                return 
+                return
             }
             wxInit_promise.wxUploadImage().then(function(src){
                 _this.image = src
@@ -81,7 +82,7 @@ var Barcode = {
             var _this = this
             if(!WX_CAN_SCAN && !IS_DEVENV){
                 $.toptip("暂时无法使用扫一扫，请稍后再试", "warning")
-                return 
+                return
             }
             wxInit_promise.wxScanBarCode().then(function(res){
                 var barCode = _normalizeBarCode(res)
@@ -139,7 +140,7 @@ var CheckBoxTable = {
     watch:{
         rows:function(cur,old){
             if (JSON.stringify(cur) === JSON.stringify(old)){
-                return 
+                return
             }
             this.innerRows = cur
         },
@@ -225,16 +226,23 @@ var app = new Vue({
             this.filterTable.rows = data
         },
         comfirmHandler: function () {
+            if (isSubmitting) {
+                return;
+            } else {
+                isSubmitting = true;
+            }
             var comfirmData = this._normalizeComfirmData()
             this._checkData(comfirmData)
             .then(function(){
                 comfirmData.products = JSON.stringify(comfirmData.products)
+                //加弹出框,防止表单进行重复提交
+                $.showLoading()
                 return ajax.post(queryUrls.qyhSubmitOrder_maintain,comfirmData)
             })
             .then(function(data){
                 if(data.returnCode !== ERR_OK){
                     alertMsg.error({message:data.returnMsg})
-                    return 
+                    return
                 }
                 var params = {userId:USERID,ordersCode:ORDERSCODE}
                 var jumpto =  getParamStr(pageUrls.unfinishedWorkOrderDetail_maintain,params)
@@ -242,6 +250,10 @@ var app = new Vue({
             })
             .fail(function(error){
                 alertMsg.error(error)
+            })
+            .always(function () {
+                $.hideLoading()
+                isSubmitting = false;
             })
         },
         _checkData: function (data) {
@@ -265,7 +277,7 @@ var app = new Vue({
             }else{
                 def.resolve()
             }
-            return def.promise()  
+            return def.promise()
         },
         _normalizeComfirmData(){
             var resObj = {
@@ -274,7 +286,7 @@ var app = new Vue({
                 "is_change_filter": this.isChangeFilter ? 2 : 1
             }
             var products = {
-                productId:this.curProduct.productId  
+                productId:this.curProduct.productId
             }
             var maintainPrices  =    this._getCheckedItem(this.maintainTable.rows),
                 filters         =    this._getCheckedItem(this.filterTable.rows)
@@ -296,7 +308,7 @@ var app = new Vue({
                             tmpObj.price = arr[i][key]
                             continue
                         }
-                        tmpObj[key] = arr[i][key]         
+                        tmpObj[key] = arr[i][key]
                     }
                     resArr.push(tmpObj)
                 }

@@ -8,7 +8,6 @@ import com.ziwow.scrmapp.common.bean.vo.ProductFinishVo;
 import com.ziwow.scrmapp.common.bean.vo.ProductVo;
 import com.ziwow.scrmapp.common.persistence.entity.Product;
 import org.apache.ibatis.annotations.Select;
-import org.apache.ibatis.annotations.Update;
 
 public interface ProductMapper {
     int deleteByPrimaryKey(Long id);
@@ -62,4 +61,7 @@ public interface ProductMapper {
 
     int countProductByUserIdWithoutStatus(@Param("userId") String userId);
 
+    int updateProductStatus(@Param("ordersId") Long ordersId,@Param("productId") Long productId);
+
+    List<Integer> getAllStatus(@Param("ordersId") Long ordersId);
 }

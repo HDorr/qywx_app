@@ -1,6 +1,7 @@
 var ORDERSCODE = $("#ordersCodeInput").val() || getUrlParam("ordersCode")
 var USERID = $("#userIdInput").val() || getUrlParam("userId")
 var ORDERTYPE = getUrlParam('orderType') || ''
+var isSubmitting = false;
 var CANCEL_REASONS = {
     title: "取消原因",
     items: [
@@ -291,11 +292,18 @@ var app = new Vue({
             this.isShowRefuse = false
         },
         handleCompleteOrder:function(){
+            if (isSubmitting) {
+                return;
+            } else {
+                isSubmitting = true;
+            }
             if(!this._isAllCompleted()){
                 $.toast('您还有产品未确认','cancel')
                 return 
             }
             var submitData = this._normalizeSubmitData(this.comfirmedProducts,this.cancelReasons)
+            //加弹出框,防止表单进行重复提交
+            $.showLoading()
             ajax.post(queryUrls.qyhSubmitOrder_install,submitData).then(function(data){
                 if(data.returnCode !== ERR_OK){
                     alertMsg.error(data)
@@ -305,6 +313,9 @@ var app = new Vue({
                 location.href = jumpTo
             }).fail(function(error){
                 alertMsg.error(error)
+            }).always(function () {
+                $.hideLoading()
+                isSubmitting = false;
             })
         },
         initCancelReasonSelect:function(){

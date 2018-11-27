@@ -66,6 +66,9 @@ public class ProductController {
     @Value("${qinyuan.modelname.service.query.url}")
     private String qinyuanModelnameServiceQuery;
 
+    @Value("${scrmapp.protocol}")
+    private String protocol;
+
     @Autowired
     private MobileService mobileService;
     @Autowired
@@ -581,26 +584,13 @@ public class ProductController {
         url = url.replace("{COMPONENT_APPID}", component_appid);
 
         String contextPath = request.getContextPath();
-        String basePath = "https" + "://" + request.getServerName() + contextPath;
-//        if (!"wx66c97d1778ea9bd3".equals(appid)){
-//            basePath="http" + "://" + request.getServerName() + contextPath;
-//        }
-        //-------------------------------------------------------------------------------------------------------------------------------------
-        //-------------------------------------------------------------------------------------------------------------------------------------
-        //-------------------------------------------------------------------------------------------------------------------------------------
-        //-------------------------------------------------------------------------------------------------------------------------------------
-        //-------------------------------------------------------------------------------------------------------------------------------------
-//        String basePath = "http" + "://" + request.getServerName() + contextPath;
-//        String basePath = request.getScheme() +"://" + request.getServerName() + contextPath;
-
+        String basePath = protocol + "://" + request.getServerName() + contextPath;
 
         String intallBaseUrl = basePath + "/scrmapp/consumer/user/filter/reserveService/jsp/chooseProduct?orderType=1";
         String maintainBaseUrl = basePath + "/scrmapp/consumer/user/filter/reserveService/jsp/chooseProduct?orderType=2";
         String updateFilterBaseUrl = basePath + "/scrmapp/consumer/user/filter/reserveService/jsp/chooseProduct?orderType=4";
         String cleanBaseUrl = basePath + "/scrmapp/consumer/user/filter/reserveService/jsp/chooseProduct?orderType=3";
-
         String changeRemindBaseUrl = basePath + "/scrmapp/consumer/user/filter/myProducts/jsp/myPdtList";
-
         String securityCheckBaseUrl = basePath + "/scrmapp/consumer/user/filter/securityCheck/jsp/securityCheck";
 
         try {
@@ -721,17 +711,7 @@ public class ProductController {
         url = url.replace("{COMPONENT_APPID}", component_appid);
 
         String contextPath = request.getContextPath();
-        String basePath = "https" + "://" + request.getServerName() + contextPath;
-//        if (!"wx66c97d1778ea9bd3".equals(appid)){
-//            basePath="http" + "://" + request.getServerName() + contextPath;
-//        }
-        //-------------------------------------------------------------------------------------------------------------------------------------
-        //-------------------------------------------------------------------------------------------------------------------------------------
-        //-------------------------------------------------------------------------------------------------------------------------------------
-        //-------------------------------------------------------------------------------------------------------------------------------------
-        //-------------------------------------------------------------------------------------------------------------------------------------
-//        String basePath = "http" + "://" + request.getServerName() + contextPath;
-//        String basePath = request.getScheme() +"://" + request.getServerName() + contextPath;
+        String basePath = protocol + "://" + request.getServerName() + contextPath;
         if (StringUtil.isBlank(scOrderItemId)){
             scOrderItemId="";
         }

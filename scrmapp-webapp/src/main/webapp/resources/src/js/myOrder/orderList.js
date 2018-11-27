@@ -8,7 +8,7 @@ function queryOrderList(callback) {
     ajax.get(queryUrls.orderList).then(function(data){
         if(!data.returnCode === 1){
             $.alert(data.returnMsg)
-            return 
+            return
         }
         if(data.data.length === 0){
             $.alert({
@@ -39,28 +39,28 @@ function cancelOrder(ele) {
     }).then(function(data){
         if(data.returnCode !== ERR_OK){
             alertMsg.error(data)
-            return 
+            return
         }
         queryOrderList(renderOrderList)
-        $.toptip('取消成功','success')
-    }).fail(function(error){
+        $.toptip('取消成功', 'success')
+    }).fail(function (error) {
         alertMsg.error(error)
     })
 }
 
 function changeOrder(ele) {
     window.location.href = pageUrls.orderDetail + "?ordersCode=" + $(ele).data("orderscode") + "&changeOrder=1"
-        //console.log($(ele).data("orderscode"))
+    //console.log($(ele).data("orderscode"))
 }
 
 function orderDetail(ele) {
     window.location.href = pageUrls.orderDetail + "?ordersCode=" + $(ele).data("orderscode")
-        //console.log($(ele).data("orderscode"))
+    //console.log($(ele).data("orderscode"))
 }
 
 function reviewOrder(ele) {
     //alert($(ele).data("orderscode"))
-    window.location.href = pageUrls.reviewPraide + "?ordersCode=" + $(ele).data("orderscode")
+    window.location.replace(pageUrls.reviewPraide + "?ordersCode=" + $(ele).data("orderscode") + "&orderType=" + $(ele).data("ordertype") + "&maintType=" + $(ele).data("mainttype"))
 }
 
 function _comfirmCancelAlert(){

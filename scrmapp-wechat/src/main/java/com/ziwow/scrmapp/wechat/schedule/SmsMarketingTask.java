@@ -154,7 +154,7 @@ public class SmsMarketingTask {
         }
     }
 
-    private int convertOriginalType(int smsType, int orderType) {
+    public static int convertOriginalType(int smsType, int orderType) {
         if (smsType == 0 || orderType == 0) {
             return 0;
         }

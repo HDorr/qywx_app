@@ -65,7 +65,7 @@
                            {{else if order.status == 2 || order.status == 6}}
                            <button onclick="orderDetail(this)" data-orderscode="{{order.ordersCode}}">查看详情</button>
                            {{else if order.status == 5}}
-                           <button onclick="reviewOrder(this)" data-orderscode="{{order.ordersCode}}">评价</button>
+                           <button onclick="reviewOrder(this)" data-orderscode="{{order.ordersCode}}" data-ordertype="{{order.orderType}}" data-mainttype="{{order.maintType}}">评价</button>
                            <button onclick="orderDetail(this)" data-orderscode="{{order.ordersCode}}">查看详情</button>
                            {{/if}}
                         </div>

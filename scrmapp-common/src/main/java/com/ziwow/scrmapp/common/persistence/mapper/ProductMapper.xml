@@ -76,7 +76,7 @@
         productName, productCode, productImage,
         productBarCode, barCodeImage, shoppingOrder, saleType,
         o2o, buyChannel, filterRemind,
-        userId, buyTime, status, createTime)
+        userId, buyTime, status, createTime,isAutoBind)
         values
         <foreach collection="list" item="item" index="index" separator=",">
             (#{item.itemKind,jdbcType=VARCHAR}, #{item.typeName,jdbcType=VARCHAR}, #{item.smallcName,jdbcType=VARCHAR},
@@ -86,7 +86,7 @@
             #{item.barCodeImage,jdbcType=VARCHAR},#{item.shoppingOrder,jdbcType=VARCHAR},#{item.saleType,jdbcType=CHAR},
             #{item.o2o,jdbcType=INTEGER}, #{item.buyChannel,jdbcType=INTEGER}, #{item.filterRemind,jdbcType=INTEGER},
             #{item.userId,jdbcType=VARCHAR}, #{item.buyTime,jdbcType=DATE}, #{item.status,jdbcType=INTEGER},
-            #{item.createTime,jdbcType=DATE}
+            #{item.createTime,jdbcType=DATE},#{item.isAutoBind,jdbcType=INTEGER}
             )
         </foreach>
     </insert>
@@ -510,5 +510,15 @@
         where productCode = #{productCode,jdbcType=VARCHAR} and smallcName is null
     </update>
 
+    <update id="updateProductStatus">
+        update t_orders_pro_relations set status = 2
+        where orderId = #{ordersId,jdbcType=BIGINT}
+        and productId = #{productId,jdbcType=BIGINT}
+    </update>
+    <select id="getAllStatus" resultType="java.lang.Integer">
+        select status
+        from t_orders_pro_relations
+        where orderId = #{ordersId,jdbcType=BIGINT}
+    </select>
 
 </mapper>

@@ -16,7 +16,7 @@ public class OrderUtils {
         } else if ((status == 11) || (status == 13)) {
             orderStatus = 5;
         } else if (status == 9) {
-            orderStatus = 6;
+            orderStatus = 5;
         }
 
         return orderStatus;

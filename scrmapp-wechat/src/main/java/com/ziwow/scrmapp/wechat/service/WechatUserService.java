@@ -2,6 +2,7 @@ package com.ziwow.scrmapp.wechat.service;
 
 import com.ziwow.scrmapp.common.bean.pojo.EvaluateParam;
 import com.ziwow.scrmapp.common.persistence.entity.QyhUserAppraisal;
+import com.ziwow.scrmapp.common.persistence.entity.QyhUserAppraisalVo;
 import com.ziwow.scrmapp.common.persistence.entity.WechatOrdersRecord;
 import com.ziwow.scrmapp.common.result.Result;
 import com.ziwow.scrmapp.wechat.persistence.entity.MallPcUser;
@@ -38,6 +39,8 @@ public interface WechatUserService {
     public void sendUserUpdTemplateMsg(String openId, String nikeName);
 
     int save(QyhUserAppraisal qyhUserAppraisal);
+
+    int saveVo(QyhUserAppraisalVo qyhUserAppraisalVo);
 
     int save(String ordersCode, Date updateTime, QyhUserAppraisal qyhUserAppraisal, WechatOrdersRecord wechatOrdersRecord);
 

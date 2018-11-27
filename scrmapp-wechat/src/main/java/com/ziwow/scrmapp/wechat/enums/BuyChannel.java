@@ -21,7 +21,7 @@ public enum BuyChannel {
     ONYHD(SystemConstants.ONLINE, 8, "一号店"),
     ONQYSC(SystemConstants.ONLINE, 16, "微信商城"),
     ONOTHER(SystemConstants.ONLINE, 9, "其他"),
-    OFFGOME(SystemConstants.OFFLINE, 10, "国美"),
+    OFFGOME(SystemConstants.OFFLINE, 10, "国美电器"),
     OFFSUNING(SystemConstants.OFFLINE, 11, "苏宁"),
     OFFBAIHUO(SystemConstants.OFFLINE, 12, "百货商场"),
     OFFZHUANMAI(SystemConstants.OFFLINE, 13, "专卖店"),
