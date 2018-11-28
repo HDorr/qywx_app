@@ -56,6 +56,8 @@ public class WechatMediaServiceImpl implements WechatMediaService,InitializingBe
 	@Value("${wechat.appSecret}")
 	private String secret;
 
+	private static final String TMP_DIR=System.getProperty("java.io.tmpdir")+"/";
+
 
   /***
    * 在bean装配完成之后将呼叫中心文件服务器的地址注入到工具类{link com.ziwow.scrmapp.tools.oss.CallCenterOssUtil}
@@ -93,7 +95,6 @@ public class WechatMediaServiceImpl implements WechatMediaService,InitializingBe
 	public String downLoadMediaForCallCenter(String media_id) {
 		String url = WeChatConstants.WECHAT_MADIA_DOWNLOAD.replace("ACCESS_TOKEN", weiXinService.getAccessToken(appid, secret))
 				.replace("MEDIA_ID", media_id);
-    String tempDir = System.getProperty("java.io.tmpdir")+"/";
     String fileName="";
     BufferedInputStream in=null;
 		try{
@@ -104,7 +105,7 @@ public class WechatMediaServiceImpl implements WechatMediaService,InitializingBe
           fileName=res.getFileName();
           res.setSuffix("mp3");
           String mp3Path = saveImageToDisk(res.getFileStream(), fileName,
-              tempDir);
+              TMP_DIR);
           if (StringUtil.isBlank(mp3Path)){
             return null;
           }
@@ -123,8 +124,8 @@ public class WechatMediaServiceImpl implements WechatMediaService,InitializingBe
 		}catch (Exception e) {
 			logger.error("下载图片失败,[{}]",e);
 		}finally {
-      new File(tempDir+fileName+".amr").delete();
-      new File(tempDir+fileName+".mp3").delete();
+      new File(TMP_DIR+fileName+".amr").delete();
+      new File(TMP_DIR+fileName+".mp3").delete();
       try {
         if(in!=null){
           in.close();
