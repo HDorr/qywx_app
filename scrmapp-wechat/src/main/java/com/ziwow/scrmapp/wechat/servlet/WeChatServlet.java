@@ -70,7 +70,7 @@ public class WeChatServlet extends HttpServlet {
 	private void message(HttpServletRequest request, HttpServletResponse response){
 		ServletInputStream in=null;
 		try{
-			in = request.getInputStream();
+					in = request.getInputStream();
 	        String xmlMsg = Tools.inputStream2String(in);
 	        weChatMessageProcessingHandler.manageMessage(xmlMsg,request, response);
 		}catch (Exception e) {
