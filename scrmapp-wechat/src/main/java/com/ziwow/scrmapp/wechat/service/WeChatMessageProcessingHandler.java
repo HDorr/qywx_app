@@ -510,13 +510,12 @@ public class WeChatMessageProcessingHandler {
         }else if (content.contains("人工客服")){
           msgsb.append("正在为您转接人工客服,请耐心等待！");
           replyMessage(inMessage, response, msgsb);
-//            boolean isInChat=checkChatStatus(inMessage.getFromUserName());
-//            if (isInChat){
-//                redisService.set(RedisKeyConstants.getScrmappWechatCustomermsg()+inMessage.getFromUserName(),true,60L);
-//                return false;
-//            }
-
-//            redisService.set(RedisKeyConstants.getScrmappWechatCustomermsg()+inMessage.getFromUserName(),true,60L);
+            boolean isInChat=checkChatStatus(inMessage.getFromUserName());
+            if (isInChat){
+                redisService.set(RedisKeyConstants.getScrmappWechatCustomermsg()+inMessage.getFromUserName(),true,60L);
+                return false;
+            }
+            redisService.set(RedisKeyConstants.getScrmappWechatCustomermsg()+inMessage.getFromUserName(),true,60L);
             //调用呼叫中心转人工
             LOG.info("调用呼叫中心转人工接口");
             inMessage.setContent("转人工");
