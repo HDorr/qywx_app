@@ -507,7 +507,7 @@ public class ProductServiceImpl implements ProductService {
                         product.setLevelId(Long.getLong(productItem.getFilterGradeId() + ""));
                         product.setLevelName(productItem.getFilterGrade());
                         product.setProductName(productItem.getItemName());
-                        product.setSaleType(productItem.getFromChannel());
+
                         product.setProductCode(productItem.getItemCode());
                         product.setUserId(userId);
                         product.setO2o(BuyChannel.ONQINYUAN.getO2o());  // 线上、线下

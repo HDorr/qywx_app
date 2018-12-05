@@ -32,6 +32,7 @@ import com.ziwow.scrmapp.wechat.vo.callCenter.CallCenterMessage;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.URLEncoder;
+import java.util.Calendar;
 import java.util.Date;
 import javax.annotation.Resource;
 import javax.servlet.ServletException;
@@ -378,6 +379,38 @@ public class WeChatMessageProcessingHandler {
         }
     }
 
+    /***
+     * 呼叫中心开始工作时间
+     */
+    private final int CALL_CENTER_WORK_TIME_BEGIN=8;
+    /**
+     * 呼叫中心结束工作时间
+     */
+    private final int CALL_CENTER_WORK_TIME_END=20;
+
+    /***
+     * 检查时间是否符合呼叫中心的工作时间
+     * @param  time 时间
+     * @return true 符合，false 不符合
+     */
+    private boolean  checkIsInCallCenterWorkingTime(Calendar time){
+        if(null!=time){
+            final  int hour = time.get(Calendar.HOUR_OF_DAY);
+            return CALL_CENTER_WORK_TIME_BEGIN <= hour && hour <= CALL_CENTER_WORK_TIME_END;
+        }else{
+            return false;
+        }
+    }
+
+    private enum CallCenterKyWord {
+        buy("购买");
+        private String text;
+
+        CallCenterKyWord(String text) {
+            this.text = text;
+        }
+    }
+
     private boolean dealWithText(final InMessage inMessage, HttpServletResponse response)
         {
 
@@ -508,14 +541,21 @@ public class WeChatMessageProcessingHandler {
         }else if (content.contains("投诉")){
           msgsb.append("您好,非常抱歉给您带来的不便！\n您可以直接输入投诉问题,我们会尽快给您受理的哦\n全国服务热线：400 111 1222\n在线工作时间：8:00AM-20:00PM");
         }else if (content.contains("人工客服")){
-          msgsb.append("正在为您转接人工客服,请耐心等待！");
-          replyMessage(inMessage, response, msgsb);
-            redisService.set(RedisKeyConstants.getScrmappWechatCustomermsg()+inMessage.getFromUserName(),true,1200L);
-            //调用呼叫中心转人工
-            LOG.info("调用呼叫中心转人工接口");
-            inMessage.setContent("转人工");
-            pushMessageToCallCenter(inMessage);//推送消息到呼叫中心
-            return true;
+            final boolean inWorkTime=checkIsInCallCenterWorkingTime(Calendar.getInstance());
+            boolean isPushToCallCenter=false;
+            if (inWorkTime) {
+                msgsb.append("正在为您转接人工客服,请耐心等待！");
+                redisService.set(RedisKeyConstants.getScrmappWechatCustomermsg() + inMessage.getFromUserName(), true, 1200L);
+                //调用呼叫中心转人工
+                LOG.info("调用呼叫中心转人工接口");
+                inMessage.setContent("转人工");
+                pushMessageToCallCenter(inMessage);//推送消息到呼叫中心
+                isPushToCallCenter=true;
+            } else {
+                msgsb.append("抱歉目前不是人工客服的工作时间，在线工作时间：8:00AM-20:00PM");
+            }
+            replyMessage(inMessage, response, msgsb);
+            return isPushToCallCenter;
         }else {
 
             if (content.equals("completechat")){
@@ -525,14 +565,12 @@ public class WeChatMessageProcessingHandler {
                 return true;
             }
 
-
-
             boolean isInChat=checkChatStatus(inMessage.getFromUserName());
             if (isInChat){
                 redisService.set(RedisKeyConstants.getScrmappWechatCustomermsg()+inMessage.getFromUserName(),true,1200L);
                 return false;
             }
-          msgsb.append("您好,小沁在此为您服务,沁园与你一起,健康每一天！\n")
+            msgsb.append("您好,小沁在此为您服务,沁园与你一起,健康每一天！\n")
               .append("\n")
               .append("商城购买：\n")
               .append("购买机器,请点击")
