@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.nio.charset.Charset;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.UUID;
 import net.sf.json.JSONObject;
@@ -161,6 +162,29 @@ public class CallCenterOssUtil {
       } catch (IOException e) {
         e.printStackTrace();
       }
+    }
+  }
+
+  /***
+   * 呼叫中心开始工作时间
+   */
+  private final static int CALL_CENTER_WORK_TIME_BEGIN=8;
+  /**
+   * 呼叫中心结束工作时间(-1)
+   */
+  private final static int CALL_CENTER_WORK_TIME_END=19;
+
+  /***
+   * 检查时间是否符合呼叫中心的工作时间
+   * @param  time 时间
+   * @return true 符合，false 不符合
+   */
+  public  static boolean  checkIsInCallCenterWorkingTime(Calendar time){
+    if(null!=time){
+      final  int hour = time.get(Calendar.HOUR_OF_DAY);
+      return CALL_CENTER_WORK_TIME_BEGIN <= hour && hour <= CALL_CENTER_WORK_TIME_END;
+    }else{
+      return false;
     }
   }
 

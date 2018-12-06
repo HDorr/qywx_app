@@ -12,6 +12,7 @@ import com.alibaba.fastjson.JSON;
 import com.thoughtworks.xstream.XStream;
 import com.ziwow.scrmapp.common.persistence.entity.Channel;
 import com.ziwow.scrmapp.common.redis.RedisService;
+import com.ziwow.scrmapp.tools.oss.CallCenterOssUtil;
 import com.ziwow.scrmapp.tools.utils.CommonUtil;
 import com.ziwow.scrmapp.tools.utils.Sha1Util;
 import com.ziwow.scrmapp.tools.utils.StringUtil;
@@ -379,28 +380,6 @@ public class WeChatMessageProcessingHandler {
         }
     }
 
-    /***
-     * 呼叫中心开始工作时间
-     */
-    private final int CALL_CENTER_WORK_TIME_BEGIN=8;
-    /**
-     * 呼叫中心结束工作时间(-1)
-     */
-    private final int CALL_CENTER_WORK_TIME_END=19;
-
-    /***
-     * 检查时间是否符合呼叫中心的工作时间
-     * @param  time 时间
-     * @return true 符合，false 不符合
-     */
-    private boolean  checkIsInCallCenterWorkingTime(Calendar time){
-        if(null!=time){
-            final  int hour = time.get(Calendar.HOUR_OF_DAY);
-            return CALL_CENTER_WORK_TIME_BEGIN <= hour && hour <= CALL_CENTER_WORK_TIME_END;
-        }else{
-            return false;
-        }
-    }
 
     private enum CallCenterKyWord {
         buy("购买");
@@ -541,7 +520,7 @@ public class WeChatMessageProcessingHandler {
         }else if (content.contains("投诉")){
           msgsb.append("您好,非常抱歉给您带来的不便！\n您可以直接输入投诉问题,我们会尽快给您受理的哦\n全国服务热线：400 111 1222\n在线工作时间：8:00AM-20:00PM");
         }else if (content.contains("人工客服")){
-            final boolean inWorkTime=checkIsInCallCenterWorkingTime(Calendar.getInstance());
+            final boolean inWorkTime=CallCenterOssUtil.checkIsInCallCenterWorkingTime(Calendar.getInstance());
             boolean isPushToCallCenter=false;
             if (inWorkTime) {
                 msgsb.append("正在为您转接人工客服,请耐心等待！");
