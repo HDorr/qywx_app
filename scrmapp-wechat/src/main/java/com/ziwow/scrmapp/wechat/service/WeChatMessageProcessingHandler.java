@@ -384,9 +384,9 @@ public class WeChatMessageProcessingHandler {
      */
     private final int CALL_CENTER_WORK_TIME_BEGIN=8;
     /**
-     * 呼叫中心结束工作时间
+     * 呼叫中心结束工作时间(-1)
      */
-    private final int CALL_CENTER_WORK_TIME_END=20;
+    private final int CALL_CENTER_WORK_TIME_END=19;
 
     /***
      * 检查时间是否符合呼叫中心的工作时间
@@ -552,7 +552,7 @@ public class WeChatMessageProcessingHandler {
                 pushMessageToCallCenter(inMessage);//推送消息到呼叫中心
                 isPushToCallCenter=true;
             } else {
-                msgsb.append("抱歉目前不是人工客服的工作时间，在线工作时间：8:00AM-20:00PM");
+                msgsb.append("您好，非常抱歉给您带来不便，目前并非工客服的工作时间，工作时间为：8:00AM-20:00PM");
             }
             replyMessage(inMessage, response, msgsb);
             return isPushToCallCenter;
