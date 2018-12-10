@@ -106,6 +106,9 @@ public class WeChatMessageProcessingHandler {
     @Value("${callCenter.url}")
     private String callCenterUrl;
 
+    @Value("${callCenter.limit.time}")
+    private Boolean limitCallCenterWorkingTime;
+
     @Value("${callCenter.tenantId}")
     private String callCenterTenantId;
 
@@ -522,7 +525,7 @@ public class WeChatMessageProcessingHandler {
         }else if (content.contains("人工客服")){
             final boolean inWorkTime=CallCenterOssUtil.checkIsInCallCenterWorkingTime(Calendar.getInstance());
             boolean isPushToCallCenter=false;
-            if (inWorkTime) {
+            if (!limitCallCenterWorkingTime || inWorkTime) {
                 msgsb.append("正在为您转接人工客服,请耐心等待！");
                 redisService.set(RedisKeyConstants.getScrmappWechatCustomermsg() + inMessage.getFromUserName(), true, 1200L);
                 //调用呼叫中心转人工
