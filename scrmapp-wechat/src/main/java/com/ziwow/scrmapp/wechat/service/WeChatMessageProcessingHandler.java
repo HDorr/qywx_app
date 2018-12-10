@@ -531,7 +531,7 @@ public class WeChatMessageProcessingHandler {
                 pushMessageToCallCenter(inMessage);//推送消息到呼叫中心
                 isPushToCallCenter=true;
             } else {
-                msgsb.append("您好，非常抱歉给您带来不便，目前并非工客服的工作时间，工作时间为：8:00AM-20:00PM");
+                msgsb.append("您好，非常抱歉给您带来不便，目前并非客服的工作时间，工作时间为：8:00AM-20:00PM");
             }
             replyMessage(inMessage, response, msgsb);
             return isPushToCallCenter;
