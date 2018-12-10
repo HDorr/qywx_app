@@ -5,10 +5,12 @@ import com.ziwow.scrmapp.common.bean.vo.cem.CemResp;
 import com.ziwow.scrmapp.common.service.ThirdPartyService;
 import com.ziwow.scrmapp.tools.utils.MD5;
 import com.ziwow.scrmapp.wechat.service.ProductService;
+import com.ziwow.scrmapp.wechat.service.WechatMediaService;
 import java.io.IOException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -53,6 +55,9 @@ public class CheckUserInterceptor implements HandlerInterceptor {
     @Autowired
     ProductService productService;
 
+    @Resource
+    private WechatMediaService wechatMediaService;
+
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         //为false时，方法直接return;
@@ -93,6 +98,7 @@ public class CheckUserInterceptor implements HandlerInterceptor {
 
 //        thirdPartyService.getCemProductInfo("104011-0003");
 //        productService.syncHistroyProductItemFromCemTemp("15207105539", "iqCjJfmk");
+//        wechatMediaService.downLoadMediaForCallCenter("QF2q18_9XhZFXSe7wacahl1pljPwZn-xwdDLimr1mqNAXrxpLJP5YkyE7Cx3zeDv");
 
         /**
          * fixme 测试数据

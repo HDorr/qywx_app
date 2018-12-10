@@ -31,6 +31,8 @@ import com.ziwow.scrmapp.tools.thirdParty.SignUtil;
 import com.ziwow.scrmapp.tools.utils.DateUtil;
 import com.ziwow.scrmapp.tools.utils.StringUtil;
 import com.ziwow.scrmapp.tools.utils.UniqueIDBuilder;
+import com.ziwow.scrmapp.tools.weixin.Tools;
+import com.ziwow.scrmapp.tools.weixin.XmlUtils;
 import com.ziwow.scrmapp.wechat.constants.WeChatConstants;
 import com.ziwow.scrmapp.wechat.enums.BuyChannel;
 import com.ziwow.scrmapp.wechat.persistence.entity.MallPcUser;
@@ -41,6 +43,7 @@ import com.ziwow.scrmapp.wechat.utils.BarCodeConvert;
 import com.ziwow.scrmapp.wechat.vo.MiniappSendSms;
 import com.ziwow.scrmapp.wechat.vo.WechatFansVo;
 import com.ziwow.scrmapp.wechat.vo.WechatJSSdkSignVO;
+import javax.servlet.ServletInputStream;
 import net.sf.json.JSONArray;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
@@ -616,5 +619,7 @@ public class WechatController {
 
     @Value("${open.weixin.component_appid}")
     private String component_appid;
+
+
 
 }
