@@ -358,7 +358,7 @@ public class WeChatMessageProcessingHandler {
             .append("/scrmapp/consumer/product/index'>【找售后•一键服务】</a>\n")
             .append("24小时在线预约滤芯、安装、维修、清洗等售后服务\n")
             .append("\n")
-            .append("2018，沁园和您一起更净一步！");
+            .append("2019，沁园和您一起更净一步！");
 
         replyMessage(inMessage, response, msgsb);
     }
