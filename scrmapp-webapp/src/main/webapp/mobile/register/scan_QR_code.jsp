@@ -71,7 +71,9 @@
     <div class="main-layer-new" hidden="hidden" id="newChannelPage">
       <p class="text" >关注沁园官方微信即可查询</p>
       <p class="text"><text class="icon">●</text>长按二维码保存图片</p>
-      <p class="text"><text class="icon">●</text>打开识别，点击关注</p>
+      <p class="text"><text class="icon">●</text>打开微信扫一扫</p>
+      <p class="text"><text class="icon">●</text>选择相册中的二维码</p>
+      <p class="text"><text class="icon">●</text>点击关注公众号</p>
       <div class="img-box">
         <img src="${f_ctxpath}/resources/src/images/qy_qrcode_new_channel.png${f_ver}" class="newQrCode">
       </div>
