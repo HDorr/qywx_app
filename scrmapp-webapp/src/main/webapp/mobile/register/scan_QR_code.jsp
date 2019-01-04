@@ -28,21 +28,19 @@
     .main-layer .img-box .qrCode{
       width: 100%;
     }
-
-
     .main-layer-new{
-      max-width: 750px;
+      width: 100%;
       margin:0 auto;
     }
-    /*.main-layer-new p:nth-child(1){
-      margin-top: 100px;
-    }*/
-    .main-layer-new .text{
+    /* .main-layer-new p:nth-child(1){
+    margin-top: 100px;
+    } */
+    .main-layer-new >.tip>.text{
       width: 100%;
-      text-align:left;
+      text-align:center;
       /*font-size: 18px;*/
       /*font-weight: bold;*/
-      margin-top: 20px;
+      margin-top: 100px;
     }
     .main-layer-new .img-box{
       /*width: 80%;*/
@@ -57,40 +55,40 @@
       margin-right: 10px;
     }
     .tip{
-      margin-left: 50%;
-      transform: translateX(-50%);
+      width: 100%;
+    }
+    .tip>.text{
+      margin-top: 100px;
     }
     .tips{
       width: 90%;
-      margin:  0 auto;
-    }
-    .tip > .text{
-      margin-top: 100px;
+      width: 60%;
+      text-align: left;
+      margin-left: 30%;
+      /* transform: translateX(-50%); */
     }
   </style>
 </head>
 <body>
-<%--<input type="hidden" value="myPdtList" id="formUrl" />--%>
-<input type="hidden" value="${url}" hidden="hidden" id="formUrl" />
+<input type="hidden" value="${url}" id="formUrl" />
 <div class="main-layer" hidden="" id="defaultChannelPage">
-  <p class="text" id="qr">您还不是粉丝哦，长按钮下方二维码进行关注</p>
+  <p class="text" id="qr">您还不是粉丝哦，长按钮下方二维码进行关注</p >
   <div class="img-box">
-    <img src="${f_ctxpath}/resources/src/images/qy_QR_code.png${f_ver}" class="qrCode">
+    <img src="${f_ctxpath}/resources/src/images/qy_QR_code.png${f_ver}" class="qrCode"/>
   </div>
 </div>
-
-<div class="main-layer-new" hidden="hidden" id="newChannelPage">
+<div class="main-layer-new" id="newChannelPage">
   <div class="tip">
-    <p class="text" >关注沁园官方微信即可查询</p>
+    <p class="text" >关注沁园官方微信即可查询</p >
     <div class="tips">
-      <p class="text"><text class="icon">●</text>长按二维码保存图片</p>
-      <p class="text"><text class="icon">●</text>打开微信扫一扫</p>
-      <p class="text"><text class="icon">●</text>选择相册中的二维码</p>
-      <p class="text"><text class="icon">●</text>点击关注公众号</p>
+      <p class="text"><text class="icon">●</text>长按二维码保存图片</p >
+      <p class="text"><text class="icon">●</text>打开微信扫一扫</p >
+      <p class="text"><text class="icon">●</text>选择相册中的二维码</p >
+      <p class="text"><text class="icon">●</text>点击关注公众号</p >
     </div>
   </div>
   <div class="img-box">
-    <img src="${f_ctxpath}/resources/src/images/qy_qrcode_new_channel.png${f_ver}" class="newQrCode">
+    <img src="${f_ctxpath}/resources/src/images/qy_qrcode_new_channel.png${f_ver}" class="newQrCode"/>
   </div>
 </div>
 </body>
