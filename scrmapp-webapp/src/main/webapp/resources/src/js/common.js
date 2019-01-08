@@ -356,7 +356,7 @@ var wxInit_promise = {
         }
         wx.scanQRCode({
             needResult: 1, // 默认为0，扫描结果由微信处理，1则直接返回扫描结果，
-            scanType: ["barCode"], // 可以指定扫二维码还是一维码
+            scanType: ["barCode","qrCode"], // 可以指定扫二维码还是一维码
             success: function (res) {
                 def.resolve(res)
             },
