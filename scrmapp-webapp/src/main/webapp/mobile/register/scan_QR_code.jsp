@@ -10,63 +10,30 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
   <script type="text/javascript" src="https://res.wx.qq.com/open/js/jweixin-1.3.2.js"></script>
   <style>
-    .main-layer{
-      max-width: 750px;
-      margin:0 auto;
+    *{
+      margin: 0;
+      padding: 0;
     }
-    .main-layer .text{
-      width: 100%;
-      text-align:center;
-      font-size: 15px;
-      font-weight: bold;
-      margin-top: 40px;
-    }
-    .main-layer .img-box{
-      width: 80%;
-      margin: 40px auto 0 auto;
-    }
-    .main-layer .img-box .qrCode{
-      width: 100%;
-    }
-    .main-layer-new{
-      width: 100%;
-      margin:0 auto;
-    }
-    /* .main-layer-new p:nth-child(1){
-    margin-top: 100px;
-    } */
-    .main-layer-new >.tip>.text{
-      width: 100%;
-      text-align:center;
-      /*font-size: 18px;*/
-      /*font-weight: bold;*/
-      margin-top: 100px;
-    }
-    .main-layer-new .img-box{
-      /*width: 80%;*/
-      /*margin: 40px auto 0 auto;*/
-      text-align:center;
-      margin-top:40px;
-    }
-    .main-layer-new .img-box .qrCode{
-      width: 60%;
-    }
-    .main-layer-new .icon{
-      margin-right: 10px;
-    }
-    .tip{
-      width: 100%;
-    }
-    .tip>.text{
-      margin-top: 100px;
-    }
-    .tips{
-      width: 90%;
-      width: 60%;
+    .title{
       text-align: left;
-      margin-left: 30%;
-      /* transform: translateX(-50%); */
+      width: 216px;
+      margin: 20px 0;
+      font-weight: bold;
+      letter-spacing: 2px;
+      margin: 20px auto;
     }
+    .tips>p{
+      margin-bottom: 20px;
+    }
+    .center{
+      text-align: left;
+      margin: 0 auto;
+      width: 160px;
+    }
+    .img-box{
+      text-align: center;
+    }
+
   </style>
 </head>
 <body>
@@ -79,12 +46,12 @@
 </div>
 <div class="main-layer-new" id="newChannelPage">
   <div class="tip">
-    <p class="text" >关注沁园官方微信即可查询</p >
+    <p class="title" >关注沁园官方微信即可查询</p >
     <div class="tips">
-      <p class="text"><text class="icon">●</text>长按二维码保存图片</p >
-      <p class="text"><text class="icon">●</text>打开微信扫一扫</p >
-      <p class="text"><text class="icon">●</text>选择相册中的二维码</p >
-      <p class="text"><text class="icon">●</text>点击关注公众号</p >
+      <p class="text center"><text class="icon">●</text>长按二维码保存图片</p >
+      <p class="text marginLeft"><text class="icon">●</text>打开微信扫一扫</p >
+      <p class="text marginLeft"><text class="icon">●</text>选择相册中的二维码</p >
+      <p class="text marginLeft"><text class="icon">●</text>点击关注公众号</p >
     </div>
   </div>
   <div class="img-box">
@@ -92,7 +59,15 @@
   </div>
 </div>
 </body>
-<script>
+
+<script type="text/javascript">
+  let centerLeft = document.getElementsByClassName("center")[0];
+  let marginLefs = document.getElementsByClassName("marginLeft");
+  let title = document.getElementsByClassName("title")[0];
+  for(let i = 0;i<marginLefs.length;i++){
+    alert(centerLeft.getBoundingClientRect().left);
+    marginLefs[i].style.marginLeft = centerLeft.getBoundingClientRect().left;
+  }
   wx.miniProgram.getEnv(function (res) {
     if(true===res.miniprogram){
       let fromUrl =document.getElementById('formUrl').value;
