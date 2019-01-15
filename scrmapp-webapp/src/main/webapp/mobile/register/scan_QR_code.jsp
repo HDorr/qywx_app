@@ -28,7 +28,7 @@
     .center{
       text-align: left;
       margin: 0 auto;
-      width: 160px;
+      width: 170px;
     }
     .img-box{
       text-align: center;
