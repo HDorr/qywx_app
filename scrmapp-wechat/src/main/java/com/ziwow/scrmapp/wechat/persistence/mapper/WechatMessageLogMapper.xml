@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ziwow.scrmapp.wechat.persistence.mapper.WechatMessageLogMapper">
+	<resultMap type=" com.ziwow.scrmapp.tools.weixin.InMessage" id="resultMap">
+	</resultMap>
+
+	<insert id="saveLog"  parameterType="com.ziwow.scrmapp.tools.weixin.InMessage">
+		insert into t_wechat_message_log (open_id,msg_type,event,event_key) values (#{fromUserName},NOW(),#{msgType},#{event},#{eventKey});
+	</insert>
+
+</mapper>
