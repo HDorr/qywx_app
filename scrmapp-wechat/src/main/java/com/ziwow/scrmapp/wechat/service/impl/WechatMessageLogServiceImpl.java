@@ -32,6 +32,6 @@ public class WechatMessageLogServiceImpl implements WechatMessageLogService {
     @Async
     @Override
     public void saveLog(InMessage message) {
-      wechatMessageLogMapper.saveLog(message);
+      wechatMessageLogMapper.saveLog(message.getFromUserName(),message.getMsgType(),message.getEvent(),message.getEventKey());
     }
 }

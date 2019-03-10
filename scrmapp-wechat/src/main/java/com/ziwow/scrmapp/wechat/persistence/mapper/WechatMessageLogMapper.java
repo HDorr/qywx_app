@@ -10,5 +10,5 @@ import org.apache.ibatis.annotations.Param;
  */
 public interface WechatMessageLogMapper {
 
-  int saveLog(InMessage message);
+  int saveLog(@Param("openId")String openId,@Param("msgType")String msgType,@Param("event")String event,@Param("eventKey")String eventKey);
 }
