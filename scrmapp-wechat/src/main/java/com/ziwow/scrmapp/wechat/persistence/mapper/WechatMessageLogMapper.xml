@@ -4,7 +4,7 @@
 	<resultMap type=" com.ziwow.scrmapp.tools.weixin.InMessage" id="resultMap">
 	</resultMap>
 
-	<insert id="saveLog"  parameterType="com.ziwow.scrmapp.tools.weixin.InMessage">
+	<insert id="saveLog" >
 		insert into t_wechat_message_log (open_id,msg_type,event,event_key) values (#{openId},NOW(),#{msgType},#{event},#{eventKey});
 	</insert>
 
