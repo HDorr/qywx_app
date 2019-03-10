@@ -3,7 +3,7 @@
 <mapper namespace="com.ziwow.scrmapp.wechat.persistence.mapper.WechatMessageLogMapper">
 
 	<insert id="saveLog" >
-		insert into t_wechat_message_log (open_id,msg_type,event,event_key) values (#{openId},NOW(),#{msgType},#{event},#{eventKey});
+		insert into t_wechat_message_log (open_id,create_time,msg_type,event,event_key) values (#{openId},NOW(),#{msgType},#{event},#{eventKey});
 	</insert>
 
 </mapper>
