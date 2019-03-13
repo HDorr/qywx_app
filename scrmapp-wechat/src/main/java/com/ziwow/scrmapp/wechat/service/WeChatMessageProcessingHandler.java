@@ -121,6 +121,13 @@ public class WeChatMessageProcessingHandler {
     @Autowired
     private RedisService redisService;
 
+    private WechatMessageLogService wechatMessageLogService;
+    @Autowired
+    public void setWechatMessageLogService(WechatMessageLogService wechatMessageLogService) {
+        this.wechatMessageLogService = wechatMessageLogService;
+    }
+
+
     /**
      * 业务转发组件
      *
@@ -139,6 +146,7 @@ public class WeChatMessageProcessingHandler {
         try {
             InMessage inMessage = XmlUtils.xmlToObject(requestStr, InMessage.class);
             LOG.info("微信返回inMessage信息:{}", JSON.toJSONString(inMessage));
+            wechatMessageLogService.saveLog(inMessage);
             if (null != inMessage) {
                 if ("event".equals(inMessage.getMsgType())) {
                     if ("subscribe".equals(inMessage.getEvent())) {
