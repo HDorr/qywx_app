@@ -14,21 +14,21 @@ TAG=$1
 echo -e "===================>请确认当前的环境:$ENV,镜像标签:$TAG [Y/N]"
 read answer
 
-if [ "$answer" -eq "N" ]
+if [ "$answer" = "Y" ]
 then
-    exit 0
+    echo -e "===================>打包-scrm-生产环境"
+    cd scrmapp-parent
+    mvn clean package -P$ENV
+
+    # 3.构建镜像
+    cd ..
+    echo "===================>镜像构建-scrmPC-生产环境"
+    docker login 47.96.110.23:8081
+    docker build -t="47.96.110.23:8081/scrm/app:$TAG-$ENV" .
+    echo "===================>推送镜像"
+    docker push "47.96.110.23:8081/scrm/app:$TAG-$ENV"
 fi
 
-echo -e "===================>打包-scrm-生产环境"
-cd scrmapp-parent
-mvn clean package -P$ENV
 
-# 3.构建镜像
-cd ..
-echo "===================>镜像构建-scrm-测试环境"
-docker login 47.96.110.23:8081
-docker build -t="47.96.110.23:8081/scrm/app:$TAG-$ENV" .
-echo "===================>推送镜像"
-docker push "47.96.110.23:8081/scrm/app:$TAG-$ENV"
 
 
