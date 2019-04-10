@@ -158,7 +158,8 @@ public class WechatMediaServiceImpl implements WechatMediaService,InitializingBe
         }
       }
       //生成对应mp3格式
-      return  ChangeAudioFormat.changeToMp3(filePath, picPath + picName + ".mp3");
+      ChangeAudioFormat.changeToMp3(filePath, picPath + picName + ".mp3");
+      return  "";
     }
   }
 

@@ -85,9 +85,9 @@
 		</dependency>
 
 		<dependency>
-			<groupId>it.sauronsoftware</groupId>
+			<groupId>com.github.dadiyang</groupId>
 			<artifactId>jave</artifactId>
-			<version>1.0.2.3</version>
+			<version>1.0.5</version>
 		</dependency>
 		
 		<dependency>
