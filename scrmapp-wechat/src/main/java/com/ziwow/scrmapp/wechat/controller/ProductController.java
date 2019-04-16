@@ -236,7 +236,7 @@ public class ProductController {
 
             // 产品绑定后发送模板消息
             productService.productBindTemplateMsg(product);
-            String content = "亲爱的用户，恭喜您成功绑定产品。您可以即刻开启滤芯更换提醒功能，及时了解滤芯使用情况。";
+            String content = "亲爱的用户，恭喜您成功绑定产品。积分商城全新上线、微商城下单即可享受积分专属抵扣，积分也能当钱花！";
             mobileService.sendContentByEmay(wechatUser.getMobilePhone(), content, Constant.CUSTOMER);
 
             result.setReturnCode(Constant.SUCCESS);
