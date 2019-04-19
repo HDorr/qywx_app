@@ -72,7 +72,10 @@ public class WechatTemplateServiceImpl implements WechatTemplateService {
 	
 	@Value("${changeAppointmentTemplate.id}")
 	private String changeAppointmentTemplateId;
-	
+
+	@Value("${orderSubmittedTemplate.id}")
+	private String orderSubmittedTemplateId;
+
 	@Resource
 	private RedisService redisService;
 	
@@ -236,5 +239,15 @@ public class WechatTemplateServiceImpl implements WechatTemplateService {
 				this.getTemplateID(changeAppointmentTemplateId), url, title, orderType, ordersCode, orderTime, qyhUserName,
 				qyhUserPhone, remark);
 		this.sendTemplateMsgByToken(weiXinService.getAccessToken(appid, secret), templateData);
+	}
+
+	@Override
+	public void submittedOrderTemplate(String openId, String url, String title, String userName,
+			String orderTime, String productName, String totalFee, String usedPoint, String remark) {
+		String[] params={title,userName,orderTime,productName,totalFee,usedPoint,remark};
+		TemplateData templateData = TemplateSetting.generateTemplateData(openId,
+				this.getTemplateID(subscribeResultNoticeTemplateId), url,params);
+		this.sendTemplateMsgByToken(weiXinService.getAccessToken(appid, secret), templateData);
+
 	}
 }

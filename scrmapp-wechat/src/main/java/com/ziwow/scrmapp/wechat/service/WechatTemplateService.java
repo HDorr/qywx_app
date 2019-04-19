@@ -244,4 +244,19 @@ public interface WechatTemplateService {
 	 */
 	public void changeAppointmentTemplate(String openId, String url, String title, String orderType, String ordersCode,
 			String orderTime, String qyhUserName, String qyhUserPhone, String remark);
+
+	/****
+	 * 下单通知模板
+	 * @param openId 用户openid
+	 * @param url 链接
+	 * @param title 标题
+	 * @param userName 用户姓名
+	 * @param orderTime 下单时间
+	 * @param productName 产品名称
+	 * @param totalFee 金额
+	 * @param usedPoint 消费积分
+	 * @param remark mark
+	 */
+	void submittedOrderTemplate(String openId,String url,String title,String userName,String orderTime,
+			String productName,String totalFee,String usedPoint,String remark);
 }
