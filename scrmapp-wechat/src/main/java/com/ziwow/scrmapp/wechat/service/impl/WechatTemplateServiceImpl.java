@@ -246,7 +246,7 @@ public class WechatTemplateServiceImpl implements WechatTemplateService {
 			String orderTime, String productName, String totalFee, String usedPoint, String remark) {
 		String[] params={title,userName,orderTime,productName,totalFee,usedPoint,remark};
 		TemplateData templateData = TemplateSetting.generateTemplateData(openId,
-				this.getTemplateID(subscribeResultNoticeTemplateId), url,params);
+				this.getTemplateID(orderSubmittedTemplateId), url,params);
 		this.sendTemplateMsgByToken(weiXinService.getAccessToken(appid, secret), templateData);
 
 	}
