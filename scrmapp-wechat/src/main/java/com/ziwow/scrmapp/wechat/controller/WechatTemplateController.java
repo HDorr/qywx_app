@@ -116,8 +116,8 @@ public class WechatTemplateController {
                 logger.error("发送通知模板出错，用户不存在");
                 return result;
             }
-            wechatTemplateService.submittedOrderTemplate(fans.getOpenId(),"","测试标题",
-                fans.getWfNickName(),orderTime,productName,totalFee,usedPoint,"mark");
+            wechatTemplateService.submittedOrderTemplate(fans.getOpenId(),"","沁园微商城消费结果",
+                fans.getWfNickName(),orderTime,productName,totalFee,usedPoint,"欢迎下次再来");
         } catch (Exception e) {
             logger.error("通知发送失败，原因", e);
             result.setReturnCode(Constant.FAIL);
