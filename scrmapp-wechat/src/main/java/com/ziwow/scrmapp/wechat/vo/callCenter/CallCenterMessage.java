@@ -107,7 +107,7 @@ public class CallCenterMessage {
 
 
   @XStreamCDATA
-  String SkillGroup="egoo_xa";
+  String SkillGroup="wechat";
 
 
   public CallCenterMessage() {
