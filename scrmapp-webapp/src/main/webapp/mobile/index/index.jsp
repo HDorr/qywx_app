@@ -43,7 +43,7 @@
                 <li class="flex-item">
                     <a href="${securityCheckUrl}">
                         <img src="${f_ctxpath}/resources/images/index/check.png">
-                        <p>产品防伪查询</p>
+                        <p>滤芯防伪查询</p>
                     </a>
                 </li>
                 <li class="flex-item">
