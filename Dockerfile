@@ -5,6 +5,9 @@ LABEL time="2019年03月23日"
 
 WORKDIR /root
 
+#安装curl 用于进行监控检查
+RUN apk add curl
+
 COPY  scrmapp-webapp/target/scrmapp.war /usr/local/tomcat/webapps/wx.war
 
 # 端口开放声明
