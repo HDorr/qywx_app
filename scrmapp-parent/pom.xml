@@ -413,36 +413,6 @@
 	</build>
 
 	<repositories>
-		<repository>
-			<id>org.apache.maven2.repo1</id>
-			<name>Maven2 repo1</name>
-			<url>http://repo1.maven.org/maven2</url>
-		</repository>
-		<repository>
-			<id>org.apache.maven2.repo2</id>
-			<name>Maven2 repo2</name>
-			<url>http://repo2.maven.org/maven2</url>
-		</repository>
-		<repository>
-			<id>jboss maven2</id>
-			<name>jboss maven2</name>
-			<url>https://repository.jboss.org/nexus/content/groups/public/</url>
-		</repository>
-		<repository>
-			<id>oss.sonatype.org</id>
-			<name>oss.sonatype.org</name>
-			<url>http://oss.sonatype.org/content/groups/public/</url>
-		</repository>
-		<repository>
-			<id>m2repo.epseelon.org</id>
-			<name>m2repo.epseelon.org</name>
-			<url>http://m2repo.epseelon.org/</url>
-		</repository>
-		<repository>
-			<id>team.andromda.org</id>
-			<name>team.andromda.org</name>
-			<url>http://team.andromda.org/maven2/</url>
-		</repository>
 	</repositories>
 
 
