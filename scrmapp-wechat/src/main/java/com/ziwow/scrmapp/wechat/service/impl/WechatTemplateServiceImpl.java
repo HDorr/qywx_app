@@ -76,6 +76,15 @@ public class WechatTemplateServiceImpl implements WechatTemplateService {
 	@Value("${orderSubmittedTemplate.id}")
 	private String orderSubmittedTemplateId;
 
+	@Value("${orderRefundTemplate.id}")
+	private String orderRefundTemplateId;
+
+	@Value("${pointChangeTemplate.id}")
+	private String pointChangeTemplateId;
+
+	@Value("${qyscRegisterTemplate.id}")
+	private String  qyscRegsiterTemplateId;
+
 	@Resource
 	private RedisService redisService;
 	
