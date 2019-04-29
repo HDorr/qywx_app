@@ -1,6 +1,7 @@
 package com.ziwow.scrmapp.wechat.service;
 
 import com.ziwow.scrmapp.wechat.weixin.TemplateData;
+import java.util.List;
 
 /**
  * 
@@ -249,14 +250,8 @@ public interface WechatTemplateService {
 	 * 下单通知模板
 	 * @param openId 用户openid
 	 * @param url 链接
-	 * @param title 标题
-	 * @param userName 用户姓名
-	 * @param orderTime 下单时间
-	 * @param productName 产品名称
-	 * @param totalFee 金额
-	 * @param usedPoint 消费积分
-	 * @param remark mark
+	 * @param params
+	 * @param type
 	 */
-	void submittedOrderTemplate(String openId,String url,String title,String userName,String orderTime,
-			String productName,String totalFee,String usedPoint,String remark);
+	void sendTemplate(String openId, String url, List<String> params, String type);
 }

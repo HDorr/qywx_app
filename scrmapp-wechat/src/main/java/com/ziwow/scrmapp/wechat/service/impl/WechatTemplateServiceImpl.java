@@ -1,5 +1,8 @@
 package com.ziwow.scrmapp.wechat.service.impl;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import javax.annotation.Resource;
@@ -7,7 +10,9 @@ import javax.annotation.Resource;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
 import com.ziwow.scrmapp.common.redis.RedisService;
@@ -84,6 +89,9 @@ public class WechatTemplateServiceImpl implements WechatTemplateService {
 
 	@Value("${qyscRegisterTemplate.id}")
 	private String  qyscRegsiterTemplateId;
+
+	@Autowired
+	Environment environment;
 
 	@Resource
 	private RedisService redisService;
@@ -250,12 +258,22 @@ public class WechatTemplateServiceImpl implements WechatTemplateService {
 		this.sendTemplateMsgByToken(weiXinService.getAccessToken(appid, secret), templateData);
 	}
 
+	private static final String KEY=".id";
 	@Override
-	public void submittedOrderTemplate(String openId, String url, String title, String userName,
-			String orderTime, String productName, String totalFee, String usedPoint, String remark) {
-		String[] params={title,userName,orderTime,productName,totalFee,usedPoint,remark};
-		TemplateData templateData = TemplateSetting.generateTemplateData(openId,
-				this.getTemplateID(orderSubmittedTemplateId), url,params);
+	public void sendTemplate(String openId, String url, List<String> params, String type) {
+	  //根据类型获取模板id
+    String templateKey=type+KEY;
+		String templateShortId = environment.getProperty(templateKey);
+		String templateID = this.getTemplateID(templateShortId);
+		String remark = wechatTemplateMapper.getTemplateRemark(templateShortId);
+		String title = wechatTemplateMapper.getTemplateTitle(templateShortId);
+		List<String> paramList=new ArrayList<>();
+		paramList.add(title);
+		paramList.addAll(params);
+		paramList.add(remark);
+		//获取模板的内容
+		TemplateData templateData = TemplateSetting.generateTemplateData(openId,templateID
+				, url,paramList.toArray(new String[0]));
 		this.sendTemplateMsgByToken(weiXinService.getAccessToken(appid, secret), templateData);
 
 	}
