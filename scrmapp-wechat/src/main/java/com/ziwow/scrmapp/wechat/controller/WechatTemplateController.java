@@ -36,9 +36,6 @@ public class WechatTemplateController {
         this.wechatFansService = wechatFansService;
     }
 
-
-
-
     @RequestMapping(method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
     @ResponseBody
     public Result sendTemplateNotify(@RequestParam("timestamp") String timestamp,
