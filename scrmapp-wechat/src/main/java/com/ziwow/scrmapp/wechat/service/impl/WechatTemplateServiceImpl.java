@@ -1,24 +1,5 @@
 package com.ziwow.scrmapp.wechat.service.impl;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.concurrent.TimeUnit;
-
-import javax.annotation.Resource;
-
-import org.apache.commons.lang.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.BeansException;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
-import org.springframework.context.MessageSource;
-import org.springframework.core.env.Environment;
-import org.springframework.stereotype.Service;
-
 import com.ziwow.scrmapp.common.redis.RedisService;
 import com.ziwow.scrmapp.wechat.constants.RedisKeyConstants;
 import com.ziwow.scrmapp.wechat.persistence.mapper.WechatTemplateMapper;
@@ -27,6 +8,19 @@ import com.ziwow.scrmapp.wechat.service.WeiXinService;
 import com.ziwow.scrmapp.wechat.weixin.TemplateData;
 import com.ziwow.scrmapp.wechat.weixin.TemplateSetting;
 import com.ziwow.scrmapp.wechat.weixin.WechatMsgAction;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
+import javax.annotation.Resource;
+import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.ApplicationContextAware;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.core.env.Environment;
+import org.springframework.stereotype.Service;
 
 /**
  * ClassName: WXTemplateServiceImpl <br/>
@@ -38,7 +32,8 @@ import com.ziwow.scrmapp.wechat.weixin.WechatMsgAction;
  * @since JDK 1.6
  */
 @Service
-public class WechatTemplateServiceImpl implements WechatTemplateService,ApplicationContextAware {
+@PropertySource("classpath:application.properties")
+public class WechatTemplateServiceImpl implements WechatTemplateService {
 	private Logger LOG = LoggerFactory.getLogger(WechatTemplateService.class);
 	
 	@Value("${wechat.appid}")
@@ -94,6 +89,8 @@ public class WechatTemplateServiceImpl implements WechatTemplateService,Applicat
 	@Value("${qyscRegisterTemplate.id}")
 	private String  qyscRegsiterTemplateId;
 
+	@Autowired
+	private Environment environment;
 
 	@Resource
 	private RedisService redisService;
@@ -265,7 +262,7 @@ public class WechatTemplateServiceImpl implements WechatTemplateService,Applicat
 	public void sendTemplate(String openId, String url, List<String> params, String type) {
 	  //根据类型获取模板id
     String templateKey=type+KEY;
-		String templateShortId = context.getMessage(templateKey,null,null);
+		String templateShortId = environment.getProperty(templateKey);
 		String templateID = this.getTemplateID(templateShortId);
 		String remark = wechatTemplateMapper.getTemplateRemark(templateShortId);
 		String title = wechatTemplateMapper.getTemplateTitle(templateShortId);
@@ -280,10 +277,4 @@ public class WechatTemplateServiceImpl implements WechatTemplateService,Applicat
 
 	}
 
-	private ApplicationContext context;
-
-	@Override
-	public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-		this.context=applicationContext;
-	}
 }
