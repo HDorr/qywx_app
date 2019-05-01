@@ -12,6 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.MessageSource;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
@@ -91,7 +92,7 @@ public class WechatTemplateServiceImpl implements WechatTemplateService {
 	private String  qyscRegsiterTemplateId;
 
 	@Autowired
-	Environment environment;
+	MessageSource messageSource;
 
 	@Resource
 	private RedisService redisService;
@@ -263,7 +264,7 @@ public class WechatTemplateServiceImpl implements WechatTemplateService {
 	public void sendTemplate(String openId, String url, List<String> params, String type) {
 	  //根据类型获取模板id
     String templateKey=type+KEY;
-		String templateShortId = environment.getProperty(templateKey);
+		String templateShortId = messageSource.getMessage(templateKey,null,null);
 		String templateID = this.getTemplateID(templateShortId);
 		String remark = wechatTemplateMapper.getTemplateRemark(templateShortId);
 		String title = wechatTemplateMapper.getTemplateTitle(templateShortId);
