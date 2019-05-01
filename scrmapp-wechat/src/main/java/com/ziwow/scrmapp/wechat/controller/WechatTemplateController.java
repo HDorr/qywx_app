@@ -50,7 +50,7 @@ public class WechatTemplateController {
                 result.setReturnMsg(Constant.ILLEGAL_REQUEST);
                 return result;
             }
-            String[] params = param.split("-");
+            String[] params = param.split(",");
             List<String>  paramList= Arrays.asList(params);
             if (StringUtils.isEmpty(unionId) ||StringUtils.isNotBlank(type)||CollectionUtils.isEmpty(paramList)) {
                 result.setReturnCode(Constant.FAIL);
