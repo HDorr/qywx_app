@@ -52,7 +52,7 @@ public class WechatTemplateController {
             }
             String[] params = param.split(",");
             List<String>  paramList= Arrays.asList(params);
-            if (StringUtils.isEmpty(unionId) ||StringUtils.isNotBlank(type)||CollectionUtils.isEmpty(paramList)) {
+            if (StringUtils.isEmpty(unionId) ||StringUtils.isBlank(type)||CollectionUtils.isEmpty(paramList)) {
                 result.setReturnCode(Constant.FAIL);
                 result.setReturnMsg("请求参数有误，请检查后再试！");
                 return result;
