@@ -10,8 +10,11 @@ import javax.annotation.Resource;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.MessageSource;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
@@ -35,7 +38,7 @@ import com.ziwow.scrmapp.wechat.weixin.WechatMsgAction;
  * @since JDK 1.6
  */
 @Service
-public class WechatTemplateServiceImpl implements WechatTemplateService {
+public class WechatTemplateServiceImpl implements WechatTemplateService,ApplicationContextAware {
 	private Logger LOG = LoggerFactory.getLogger(WechatTemplateService.class);
 	
 	@Value("${wechat.appid}")
@@ -91,8 +94,6 @@ public class WechatTemplateServiceImpl implements WechatTemplateService {
 	@Value("${qyscRegisterTemplate.id}")
 	private String  qyscRegsiterTemplateId;
 
-	@Autowired
-	MessageSource messageSource;
 
 	@Resource
 	private RedisService redisService;
@@ -264,7 +265,7 @@ public class WechatTemplateServiceImpl implements WechatTemplateService {
 	public void sendTemplate(String openId, String url, List<String> params, String type) {
 	  //根据类型获取模板id
     String templateKey=type+KEY;
-		String templateShortId = messageSource.getMessage(templateKey,null,null);
+		String templateShortId = context.getMessage(templateKey,null,null);
 		String templateID = this.getTemplateID(templateShortId);
 		String remark = wechatTemplateMapper.getTemplateRemark(templateShortId);
 		String title = wechatTemplateMapper.getTemplateTitle(templateShortId);
@@ -277,5 +278,12 @@ public class WechatTemplateServiceImpl implements WechatTemplateService {
 				, url,paramList.toArray(new String[0]));
 		this.sendTemplateMsgByToken(weiXinService.getAccessToken(appid, secret), templateData);
 
+	}
+
+	private ApplicationContext context;
+
+	@Override
+	public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+		this.context=applicationContext;
 	}
 }
