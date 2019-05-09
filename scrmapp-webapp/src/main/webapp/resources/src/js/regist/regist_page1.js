@@ -18,6 +18,7 @@ var registRootPath = getRootPath();
     var telNum;
     var openid = $("#getCusInfo").data("openid");
     var registerSrc=getUrlParam("registerSrc");
+    registerSrc=registerSrc===null?1001:registerSrc;
 
     // var openid = "obJNHxMUR55MYhXYItJFuUlpLg_0"
 
