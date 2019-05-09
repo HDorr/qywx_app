@@ -24,6 +24,7 @@
         <result column="status" property="status"/>
         <result column="wfId" property="wfId"/>
         <result column="createDate" property="createDate"/>
+        <result column="register_src" property="registerSrc"/>
     </resultMap>
 
     <select id="getUserByOpenId" resultMap="wechatUserMap">
@@ -52,8 +53,8 @@
 	</select>
 
     <insert id="saveUser" parameterType="com.ziwow.scrmapp.wechat.persistence.entity.WechatUser">
-		insert into t_wechat_user(userId,password,seed,mobilePhone,provinceId,cityId,areaId,wfId,createDate,nickName,gender)
-		values(#{userId},#{password},#{seed},#{mobilePhone},#{provinceId},#{cityId},#{areaId},#{wfId},now(),#{nickName},#{gender})
+		insert into t_wechat_user(userId,password,seed,mobilePhone,provinceId,cityId,areaId,wfId,createDate,nickName,gender,register_src)
+		values(#{userId},#{password},#{seed},#{mobilePhone},#{provinceId},#{cityId},#{areaId},#{wfId},now(),#{nickName},#{gender},#{registerSrc})
 	</insert>
 
 
