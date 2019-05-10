@@ -17,6 +17,7 @@ public class WechatUser implements java.io.Serializable {
     private Integer gender;			// 1:男 2:女
     private String mobilePhone;
     private Integer maritalStatus;	// 1:是  2:否
+		private Integer registerSrc=0;	//注册来源
     private String email;
     private Date birthday;
     private Integer educationLevel;
@@ -161,5 +162,12 @@ public class WechatUser implements java.io.Serializable {
 	}
 	public void setInterestedType(String interestedType) {
 		this.interestedType = interestedType;
+	}
+
+	public Integer getRegisterSrc() {
+		return registerSrc;
+	}
+	public void setRegisterSrc(Integer registerSrc) {
+		this.registerSrc = registerSrc;
 	}
 }

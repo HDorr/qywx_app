@@ -113,6 +113,7 @@
     <script src="${f_ctxpath}/resources/src/js/flexible.js"></script>
     <script src="${f_ctxpath}/resources/thirdparty/jquery/dist/jquery.min.js"></script>
     <script src="${f_ctxpath}/resources/thirdparty/iscroll/build/iscroll.js"></script>
+    <script src="${f_ctxpath}/resources/src/js/common.js${f_ver}"></script>
     <script src="${f_ctxpath}/resources/src/js/regist/regist_page1.js${f_ver}"></script>
 </body>
 

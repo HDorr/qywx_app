@@ -17,6 +17,8 @@ var registRootPath = getRootPath();
 
     var telNum;
     var openid = $("#getCusInfo").data("openid");
+    var registerSrc=getUrlParam("registerSrc");
+    registerSrc=registerSrc===null?1001:registerSrc;
 
     // var openid = "obJNHxMUR55MYhXYItJFuUlpLg_0"
 
@@ -401,7 +403,8 @@ var registRootPath = getRootPath();
                     // areaId: spanDom.data("areaid"),
                     //userName: $("#custmName").val(),
                     // password: $("#custmPsw").val(),
-                    isMallMember: false
+                    isMallMember: false,
+                    registerSrc:registerSrc
                 }
             } else {
                 window.finaldata = {
@@ -410,7 +413,8 @@ var registRootPath = getRootPath();
                     // provinceId: spanDom.data("provinceid"),
                     // cityId: spanDom.data("cityid"),
                     // areaId: spanDom.data("areaid"),
-                    isMallMember: true
+                    isMallMember: true,
+                    registerSrc:registerSrc
                         //userName: $("#custmName").val(),
                 }
             }
