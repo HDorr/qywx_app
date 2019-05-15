@@ -2,9 +2,9 @@
   position: relative;
   max-width: 750px;
   margin: 0 auto;
-  height: 100%;
+/*  height: 100%;*/
   background-color: #fff;
-  padding-top: 1.5rem;
+  padding-top: 1rem;
 }
 .main_layer .imgBox {
   width: 1.933333rem;
@@ -22,7 +22,7 @@
 }
 .main_layer > p > i {
   display: inline-block;
-  height: 0.346667rem;
+  height: 0.356667rem;
   width: 0.346667rem;
   background-size: cover;
   vertical-align: sub;
@@ -52,7 +52,7 @@
   display: none;
 }
 .main_layer .container {
-  padding-top: 2rem;
+  padding-top: 1.2rem;
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
