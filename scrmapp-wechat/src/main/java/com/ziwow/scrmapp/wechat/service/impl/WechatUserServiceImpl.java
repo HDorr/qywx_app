@@ -2,6 +2,7 @@ package com.ziwow.scrmapp.wechat.service.impl;
 
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
@@ -226,6 +227,11 @@ public class WechatUserServiceImpl implements WechatUserService {
                 logger.info("注册用户信息同步到小程序失败,moreInfo:{}", o1.getString("moreInfo"));
             }
         }
+    }
+
+    @Override
+    public List<WechatUser> getUserByRegisterSrc(Integer src) {
+        return wechatUserMapper.getUserByRegisterSrc(src);
     }
 
     @Override

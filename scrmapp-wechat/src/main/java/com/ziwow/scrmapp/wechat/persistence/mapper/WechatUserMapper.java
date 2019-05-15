@@ -1,6 +1,7 @@
 package com.ziwow.scrmapp.wechat.persistence.mapper;
 
 import com.ziwow.scrmapp.wechat.vo.WechatUserVo;
+import java.util.List;
 import org.apache.ibatis.annotations.Param;
 
 import com.ziwow.scrmapp.wechat.persistence.entity.WechatUser;
@@ -13,17 +14,19 @@ import com.ziwow.scrmapp.wechat.persistence.entity.WechatUser;
  * @版本 V 1.0
  */
 public interface WechatUserMapper {
-    public WechatUser getUserByOpenId(@Param("openId") String openId);
+     WechatUser getUserByOpenId(@Param("openId") String openId);
 
-    public WechatUser getUserByUnionId(@Param("unionId") String unionId);
+     WechatUser getUserByUnionId(@Param("unionId") String unionId);
 
-    public WechatUser getUserByMobilePhone(@Param("mobilePhone") String mobilePhone);
+     WechatUser getUserByMobilePhone(@Param("mobilePhone") String mobilePhone);
 
-    public void saveUser(WechatUser wechatUser);
+     void saveUser(WechatUser wechatUser);
 
     Integer updateUser(@Param("wechatUser") WechatUser wechatUser, @Param("wfId") Long wfId);
 
     WechatUser getUserByUserId(@Param("userId") String userId);
+
+    List<WechatUser> getUserByRegisterSrc(@Param("src") Integer src);
 
     WechatUserVo getBaseUserInfoByUserId(String userId);
 }
