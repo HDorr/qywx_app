@@ -10,7 +10,7 @@
         <meta name="apple-mobile-web-app-capable" content="yes">
         <meta name="apple-mobile-web-app-status-bar-style" content="black">
         <link rel="stylesheet" href="${f_ctxpath}/resources/src/css/reset.css">
-        <link rel="stylesheet" href="${f_ctxpath}/resources/src/css/bindProduct/bindSuccess.css">
+        <link rel="stylesheet" href="${f_ctxpath}/resources/src/css/bindProduct/bindSuccess.css?t=12111111134">
     </head>
     <body>
     <div class="main_layer clearfix">
@@ -32,10 +32,15 @@
             </li>
 
             <li class="flex-item">
-
                 <a href="${installUrl}">
                     <img src="${f_ctxpath}/resources/images/index/orderInstall.png">
                     <p>预约安装</p>
+                </a>
+            </li>
+            <li class="flex-item">
+                <a href="${cleanUrl}">
+                    <img src="${f_ctxpath}/resources/images/index/orderClean.png">
+                    <p>预约清洗</p>
                 </a>
             </li>
 
@@ -43,6 +48,12 @@
                 <a href="${updateFilterUrl}">
                     <img src="${f_ctxpath}/resources/images/index/changeFilter.png">
                     <p>预约更换滤芯</p>
+                </a>
+            </li>
+            <li class="flex-item">
+                <a href="${maintainUrl}">
+                    <img src="${f_ctxpath}/resources/images/index/orderMantainance.png">
+                    <p>预约维修</p>
                 </a>
             </li>
         </ul>

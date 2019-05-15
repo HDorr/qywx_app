@@ -349,7 +349,7 @@ public class WeChatMessageProcessingHandler {
             .append("点击<a href='http://www.qinyuan.cn' data-miniprogram-appid='")
             .append(miniappAppid)
             .append("' data-miniprogram-path='pages/pre_register?fromWechatService=1'>【会员注册】</a>")
-            .append("成为沁园会员，立享专属优惠券\n")
+            .append("畅享在线会员权益 尊享专属积分福利\n")
             .append("\n")
 //            .append("点击<a href='http://www.qinyuan.cn' data-miniprogram-appid='")
 //            .append(miniappAppid)
@@ -359,12 +359,12 @@ public class WeChatMessageProcessingHandler {
             .append("点击<a href='http://www.qinyuanmall.com/mobile/product/filterIndex.jhtml' data-miniprogram-appid='")
             .append(miniappAppid)
             .append("' data-miniprogram-path='pages/home'>【要购买•微信商城】</a>\n")
-            .append("全场优惠立减，购买分享返现\n")
+            .append("全场积分抵现享不停，积分多积多优惠\n")
             .append("\n")
             .append("点击<a href='")
             .append(mineBaseUrl)
             .append("/scrmapp/consumer/product/index'>【找售后•一键服务】</a>\n")
-            .append("24小时在线预约滤芯、安装、维修、清洗等售后服务\n")
+            .append("24小时在线预约滤芯、安装、保养、维修等售后服务\n")
             .append("\n")
             .append("2019，沁园和您一起更净一步！");
 
