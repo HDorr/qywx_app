@@ -116,10 +116,9 @@ public class TemplateMsgScheduledTask {
     /***
      * 在2019年5-17号晚上七点钟进行执行,活动来源用户发送公众号通知
      */
-    //@Scheduled(cron = "0 0 19 17 5 ? 2019")
-    @Scheduled(cron = "0 */5 * * * ?")
+    @Scheduled(cron = "0 0 13 16 5 ? 2019")
     public void registerActivityReminderMsg() {
-/*        if (!flag.equals("0")) {
+        /*        if (!flag.equals("0")) {
             return;
         }*/
         logger.info("H5活动模板消息提醒定时任务开始......");
