@@ -114,13 +114,13 @@ public class TemplateMsgScheduledTask {
 
 
     /***
-     * 在2019年5-17号晚上七点钟进行执行,活动来源用户发送公众号通知
+     * 在2019年5-18号10AM钟进行执行,活动来源用户发送公众号通知
      */
-    @Scheduled(cron = "0 0 14 16 5 ? ")
+    @Scheduled(cron = "0 0 10 18 5 ? ")
     public void registerActivityReminderMsg() {
-        /*        if (!flag.equals("0")) {
+        if (!flag.equals("0")) {
             return;
-        }*/
+        }
         logger.info("H5活动模板消息提醒定时任务开始......");
         long begin = System.currentTimeMillis();
         List<WechatUser> activityUser = wechatUserService.getUserByRegisterSrc(1001);
@@ -128,7 +128,7 @@ public class TemplateMsgScheduledTask {
         for (WechatUser wechatUser : activityUser) {
           try{
               WechatFans fans = wechatFansService.getWechatFansById(wechatUser.getWfId());
-              String[] params={"2019年5月17日","沁园净水器保养礼包","截止2019年6月18日"};
+              String[] params={"2019年5月18日","沁园净水器保养礼包","截止2019年6月18日"};
               wechatTemplateService.sendTemplate(fans.getOpenId(),"", Arrays.asList(params),"awardNotifyTemplate");
               logger.info("发送通知成功,user:{}",wechatUser.getMobilePhone());
           }catch (Exception e){
