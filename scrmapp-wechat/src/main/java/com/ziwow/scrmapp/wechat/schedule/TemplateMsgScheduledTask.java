@@ -116,14 +116,15 @@ public class TemplateMsgScheduledTask {
     /***
      * 在2019年5-17号晚上七点钟进行执行,活动来源用户发送公众号通知
      */
-    @Scheduled(cron = "0 0 19 17 5 ? 2019")
+    //@Scheduled(cron = "0 0 19 17 5 ? 2019")
+    @Scheduled(cron = "0 */5 * * * ?")
     public void registerActivityReminderMsg() {
-        if (!flag.equals("0")) {
+/*        if (!flag.equals("0")) {
             return;
-        }
+        }*/
         logger.info("H5活动模板消息提醒定时任务开始......");
         long begin = System.currentTimeMillis();
-        List<WechatUser> activityUser = wechatUserService.getUserByRegisterSrc(1);
+        List<WechatUser> activityUser = wechatUserService.getUserByRegisterSrc(1001);
         logger.info("获取H5注册的用户，数量:{}",activityUser.size());
         for (WechatUser wechatUser : activityUser) {
           try{
