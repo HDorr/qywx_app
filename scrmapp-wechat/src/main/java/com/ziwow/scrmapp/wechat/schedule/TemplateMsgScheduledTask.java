@@ -116,7 +116,7 @@ public class TemplateMsgScheduledTask {
     /***
      * 在2019年5-17号晚上七点钟进行执行,活动来源用户发送公众号通知
      */
-    @Scheduled(cron = "0 0 13 16 5 ? 2019")
+    @Scheduled(cron = "0 0 14 16 5 ? ")
     public void registerActivityReminderMsg() {
         /*        if (!flag.equals("0")) {
             return;
