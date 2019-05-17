@@ -123,7 +123,7 @@ public class TemplateMsgScheduledTask {
         }
         logger.info("H5活动模板消息提醒定时任务开始......");
         long begin = System.currentTimeMillis();
-        List<WechatUser> activityUser = wechatUserService.getUserByRegisterSrc(1001);
+        List<WechatUser> activityUser = wechatUserService.getUserByRegisterSrc(1);
         logger.info("获取H5注册的用户，数量:{}",activityUser.size());
         for (WechatUser wechatUser : activityUser) {
           try{
@@ -135,6 +135,30 @@ public class TemplateMsgScheduledTask {
               logger.error("定向人群发送通知失败:", e);
           }
 
+        }
+        long end = System.currentTimeMillis();
+        logger.info("H5活动模板消息提醒定时任务结束，共耗时：[" + (end - begin) / 1000 + "]秒");
+    }
+
+
+    /***
+     * 活动通知测试
+     */
+    @Scheduled(cron = "0 0 16 17 5 ? ")
+    public void registerActivityReminderMsgTest() {
+        if (!flag.equals("0")) {
+            return;
+        }
+        logger.info("H5活动模板消息提醒定时任务开始......");
+        long begin = System.currentTimeMillis();
+        WechatUser user = wechatUserService.getUserByMobilePhone("18358733695");
+        try{
+            WechatFans fans = wechatFansService.getWechatFansById(user.getWfId());
+            String[] params={"2019年5月18日","沁园净水器保养礼包","截止2019年6月18日"};
+            wechatTemplateService.sendTemplate(fans.getOpenId(),"", Arrays.asList(params),"awardNotifyTemplate");
+            logger.info("发送通知成功,user:{}",user.getMobilePhone());
+        }catch (Exception e){
+            logger.error("定向人群发送通知失败:", e);
         }
         long end = System.currentTimeMillis();
         logger.info("H5活动模板消息提醒定时任务结束，共耗时：[" + (end - begin) / 1000 + "]秒");
