@@ -1,6 +1,7 @@
 package com.ziwow.scrmapp.wechat.service;
 
 import com.ziwow.scrmapp.wechat.weixin.TemplateData;
+import java.util.List;
 
 /**
  * 
@@ -244,4 +245,13 @@ public interface WechatTemplateService {
 	 */
 	public void changeAppointmentTemplate(String openId, String url, String title, String orderType, String ordersCode,
 			String orderTime, String qyhUserName, String qyhUserPhone, String remark);
+
+	/****
+	 * 下单通知模板
+	 * @param openId 用户openid
+	 * @param url 链接
+	 * @param params
+	 * @param type
+	 */
+	void sendTemplate(String openId, String url, List<String> params, String type);
 }

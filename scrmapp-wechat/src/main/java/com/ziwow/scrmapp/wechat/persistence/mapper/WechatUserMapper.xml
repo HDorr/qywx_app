@@ -41,6 +41,11 @@
 		SELECT u.* FROM t_wechat_user u WHERE userId = #{userId} and u.status=0
 	</select>
 
+
+  <select id="getUserByRegisterSrc" resultMap="wechatUserMap">
+		SELECT u.* FROM t_wechat_user u WHERE register_src = #{src} and u.status=0
+	</select>
+
     <select id="getBaseUserInfoByUserId" resultType="com.ziwow.scrmapp.wechat.vo.WechatUserVo">
         SELECT u.mobilePhone,p.province provinceName,u.nickName,c.city cityName FROM t_wechat_user u
         left join t_city c on u.cityId = c.cityid

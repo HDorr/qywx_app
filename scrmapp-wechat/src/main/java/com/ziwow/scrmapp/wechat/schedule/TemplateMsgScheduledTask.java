@@ -1,8 +1,15 @@
 package com.ziwow.scrmapp.wechat.schedule;
 
+import com.ziwow.scrmapp.wechat.persistence.entity.WechatFans;
+import com.ziwow.scrmapp.wechat.persistence.entity.WechatUser;
+import com.ziwow.scrmapp.wechat.service.WechatFansService;
+import com.ziwow.scrmapp.wechat.service.WechatTemplateService;
+import com.ziwow.scrmapp.wechat.service.WechatUserService;
+import java.util.Arrays;
 import java.util.List;
 
 import com.ziwow.scrmapp.common.constants.Constant;
+import org.apache.commons.lang3.time.DateUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +28,22 @@ import com.ziwow.scrmapp.common.utils.OrderUtils;
 @Component
 public class TemplateMsgScheduledTask {
     private final Logger logger = LoggerFactory.getLogger(TemplateMsgScheduledTask.class);
+    private WechatTemplateService wechatTemplateService;
+    private WechatFansService wechatFansService;
+    @Autowired
+    public void setWechatFansService(WechatFansService wechatFansService) {
+        this.wechatFansService = wechatFansService;
+    }
+
+    @Autowired
+    public void setWechatTemplateService(WechatTemplateService wechatTemplateService) {
+        this.wechatTemplateService = wechatTemplateService;
+    }
+    private WechatUserService wechatUserService;
+    @Autowired
+    public void setWechatUserService(WechatUserService wechatUserService) {
+        this.wechatUserService = wechatUserService;
+    }
     @Autowired
     private FilterChangeRemindService filterChangeRemindService;
     @Autowired
@@ -87,5 +110,57 @@ public class TemplateMsgScheduledTask {
         }
         long end = System.currentTimeMillis();
         logger.info("模板消息提醒定时任务结束，共耗时：[" + (end - begin) / 1000 + "]秒");
+    }
+
+
+    /***
+     * 在2019年5-18号10AM钟进行执行,活动来源用户发送公众号通知
+     */
+    @Scheduled(cron = "0 0 10 18 5 ? ")
+    public void registerActivityReminderMsg() {
+        if (!flag.equals("0")) {
+            return;
+        }
+        logger.info("H5活动模板消息提醒定时任务开始......");
+        long begin = System.currentTimeMillis();
+        List<WechatUser> activityUser = wechatUserService.getUserByRegisterSrc(1);
+        logger.info("获取H5注册的用户，数量:{}",activityUser.size());
+        for (WechatUser wechatUser : activityUser) {
+          try{
+              WechatFans fans = wechatFansService.getWechatFansById(wechatUser.getWfId());
+              String[] params={"2019年5月18日","沁园净水器保养礼包","截止2019年6月18日"};
+              wechatTemplateService.sendTemplate(fans.getOpenId(),"", Arrays.asList(params),"awardNotifyTemplate");
+              logger.info("发送通知成功,user:{}",wechatUser.getMobilePhone());
+          }catch (Exception e){
+              logger.error("定向人群发送通知失败:", e);
+          }
+
+        }
+        long end = System.currentTimeMillis();
+        logger.info("H5活动模板消息提醒定时任务结束，共耗时：[" + (end - begin) / 1000 + "]秒");
+    }
+
+
+    /***
+     * 活动通知测试
+     */
+    @Scheduled(cron = "0 0 16 17 5 ? ")
+    public void registerActivityReminderMsgTest() {
+        if (!flag.equals("0")) {
+            return;
+        }
+        logger.info("H5活动模板消息提醒定时任务开始......");
+        long begin = System.currentTimeMillis();
+        WechatUser user = wechatUserService.getUserByMobilePhone("18358733695");
+        try{
+            WechatFans fans = wechatFansService.getWechatFansById(user.getWfId());
+            String[] params={"2019年5月18日","沁园净水器保养礼包","截止2019年6月18日"};
+            wechatTemplateService.sendTemplate(fans.getOpenId(),"", Arrays.asList(params),"awardNotifyTemplate");
+            logger.info("发送通知成功,user:{}",user.getMobilePhone());
+        }catch (Exception e){
+            logger.error("定向人群发送通知失败:", e);
+        }
+        long end = System.currentTimeMillis();
+        logger.info("H5活动模板消息提醒定时任务结束，共耗时：[" + (end - begin) / 1000 + "]秒");
     }
 }
