@@ -132,9 +132,18 @@
 		  and fans.is_cancel = 0
 	</select>
 
-    <select id="selectTempWechatFans" resultMap="TempWechatMap">
+  <!--临时查询-->
+    <select id="selectTempWechatFansBtach1" resultMap="TempWechatMap">
 		select temp.mobile, f.openid
-		from t_wechat_user_temp temp
+		from t_wechat_user_temp_1 temp
+	  	join t_wechat_fans f
+	  	on temp.wfId = f.id
+	</select>
+
+	<!--临时查询-->
+	<select id="selectTempWechatFansBtach2" resultMap="TempWechatMap">
+		select temp.mobile, f.openid
+		from t_wechat_user_temp_2 temp
 	  	join t_wechat_fans f
 	  	on temp.wfId = f.id
 	</select>

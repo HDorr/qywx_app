@@ -26,5 +26,6 @@ public interface WechatFansMapper {
     public WechatFans getFans(@Param("unionId") String unionId);
     public WechatFans getWechatFansById(@Param("pkId") Long pkId);
     public WechatFans getWechatFansByUserId(@Param("userId") String userId);
-    List<TempWechatFans> selectTempWechatFans();
+    List<TempWechatFans> selectTempWechatFansBtach1();
+    List<TempWechatFans> selectTempWechatFansBtach2();
 }

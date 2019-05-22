@@ -21,5 +21,6 @@ public interface WechatFansService {
     public WechatFans getWechatFansByUserId(String userId);
     public WechatFansVo getOAuthUserInfo(String code, HttpServletRequest request, HttpServletResponse response);
     public WechatFansVo getFansInfo(String code, HttpServletRequest request, HttpServletResponse response);
-    public List<TempWechatFans> loadTempWechatFans();
+    public List<TempWechatFans> loadTempWechatFansBatch1();
+    public List<TempWechatFans> loadTempWechatFansBatch2();
 }
