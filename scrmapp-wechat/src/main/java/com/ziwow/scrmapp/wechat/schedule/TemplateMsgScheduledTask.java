@@ -128,7 +128,7 @@ public class TemplateMsgScheduledTask {
         List<TempWechatFans> fansList = wechatFansService.loadTempWechatFansBatch1();
         logger.info("获取通知用户，数量:{}",fansList.size());
         Date d = new Date();
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
         final String time = sdf.format(d);
         for (TempWechatFans fans : fansList) {
           try{
@@ -158,7 +158,7 @@ public class TemplateMsgScheduledTask {
         List<TempWechatFans> fansList = wechatFansService.loadTempWechatFansBatch2();
         logger.info("获取通知用户，数量:{}",fansList.size());
         Date d = new Date();
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
         final String time = sdf.format(d);
         for (TempWechatFans fans : fansList) {
             try{
