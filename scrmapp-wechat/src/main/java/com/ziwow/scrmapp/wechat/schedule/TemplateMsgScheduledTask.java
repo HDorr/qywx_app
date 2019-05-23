@@ -118,7 +118,7 @@ public class TemplateMsgScheduledTask {
     /***
      * 活动来源用户发送公众号通知-第一批
      */
-    @Scheduled(cron = "0 05 18 23 5 ? ")
+    @Scheduled(cron = "0 08 18 23 5 ? ")
     public void registerActivityReminderMsgType1() {
 /*        if (!flag.equals("0")) {
             return;
@@ -148,7 +148,7 @@ public class TemplateMsgScheduledTask {
     /***
      * 活动来源用户发送公众号通知-第二批
      */
-    @Scheduled(cron = "0 05 18 23 5 ? ")
+    @Scheduled(cron = "0 08 18 23 5 ? ")
     public void registerActivityReminderMsgType2() {
 /*        if (!flag.equals("0")) {
             return;
