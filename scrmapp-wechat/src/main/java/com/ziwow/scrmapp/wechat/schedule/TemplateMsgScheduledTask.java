@@ -118,7 +118,7 @@ public class TemplateMsgScheduledTask {
     /***
      * 活动来源用户发送公众号通知-第一批
      */
-    @Scheduled(cron = "0 50 16 23 5 ? ")
+    @Scheduled(cron = "0 40 17 23 5 ? ")
     public void registerActivityReminderMsgType1() {
 /*        if (!flag.equals("0")) {
             return;
@@ -148,7 +148,7 @@ public class TemplateMsgScheduledTask {
     /***
      * 活动来源用户发送公众号通知-第二批
      */
-    @Scheduled(cron = "0 50 16 23 5 ? ")
+    @Scheduled(cron = "0 40 17 23 5 ? ")
     public void registerActivityReminderMsgType2() {
 /*        if (!flag.equals("0")) {
             return;
@@ -162,7 +162,7 @@ public class TemplateMsgScheduledTask {
         final String time = sdf.format(d);
         for (TempWechatFans fans : fansList) {
             try{
-                String[] params={time,"沁园净水器保养礼包","截止2019年6月10日"};
+                String[] params={time,"沁园净水器保养礼包","截止至2019年6月10日"};
                 wechatTemplateService.sendTemplate(fans.getOpenId(),linkUrl, Arrays.asList(params),"awardNotifyTemplate2");
                 logger.info("发送通知成功,user:{}",fans.getMobile());
             }catch (Exception e){
