@@ -190,9 +190,9 @@ public class TemplateMsgScheduledTask {
 
         logger.info("第一批模板测试......");
         String[] params2={time,"沁园净水器保养礼包","截止2019年6月18日"};
-        wechatTemplateService.sendTemplate("ojNiSuHP0m5vZan69YA7JQailbt0",linkUrl, Arrays.asList(params2),"awardNotifyTemplate");
-        wechatTemplateService.sendTemplate("ojNiSuIka_HjUGdXESFJvLNx0SxM",linkUrl, Arrays.asList(params2),"awardNotifyTemplate");
-        wechatTemplateService.sendTemplate("ojNiSuL0auZQGxf-n9NYpELBk7bo",linkUrl, Arrays.asList(params2),"awardNotifyTemplate");
+        wechatTemplateService.sendTemplate("ojNiSuHP0m5vZan69YA7JQailbt0","", Arrays.asList(params2),"awardNotifyTemplate");
+        wechatTemplateService.sendTemplate("ojNiSuIka_HjUGdXESFJvLNx0SxM","", Arrays.asList(params2),"awardNotifyTemplate");
+        wechatTemplateService.sendTemplate("ojNiSuL0auZQGxf-n9NYpELBk7bo","", Arrays.asList(params2),"awardNotifyTemplate");
         logger.info("第二批模板测试......");
         String[] params={time,"沁园净水器保养礼包","预约截止至2019年6月10日"};
         wechatTemplateService.sendTemplate("ojNiSuHP0m5vZan69YA7JQailbt0",linkUrl, Arrays.asList(params),"awardNotifyTemplate2");
