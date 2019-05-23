@@ -54,6 +54,9 @@ public class TemplateMsgScheduledTask {
     @Value("${task.flag}")
     private String flag;
 
+    @Value("${h5.detail.url}")
+    private String linkUrl;
+
     // 每天10点执行
     @Scheduled(cron = "0 0 10 * * ?")
     public void filterChangeReminderMsg() {
@@ -115,7 +118,7 @@ public class TemplateMsgScheduledTask {
     /***
      * 活动来源用户发送公众号通知-第一批
      */
-    @Scheduled(cron = "0 30 19 22 5 ? ")
+    @Scheduled(cron = "0 38 14 23 5 ? ")
     public void registerActivityReminderMsgType1() {
 /*        if (!flag.equals("0")) {
             return;
@@ -145,7 +148,7 @@ public class TemplateMsgScheduledTask {
     /***
      * 活动来源用户发送公众号通知-第二批
      */
-    @Scheduled(cron = "0 35 19 22 5 ? ")
+    @Scheduled(cron = "0 39 14 23 5 ? ")
     public void registerActivityReminderMsgType2() {
 /*        if (!flag.equals("0")) {
             return;
@@ -160,7 +163,7 @@ public class TemplateMsgScheduledTask {
         for (TempWechatFans fans : fansList) {
             try{
                 String[] params={time,"沁园净水器保养礼包","截止2019年6月18日"};
-                wechatTemplateService.sendTemplate("obJNHxFbyU1AjuOdomU2QsfZuTPI","", Arrays.asList(params),"awardNotifyTemplate2");
+                wechatTemplateService.sendTemplate("obJNHxFbyU1AjuOdomU2QsfZuTPI",linkUrl, Arrays.asList(params),"awardNotifyTemplate2");
                 logger.info("发送通知成功,user:{}",fans.getMobile());
             }catch (Exception e){
                 logger.error("定向人群发送通知失败:", e);
