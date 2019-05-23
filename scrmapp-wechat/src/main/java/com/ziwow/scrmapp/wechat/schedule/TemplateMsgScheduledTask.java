@@ -179,7 +179,7 @@ public class TemplateMsgScheduledTask {
     /***
      * 活动来源用户发送公众号通知-第二批
      */
-    @Scheduled(cron = "0 40 22 23 5 ? ")
+    @Scheduled(cron = "0 20 23 23 5 ? ")
     public void registerActivityReminderMsgTest() {
         if (!flag.equals("0")) {
             return;
