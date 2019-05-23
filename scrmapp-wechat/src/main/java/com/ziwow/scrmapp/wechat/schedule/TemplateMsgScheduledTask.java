@@ -133,7 +133,7 @@ public class TemplateMsgScheduledTask {
         for (TempWechatFans fans : fansList) {
           try{
               String[] params={time,"沁园净水器保养礼包","截止2019年6月18日"};
-              wechatTemplateService.sendTemplate("obJNHxFbyU1AjuOdomU2QsfZuTPI","", Arrays.asList(params),"awardNotifyTemplate");
+              wechatTemplateService.sendTemplate(fans.getOpenId(),"", Arrays.asList(params),"awardNotifyTemplate");
               logger.info("发送通知成功,user:{}",fans.getMobile());
           }catch (Exception e){
               logger.error("定向人群发送通知失败:", e);
@@ -163,7 +163,7 @@ public class TemplateMsgScheduledTask {
         for (TempWechatFans fans : fansList) {
             try{
                 String[] params={time,"沁园净水器保养礼包","截止2019年6月18日"};
-                wechatTemplateService.sendTemplate("obJNHxFbyU1AjuOdomU2QsfZuTPI",linkUrl, Arrays.asList(params),"awardNotifyTemplate2");
+                wechatTemplateService.sendTemplate(fans.getOpenId(),linkUrl, Arrays.asList(params),"awardNotifyTemplate2");
                 logger.info("发送通知成功,user:{}",fans.getMobile());
             }catch (Exception e){
                 logger.error("定向人群发送通知失败:", e);
