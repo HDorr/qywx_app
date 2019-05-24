@@ -162,7 +162,14 @@
                  <groupId>com.spotify</groupId>
                  <artifactId>docker-maven-plugin</artifactId>
                  <version>0.4.13</version>
+
+                 <executions>
+
+                 </executions>
+
                  <configuration>
+                     <serverId>docker-harbor</serverId>
+                     <registryUrl>47.96.110.23:8081</registryUrl>
                      <imageName>47.96.110.23:8081/one_client/test:1.0</imageName>
                      <dockerDirectory>./docker</dockerDirectory>
                      <resources>
@@ -172,6 +179,7 @@
                              <include>${project.build.finalName}.war</include>
                          </resource>
                      </resources>
+
                  </configuration>
              </plugin>
 
