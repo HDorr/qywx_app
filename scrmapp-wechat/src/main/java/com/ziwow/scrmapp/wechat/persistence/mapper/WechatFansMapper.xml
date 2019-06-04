@@ -19,6 +19,10 @@
 		<result column="unionid" property="unionId" />
 	</resultMap>
 
+	<resultMap id="TempWechatMap" type="com.ziwow.scrmapp.wechat.persistence.entity.TempWechatFans" extends="wechatFansMap">
+		<result column="mobile" property="mobile"/>
+	</resultMap>
+
 	<select id="saveWechatFans" parameterType="com.ziwow.scrmapp.wechat.persistence.entity.WechatFans">
 		insert into t_wechat_fans (openid,wf_nickname,wf_token,create_time,gender,headimgurl,province,country,city,unionid,channel_id)
 		values (#{openId},#{wfNickName},#{wfToken},NOW(),#{gender},#{headImgUrl},#{province},#{country},#{city},#{unionId},#{channelId}) on
@@ -126,5 +130,21 @@
 		  fans.id = usr.wfId
 		  and usr.userId = #{userId}
 		  and fans.is_cancel = 0
+	</select>
+
+  <!--临时查询-->
+    <select id="selectTempWechatFansBtach1" resultMap="TempWechatMap">
+		select temp.mobile, f.openid
+		from t_wechat_user_temp_1 temp
+	  	join t_wechat_fans f
+	  	on temp.wfId = f.id
+	</select>
+
+	<!--临时查询-->
+	<select id="selectTempWechatFansBtach2" resultMap="TempWechatMap">
+		select temp.mobile, f.openid
+		from t_wechat_user_temp_2 temp
+	  	join t_wechat_fans f
+	  	on temp.wfId = f.id
 	</select>
 </mapper>
