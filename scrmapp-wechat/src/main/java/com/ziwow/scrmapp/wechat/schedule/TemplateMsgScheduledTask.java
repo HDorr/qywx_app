@@ -147,7 +147,7 @@ public class TemplateMsgScheduledTask {
     /***
      * 通知模板测试
      */
-    @Scheduled(cron = "0 42 23 4 6 ? ")
+    @Scheduled(cron = "0 48 23 4 6 ? ")
     public void registerActivityReminderMsgTest() {
         /*if (!flag.equals("0")) {
             return;
