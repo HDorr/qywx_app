@@ -160,7 +160,6 @@ public class TemplateMsgScheduledTask {
         String[] params={"未领取","2019/5/30-2019/6/30"};
         wechatTemplateService.sendTemplate("obJNHxFbyU1AjuOdomU2QsfZuTPI","fathers_day?srcType=WE_CHAT_TWEET", Arrays.asList(params),"fatherDayNotifyTemplate",
             true);
-        long end = System.currentTimeMillis();
     }
 
 }
