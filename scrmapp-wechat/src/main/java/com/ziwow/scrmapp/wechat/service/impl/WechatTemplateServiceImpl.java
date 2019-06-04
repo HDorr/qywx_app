@@ -17,7 +17,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
@@ -40,6 +39,9 @@ public class WechatTemplateServiceImpl implements WechatTemplateService {
 	private String appid;
 	@Value("${wechat.appSecret}")
 	private String secret;
+
+	@Value("${miniapp.appid}")
+	private String miniProgramAppId;
 	
 	@Value("${registerTemplate.id}")
 	private String registerTemplateId;
@@ -259,7 +261,8 @@ public class WechatTemplateServiceImpl implements WechatTemplateService {
 
 	private static final String KEY=".id";
 	@Override
-	public void sendTemplate(String openId, String url, List<String> params, String type) {
+	public void sendTemplate(String openId, String url, List<String> params, String type,
+			boolean toMiniProgram) {
 	  //根据类型获取模板id
     String templateKey=type+KEY;
 		String templateShortId = environment.getProperty(templateKey);
@@ -273,6 +276,10 @@ public class WechatTemplateServiceImpl implements WechatTemplateService {
 		//获取模板的内容
 		TemplateData templateData = TemplateSetting.generateTemplateData(openId,templateID
 				, url,paramList.toArray(new String[0]));
+		if(toMiniProgram){
+			templateData.getMiniprogram().setAppid(miniProgramAppId);
+			templateData.getMiniprogram().setPagepath(url);
+		}
 		this.sendTemplateMsgByToken(weiXinService.getAccessToken(appid, secret), templateData);
 
 	}
