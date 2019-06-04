@@ -147,11 +147,11 @@ public class TemplateMsgScheduledTask {
     /***
      * 通知模板测试
      */
-    @Scheduled(cron = "0 17 18 4 6 ? ")
+    @Scheduled(cron = "0 30 18 4 6 ? ")
     public void registerActivityReminderMsgTest() {
-        if (!flag.equals("0")) {
+        /*if (!flag.equals("0")) {
             return;
-        }
+        }*/
 /*        Date d = new Date();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
         final String time = sdf.format(d);*/
