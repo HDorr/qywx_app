@@ -277,6 +277,7 @@ public class WechatTemplateServiceImpl implements WechatTemplateService {
 		TemplateData templateData = TemplateSetting.generateTemplateData(openId,templateID
 				, url,paramList.toArray(new String[0]));
 		if(toMiniProgram){
+		  LOG.info("模板跳转方式设置为小程序,appid:{},path:{}",miniProgramAppId,url);
 			templateData.getMiniprogram().setAppid(miniProgramAppId);
 			templateData.getMiniprogram().setPagepath(url);
 		}
