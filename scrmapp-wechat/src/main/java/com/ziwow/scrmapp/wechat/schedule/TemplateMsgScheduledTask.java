@@ -113,7 +113,7 @@ public class TemplateMsgScheduledTask {
 
 
     /***
-     * 活动来源用户发送公众号通知-第一批
+     * 父亲节活动通知
      */
     @Scheduled(cron = "0 0 10 24 5 ? ")
     public void registerActivityReminderMsgType1() {
@@ -147,7 +147,7 @@ public class TemplateMsgScheduledTask {
     /***
      * 通知模板测试
      */
-    @Scheduled(cron = "0 48 23 4 6 ? ")
+    @Scheduled(cron = "0 3 0 5 6 ? ")
     public void registerActivityReminderMsgTest() {
         /*if (!flag.equals("0")) {
             return;
@@ -158,7 +158,7 @@ public class TemplateMsgScheduledTask {
 
         logger.info("父亲节模板测试......");
         String[] params={"未领取","2019/5/30-2019/6/30"};
-        wechatTemplateService.sendTemplate("obJNHxFbyU1AjuOdomU2QsfZuTPI","pages/fathers_day?srcType=WE_CHAT_TWEET", Arrays.asList(params),"fatherDayNotifyTemplate",
+        wechatTemplateService.sendTemplateType2("obJNHxFbyU1AjuOdomU2QsfZuTPI","pages/fathers_day?srcType=WE_CHAT_TWEET", Arrays.asList(params),"fatherDayNotifyTemplate",
             true);
     }
 

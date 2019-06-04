@@ -361,4 +361,24 @@ public class TemplateSetting {
 			return data;
 		}
 	}
+
+
+	public static TemplateData  generateTemplateDataType2(String openId,String templateId,String url, String[] params){
+		TemplateData data = new TemplateData(openId, templateId, url);
+		if(params.length>2){
+			for (int i = 0; i < params.length; i++) {
+				if(i==0){
+					data.getTemplateDataItemInstance().addItem("first",params[i]);
+				}else if(i==(params.length-1)){
+					data.getTemplateDataItemInstance().addItem("remark", params[i]);
+				}
+				else{
+					data.getTemplateDataItemInstance().addItem("keynote"+i,params[i], blue_color);
+				}
+			}
+			return data;
+		}else{
+			return data;
+		}
+	}
 }
