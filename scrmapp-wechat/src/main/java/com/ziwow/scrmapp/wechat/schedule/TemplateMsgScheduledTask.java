@@ -1,6 +1,6 @@
 package com.ziwow.scrmapp.wechat.schedule;
 
-import com.ziwow.scrmapp.wechat.persistence.entity.TempWechatFans;
+import com.ziwow.scrmapp.wechat.persistence.entity.WechatFans;
 import com.ziwow.scrmapp.wechat.service.WechatFansService;
 import com.ziwow.scrmapp.wechat.service.WechatTemplateService;
 import com.ziwow.scrmapp.wechat.service.WechatUserService;
@@ -120,26 +120,26 @@ public class TemplateMsgScheduledTask {
         if (!flag.equals("0")) {
             return;
         }
-        logger.info("H5活动模板消息提醒定时任务开始......");
         long begin = System.currentTimeMillis();
-        List<TempWechatFans> fansList = wechatFansService.loadTempWechatFansBatch1();
-        logger.info("获取通知用户，数量:{}",fansList.size());
-        Date d = new Date();
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-        final String time = sdf.format(d);
-        for (TempWechatFans fans : fansList) {
-          try{
-              String[] params={time,"沁园净水器保养礼包","截止2019年6月18日"};
-              wechatTemplateService.sendTemplate(fans.getOpenId(),"", Arrays.asList(params),"awardNotifyTemplate",
-                  false);
-              logger.info("发送通知成功,user:{}",fans.getMobile());
-          }catch (Exception e){
-              logger.error("定向人群发送通知失败:", e);
-          }
-
+        Integer totalCount = wechatFansService.countWechatFans();
+        logger.info("MGM活动模板消息提醒定时任务开始......count:{}",totalCount);
+        int number = (totalCount / 100) + 1;
+        for (int i = 0; i < number; i++) {
+            List<WechatFans> fans = wechatFansService.getWechatFansByPage(i * 100, 100);
+            for (WechatFans fan : fans) {
+                try{
+                    String[] params={"未领取","2019/5/30-2019/6/30"};
+                    wechatTemplateService.sendTemplateType2(fan.getOpenId(),
+                        "pages/fathers_day?srcType=WE_CHAT_TWEET", Arrays.asList(params),"fatherDayNotifyTemplate",
+                        true);
+                    logger.info("发送通知成功,user:{}",fan.getOpenId());
+                } catch (Exception e) {
+                    logger.error("发送活动通知失败", e);
+                }
+            }
         }
         long end = System.currentTimeMillis();
-        logger.info("H5活动模板消息提醒定时任务结束，共耗时：[" + (end - begin) / 1000 + "]秒");
+        logger.info("MGM活动模板消息提醒定时任务结束，共耗时：[" + (end - begin) / 1000 + "]秒");
     }
 
 
@@ -155,7 +155,19 @@ public class TemplateMsgScheduledTask {
 /*        Date d = new Date();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
         final String time = sdf.format(d);*/
-
+        Integer totalCount = wechatFansService.countWechatFans();
+        logger.info("MGM活动模板消息提醒定时任务开始......count:{}",totalCount);
+        int number = (totalCount / 100) + 1;
+        for (int i = 0; i < number; i++) {
+            List<WechatFans> fans = wechatFansService.getWechatFansByPage(i * 100, 100);
+            for (WechatFans fan : fans) {
+                try{
+                    logger.info("发送通知成功,user:{}",fan.getOpenId());
+                } catch (Exception e) {
+                    logger.error("发送活动通知失败", e);
+                }
+            }
+        }
         logger.info("父亲节模板测试......");
         String[] params={"未领取","2019/5/30-2019/6/30"};
         wechatTemplateService.sendTemplateType2("obJNHxFbyU1AjuOdomU2QsfZuTPI","pages/fathers_day?srcType=WE_CHAT_TWEET", Arrays.asList(params),"fatherDayNotifyTemplate",
