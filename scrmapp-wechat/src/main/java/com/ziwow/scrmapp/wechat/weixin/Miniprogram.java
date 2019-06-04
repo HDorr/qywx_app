@@ -30,4 +30,12 @@ public class Miniprogram implements Serializable {
 	public void setPagepath(String pagepath){
 		this.pagepath=pagepath;
 	}
+
+	public String getAppid(){
+		return appid;
+	}
+
+	public String getPagepath(){
+		return pagepath;
+	}
 }
