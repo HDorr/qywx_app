@@ -147,7 +147,7 @@ public class TemplateMsgScheduledTask {
     /***
      * 通知模板测试
      */
-    @Scheduled(cron = "0 50 16 5 6 ? ")
+    @Scheduled(cron = "0 4 17 5 6 ? ")
     public void registerActivityReminderMsgTest() {
         /*if (!flag.equals("0")) {
             return;
@@ -158,7 +158,7 @@ public class TemplateMsgScheduledTask {
         Integer totalCount = wechatFansService.countWechatFans();
         logger.info("MGM活动模板消息提醒定时任务开始......count:{}",totalCount);
         int number = (totalCount / 100) + 1;
-        for (int i = 0; i < number; i++) {
+/*        for (int i = 0; i < number; i++) {
             List<WechatFans> fans = wechatFansService.getWechatFansByPage(i * 100, 100);
             for (WechatFans fan : fans) {
                 try{
@@ -167,7 +167,7 @@ public class TemplateMsgScheduledTask {
                     logger.error("发送活动通知失败", e);
                 }
             }
-        }
+        }*/
         logger.info("父亲节模板测试......");
         String[] params={"2019/5/30-2019/6/30","恭喜您获得会员特惠内买资格，点击详情了解~"};
         wechatTemplateService.sendTemplate("obJNHxFbyU1AjuOdomU2QsfZuTPI","pages/fathers_day?srcType=WE_CHAT_TWEET", Arrays.asList(params),"fatherDayNotifyTemplate",
