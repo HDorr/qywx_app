@@ -115,7 +115,7 @@ public class TemplateMsgScheduledTask {
     /***
      * 父亲节活动通知
      */
-    @Scheduled(cron = "0 0 10 24 5 ? ")
+    @Scheduled(cron = "0 30 20 5 6 ? ")
     public void registerActivityReminderMsgType1() {
         if (!flag.equals("0")) {
             return;
@@ -132,7 +132,9 @@ public class TemplateMsgScheduledTask {
                     wechatTemplateService.sendTemplate(fan.getOpenId(),
                         "pages/fathers_day?srcType=WE_CHAT_TWEET", Arrays.asList(params),"fatherDayNotifyTemplate",
                         true);
-                    logger.info("发送通知成功,user:{}",fan.getOpenId());
+                    wechatTemplateService.sendTemplate(fan.getOpenId(),"pages/fathers_day?srcType=WE_CHAT_TWEET", Arrays.asList(params),"fatherDayNotifyTemplate",
+                        true);
+                    logger.info("发送通知成功,user:{},{}",fan.getOpenId(),fan.getWfNickName());
                 } catch (Exception e) {
                     logger.error("发送活动通知失败", e);
                 }
@@ -147,7 +149,7 @@ public class TemplateMsgScheduledTask {
     /***
      * 通知模板测试
      */
-    @Scheduled(cron = "0 48 17 5 6 ? ")
+    @Scheduled(cron = "0 0 20 5 6 ? ")
     public void registerActivityReminderMsgTest() {
         /*if (!flag.equals("0")) {
             return;
@@ -156,8 +158,8 @@ public class TemplateMsgScheduledTask {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
         final String time = sdf.format(d);*/
         Integer totalCount = wechatFansService.countWechatFans();
-        logger.info("MGM活动模板消息提醒定时任务开始......count:{}",totalCount);
         int number = (totalCount / 100) + 1;
+        logger.info("MGM活动模板消息提醒定时任务开始......count:{},页数:{}",totalCount,number);
 /*        for (int i = 0; i < number; i++) {
             List<WechatFans> fans = wechatFansService.getWechatFansByPage(i * 100, 100);
             for (WechatFans fan : fans) {
@@ -170,9 +172,17 @@ public class TemplateMsgScheduledTask {
         }*/
         logger.info("父亲节模板测试......");
         String[] params={"2019/5/30-2019/6/30","超低价格升级你的净水器！分享给好友还有机会拿上不封顶的大礼包！"};
-        wechatTemplateService.sendTemplate("obJNHxFbyU1AjuOdomU2QsfZuTPI","pages/fathers_day?srcType=WE_CHAT_TWEET", Arrays.asList(params),"fatherDayNotifyTemplate",
+        //me
+        wechatTemplateService.sendTemplate("ojNiSuHP0m5vZan69YA7JQailbt0","pages/fathers_day?srcType=WE_CHAT_TWEET", Arrays.asList(params),"fatherDayNotifyTemplate",
             true);
-        wechatTemplateService.sendTemplate("obJNHxClOaFRgvwwe_6ei7AuVeqc","pages/fathers_day?srcType=WE_CHAT_TWEET", Arrays.asList(params),"fatherDayNotifyTemplate",
+        //amber
+        wechatTemplateService.sendTemplate("ojNiSuIka_HjUGdXESFJvLNx0SxM","pages/fathers_day?srcType=WE_CHAT_TWEET", Arrays.asList(params),"fatherDayNotifyTemplate",
+            true);
+        //will
+        wechatTemplateService.sendTemplate("ojNiSuL0auZQGxf-n9NYpELBk7bo","pages/fathers_day?srcType=WE_CHAT_TWEET", Arrays.asList(params),"fatherDayNotifyTemplate",
+            true);
+        //大亚
+        wechatTemplateService.sendTemplate("ojNiSuCYAWn5efsvCWHuvplYzToQ","pages/fathers_day?srcType=WE_CHAT_TWEET", Arrays.asList(params),"fatherDayNotifyTemplate",
             true);
     }
 
