@@ -129,7 +129,7 @@ public class TemplateMsgScheduledTask {
             for (WechatFans fan : fans) {
                 try{
                     String[] params={"未领取","2019/5/30-2019/6/30"};
-                    wechatTemplateService.sendTemplateType2(fan.getOpenId(),
+                    wechatTemplateService.sendTemplate(fan.getOpenId(),
                         "pages/fathers_day?srcType=WE_CHAT_TWEET", Arrays.asList(params),"fatherDayNotifyTemplate",
                         true);
                     logger.info("发送通知成功,user:{}",fan.getOpenId());
@@ -147,7 +147,7 @@ public class TemplateMsgScheduledTask {
     /***
      * 通知模板测试
      */
-    @Scheduled(cron = "0 3 0 5 6 ? ")
+    @Scheduled(cron = "0 34 16 5 6 ? ")
     public void registerActivityReminderMsgTest() {
         /*if (!flag.equals("0")) {
             return;
@@ -169,8 +169,8 @@ public class TemplateMsgScheduledTask {
             }
         }
         logger.info("父亲节模板测试......");
-        String[] params={"未领取","2019/5/30-2019/6/30"};
-        wechatTemplateService.sendTemplateType2("obJNHxFbyU1AjuOdomU2QsfZuTPI","pages/fathers_day?srcType=WE_CHAT_TWEET", Arrays.asList(params),"fatherDayNotifyTemplate",
+        String[] params={"2019/5/30-2019/6/30","恭喜您获得会员特惠内买资格，点击详情了解~"};
+        wechatTemplateService.sendTemplate("obJNHxFbyU1AjuOdomU2QsfZuTPI","pages/fathers_day?srcType=WE_CHAT_TWEET", Arrays.asList(params),"fatherDayNotifyTemplate",
             true);
     }
 

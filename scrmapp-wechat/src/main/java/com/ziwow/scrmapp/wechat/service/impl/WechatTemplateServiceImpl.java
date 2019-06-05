@@ -285,29 +285,5 @@ public class WechatTemplateServiceImpl implements WechatTemplateService {
 
 	}
 
-	@Override
-	public void sendTemplateType2(String openId, String url, List<String> params, String type,
-			boolean toMiniProgram) {
-		//根据类型获取模板id
-		String templateKey=type+KEY;
-		String templateShortId = environment.getProperty(templateKey);
-		String templateID = this.getTemplateID(templateShortId);
-		String remark = wechatTemplateMapper.getTemplateRemark(templateShortId);
-		String title = wechatTemplateMapper.getTemplateTitle(templateShortId);
-		List<String> paramList=new ArrayList<>();
-		paramList.add(title);
-		paramList.addAll(params);
-		paramList.add(remark);
-		//获取模板的内容
-		TemplateData templateData = TemplateSetting.generateTemplateDataType2(openId,templateID
-				, url,paramList.toArray(new String[0]));
-		if(toMiniProgram){
-			LOG.info("模板跳转方式设置为小程序,appid:{},path:{}",miniProgramAppId,url);
-			templateData.getMiniprogram().setAppid(miniProgramAppId);
-			templateData.getMiniprogram().setPagepath(url);
-		}
-		this.sendTemplateMsgByToken(weiXinService.getAccessToken(appid, secret), templateData);
-
-	}
 
 }
