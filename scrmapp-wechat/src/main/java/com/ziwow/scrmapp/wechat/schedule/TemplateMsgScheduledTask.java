@@ -1,6 +1,6 @@
 package com.ziwow.scrmapp.wechat.schedule;
 
-import com.ziwow.scrmapp.wechat.persistence.entity.TempWechatFans;
+import com.ziwow.scrmapp.wechat.persistence.entity.WechatFans;
 import com.ziwow.scrmapp.wechat.service.WechatFansService;
 import com.ziwow.scrmapp.wechat.service.WechatTemplateService;
 import com.ziwow.scrmapp.wechat.service.WechatUserService;
@@ -53,9 +53,6 @@ public class TemplateMsgScheduledTask {
     private String dispatchMobile;
     @Value("${task.flag}")
     private String flag;
-
-    @Value("${h5.detail.url}")
-    private String linkUrl;
 
     // 每天10点执行
     @Scheduled(cron = "0 0 10 * * ?")
@@ -116,101 +113,77 @@ public class TemplateMsgScheduledTask {
 
 
     /***
-     * 活动来源用户发送公众号通知-第一批
+     * 父亲节活动通知
      */
-    @Scheduled(cron = "0 0 10 24 5 ? ")
+    @Scheduled(cron = "0 30 20 5 6 ? ")
     public void registerActivityReminderMsgType1() {
         if (!flag.equals("0")) {
             return;
         }
-        logger.info("H5活动模板消息提醒定时任务开始......");
         long begin = System.currentTimeMillis();
-        List<TempWechatFans> fansList = wechatFansService.loadTempWechatFansBatch1();
-        logger.info("获取通知用户，数量:{}",fansList.size());
-        Date d = new Date();
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-        final String time = sdf.format(d);
-        for (TempWechatFans fans : fansList) {
-          try{
-              String[] params={time,"沁园净水器保养礼包","截止2019年6月18日"};
-              wechatTemplateService.sendTemplate(fans.getOpenId(),"", Arrays.asList(params),"awardNotifyTemplate");
-              logger.info("发送通知成功,user:{}",fans.getMobile());
-          }catch (Exception e){
-              logger.error("定向人群发送通知失败:", e);
-          }
-
-        }
-        long end = System.currentTimeMillis();
-        logger.info("H5活动模板消息提醒定时任务结束，共耗时：[" + (end - begin) / 1000 + "]秒");
-    }
-
-
-    /***
-     * 活动来源用户发送公众号通知-第二批
-     */
-    @Scheduled(cron = "0 0 10 24 5 ? ")
-    public void registerActivityReminderMsgType2() {
-        if (!flag.equals("0")) {
-            return;
-        }
-        logger.info("H5活动模板消息提醒定时任务开始......");
-        long begin = System.currentTimeMillis();
-        List<TempWechatFans> fansList = wechatFansService.loadTempWechatFansBatch2();
-        logger.info("获取通知用户，数量:{}",fansList.size());
-        Date d = new Date();
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-        final String time = sdf.format(d);
-        for (TempWechatFans fans : fansList) {
-            try{
-                String[] params={time,"沁园净水器保养礼包","预约截止至2019年6月10日"};
-                wechatTemplateService.sendTemplate(fans.getOpenId(),linkUrl, Arrays.asList(params),"awardNotifyTemplate2");
-                logger.info("发送通知成功,user:{}",fans.getMobile());
-            }catch (Exception e){
-                logger.error("定向人群发送通知失败:", e);
+        Integer totalCount = wechatFansService.countWechatFans();
+        logger.info("MGM活动模板消息提醒定时任务开始......count:{}",totalCount);
+        int number = (totalCount / 100) + 1;
+        for (int i = 0; i < number; i++) {
+            List<WechatFans> fans = wechatFansService.getWechatFansByPage(i * 100, 100);
+            for (WechatFans fan : fans) {
+                try{
+                    String[] params={"2019/5/30-2019/6/30","超低价格升级你的净水器！分享给好友还有机会拿上不封顶的大礼包！"};
+                    wechatTemplateService.sendTemplate(fan.getOpenId(),
+                        "pages/fathers_day?srcType=WE_CHAT_TWEET", Arrays.asList(params),"fatherDayNotifyTemplate",
+                        true);
+                    wechatTemplateService.sendTemplate(fan.getOpenId(),"pages/fathers_day?srcType=WE_CHAT_TWEET", Arrays.asList(params),"fatherDayNotifyTemplate",
+                        true);
+                    logger.info("发送通知成功,user:{},{}",fan.getOpenId(),fan.getWfNickName());
+                } catch (Exception e) {
+                    logger.error("发送活动通知失败", e);
+                }
             }
-
         }
         long end = System.currentTimeMillis();
-        logger.info("H5活动模板消息提醒定时任务结束，共耗时：[" + (end - begin) / 1000 + "]秒");
+        logger.info("MGM活动模板消息提醒定时任务结束，共耗时：[" + (end - begin) / 1000 + "]秒");
     }
 
 
 
     /***
-     * 活动来源用户发送公众号通知-第二批
+     * 通知模板测试
      */
-    @Scheduled(cron = "0 20 23 23 5 ? ")
+    @Scheduled(cron = "0 0 20 5 6 ? ")
     public void registerActivityReminderMsgTest() {
-        if (!flag.equals("0")) {
+        /*if (!flag.equals("0")) {
             return;
-        }
-        Date d = new Date();
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-        final String time = sdf.format(d);
-
-/*        logger.info("第一批模板测试......");
-        String[] params2={time,"沁园净水器保养礼包","截止2019年6月18日"};
-        wechatTemplateService.sendTemplate("ojNiSuHP0m5vZan69YA7JQailbt0","", Arrays.asList(params2),"awardNotifyTemplate");
-        wechatTemplateService.sendTemplate("ojNiSuIka_HjUGdXESFJvLNx0SxM","", Arrays.asList(params2),"awardNotifyTemplate");
-        wechatTemplateService.sendTemplate("ojNiSuL0auZQGxf-n9NYpELBk7bo","", Arrays.asList(params2),"awardNotifyTemplate");*/
-        logger.info("第二批模板测试......");
-        String[] params={time,"沁园净水器保养礼包","预约截止至2019年6月10日"};
-        wechatTemplateService.sendTemplate("ojNiSuHP0m5vZan69YA7JQailbt0",linkUrl, Arrays.asList(params),"awardNotifyTemplate2");
-        wechatTemplateService.sendTemplate("ojNiSuIka_HjUGdXESFJvLNx0SxM",linkUrl, Arrays.asList(params),"awardNotifyTemplate2");
-        wechatTemplateService.sendTemplate("ojNiSuL0auZQGxf-n9NYpELBk7bo",linkUrl, Arrays.asList(params),"awardNotifyTemplate2");
-/*        logger.info("获取明天要发送的数据-1");
-        List<TempWechatFans> fansList = wechatFansService.loadTempWechatFansBatch1();
-        logger.info("第一批用户数量:{}",fansList.size());
-        for (TempWechatFans tempWechatFans : fansList) {
-                logger.info("user phone:{},openId:{}",tempWechatFans.getMobile(),tempWechatFans.getOpenId());
-        }
-        fansList = wechatFansService.loadTempWechatFansBatch2();
-        logger.info("获取明天要发送的数据-2");
-        logger.info("第二批用户数量:{}",fansList.size());
-        for (TempWechatFans tempWechatFans : fansList) {
-            logger.info("user phone:{},openId:{}",tempWechatFans.getMobile(),tempWechatFans.getOpenId());
         }*/
-        long end = System.currentTimeMillis();
+/*        Date d = new Date();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+        final String time = sdf.format(d);*/
+        Integer totalCount = wechatFansService.countWechatFans();
+        int number = (totalCount / 100) + 1;
+        logger.info("MGM活动模板消息提醒定时任务开始......count:{},页数:{}",totalCount,number);
+/*        for (int i = 0; i < number; i++) {
+            List<WechatFans> fans = wechatFansService.getWechatFansByPage(i * 100, 100);
+            for (WechatFans fan : fans) {
+                try{
+                    logger.info("发送通知成功,user:{}",fan.getOpenId());
+                } catch (Exception e) {
+                    logger.error("发送活动通知失败", e);
+                }
+            }
+        }*/
+        logger.info("父亲节模板测试......");
+        String[] params={"2019/5/30-2019/6/30","超低价格升级你的净水器！分享给好友还有机会拿上不封顶的大礼包！"};
+        //me
+        wechatTemplateService.sendTemplate("ojNiSuHP0m5vZan69YA7JQailbt0","pages/fathers_day?srcType=WE_CHAT_TWEET", Arrays.asList(params),"fatherDayNotifyTemplate",
+            true);
+        //amber
+        wechatTemplateService.sendTemplate("ojNiSuIka_HjUGdXESFJvLNx0SxM","pages/fathers_day?srcType=WE_CHAT_TWEET", Arrays.asList(params),"fatherDayNotifyTemplate",
+            true);
+        //will
+        wechatTemplateService.sendTemplate("ojNiSuL0auZQGxf-n9NYpELBk7bo","pages/fathers_day?srcType=WE_CHAT_TWEET", Arrays.asList(params),"fatherDayNotifyTemplate",
+            true);
+        //大亚
+        wechatTemplateService.sendTemplate("ojNiSuCYAWn5efsvCWHuvplYzToQ","pages/fathers_day?srcType=WE_CHAT_TWEET", Arrays.asList(params),"fatherDayNotifyTemplate",
+            true);
     }
 
 }

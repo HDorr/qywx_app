@@ -1,10 +1,10 @@
 package com.ziwow.scrmapp.wechat.service.impl;
 
+import java.util.List;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.ziwow.scrmapp.wechat.persistence.entity.TempWechatFans;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,8 +30,6 @@ import com.ziwow.scrmapp.wechat.vo.AccessToken;
 import com.ziwow.scrmapp.wechat.vo.OauthUser;
 import com.ziwow.scrmapp.wechat.vo.UserInfo;
 import com.ziwow.scrmapp.wechat.vo.WechatFansVo;
-
-import java.util.List;
 
 @Service
 public class WechatFansServiceImpl implements WechatFansService {
@@ -297,13 +295,14 @@ public class WechatFansServiceImpl implements WechatFansService {
 		return wechatFansVo;
 	}
 
-    @Override
-    public List<TempWechatFans> loadTempWechatFansBatch1() {
-        return wechatFansMapper.selectTempWechatFansBtach1();
-    }
+  @Override
+  public List<WechatFans> getWechatFansByPage(int page, int size) {
+    return wechatFansMapper.getWechatFansByPage(page,size);
+  }
 
-	@Override
-	public List<TempWechatFans> loadTempWechatFansBatch2() {
-		return wechatFansMapper.selectTempWechatFansBtach2();
-	}
+  @Override
+  public Integer countWechatFans() {
+		return wechatFansMapper.countWechatFans();
+  }
+
 }
