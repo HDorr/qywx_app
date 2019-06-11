@@ -1,22 +1,30 @@
 package com.ziwow.scrmapp.qyh.controller;
 
+import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.alibaba.fastjson.JSONObject;
 import com.ziwow.scrmapp.common.constants.CancelConstant;
+import com.ziwow.scrmapp.common.utils.HttpClientUtil;
+import com.ziwow.scrmapp.qyh.constants.PointConstant;
+import com.ziwow.scrmapp.tools.utils.HttpClientUtils;
 import org.apache.commons.codec.Charsets;
 import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -68,6 +76,9 @@ public class QyhUserController {
     private String corpId;
     @Value("${order.detail.url}")
     private String orderDetailUrl;
+    @Value("${mine.baseUrl}")
+    private String baseUrl;
+
     @Autowired
     private WechatOrdersMapper wechatOrdersMapper;
     @Autowired
@@ -80,6 +91,8 @@ public class QyhUserController {
     private QyhNoticeService qyhNoticeService;
     @Autowired
     private MobileService mobileService;
+
+
 
     /**
      * 企业号个人中心数据
@@ -449,10 +462,10 @@ public class QyhUserController {
                 throw new RuntimeException("工单提交失败!");
             }
             int count = qyhOrdersService.getProductStatus(completeParam.getOrdersId());
-//            if (count == 0) {
             // 发送模板消息
             sendTemplate(completeParam);
-//            }
+            //调用服务号发积分方法
+            grantPoint(userId,ordersCode, PointConstant.INSTALL,null);
         } catch (RuntimeException ex) {
             logger.error("师傅点击工单[{}]完工操作出现异常,原因:[{}]", ordersCode, ex);
             logger.error("师傅点击工单完工操作失败:", ex);
@@ -570,6 +583,7 @@ public class QyhUserController {
                 sendTemplate(completeParam);
             }
             qyhOrdersService.finishMakeAppointment(completeParam.getOrdersCode());
+            grantPoint(userId,ordersCode, PointConstant.FILTER,null);
         } catch (RuntimeException ex) {
             logger.error("师傅点击工单[{}]完工操作出现异常,原因:[{}]", ordersCode, ex);
             result.setReturnCode(Constant.FAIL);
@@ -1078,5 +1092,19 @@ public class QyhUserController {
         ModelAndView modelAndView = new ModelAndView("/qiYeHao/workOrderOperation/jsp/unfinishedOrderDetail_maintain_detail");
         modelAndView.addObject("ordersCode", ordersCode);
         return modelAndView;
+    }
+
+    /**
+     * 内部调用发积分
+     */
+    private void grantPoint(String userId,String ordersCode,String path,Integer orderType){
+        Map<String,Object> params = new HashMap<String,Object>();
+        params.put("userId",userId);
+        params.put("orderCoder",ordersCode);
+        if(null!=orderType){
+            params.put("orderType",orderType);
+        }
+        HttpClientUtils
+            .postJson(baseUrl+path, JSONObject.toJSONString(params));
     }
 }

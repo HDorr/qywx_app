@@ -92,6 +92,8 @@ public class WechatOrdersController {
     private WechatOrderServiceFeeService wechatOrderServiceFeeService;
     @Autowired
     private SmsMarketingService smsMarketingService;
+    @Autowired
+    private GrantPointService grantPointService;
 
 
     /**
@@ -985,6 +987,9 @@ public class WechatOrdersController {
                 if (count > 0) {
                     //修改预约单状态为已评价
                     wechatOrdersService.updateOrdersStatus(ordersCode, userId, date, SystemConstants.APPRAISE);
+                    //发送评价积分
+                    grantPointService.grantOrderComment(userId,ordersCode,wechatOrders.getOrderType());
+
                 } else {
                     throw new SQLException("qyhUserAppraisalVo:" + JSONObject.toJSONString(qyhUserAppraisalVo));
                 }
