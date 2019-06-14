@@ -34,6 +34,7 @@
         			<p>产品名称：<span class="pdtName"></span></p>
         			<p>产品型号：<span class="pdtModel"></span></p>
         			<p>产品条码：<span class="pdtCode"></span></p>
+                    <p>产品子码：<span class="pdtGlCode"></span></p>
         		</div>
         	</div>
 <!--         	<div class="content_failed">
@@ -58,11 +59,13 @@
         <script>
             $(function(){
                 var barCode = getUrlParam("barCode")||$('#barCodeInput').val();
+                var glCode = getUrlParam("glCode");
                 var prodName = getUrlParam("prodName")||$('#prodNameInput').val();
                 var spec = getUrlParam("spec")||$('#specInput').val();
-                $('.pdtName').html(prodName)
-                $('.pdtModel').html(spec)
-                $('.pdtCode').html(barCode)
+                $('.pdtName').html(prodName);
+                $('.pdtModel').html(spec);
+                $('.pdtCode').html(barCode);
+                $('.pdtGlCode').html(glCode);
             })
         </script>
     </body>

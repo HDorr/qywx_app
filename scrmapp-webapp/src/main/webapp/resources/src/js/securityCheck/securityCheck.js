@@ -74,7 +74,8 @@ var glData = {
                             var prodName =data.data.prodName;
                             var spec =data.data.spec;
                             var barCode =data.data.barCode;
-                            var jumpUrl = rootUrl + '/mobile/bindProduct/jsp/securityCheckSuccess.jsp?barCode='+escape(barCode)+"&spec="+escape(spec)+"&prodName="+escape(prodName);
+                            var glCode=data.data.glCode;
+                            var jumpUrl = rootUrl + '/mobile/bindProduct/jsp/securityCheckSuccess.jsp?barCode='+escape(barCode)+"&spec="+escape(spec)+"&prodName="+escape(prodName)+"&glCode="+escape(glCode);
                             window.location.href=jumpUrl
                         } else {
                             var wxName = escape(data.data)
