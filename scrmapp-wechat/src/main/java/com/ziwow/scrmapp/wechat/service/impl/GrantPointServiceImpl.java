@@ -1,11 +1,11 @@
 package com.ziwow.scrmapp.wechat.service.impl;
 
-import com.alibaba.fastjson.JSONObject;
 import com.ziwow.scrmapp.common.constants.Constant;
 import com.ziwow.scrmapp.tools.utils.HttpClientUtils;
 import com.ziwow.scrmapp.tools.utils.MD5;
 import com.ziwow.scrmapp.wechat.service.GrantPointService;
 import com.ziwow.scrmapp.wechat.service.WechatUserService;
+import net.sf.json.JSONObject;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -91,10 +91,10 @@ public class GrantPointServiceImpl implements GrantPointService {
     }
     params.put("signture", MD5.toMD5(Constant.AUTH_KEY + timestamp));
     String result = HttpClientUtils
-        .postJson(url, JSONObject.toJSONString(params));
+        .postJson(url, JSONObject.fromObject(params).toString());
     if (StringUtils.isNotBlank(result)) {
-      JSONObject o1 = JSONObject.parseObject(result);
-      if (o1.containsKey("errorCode") && o1.getInteger("errorCode")==200) {
+      JSONObject o1 = JSONObject.fromObject(result);
+      if (o1.containsKey("errorCode") && o1.getInt("errorCode")==200) {
         String fAid = o1.getString("data");
         LOG.info("积分发送成功");
       } else {

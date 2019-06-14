@@ -9,7 +9,7 @@ package com.ziwow.scrmapp.wechat.controller;
 
 public class PointForm {
   private String userId;
-  private String orderCode;
+  private String ordersCode;
   private Integer orderType;
 
   public String getUserId() {
@@ -20,12 +20,12 @@ public class PointForm {
     this.userId = userId;
   }
 
-  public String getOrderCode() {
-    return orderCode;
+  public String getOrdersCode() {
+    return ordersCode;
   }
 
-  public void setOrderCode(String orderCode) {
-    this.orderCode = orderCode;
+  public void setOrdersCode(String ordersCode) {
+    this.ordersCode = ordersCode;
   }
 
   public Integer getOrderType() {

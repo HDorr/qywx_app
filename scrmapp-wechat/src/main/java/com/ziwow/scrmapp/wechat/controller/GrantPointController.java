@@ -8,6 +8,7 @@ import com.ziwow.scrmapp.wechat.service.GrantPointService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,35 +32,26 @@ public class GrantPointController {
   @Autowired
   private GrantPointService grantPointService;
 
-  @RequestMapping("/install")
+  @RequestMapping(value = "/install",consumes = MediaType.APPLICATION_JSON_VALUE)
   @ResponseBody
   public Result install(@RequestBody PointForm form){
     try {
-      grantPointService.grantOrderInstallPoint(form.getUserId(),form.getOrderCode());
+      grantPointService.grantOrderInstallPoint(form.getUserId(),form.getOrdersCode());
     }catch (Exception e){
       logger.error("积分发放失败 原因",e);
     }
     return BaseResult.Success(true);
   }
-  @RequestMapping("/filter")
+  @RequestMapping(value = "/filter",consumes = MediaType.APPLICATION_JSON_VALUE)
   @ResponseBody
   public Result filter(@RequestBody PointForm form){
     try {
-      grantPointService.grantOrderFilterPoint(form.getUserId(),form.getOrderCode());
+      grantPointService.grantOrderFilterPoint(form.getUserId(),form.getOrdersCode());
     }catch (Exception e){
       logger.error("积分发放失败 原因",e);
     }
     return BaseResult.Success(true);
   }
-  @RequestMapping("/comment")
-  @ResponseBody
-  public Result comment(@RequestBody PointForm form){
-    try {
-      grantPointService.grantOrderComment(form.getUserId(),form.getOrderCode(),form.getOrderType());
-    }catch (Exception e){
-      logger.error("积分发放失败 原因",e);
-    }
-    return BaseResult.Success(true);
-  }
+
 
 }

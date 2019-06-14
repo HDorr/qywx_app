@@ -1,42 +1,10 @@
 package com.ziwow.scrmapp.qyh.controller;
 
-import java.awt.*;
-import java.io.File;
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import com.alibaba.fastjson.JSONObject;
-import com.ziwow.scrmapp.common.bean.vo.*;
-import com.ziwow.scrmapp.common.constants.CancelConstant;
-import com.ziwow.scrmapp.common.utils.HttpClientUtil;
-import com.ziwow.scrmapp.qyh.constants.PointConstant;
-import com.ziwow.scrmapp.tools.utils.HttpClientUtils;
-import org.apache.commons.codec.Charsets;
-import org.apache.commons.io.FileUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.scheduling.annotation.Async;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.ModelAndView;
-
 import com.alibaba.druid.util.StringUtils;
 import com.alibaba.fastjson.JSON;
 import com.ziwow.scrmapp.common.bean.pojo.CancelProductParam;
+import com.ziwow.scrmapp.common.bean.vo.*;
+import com.ziwow.scrmapp.common.constants.CancelConstant;
 import com.ziwow.scrmapp.common.constants.Constant;
 import com.ziwow.scrmapp.common.constants.SystemConstants;
 import com.ziwow.scrmapp.common.persistence.entity.Filter;
@@ -48,6 +16,7 @@ import com.ziwow.scrmapp.common.result.BaseResult;
 import com.ziwow.scrmapp.common.result.Result;
 import com.ziwow.scrmapp.common.service.MobileService;
 import com.ziwow.scrmapp.common.utils.OrderUtils;
+import com.ziwow.scrmapp.qyh.constants.PointConstant;
 import com.ziwow.scrmapp.qyh.service.QyhNoticeService;
 import com.ziwow.scrmapp.qyh.service.QyhOrdersService;
 import com.ziwow.scrmapp.qyh.service.QyhProductService;
@@ -55,6 +24,27 @@ import com.ziwow.scrmapp.qyh.service.QyhUserService;
 import com.ziwow.scrmapp.qyh.vo.QyhApiUser;
 import com.ziwow.scrmapp.tools.queue.UserQueue;
 import com.ziwow.scrmapp.tools.utils.Base64;
+import com.ziwow.scrmapp.tools.utils.HttpClientUtils;
+import net.sf.json.JSONObject;
+import org.apache.commons.codec.Charsets;
+import org.apache.commons.io.FileUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.File;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by xiaohei on 2017/4/18.
@@ -1100,12 +1090,12 @@ public class QyhUserController {
         Map<String,Object> params = new HashMap<String,Object>();
         if(null!=wechatOrdersVoByCode){
             params.put("userId",wechatOrdersVoByCode.getUserId());
-            params.put("orderCoder",ordersCode);
+            params.put("ordersCoder",ordersCode);
             if(null!=orderType){
                 params.put("orderType",orderType);
             }
             HttpClientUtils
-                .postJson(baseUrl+path, JSONObject.toJSONString(params));
+                .postJson(baseUrl+path, JSONObject.fromObject(params).toString());
         }
 
     }
