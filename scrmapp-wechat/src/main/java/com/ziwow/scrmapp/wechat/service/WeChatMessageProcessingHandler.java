@@ -546,6 +546,8 @@ public class WeChatMessageProcessingHandler {
             }
             replyMessage(inMessage, response, msgsb);
             return isPushToCallCenter;
+        }else if (content.contains("攻略")){
+          return false;
         }else {
 
             if (content.equals("completechat")){
