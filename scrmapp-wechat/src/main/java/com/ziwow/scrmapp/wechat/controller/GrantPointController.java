@@ -10,10 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.awt.*;
 
@@ -32,7 +29,7 @@ public class GrantPointController {
   @Autowired
   private GrantPointService grantPointService;
 
-  @RequestMapping(value = "/install",consumes = MediaType.APPLICATION_JSON_VALUE)
+  @RequestMapping(value = "/install",method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
   @ResponseBody
   public Result install(@RequestBody PointForm form){
     try {
@@ -42,7 +39,7 @@ public class GrantPointController {
     }
     return BaseResult.Success(true);
   }
-  @RequestMapping(value = "/filter",consumes = MediaType.APPLICATION_JSON_VALUE)
+  @RequestMapping(value = "/filter",method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
   @ResponseBody
   public Result filter(@RequestBody PointForm form){
     try {
