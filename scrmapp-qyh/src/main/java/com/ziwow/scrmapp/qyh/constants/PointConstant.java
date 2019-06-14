@@ -9,9 +9,9 @@ package com.ziwow.scrmapp.qyh.constants;
 
 public class PointConstant {
   /*安装工单发积分路径*/
-  public static final String INSTALL = "/install";
+  public static final String INSTALL = "/grant/install";
   /*保养滤芯发积分路径*/
-  public static final String FILTER = "/filter";
+  public static final String FILTER = "/grant/filter";
 //  /*评价发积分路径*/
 //  public static final String COMMENT = "/comment";
 
