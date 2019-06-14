@@ -83,11 +83,11 @@ public class GrantPointServiceImpl implements GrantPointService {
     String unionId = findUnionId(userId);
     Map<String, Object> params = new HashMap<String, Object>();
     long timestamp = System.currentTimeMillis();
-    params.put("orderCode", orderCode);
+    params.put("ordersCode", orderCode);
     params.put("timestamp", timestamp);
     params.put("unionId", unionId);
     if(null!=orderType){
-      params.put("orderTYpe", orderType);
+      params.put("orderType", orderType);
     }
     params.put("signture", MD5.toMD5(Constant.AUTH_KEY + timestamp));
     String result = HttpClientUtils

@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.alibaba.fastjson.JSONObject;
+import com.ziwow.scrmapp.common.bean.vo.*;
 import com.ziwow.scrmapp.common.constants.CancelConstant;
 import com.ziwow.scrmapp.common.utils.HttpClientUtil;
 import com.ziwow.scrmapp.qyh.constants.PointConstant;
@@ -36,12 +37,6 @@ import org.springframework.web.servlet.ModelAndView;
 import com.alibaba.druid.util.StringUtils;
 import com.alibaba.fastjson.JSON;
 import com.ziwow.scrmapp.common.bean.pojo.CancelProductParam;
-import com.ziwow.scrmapp.common.bean.vo.CompleteParam;
-import com.ziwow.scrmapp.common.bean.vo.QyhUserOrdersVo;
-import com.ziwow.scrmapp.common.bean.vo.QyhUserVo;
-import com.ziwow.scrmapp.common.bean.vo.WechatOrdersUserInfo;
-import com.ziwow.scrmapp.common.bean.vo.WechatOrdersVo;
-import com.ziwow.scrmapp.common.bean.vo.WechatUserMsgVo;
 import com.ziwow.scrmapp.common.constants.Constant;
 import com.ziwow.scrmapp.common.constants.SystemConstants;
 import com.ziwow.scrmapp.common.persistence.entity.Filter;
@@ -464,8 +459,10 @@ public class QyhUserController {
             int count = qyhOrdersService.getProductStatus(completeParam.getOrdersId());
             // 发送模板消息
             sendTemplate(completeParam);
-            //调用服务号发积分方法
-            grantPoint(userId,ordersCode, PointConstant.INSTALL,null);
+            //调用服务号发积分方法,
+            grantPoint(ordersCode, PointConstant.INSTALL,null);
+
+
         } catch (RuntimeException ex) {
             logger.error("师傅点击工单[{}]完工操作出现异常,原因:[{}]", ordersCode, ex);
             logger.error("师傅点击工单完工操作失败:", ex);
@@ -583,7 +580,7 @@ public class QyhUserController {
                 sendTemplate(completeParam);
             }
             qyhOrdersService.finishMakeAppointment(completeParam.getOrdersCode());
-            grantPoint(userId,ordersCode, PointConstant.FILTER,null);
+            grantPoint(ordersCode, PointConstant.FILTER,null);
         } catch (RuntimeException ex) {
             logger.error("师傅点击工单[{}]完工操作出现异常,原因:[{}]", ordersCode, ex);
             result.setReturnCode(Constant.FAIL);
@@ -1097,14 +1094,19 @@ public class QyhUserController {
     /**
      * 内部调用发积分
      */
-    private void grantPoint(String userId,String ordersCode,String path,Integer orderType){
+    private void grantPoint(String ordersCode,String path,Integer orderType){
+        WechatOrderVo wechatOrdersVoByCode = wechatOrdersMapper
+            .getWechatOrdersVoByCode(ordersCode);
         Map<String,Object> params = new HashMap<String,Object>();
-        params.put("userId",userId);
-        params.put("orderCoder",ordersCode);
-        if(null!=orderType){
-            params.put("orderType",orderType);
+        if(null!=wechatOrdersVoByCode){
+            params.put("userId",wechatOrdersVoByCode.getUserId());
+            params.put("orderCoder",ordersCode);
+            if(null!=orderType){
+                params.put("orderType",orderType);
+            }
+            HttpClientUtils
+                .postJson(baseUrl+path, JSONObject.toJSONString(params));
         }
-        HttpClientUtils
-            .postJson(baseUrl+path, JSONObject.toJSONString(params));
+
     }
 }
