@@ -1090,7 +1090,7 @@ public class QyhUserController {
         Map<String,Object> params = new HashMap<String,Object>();
         if(null!=wechatOrdersVoByCode){
             params.put("userId",wechatOrdersVoByCode.getUserId());
-            params.put("ordersCoder",ordersCode);
+            params.put("ordersCode",ordersCode);
             if(null!=orderType){
                 params.put("orderType",orderType);
             }
