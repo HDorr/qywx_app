@@ -2,9 +2,9 @@ package com.ziwow.scrmapp.common.service.impl;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.TypeReference;
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import com.google.common.net.HttpHeaders;
 import com.sinocc.service.*;
 import com.ziwow.scrmapp.common.aop.LoginRequired;
 import com.ziwow.scrmapp.common.bean.pojo.*;
@@ -12,10 +12,7 @@ import com.ziwow.scrmapp.common.bean.vo.SecurityVo;
 import com.ziwow.scrmapp.common.bean.vo.cem.CemAssertInfo;
 import com.ziwow.scrmapp.common.bean.vo.cem.CemProductInfo;
 import com.ziwow.scrmapp.common.bean.vo.cem.CemResp;
-import com.ziwow.scrmapp.common.bean.vo.csm.AppealProduct;
-import com.ziwow.scrmapp.common.bean.vo.csm.ProductAppealVo;
-import com.ziwow.scrmapp.common.bean.vo.csm.ProductFilterGrade;
-import com.ziwow.scrmapp.common.bean.vo.csm.ProductItem;
+import com.ziwow.scrmapp.common.bean.vo.csm.*;
 import com.ziwow.scrmapp.common.bean.vo.mall.MallOrderVo;
 import com.ziwow.scrmapp.common.bean.vo.mall.OrderItem;
 import com.ziwow.scrmapp.common.constants.Constant;
@@ -28,9 +25,9 @@ import com.ziwow.scrmapp.common.service.ThirdPartyService;
 import com.ziwow.scrmapp.common.utils.HttpKit;
 import com.ziwow.scrmapp.common.utils.JsonUtil;
 import com.ziwow.scrmapp.common.utils.MD5;
-import java.io.Console;
 import java.io.IOException;
-import java.util.Date;
+import java.util.*;
+
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import net.sf.json.JsonConfig;
@@ -44,26 +41,24 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
-import org.bouncycastle.jce.provider.JDKMessageDigest;
 import org.codehaus.xfire.client.Client;
 import org.codehaus.xfire.client.XFireProxy;
 import org.codehaus.xfire.client.XFireProxyFactory;
 import org.codehaus.xfire.service.binding.ObjectServiceFactory;
-import org.codehaus.xfire.transport.http.CommonsHttpMessageSender;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import javax.xml.namespace.QName;
 import java.lang.reflect.Proxy;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 @Service
 public class ThirdPartyServiceImpl implements ThirdPartyService {
@@ -78,6 +73,16 @@ public class ThirdPartyServiceImpl implements ThirdPartyService {
     @Value("${mall.productimg.url}")
     private String mallProductImgUrl;
     // csm系统url
+    /**
+     * 查询延保卡url
+     */
+    @Value("${csm.queryewcard.url}")
+    private String queryEwCardUrl;
+    /**
+     * 注册延保卡
+     */
+    @Value("${csm.registerewcard.url}")
+    private String registerEwCardUrl;
     @Value("${csm.csswx.url}")
     private String cssWxUrl;
     @Value("${csm.cssappealWx.url}")
@@ -99,6 +104,48 @@ public class ThirdPartyServiceImpl implements ThirdPartyService {
     private String cemAssetsUrl;
     @Value("${cem.productInfo.url}")
     private String cemProductInfoUrl;
+
+    @Autowired
+    private RestTemplate restTemplate;
+
+
+    @Override
+    public EwCardVo getEwCardListByNo(String cardNo){
+        LOG.info("第三方CSM系统根据卡号查询延保卡,cardNo:[{}]", cardNo);
+        EwCardVo ewCardVo = null;
+        try {
+            final String s = restTemplate.postForObject(queryEwCardUrl, JsonUtil.object2Json(ImmutableMap.of("card_no",cardNo,"mobile","")), String.class);
+            LOG.info("收到csm的数据:[{}]",s);
+            ewCardVo = JsonUtil.json2Object(s, EwCardVo.class);
+        } catch (IOException e) {
+            LOG.error("http reqeust csm fail",e);
+        }
+        return ewCardVo;
+    }
+
+
+    @Override
+    public Status registerEwCard(CSMEwCardParam CSMEwCardParam) {
+        LOG.info("第三方CSM系统注册延保卡信息,CSMEwCardParam:[{}]", CSMEwCardParam);
+        BaseCardVo baseCardVo = null;
+        try {
+            HttpHeaders headers = new HttpHeaders();
+            MediaType type = MediaType.parseMediaType("application/json; charset=UTF-8");
+            headers.setContentType(type);
+            headers.add("Accept", MediaType.APPLICATION_JSON.toString());
+            final String s1 = JsonUtil.object2Json(CSMEwCardParam);
+            org.springframework.http.HttpEntity<String> formEntity = new org.springframework.http.HttpEntity<String>(s1, headers);
+
+            final String s = restTemplate.postForObject(registerEwCardUrl, formEntity , String.class);
+            LOG.info("收到csm的数据:[{}]",s);
+            baseCardVo = JsonUtil.json2Object(s, BaseCardVo.class);
+        } catch (IOException e) {
+            LOG.info("第三方CSM系统注册延保卡信息失败");
+            e.printStackTrace();
+        }
+        return baseCardVo.getStatus();
+    }
+
 
     @Override
     public boolean registerCheck(String userName) {
@@ -181,6 +228,7 @@ public class ThirdPartyServiceImpl implements ThirdPartyService {
         }
         return imgUrl;
     }
+
 
     /**
      * 获取csswx服务

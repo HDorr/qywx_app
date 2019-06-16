@@ -132,7 +132,8 @@ function renderFunc(data) {
                 '                <div class="operation">' +
                 '                    <i class="deletePdt" onclick="deletePdt(this)" style="background-image: url(\'' + deleteIcon + '\');" data-id=' + v.id + '></i>' +
                 '                    <div class="btnBox pull-right">' +
-                '                        <button onclick="gotoIndex()">+ 一键服务</button>' +
+                '                        <button onclick="gotoIndex()">+ 保修状态:'+v.guaMessage+'</button>' +
+                '                        <button onclick="gotoIndex()">+ 一键服务</button>'
                 '                        <button hidden="hidden" onclick="goToPdtDetail(this)" data-id=' + v.id + '>' + v.filterRemindName + '</button>' +
                 '                    </div>' +
                 '                </div>' +

@@ -62,6 +62,15 @@
             </p>
             <p class="shadow"></p>
         </a>
+        <a href="${f_ctxpath}/scrmapp/consumer/user/filter/myOrder/jsp/myOrderList" class="weui-grid js_grid">
+            <div class="weui-grid__icon">
+                <img src="${f_ctxpath}/resources/images/home_menu/ACPP.png${f_ver}" alt="">
+            </div>
+            <p class="weui-grid__label">
+                延保服务
+            </p>
+            <p class="shadow"></p>
+        </a>
        <!--  <a href="javascript:;" class="weui-grid js_grid">
             <div class="weui-grid__icon">
                 <img src="${f_ctxpath}/resources/images/home_menu/myCount.png" alt="">

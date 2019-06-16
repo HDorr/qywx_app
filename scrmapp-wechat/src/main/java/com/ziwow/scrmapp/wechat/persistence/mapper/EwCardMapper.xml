@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ziwow.scrmapp.wechat.persistence.mapper.EwCardMapper">
+
+
+	<resultMap id="ewCardMap" type="com.ziwow.scrmapp.wechat.persistence.entity.EwCard">
+		<id column="id" property="id"></id>
+		<result column="fans_id" property="fansId"></result>
+		<result column="card_no" property="cardNo"></result>
+		<result column="item_name" property="itemName"></result>
+		<result column="purch_date" property="purchDate"></result>
+		<result column="repair_term" property="repairTerm"></result>
+		<result column="valid_time" property="validTime"></result>
+		<result column="use_status" property="useStatus"></result>
+		<result column="product_bar_code" property="productBarCodeTwenty"></result>
+	</resultMap>
+
+
+    <insert id="saveEwCard" parameterType="com.ziwow.scrmapp.wechat.persistence.entity.EwCard">
+		insert into t_ew_card(fans_id,card_no,item_name,purch_date,repair_term,valid_time,use_status)
+		values(#{fansId},#{cardNo},#{itemName},#{purchDate},#{repairTerm},#{validTime},#{useStatus})
+	</insert>
+
+	<select id="selectEwCardByNo" resultMap="ewCardMap">
+		select * from t_ew_card where card_no=#{cardNo}
+	</select>
+
+	<select id="selectEwCardByFansId" resultMap="ewCardMap">
+		select * from t_ew_card where fans_id=#{fansId} and use_status = false
+	</select>
+
+	<select id="selectEwCardByItemNameAndFansId" resultMap="ewCardMap">
+		select * from t_ew_card where fans_id=#{fansId} and item_name=#{itemName} and use_status = false
+	</select>
+
+	<select id="selectEwCardByNoAndFansId" resultMap="ewCardMap">
+		select * from t_ew_card where fans_id=#{fansId} and card_no=#{cardNo} and use_status=0
+	</select>
+
+	<select id="selectEwCardByBarCodeAndFansId" resultMap="ewCardMap">
+		select * from t_ew_card where fans_id=#{fansId} and product_bar_code_twenty=#{barCode} and use_status=1 order by repair_term desc limit 1
+	</select>
+
+	<update id="updateCard">
+		update t_ew_card
+		set
+		product_bar_code_twenty=#{productBarCode},
+		purch_date=#{purchDate},
+		repair_term=#{repairTerm}
+		where
+		card_no=#{cardNo}
+	</update>
+</mapper>

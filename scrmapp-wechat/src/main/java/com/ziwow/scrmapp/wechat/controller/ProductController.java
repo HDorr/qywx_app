@@ -1,34 +1,27 @@
 package com.ziwow.scrmapp.wechat.controller;
 
 import com.alibaba.druid.util.StringUtils;
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
 import com.ziwow.scrmapp.common.constants.Constant;
 import com.ziwow.scrmapp.common.constants.SystemConstants;
-import com.ziwow.scrmapp.common.persistence.entity.ProductFilter;
+import com.ziwow.scrmapp.common.enums.Guarantee;
 import com.ziwow.scrmapp.common.result.BaseResult;
 import com.ziwow.scrmapp.common.result.Result;
 import com.ziwow.scrmapp.common.service.MobileService;
+import com.ziwow.scrmapp.common.utils.EwCardUtil;
 import com.ziwow.scrmapp.tools.utils.Base64;
 import com.ziwow.scrmapp.tools.utils.CookieUtil;
 import com.ziwow.scrmapp.tools.utils.StringUtil;
-import com.ziwow.scrmapp.wechat.constants.WXPayConstant;
 import com.ziwow.scrmapp.wechat.constants.WeChatConstants;
 import com.ziwow.scrmapp.wechat.enums.BuyChannel;
 import com.ziwow.scrmapp.common.persistence.entity.Product;
 import com.ziwow.scrmapp.wechat.persistence.entity.*;
-import com.ziwow.scrmapp.wechat.service.ProductService;
-import com.ziwow.scrmapp.wechat.service.WXPayService;
-import com.ziwow.scrmapp.wechat.service.WechatFansService;
-import com.ziwow.scrmapp.wechat.service.WechatUserService;
+import com.ziwow.scrmapp.wechat.service.*;
 import com.ziwow.scrmapp.wechat.utils.BarCodeConvert;
 import com.ziwow.scrmapp.wechat.utils.JsonApache;
 import com.ziwow.scrmapp.wechat.utils.ProductServiceParamUtil;
 import com.ziwow.scrmapp.wechat.vo.EnumVo;
 import com.ziwow.scrmapp.wechat.vo.ProductVo;
 
-import java.math.BigDecimal;
 import java.util.*;
 
 import org.slf4j.Logger;
@@ -73,6 +66,8 @@ public class ProductController {
     private MobileService mobileService;
     @Autowired
     private WXPayService wxPayService;
+    @Autowired
+    private EwCardService ewCardService;
 
     /**
      * 展示产品系列列表
@@ -236,7 +231,7 @@ public class ProductController {
 
             // 产品绑定后发送模板消息
             productService.productBindTemplateMsg(product);
-            String content = "亲爱的用户，恭喜您成功绑定产品。积分商城全新上线、微商城下单即可享受积分专属抵扣，积分也能当钱花！";
+            String content = "亲爱的用户，恭喜您成功绑定产品。积分商城全新上线、微商城下单即可享受积分专属抵扣，积分也能当钱花!";
             mobileService.sendContentByEmay(wechatUser.getMobilePhone(), content, Constant.CUSTOMER);
 
             result.setReturnCode(Constant.SUCCESS);
@@ -246,19 +241,13 @@ public class ProductController {
             result.setReturnMsg("产品绑定失败!");
             logger.error("产品绑定失败,原因[{}]", e);
         }
-
         return result;
     }
 
 
 
-
-
-
-
     /**
      * 查询用户绑定所有产品信息
-     *
      * @param request
      * @param response
      * @return
@@ -270,7 +259,6 @@ public class ProductController {
         try {
             String encode = CookieUtil.readCookie(request, response, WeChatConstants.SCRMAPP_USER);
             String userId = new String(Base64.decode(encode));
-
             //用户id不存在
             if (!wechatUserService.checkUser(userId)) {
                 logger.error("查询用户产品列表失败，cookie中userId错误");
@@ -278,7 +266,15 @@ public class ProductController {
                 result.setReturnMsg("用户无效，请退出重新操作！");
                 return result;
             }
+            final WechatFans fans = wechatFansService.getWechatFansByUserId(userId);
             List<Product> products = productService.getProductsByUserId(userId);
+            //添加商品的保修状态
+            for (Product product : products) {
+                //根据产品id获取质保详情
+                final EwCard ewCard = ewCardService.selectEwCardByBarCode(product.getProductBarCode(), fans.getId());
+                final Guarantee guarantee = EwCardUtil.getGuarantee(product.getBuyTime(),ewCard == null ? null : ewCard.getRepairTerm());
+                product.setGuarantee(guarantee);
+            }
             result.setReturnCode(Constant.SUCCESS);
             result.setData(products);
         } catch (Exception e) {
@@ -287,7 +283,6 @@ public class ProductController {
             logger.error("用户查询产品列表失败，原因[{}]", e);
         }
         return result;
-
     }
 
 
