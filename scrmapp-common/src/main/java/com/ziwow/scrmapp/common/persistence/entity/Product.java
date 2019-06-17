@@ -67,15 +67,13 @@ public class Product {
 
     private Integer isAutoBind;
 
+
+
     /**
      * 延保状态
      */
-    @JsonIgnore
     private Guarantee guarantee;
 
-    public String getGuaMessage(){
-        return guarantee.getMessage();
-    }
 
     public Guarantee getGuarantee() {
         return guarantee;

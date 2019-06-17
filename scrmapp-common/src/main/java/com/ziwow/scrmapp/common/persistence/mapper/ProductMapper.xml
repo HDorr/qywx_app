@@ -41,7 +41,7 @@
     
     <select id="findByUserId" resultMap="BaseResultMap" parameterType="java.lang.String">
 	    select
-	    	id,productName,productBarCode,modelName,levelName,productImage,productBarCodeTwenty,productCode
+	    	id,productName,productBarCode,modelName,levelName,productImage,productBarCodeTwenty,productCode,buyTime
 	    from t_product
 	    where status = 1 and userId = #{userId} order by id DESC
 	</select>

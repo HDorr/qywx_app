@@ -271,6 +271,9 @@ public class ProductController {
             //添加商品的保修状态
             for (Product product : products) {
                 //根据产品id获取质保详情
+                if (product.getBuyTime() == null){
+                    continue;
+                }
                 final EwCard ewCard = ewCardService.selectEwCardByBarCode(product.getProductBarCode(), fans.getId());
                 final Guarantee guarantee = EwCardUtil.getGuarantee(product.getBuyTime(),ewCard == null ? null : ewCard.getRepairTerm());
                 product.setGuarantee(guarantee);
