@@ -432,7 +432,7 @@ public class WechatOrdersServiceImpl implements WechatOrdersService {
         int type = wechatOrderMsgVo.getOrderType();
         String serverType = OrderUtils.getServiceTypeName(type);
         String serverTime = wechatOrderMsgVo.getOrderTime();
-        wechatTemplateService.reservationServiceRemind(openId, msgUrl, title, name, serverType, serverTime, remark);
+        wechatTemplateService.reservationServiceRemind(openId, getOrdersListPageOauthUrl(), title, name, serverType, serverTime, remark);
     }
 
     @Override
@@ -446,7 +446,7 @@ public class WechatOrdersServiceImpl implements WechatOrdersService {
         String title = "亲爱的" + nickName + "，您的预约已成功提交！";
         String subscribeResult = "已成功提交";
         String remark = "点击【我的预约】查看订单状态，希望这份健康呵护尽快抵达您家！";
-        wechatTemplateService.subscribeResultNoticeTemplate(openId, msgUrl, title, name, phone, address, serverType, subscribeResult, remark);
+        wechatTemplateService.subscribeResultNoticeTemplate(openId, getOrdersListPageOauthUrl(), title, name, phone, address, serverType, subscribeResult, remark);
     }
 
     @Override
