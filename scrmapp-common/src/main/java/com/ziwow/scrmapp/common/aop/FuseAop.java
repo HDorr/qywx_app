@@ -72,7 +72,12 @@ public class FuseAop extends ApplicationObjectSupport {
                 @Override
                 public Object call() {
                     try {
+                        final long st = System.currentTimeMillis();
                         pro = point.proceed();
+                        final long et = System.currentTimeMillis();
+                        long t = et-st;
+                        MethodSignature methodSignature = (MethodSignature)point.getSignature();
+                        LOG.info(methodSignature.getName()+"方法执行时间为===="+t);
                     } catch (Throwable throwable) {
                         LOG.error("aop调用第三方出现异常,异常信息",throwable);
                     }
@@ -80,11 +85,11 @@ public class FuseAop extends ApplicationObjectSupport {
                 }
             });
             try {
-                result = future.get(timeoutInMilliSeconds,TimeUnit.MILLISECONDS);
+                result = future.get(3000,TimeUnit.MILLISECONDS);
             } catch (TimeoutException e) {
                 LOG.error("请求第三方超时! TimeoutException:",e);
                 future.cancel(true);
-                throw new ThirdException("请求第三方超时!");
+                throw new ThirdException("请求超时,请稍后再试");
             }catch (InterruptedException e){
                 //当前线程被中断 log throw
                 LOG.info("因超时线程强行停止运行");
