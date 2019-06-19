@@ -1,6 +1,7 @@
 package com.ziwow.scrmapp.common.utils;
 
 import com.ziwow.scrmapp.common.enums.Guarantee;
+import org.apache.commons.httpclient.util.DateUtil;
 import org.apache.commons.lang.time.DateUtils;
 
 import java.util.Calendar;
@@ -20,10 +21,22 @@ public class EwCardUtil {
      * @param validTime 保修天数
      * @return
      */
-    public static Date getNorMalRepairTerm(Date purchDate,int validTime){
+    public static Date getNormalRepairTerm(Date purchDate,int validTime){
         instance.setTime(purchDate);
         instance.add(Calendar.YEAR,1);
         instance.add(Calendar.DATE,validTime);
+        return instance.getTime();
+    }
+
+
+    /**
+     * 根据购买时间算正常的延保到期时间
+     * @param purchDate
+     * @return
+     */
+    public static Date getEndNormalRepairTerm(Date purchDate){
+        instance.setTime(purchDate);
+        instance.add(Calendar.YEAR,1);
         return instance.getTime();
     }
 
@@ -62,11 +75,11 @@ public class EwCardUtil {
         instance.add(Calendar.YEAR,1);
         final Date normal = instance.getTime();
         long now = System.currentTimeMillis();
-        if(normal.getTime() > now){
+        if(normal.getTime() > now || DateUtils.isSameDay(new Date(now),normal)){
             //正常质保
             return Guarantee.NORMAL_GUARANTEE;
         }else{
-            if (repairTerm != null && repairTerm.getTime() > now){
+            if (repairTerm != null && (repairTerm.getTime() > now || DateUtils.isSameDay(new Date(now),repairTerm))){
                 //延保质保中
                 return Guarantee.EXTEND_GUARANTEE;
             }else {
@@ -85,7 +98,7 @@ public class EwCardUtil {
     public static boolean isGuantee(Date purchDate){
         instance.setTime(purchDate);
         instance.add(Calendar.YEAR,2);
-        if (instance.getTime().getTime()>System.currentTimeMillis()){
+        if (instance.getTime().getTime() > System.currentTimeMillis() || DateUtils.isSameDay(new Date(System.currentTimeMillis()),purchDate)){
             return true;
         }
         return false;
@@ -99,7 +112,20 @@ public class EwCardUtil {
     public static boolean isNormal(Date purchDate){
         instance.setTime(purchDate);
         instance.add(Calendar.YEAR,1);
-        if (instance.getTime().getTime()>System.currentTimeMillis()){
+        if (instance.getTime().getTime() > System.currentTimeMillis() || DateUtils.isSameDay(new Date(System.currentTimeMillis()),purchDate)){
+            return true;
+        }
+        return false;
+    }
+
+
+    /**
+     * 已过正常延保时判断是否出了延保期限
+     * @param repairTerm 延保时间
+     * @return
+     */
+    public static boolean isExtend(Date repairTerm){
+        if (repairTerm.getTime() > System.currentTimeMillis() || DateUtils.isSameDay(new Date(System.currentTimeMillis()),repairTerm)){
             return true;
         }
         return false;

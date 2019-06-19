@@ -74,4 +74,11 @@ public interface ProductService {
     int updateByPrimaryKeySelective(Product record);
 
 
+    /**
+     * 根据userId和产品的条码查询产品
+     * @param userId
+     * @param barCode
+     * @return
+     */
+    Product getProductsByBarCodeAndUserId(String userId, String barCode);
 }

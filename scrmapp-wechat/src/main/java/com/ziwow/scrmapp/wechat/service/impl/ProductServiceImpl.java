@@ -861,4 +861,9 @@ public class ProductServiceImpl implements ProductService {
         return productMapper.updateByPrimaryKeySelective(record);
     }
 
+    @Override
+    public Product getProductsByBarCodeAndUserId(String userId, String barCode) {
+        return productMapper.getProductsByBarCodeAndUserId(userId,barCode);
+    }
+
 }

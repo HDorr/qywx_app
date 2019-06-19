@@ -12,6 +12,7 @@ var glData = {
 
 };
 
+
 (function($, window) {
     $.toast.prototype.defaults.duration = 800;
     ajaxGetList(renderFunc)
@@ -113,11 +114,22 @@ function renderFunc(data) {
         var data = data.data;
         var strLi = "";
         var deleteIcon = glData.rootUrl + '/resources/src/images/icons/delete-grey.png';
+        var ewIcon = glData.rootUrl + '/resources/src/images/icons/ew.png';
         $.each(data, function(i, v) {
+            var str='';
             if (!v.filterRemind || v.filterRemind == 2) {
                 v.filterRemindName = "开启滤芯更换提醒"
             } else {
                 v.filterRemindName = "关闭滤芯更换提醒"
+            }
+
+            if (!$.isEmptyObject(v.guarantee)) {
+                str='                    <div class="btnBox pull-right">' +
+                    '                        <button class="ew_btn" onclick="gotoMiniDetail()"> ' +
+                    '                           <div class="ewPdt_one" style="background-image: url(\'' + ewIcon + '\');"></div> ' +
+                '                               <div class="ewPdt_two">保修状态: '+v.guarantee.message+'</div></button>'+
+                '                           <button hidden="hidden" onclick="goToPdtDetail(this)" data-id=' + v.id + '>' + v.filterRemindName + '</button>' +
+                '                        </div>' ;
             }
             v.productImage = v.productImage || glData.rootUrl + "/resources/images/defaultPdtImg.jpg";
             strLi += ' <li data-id=' + v.id + '>' +
@@ -131,9 +143,9 @@ function renderFunc(data) {
                 '                </div>' +
                 '                <div class="operation">' +
                 '                    <i class="deletePdt" onclick="deletePdt(this)" style="background-image: url(\'' + deleteIcon + '\');" data-id=' + v.id + '></i>' +
+                 str+
                 '                    <div class="btnBox pull-right">' +
-                '                        <button onclick="gotoIndex()">+ 保修状态:'+v.guarantee.message+'</button>' +
-                '                        <button onclick="gotoIndex()">+ 一键服务</button>'
+                '                        <button onclick="gotoIndex()">+ 一键服务</button>'+
                 '                        <button hidden="hidden" onclick="goToPdtDetail(this)" data-id=' + v.id + '>' + v.filterRemindName + '</button>' +
                 '                    </div>' +
                 '                </div>' +

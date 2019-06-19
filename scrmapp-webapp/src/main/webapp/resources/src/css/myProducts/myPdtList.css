@@ -46,20 +46,28 @@
   width: 100%;
   background-color: #d8d8d8;
   position: relative;
+  display: flex;
+  justify-content: space-between;
+  box-sizing: border-box;
+  padding: 0 .4rem;
 }
 .main_layer > ul > li .operation .deletePdt {
-  position: absolute;
   width: 0.453333rem;
   height: 0.48rem;
   background-size: cover;
-  left: 0.44rem;
-  top: 50%;
-  margin-top: -0.24rem;
+  margin-top: 0.5rem;
 }
 .main_layer > ul > li .operation .btnBox {
   height: 100%;
   padding-top: 0.346667rem;
-  padding-right: 0.346667rem;
+  display: flex;
+}
+
+.main_layer > ul > li .operation .btnBox  > button .ewPdt_one{
+  height: 0.466rem;
+  width: 0.466rem;
+  margin: 0.137rem 0.1667rem 0 0;
+  background-size: 100% 100%;
 }
 .main_layer > ul > li .operation .btnBox > button {
   height: 0.8rem;
@@ -69,8 +77,10 @@
   border: 1px solid #8a8a8a;
   color: #8a8a8a;
   background-color: #fff;
-  padding-left: 0.293333rem;
-  padding-right: 0.293333rem;
+  padding: 0 0.293333rem;
+}
+.main_layer > ul > li .operation .btnBox > .ew_btn {
+  display: flex;
 }
 .main_layer > ul > li .operation .btnBox > button:last-child {
   margin-left: 0.333333rem;

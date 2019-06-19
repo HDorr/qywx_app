@@ -1,5 +1,6 @@
 package com.ziwow.scrmapp.wechat.controller;
 
+import com.ctc.wstx.util.DataUtil;
 import com.ziwow.scrmapp.common.annotation.MiniAuthentication;
 import com.ziwow.scrmapp.common.bean.pojo.CSMEwCardParam;
 import com.ziwow.scrmapp.common.bean.pojo.EwCardParam;
@@ -12,6 +13,7 @@ import com.ziwow.scrmapp.common.bean.vo.csm.Status;
 import com.ziwow.scrmapp.common.constants.Constant;
 import com.ziwow.scrmapp.common.constants.ErrorCodeConstants;
 import com.ziwow.scrmapp.common.enums.Guarantee;
+import com.ziwow.scrmapp.common.persistence.entity.Product;
 import com.ziwow.scrmapp.common.result.BaseResult;
 import com.ziwow.scrmapp.common.result.Result;
 import com.ziwow.scrmapp.common.service.ThirdPartyService;
@@ -26,6 +28,7 @@ import com.ziwow.scrmapp.wechat.service.*;
 import com.ziwow.scrmapp.wechat.vo.EwCardDetails;
 import com.ziwow.scrmapp.wechat.vo.EwCardInfo;
 import com.ziwow.scrmapp.wechat.vo.ServiceRecord;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -66,6 +69,9 @@ public class EwCardController {
     @Autowired
     private WechatOrdersService wechatOrdersService;
 
+    @Autowired
+    private ProductService productService;
+
 
 
 
@@ -94,13 +100,13 @@ public class EwCardController {
         ewCardVo = thirdPartyService.getEwCardListByNo(cardNo);
         if (ErrorCodeConstants.CODE_E09.equals(ewCardVo.getStatus().getCode())) {
             logger.error("查询延保卡失败!");
-            result.setReturnMsg("延保卡查询失败");
+            result.setReturnMsg("延保卡查询失败!");
             result.setReturnCode(Constant.FAIL);
             return result;
         }
         //查询到结果
         ewCard = new EwCard();
-        final EwCardItem items = ewCardVo.getItem();
+        final EwCardItem items = ewCardVo.getItems();
         BeanUtils.copyProperties(items,ewCard);
         ewCard.setRepairTerm(ewCard.getRepairTerm());
         //根据unionId查询出fans
@@ -131,8 +137,7 @@ public class EwCardController {
         final WechatUser user = wechatUserService.getUserByUnionid(unionId);
         final WechatFans fans = wechatFansService.getWechatFansByUserId(user.getUserId());
         List<EwCard> ewCards = ewCardService.selectEwCardByFansId(fans.getId());
-
-        return getSearchResult(result,ewCards);
+        return getSearchResult(result,ewCards,user.getUserId(),fans.getId());
     }
 
 
@@ -153,7 +158,7 @@ public class EwCardController {
         final WechatUser user = wechatUserService.getUserByUnionid(unionId);
         final WechatFans fans = wechatFansService.getWechatFansByUserId(user.getUserId());
         List<EwCard> ewCards = ewCardService.selectEwCardByItemName(itemName,fans.getId());
-        return getSearchResult(result,ewCards);
+        return getSearchResult(result,ewCards,user.getUserId(),fans.getId());
     }
 
 
@@ -182,37 +187,53 @@ public class EwCardController {
             return result;
         }
 
-        //根据barcode查询 产品
-        ProductItem productItem = thirdPartyService.getProductItem(new ProductParam(null, ewCardParam.getProductBarCode()));
-        if(productItem == null){
-            result.setReturnMsg("产品条码错误!");
+        //该类型用户的产品
+        final List<Product> products = productService.getProductsByUserId(wechatUser.getUserId());
+        Product product = null;
+        for (Product pro : products) {
+            if (pro.getModelName().equals(ewCard.getItemName()) && pro.getBuyTime() != null && StringUtils.isNotBlank(pro.getProductBarCode())){
+                product = pro;
+                break;
+            }
+        }
+
+        if (product == null){
+            result.setReturnMsg(StringUtils.join("对不起,您没有适合",ewCardParam.getCardNo(),"型号的产品!"));
             result.setReturnCode(Constant.FAIL);
             return result;
         }
 
+//        //根据barcode查询 产品
+//        ProductItem productItem = thirdPartyService.getProductItem(new ProductParam(product.getModelName(), product.getProductBarCode()));
+//        if(productItem == null){
+//            result.setReturnMsg("产品信息错误!");
+//            result.setReturnCode(Constant.FAIL);
+//            return result;
+//        }
+
         //判断该产品是否可以使用延保卡
-        if (!EwCardUtil.isGuantee(DateUtil.StringToDate(productItem.getPurchDate(),"yyyy-MM-dd"))){
+        if (!EwCardUtil.isGuantee(product.getBuyTime())){
             result.setReturnMsg("对不起,该产品购买超过2年,不能使用延保服务!");
             result.setReturnCode(Constant.FAIL);
             return result;
         }
 
-        CSMEwCardParam CSMEwCardParam = getCsmEwCardParam(ewCardParam, wechatUser, productItem);
-
-        //csm注册延保卡
-        final Status status = thirdPartyService.registerEwCard(CSMEwCardParam);
-        if (ErrorCodeConstants.CODE_E09.equals(status.getCode())){
-            logger.error("scm注册延保卡失败,延保卡号为[{}],产品条码为[{}]",ewCardParam.getCardNo(),ewCardParam.getProductBarCode());
-            result.setReturnCode(Constant.FAIL);
-            result.setReturnMsg(status.getMessage());
-            return result;
-        }
+//        CSMEwCardParam CSMEwCardParam = getCsmEwCardParam(ewCardParam, wechatUser, productItem);
+//
+//        //csm注册延保卡
+//        final Status status = thirdPartyService.registerEwCard(CSMEwCardParam);
+//        if (ErrorCodeConstants.CODE_E09.equals(status.getCode())){
+//            logger.error("scm注册延保卡失败,延保卡号为[{}],产品条码为[{}]",ewCardParam.getCardNo(),product.getProductBarCode());
+//            result.setReturnCode(Constant.FAIL);
+//            result.setReturnMsg(status.getMessage());
+//            return result;
+//        }
         //使用延保卡
-        useEwCard(ewCardParam, fans, ewCard, productItem);
+        useEwCard(ewCardParam, fans, ewCard.getValidTime(), product.getBuyTime(),product.getProductBarCode());
         result.setReturnMsg("延保卡注册成功");
         result.setReturnCode(Constant.SUCCESS);
         return result;
-    }
+}
 
 
     /**
@@ -233,12 +254,24 @@ public class EwCardController {
         final WechatUser wechatUser = wechatUserService.getUserByUnionid(unionId);
         final WechatFans fans = wechatFansService.getWechatFansByUserId(wechatUser.getUserId());
         final EwCard ewCard = ewCardService.selectEwCardByBarCode(barCode, fans.getId());
-        //延保状态
-        final Guarantee guarantee = EwCardUtil.getGuarantee(ewCard.getPurchDate(),ewCard == null ? null : ewCard.getRepairTerm());
-        ewCard.setGuarantee(guarantee);
+        Product product = productService.getProductsByBarCodeAndUserId(wechatUser.getUserId(),barCode);
         EwCardDetails ewCardDetails = new EwCardDetails();
-        ewCardDetails.setEwCard(ewCard);
 
+        //延保状态
+        final Guarantee guarantee = EwCardUtil.getGuarantee(product.getBuyTime(),ewCard == null ? null : ewCard.getRepairTerm());
+        ewCardDetails.setGuarantee(guarantee);
+        //没有使用延保卡的情况
+        if (ewCard == null){
+            ewCardDetails.setRepairTerm(EwCardUtil.getEndNormalRepairTerm(product.getBuyTime()));
+        }
+        ewCardDetails.setRepairTerm(ewCard.getRepairTerm());
+
+        // 商品相关信息
+        ewCardDetails.setProductImg(product.getProductImage());
+        ewCardDetails.setProductName(product.getProductName());
+        ewCardDetails.setBarCode(product.getProductBarCode());
+        ewCardDetails.setItemName(product.getModelName());
+        ewCardDetails.setBuyTime(product.getBuyTime());
         //服务记录
         //安装时间
         List<ServiceRecord> serviceRecords = new ArrayList<>(3);
@@ -266,17 +299,23 @@ public class EwCardController {
             }
         }
         //最新维修时间
-        ServiceRecord maintainServiceRecord = new ServiceRecord();
-        maintainServiceRecord.setServiceType(2);
-        maintainServiceRecord.setMessage("最近维修时间"+DateUtil.DateToString(maintainDate, "yyyy年M月d日"));
-        serviceRecords.add(maintainServiceRecord);
+        if (maintainDate != null){
+            ServiceRecord maintainServiceRecord = new ServiceRecord();
+            maintainServiceRecord.setServiceType(2);
+            maintainServiceRecord.setMessage("最近维修时间"+DateUtil.DateToString(maintainDate, "yyyy年M月d日"));
+            serviceRecords.add(maintainServiceRecord);
+        }
+
         //最新保养时间
-        ServiceRecord repairServiceRecord = new ServiceRecord();
-        repairServiceRecord.setServiceType(3);
-        repairServiceRecord.setMessage("最新保养时间"+DateUtil.DateToString(repairDate, "yyyy年M月d日"));
-        serviceRecords.add(repairServiceRecord);
+        if (repairDate != null){
+            ServiceRecord repairServiceRecord = new ServiceRecord();
+            repairServiceRecord.setServiceType(3);
+            repairServiceRecord.setMessage("最新保养时间"+DateUtil.DateToString(repairDate, "yyyy年M月d日"));
+            serviceRecords.add(repairServiceRecord);
+        }
 
         ewCardDetails.setServiceRecords(serviceRecords);
+
 
         result.setReturnCode(Constant.SUCCESS);
         result.setData(ewCardDetails);
@@ -318,28 +357,46 @@ public class EwCardController {
      * 更改延保卡的使用状态,以及绑定延保卡的产品条码,延保卡的购买时间,保修的时间
      * @param ewCardParam
      * @param fans
-     * @param ewCard
-     * @param productItem
+     * @param validTime
+     * @param productBarCode
      */
-    private void useEwCard(@RequestBody EwCardParam ewCardParam, WechatFans fans, EwCard ewCard, ProductItem productItem) {
-        final Date purchDate = DateUtil.StringToDate(productItem.getPurchDate(), "yyyy-MM-dd");
+    private void useEwCard(@RequestBody EwCardParam ewCardParam, WechatFans fans, int validTime, Date purchDate,String productBarCode) {
         Date repairTerm = null;
-        final EwCard ewCard1 = ewCardService.selectEwCardByBarCode(ewCardParam.getProductBarCode(), fans.getId());
+        final EwCard ewCard1 = ewCardService.selectEwCardByBarCode(productBarCode, fans.getId());
         //该机器是否用过延保卡
+        repairTerm = getRepairTerm(validTime, purchDate, ewCard1);
+        ewCardService.useEwCard(ewCardParam.getCardNo(), productBarCode, purchDate,repairTerm);
+    }
+
+    /**
+     * 获取延保后的期限
+     * @param validTime
+     * @param purchDate
+     * @param ewCard1
+     * @return
+     */
+    private Date getRepairTerm(int validTime, Date purchDate, EwCard ewCard1) {
+        Date repairTerm = null;
         //没有用过
         if (ewCard1 == null){
             if (EwCardUtil.isNormal(purchDate)){
                 //在正常延保期限内
-                repairTerm = EwCardUtil.getNorMalRepairTerm(purchDate, ewCard.getValidTime());
+                repairTerm = EwCardUtil.getNormalRepairTerm(purchDate, validTime);
             }else {
                 //过了正常延保期限
-                repairTerm = EwCardUtil.getEndRepairTerm(ewCard.getValidTime());
+                repairTerm = EwCardUtil.getEndRepairTerm(validTime);
             }
         }else {
             //已经用过延保卡,最新延保卡的基础上添加天数
-            repairTerm = EwCardUtil.getExtendRepairTerm(ewCard1.getRepairTerm(),ewCard.getValidTime());
+            if (EwCardUtil.isExtend(ewCard1.getRepairTerm())){
+                //在延长延保阶段
+                repairTerm = EwCardUtil.getExtendRepairTerm(ewCard1.getRepairTerm(),validTime);
+            }else {
+                //已过延保阶段
+                repairTerm = EwCardUtil.getEndRepairTerm(ewCard1.getValidTime());
+            }
         }
-        ewCardService.useEwCard(ewCardParam.getCardNo(), ewCardParam.getProductBarCode(), purchDate,repairTerm);
+        return repairTerm;
     }
 
     /**
@@ -389,12 +446,58 @@ public class EwCardController {
     /**
      * 封装查询延保卡返回信息(scrm)
      * @param result
+     * @param userId
      * @return
      */
-    private Result getSearchResult(Result result,List<EwCard> ewCards) {
+    private Result getSearchResult(Result result,List<EwCard> ewCards,String userId,Long fansId) {
         List<EwCardInfo> ewCardInfos = new ArrayList<>();
+
+        //组装 EwCardInfo
         for (EwCard ewCard : ewCards) {
             EwCardInfo ewCardInfo = new EwCardInfo();
+            final List<Product> products = productService.getProductsByUserId(userId);
+            Product product = null;
+            for (Product pro : products) {
+                if (pro.getModelName().equals(ewCard.getItemName()) && pro.getBuyTime() != null && StringUtils.isNotBlank(pro.getProductBarCode())){
+                    product = pro;
+                    break;
+                }
+            }
+
+            Date startDate = null;
+            Date endDate = null;
+
+            //有符合条件的机器
+            if (product != null){
+                //查询正在使用的最近延保卡信息
+                final EwCard ec = ewCardService.selectEwCardByBarCode(product.getProductBarCode(), fansId);
+                if (ec != null){
+                    //已经用过延保卡,最新延保卡的基础上添加天数
+                    if (EwCardUtil.isExtend(ec.getRepairTerm())){
+                        //在延长延保阶段
+                        startDate = ec.getRepairTerm();
+                        endDate = EwCardUtil.getExtendRepairTerm(ec.getRepairTerm(),ewCard.getValidTime());
+                    }else {
+                        //已过延保阶段
+                        startDate = new Date();
+                        endDate = EwCardUtil.getEndRepairTerm(ewCard.getValidTime());
+                    }
+                } else {
+                    //正常延保阶段
+                    if (EwCardUtil.isNormal(product.getBuyTime())){
+                        //在正常延保期限内
+                        startDate = EwCardUtil.getEndNormalRepairTerm(product.getBuyTime());
+                        endDate = EwCardUtil.getNormalRepairTerm(product.getBuyTime(), ewCard.getValidTime());
+                    }else {
+                        //过了正常延保期限
+                        startDate = new Date();
+                        endDate = EwCardUtil.getEndRepairTerm(ewCard.getValidTime());
+                    }
+                }
+                ewCardInfo.setStartDate(startDate);
+                ewCardInfo.setEndDate(endDate);
+            }
+
             BeanUtils.copyProperties(ewCard,ewCardInfo);
             ewCardInfos.add(ewCardInfo);
         }

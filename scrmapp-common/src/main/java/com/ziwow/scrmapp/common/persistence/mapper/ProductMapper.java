@@ -64,4 +64,12 @@ public interface ProductMapper {
     int updateProductStatus(@Param("ordersId") Long ordersId,@Param("productId") Long productId);
 
     List<Integer> getAllStatus(@Param("ordersId") Long ordersId);
+
+    /**
+     * 根据 userId 和 编码查
+     * @param userId
+     * @param barCode
+     * @return
+     */
+    Product getProductsByBarCodeAndUserId(@Param("userId") String userId, @Param("barCode") String barCode);
 }

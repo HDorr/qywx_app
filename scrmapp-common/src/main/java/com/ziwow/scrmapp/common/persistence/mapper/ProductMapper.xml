@@ -45,6 +45,14 @@
 	    from t_product
 	    where status = 1 and userId = #{userId} order by id DESC
 	</select>
+
+
+    <select id="getProductsByBarCodeAndUserId" resultMap="BaseResultMap">
+	    select
+	    	id,productName,productBarCode,modelName,levelName,productImage,productBarCodeTwenty,productCode,buyTime
+	    from t_product
+	    where status = 1 and userId = #{userId} and productBarCode = #{barCode}
+	</select>
 	
     <select id="findBaseInfoById" parameterType="java.lang.Long" resultMap="BaseResultMap">
         select id,typeName,itemKind,productName,productBarCode,modelName,levelName,productImage,o2o,buyChannel,shoppingOrder,buyTime,saleType from t_product where id = #{productId,jdbcType=BIGINT}

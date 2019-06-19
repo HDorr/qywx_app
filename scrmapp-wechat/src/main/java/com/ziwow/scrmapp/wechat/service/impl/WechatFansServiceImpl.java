@@ -84,6 +84,9 @@ public class WechatFansServiceImpl implements WechatFansService {
 	private AccessToken getTokenByCode(String code) {
 		AccessToken accessToken = null;
 		OpenAuthorizationWeixin oaw = openWeixinService.getAuthorizerWeixinByAuthorizerAppid(appId);
+		oaw = new OpenAuthorizationWeixin();
+		oaw.setAlias("aaa");
+		oaw.setNick_name("bbb");
 		if (oaw != null) {
 			// 通过三方授权获取access_token和openId
 			net.sf.json.JSONObject obj = openWeixinService.getAuthorizerWeixinOpenId(appId, code);

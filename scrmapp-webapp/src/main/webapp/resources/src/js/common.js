@@ -12,6 +12,7 @@ var IS_DEVENV = (location.origin === "http://localhost:8080") ||
 
 var pageUrls =  { //正式环境
     oneClickService: rootPath + "/scrmapp/consumer/product/index",
+    toMiniEwCardDetails:rootPath + "",
     scanToBindPdt: rootPath + "/scrmapp/consumer/product/bind/scan/page",
     noScanToBindPdt: rootPath + "/scrmapp/consumer/product/bind/noscan/page",
     bindPdtMain: rootPath + "/scrmapp/consumer/product/query/page",
@@ -76,6 +77,11 @@ var queryUrls =
 //跳转至一键预约页面
 function gotoIndex() {
     window.location.href = pageUrls.oneClickService;
+}
+
+//跳转至小程序页面
+function gotoMiniDetail() {
+    wx.miniProgram.navigateTo("https://test-mall.healthsource.com.cn");
 }
 
 

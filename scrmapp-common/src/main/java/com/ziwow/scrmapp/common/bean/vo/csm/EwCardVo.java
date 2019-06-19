@@ -12,13 +12,13 @@ public class EwCardVo extends BaseCardVo {
     /**
      * 延保卡详细
      */
-    private EwCardItem item;
+    private EwCardItem items;
 
-    public EwCardItem getItem() {
-        return item;
+    public EwCardItem getItems() {
+        return items;
     }
 
-    public void setItem(EwCardItem item) {
-        this.item = item;
+    public void setItem(EwCardItem items) {
+        this.items = items;
     }
 }
