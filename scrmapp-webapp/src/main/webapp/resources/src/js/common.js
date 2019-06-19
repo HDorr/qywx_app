@@ -81,7 +81,7 @@ function gotoIndex() {
 
 //跳转至小程序页面
 function gotoMiniDetail() {
-    wx.miniProgram.navigateTo("https://test-mall.healthsource.com.cn");
+    wx.miniProgram.navigateTo("pages/ewCodeDetails");
 }
 
 

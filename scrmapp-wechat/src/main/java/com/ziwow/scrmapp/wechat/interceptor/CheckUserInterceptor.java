@@ -107,12 +107,12 @@ public class CheckUserInterceptor implements HandlerInterceptor {
          * String nickName;  黄晶晶。
          * Integer gender;   1
          */
-        wechatFansVo=new WechatFansVo();
-        wechatFansVo.setCode(2);
-        wechatFansVo.setToken("AlEHYDMnIhvqOyG8n415BuUZgQzaj7Tw2rmObBVEnPY=");
-        wechatFansVo.setUserId("XEmQU3fJ");
-        wechatFansVo.setNickName("Jitre");
-        wechatFansVo.setGender(1);
+//        wechatFansVo=new WechatFansVo();
+//        wechatFansVo.setCode(2);
+//        wechatFansVo.setToken("AlEHYDMnIhvqOyG8n415BuUZgQzaj7Tw2rmObBVEnPY=");
+//        wechatFansVo.setUserId("eYzE67dT");
+//        wechatFansVo.setNickName("黄晶晶。");
+//        wechatFansVo.setGender(1);
 
         //会员标识
         Integer fanCode = wechatFansVo.getCode();
