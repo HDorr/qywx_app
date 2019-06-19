@@ -57,6 +57,11 @@ function goToPdtDetail(ele) {
     window.location.href = pageUrls.bindPdtDetail + "?productId=" + productId
 };
 
+//跳转至小程序页面
+function gotoMiniDetail() {
+    wx.miniProgram.navigateTo("pages/ewCodeDetails");
+}
+
 
 /*function setRemindFilter(ele) {
     var that = $(ele)
@@ -86,6 +91,7 @@ function goBindPdt() {
     // window.location.href = glData.rootUrl + "/scrmapp/consumer/product/bind/scan/page"
     window.location.href = pageUrls.scanToBindPdt;
 }
+
 
 
 

@@ -79,11 +79,6 @@ function gotoIndex() {
     window.location.href = pageUrls.oneClickService;
 }
 
-//跳转至小程序页面
-function gotoMiniDetail() {
-    wx.miniProgram.navigateTo("pages/ewCodeDetails");
-}
-
 
 ///判断是否为微信浏览器
 function isWeiXin() {
