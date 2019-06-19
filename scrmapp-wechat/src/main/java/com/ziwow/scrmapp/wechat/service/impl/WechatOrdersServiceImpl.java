@@ -574,7 +574,8 @@ public class WechatOrdersServiceImpl implements WechatOrdersService {
         QyhUser qyhUser = wechatQyhUserService.getQyhUser(wechatOrders.getQyhUserId());
         String qyhUserMobile = (null != qyhUser) ? qyhUser.getMobile() : "";
         try {
-            mobileService.sendContentByEmay(qyhUserMobile, engineerMsgContent, Constant.ENGINEER);
+            //短信开口关闭 2019年06月19日
+            //mobileService.sendContentByEmay(qyhUserMobile, engineerMsgContent, Constant.ENGINEER);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -771,7 +772,8 @@ public class WechatOrdersServiceImpl implements WechatOrdersService {
             String orderTime = DateUtil.DateToString(wechatOrders.getOrderTime(), DateUtil.YYYY_MM_DD_HH_MM_SS);
             String msgContent = "亲爱的用户，您预约的" + serviceType + "服务已成功派单。工程师上门服务时间:"
                     + orderTime + "。请保持电话畅通，届时工程师将与您联系沟通具体上门服务时间。";
-            mobileService.sendContentByEmay(mobilePhone, msgContent, Constant.CUSTOMER);
+            //短信开口关闭 2019年06月19日
+            //mobileService.sendContentByEmay(mobilePhone, msgContent, Constant.CUSTOMER);
         }
         // 派单给师傅后给用户发送模板消息
         String userId = wechatOrders.getUserId();

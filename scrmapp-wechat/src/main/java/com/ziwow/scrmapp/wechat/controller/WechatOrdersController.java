@@ -268,7 +268,8 @@ public class WechatOrdersController {
                 String mobilePhone = wechatUser.getMobilePhone();
                 int originalType = SmsMarketingTask.convertOriginalType(SmsTypeEnum.TODAY.getCode(), orderType);
                 SmsMarketing smsMarketing = smsTemplateMap.get(originalType);
-                mobileService.sendContentByEmay(mobilePhone, smsMarketing.getSmsContent(), Constant.CUSTOMER);
+                //短信开口关闭 2019年06月19日
+                //mobileService.sendContentByEmay(mobilePhone, smsMarketing.getSmsContent(), Constant.CUSTOMER);
                 // 预约提交成功模板消息提醒
                 wechatOrdersService.sendAppointmentTemplateMsg(wechatOrders.getOrdersCode(), serverType);
                 WechatOrdersRecord wechatOrdersRecord = new WechatOrdersRecord();
@@ -565,7 +566,8 @@ public class WechatOrdersController {
                     // 给用户发送发送短信提醒
                     String mobile = wechatUser.getMobilePhone();
                     String msgContent = "亲爱的用户，您预约的" + serverType + "服务已撤销。如须重新预约，您可进入“沁园”官方微信服务号进行操作。";
-                    mobileService.sendContentByEmay(mobile, msgContent, Constant.CUSTOMER);
+                    //短信开口关闭 2019年06月19日
+                    //mobileService.sendContentByEmay(mobile, msgContent, Constant.CUSTOMER);
                     // 给用户发送发送模板消息
                     wechatOrdersService.sendOrderCancelTemplateMsg(userId, serverType);
                     // 如果服务工程师接单了，用户侧取消需要给服务工程师发送取消通知
@@ -575,7 +577,8 @@ public class WechatOrdersController {
                         String engineerMsgContent = "请注意，" + contacts + "用户已取消" + serverType + "服务！您可进入“沁园”WX企业号查看该工单详情！";
                         QyhUser qyhUser = wechatQyhUserService.getQyhUser(engineerId);
                         String qyhUserMobile = (null != qyhUser) ? qyhUser.getMobile() : "";
-                        mobileService.sendContentByEmay(qyhUserMobile, engineerMsgContent, Constant.ENGINEER);
+                        //短信开口关闭 2019年06月19日
+                        //mobileService.sendContentByEmay(qyhUserMobile, engineerMsgContent, Constant.ENGINEER);
                         // 给工程师发送取消公告通知
                         String url = orderDetailUrl + "?userId=" + engineerId + "&ordersCode=" + ordersCode;
                         String content = "工单撤销通知！\n" +
@@ -821,7 +824,8 @@ public class WechatOrdersController {
                 String engineerMsgContent = "您服务的工单" + ordersCode + "，用户已经评价啦，谢谢提供服务！请登录“沁园服务之家”的售后服务个人中心，可以查看评分。";
                 QyhUser qyhUser = wechatQyhUserService.getQyhUser(wechatOrders.getQyhUserId());
                 String qyhUserMobile = (null != qyhUser) ? qyhUser.getMobile() : "";
-                mobileService.sendContentByEmay(qyhUserMobile, engineerMsgContent, Constant.ENGINEER);
+                //短信开口关闭 2019年06月19日
+                //mobileService.sendContentByEmay(qyhUserMobile, engineerMsgContent, Constant.ENGINEER);
             } else {
                 return invokeResult;
             }
@@ -1021,7 +1025,8 @@ public class WechatOrdersController {
                 String engineerMsgContent = "您服务的工单" + ordersCode + "，用户已经评价啦，谢谢提供服务！请登录“沁园服务之家”的售后服务个人中心，可以查看评分。";
                 QyhUser qyhUser = wechatQyhUserService.getQyhUser(wechatOrders.getQyhUserId());
                 String qyhUserMobile = (null != qyhUser) ? qyhUser.getMobile() : "";
-                mobileService.sendContentByEmay(qyhUserMobile, engineerMsgContent, Constant.ENGINEER);
+                //短信开口关闭 2019年06月19日
+                //mobileService.sendContentByEmay(qyhUserMobile, engineerMsgContent, Constant.ENGINEER);
             } else {
                 result.setReturnCode(Constant.FAIL);
                 result.setReturnMsg("用户评分失败!");

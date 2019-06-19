@@ -102,7 +102,8 @@ public class TemplateMsgScheduledTask {
                 String serverType = OrderUtils.getServiceTypeName(wechatOrderMsgVo.getOrderType());
                 String mobilePhone = wechatOrderMsgVo.getMobilePhone();
                 String msgContent = "亲爱的用户，您预约了" + serverType + "服务。工程师上门服务时间：" + orderTime + "。请保持电话畅通，届时工程师将与您联系。";
-                mobileService.sendContentByEmay(mobilePhone, msgContent, Constant.CUSTOMER);
+                //短信开口关闭 2019年06月19日
+                //mobileService.sendContentByEmay(mobilePhone, msgContent, Constant.CUSTOMER);
                 wechatOrdersService.sendWechatOrderTemplateMsg(wechatOrderMsgVo);
             }
         } catch (Exception e) {

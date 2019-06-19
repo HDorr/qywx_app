@@ -198,7 +198,8 @@ public class QyhUserController {
                 QyhUser qyhUser = qyhUserService.getQyhUserByUserIdAndCorpId(qyhUserId, corpId);
                 String mobilePhone = (null != qyhUser) ? qyhUser.getMobile() : "";
                 String msgContent = "您已拒绝" + contacts + "用户预约的" + serviceType + "服务，您可进入“沁园”WX企业号查看该工单详情！";
-                mobileService.sendContentByEmay(mobilePhone, msgContent, Constant.ENGINEER);
+                //短信开口关闭 2019年06月19日
+                //mobileService.sendContentByEmay(mobilePhone, msgContent, Constant.ENGINEER);
                 // 服务工程师修改预约时间给自己发送通知
                 String url = orderDetailUrl + "?userId=" + qyhUserId + "&ordersCode=" + ordersCode;
                 String content = "工单撤销通知！\n" +
@@ -266,7 +267,8 @@ public class QyhUserController {
                 String qyhUserName = (null != qyhUser) ? qyhUser.getName() : "";
                 String msgContent = "您已将" + contacts + "用户预约的" + serviceTypeName + "服务的上门服务时间由" + oldTime + "更改到" + updateTime
                         + "！您可进入“沁园”WX企业号查看该工单详情！";
-                mobileService.sendContentByEmay(mobilePhone, msgContent, Constant.ENGINEER);
+                //短信开口关闭 2019年06月19日
+                //mobileService.sendContentByEmay(mobilePhone, msgContent, Constant.ENGINEER);
                 // 服务工程师修改预约时间给自己发送通知
                 String url = orderDetailUrl + "?userId=" + qyhUserId + "&ordersCode=" + ordersCode;
                 String content = "工单服务时间更改通知！\n" +
@@ -282,7 +284,8 @@ public class QyhUserController {
                     // 服务工程师更改预约时间给用户发送短信通知提醒
                     String userMsgContent = "亲爱的用户，您预约的" + serviceTypeName + "服务已更改服务时间。工程师（姓名:" + qyhUserName + "，联系方式:"
                             + mobilePhone + "）上门服务时间：" + updateTime + "。请保持电话畅通，届时工程师将与您联系。";
-                    mobileService.sendContentByEmay(userPhone, userMsgContent, Constant.CUSTOMER);
+                    //短信开口关闭 2019年06月19日
+                    //mobileService.sendContentByEmay(userPhone, userMsgContent, Constant.CUSTOMER);
                     // 服务工程师更改预约时间给用户发送模板消息通知提醒
                     WechatUserMsgVo wechatUserMsgVo = new WechatUserMsgVo();
                     wechatUserMsgVo.setOrdersCode(ordersCode);
@@ -392,7 +395,8 @@ public class QyhUserController {
             // 服务工程师提交完工后给用户发送短信通知
             String serviceType = OrderUtils.getServiceTypeName(completeParam.getOrderType());
             String msgContent = "亲爱的用户，您预约的" + serviceType + "服务已完成，欢迎进入“沁园”官方WX服务号对工程师的服务进行评价，谢谢！如已评价，可忽视该消息。";
-            mobileService.sendContentByEmay(regMobile, msgContent, Constant.CUSTOMER);
+            //短信开口关闭 2019年06月19日
+            //mobileService.sendContentByEmay(regMobile, msgContent, Constant.CUSTOMER);
             // 服务工程师提交完工后给用户发送模板消息
             WechatUserMsgVo wechatUserMsgVo = new WechatUserMsgVo();
             wechatUserMsgVo.setOrdersCode(orderCode);
@@ -404,7 +408,8 @@ public class QyhUserController {
         // 服务工程师提交完工后给自己发送短信通知
         String msgContent = "您已成功提交工单，记得让用户给你好评哦！您可进入“沁园”WX企业号查看该工单详情！";
         String engineerPhone = completeParam.getQyhUserPhone();
-        mobileService.sendContentByEmay(engineerPhone, msgContent, Constant.ENGINEER);
+        //短信开口关闭 2019年06月19日
+        //mobileService.sendContentByEmay(engineerPhone, msgContent, Constant.ENGINEER);
         // 服务工程师提交完工后给自己发送公告通知
         String url = orderDetailUrl + "?userId=" + engineerId + "&ordersCode=" + orderCode;
         String content = "您已成功提交工单！\n" +
@@ -638,7 +643,8 @@ public class QyhUserController {
             String mobilePhone = (null != qyhUser) ? qyhUser.getMobile() : "";
             String msgContent = "您已拒绝" + contacts + "用户预约的" + serviceType + "服务，您可进入“沁园”WX企业号查看该工单详情！";
             try {
-                mobileService.sendContentByEmay(mobilePhone, msgContent, Constant.ENGINEER);
+                //短信开口关闭 2019年06月19日
+                //mobileService.sendContentByEmay(mobilePhone, msgContent, Constant.ENGINEER);
             } catch (Exception e) {
                 logger.error("发送短信失败", e);
             }
