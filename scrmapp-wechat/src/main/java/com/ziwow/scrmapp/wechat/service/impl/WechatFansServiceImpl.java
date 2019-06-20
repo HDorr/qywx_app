@@ -1,5 +1,6 @@
 package com.ziwow.scrmapp.wechat.service.impl;
 
+import java.util.List;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -293,4 +294,15 @@ public class WechatFansServiceImpl implements WechatFansService {
 		}
 		return wechatFansVo;
 	}
+
+  @Override
+  public List<WechatFans> getWechatFansByPage(int page, int size) {
+    return wechatFansMapper.getWechatFansByPage(page,size);
+  }
+
+  @Override
+  public Integer countWechatFans() {
+		return wechatFansMapper.countWechatFans();
+  }
+
 }

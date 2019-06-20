@@ -1,5 +1,6 @@
 package com.ziwow.scrmapp.wechat.persistence.mapper;
 
+import java.util.List;
 import org.apache.ibatis.annotations.Param;
 
 import com.ziwow.scrmapp.wechat.persistence.entity.WechatFans;
@@ -23,4 +24,6 @@ public interface WechatFansMapper {
     public WechatFans getFans(@Param("unionId") String unionId);
     public WechatFans getWechatFansById(@Param("pkId") Long pkId);
     public WechatFans getWechatFansByUserId(@Param("userId") String userId);
+    public List<WechatFans> getWechatFansByPage(@Param("page")int page, @Param("size")int size);
+    public Integer countWechatFans();
 }

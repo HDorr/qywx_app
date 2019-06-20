@@ -361,4 +361,5 @@ public class TemplateSetting {
 			return data;
 		}
 	}
+
 }
