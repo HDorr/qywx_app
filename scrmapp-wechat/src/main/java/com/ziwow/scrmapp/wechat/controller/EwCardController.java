@@ -507,6 +507,4 @@ public class EwCardController {
         return result;
     }
 
-
-
 }

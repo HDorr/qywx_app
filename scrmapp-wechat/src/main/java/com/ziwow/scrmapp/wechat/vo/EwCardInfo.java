@@ -1,5 +1,7 @@
 package com.ziwow.scrmapp.wechat.vo;
 
+import com.ziwow.scrmapp.common.utils.EwCardUtil;
+
 import java.util.Date;
 
 /**
@@ -34,8 +36,14 @@ public class EwCardInfo {
      */
     private Date endDate;
 
+    /**
+     * 卡片属性   例如：年卡 月卡 季卡
+     */
+    private String cardAttribute;
 
-
+    public String getCardAttribute() {
+        return EwCardUtil.getEwDate(this.validTime);
+    }
 
 
     public Date getStartDate() {

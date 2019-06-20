@@ -42,7 +42,6 @@ public class EwCard {
      */
     private int validTime;
 
-
     /**
      * 购买时间
      */
@@ -53,7 +52,6 @@ public class EwCard {
      * 对应机型
      */
     private String itemName;
-
 
     /**
      * 保修期限
@@ -72,6 +70,8 @@ public class EwCard {
      * 延保状态
      */
     private Guarantee guarantee;
+
+
 
 
     public String getGuaMessage(){

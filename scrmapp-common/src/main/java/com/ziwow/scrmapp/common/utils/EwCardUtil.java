@@ -15,6 +15,8 @@ import java.util.Date;
 public class EwCardUtil {
     final static Calendar instance = Calendar.getInstance();
 
+    private static String[] nums = new String[]{"零","一","二","三","四","五","六","七","八","九","十","十一"};
+
     /**
      * 正常延保状态= 根据 购买时间和保修天数计算保修日期
      * @param purchDate 购买时间
@@ -132,4 +134,46 @@ public class EwCardUtil {
     }
 
 
+    /**
+     * 根据时间判断卡片
+     * @param validTime
+     * @return
+     */
+    public static String getEwDate(int validTime){
+        if (validTime == Dates.MONTH.getDay()){
+            return "月卡";
+        }else if (Dates.MONTH.getDay() < validTime && validTime < Dates.YEAR.getDay()){
+            if (Dates.QUARTERLY.getDay() == validTime){
+                return "季度卡";
+            }else {
+                return nums[validTime/Dates.MONTH.getDay()]+"月卡";
+            }
+        }else if (validTime == Dates.YEAR.getDay()){
+            return "年卡";
+        }else {
+            return nums[validTime/Dates.YEAR.getDay()]+"年卡";
+        }
+    }
+
+    enum Dates{
+        /** 年卡 */
+        YEAR(365),
+        /** 月卡 */
+        MONTH(30),
+        /** 季度卡 */
+        QUARTERLY(120)
+        ;
+        private int day;
+
+        Dates(int day) {
+            this.day = day;
+        }
+
+        public int getDay() {
+            return day;
+        }
+    }
+
+
 }
+
