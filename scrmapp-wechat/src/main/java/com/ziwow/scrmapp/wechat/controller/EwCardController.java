@@ -264,7 +264,6 @@ public class EwCardController {
         if (ewCard == null){
             ewCardDetails.setRepairTerm(EwCardUtil.getEndNormalRepairTerm(product.getBuyTime()));
         }
-        ewCardDetails.setRepairTerm(ewCard.getRepairTerm());
 
         // 商品相关信息
         ewCardDetails.setProductImg(product.getProductImage());
