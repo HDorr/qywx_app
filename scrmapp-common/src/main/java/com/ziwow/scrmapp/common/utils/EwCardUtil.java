@@ -58,7 +58,7 @@ public class EwCardUtil {
      * @return
      */
     public static Date getExtendRepairTerm(Date guaranteeDate,int validTime){
-        instance.setTime(new Date());
+        instance.setTime(guaranteeDate);
         instance.add(Calendar.DATE,validTime);
         return instance.getTime();
     }
