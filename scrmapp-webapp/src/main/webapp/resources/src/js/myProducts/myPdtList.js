@@ -59,7 +59,12 @@ function goToPdtDetail(ele) {
 
 //跳转至小程序延保详情页面
 function gotoMiniDetail(barCode) {
-    wx.miniProgram.navigateTo({url:'/pages/ewCodeDetails?bar_code='+barCode});
+    if (barCode){
+        wx.miniProgram.navigateTo({url:'/pages/ewCodeDetails?bar_code='+barCode});
+    }else {
+        $.alert("该机器没有条码,无法查看保修信息!");
+        return;
+    }
 }
 
 
@@ -131,7 +136,7 @@ function renderFunc(data) {
 
             if (!$.isEmptyObject(v.guarantee)) {
                 str='                    <div class="btnBox pull-right">' +
-                    '                        <button class="ew_btn" onclick="gotoMiniDetail()"> ' +
+                    '                        <button class="ew_btn" onclick="gotoMiniDetail('+v.productBarCode+')"> ' +
                     '                           <div class="ewPdt_one" style="background-image: url(\'' + ewIcon + '\');"></div> ' +
                 '                               <div class="ewPdt_two">保修状态: '+v.guarantee.message+'</div></button>'+
                 '                           <button hidden="hidden" onclick="goToPdtDetail(this)" data-id=' + v.id + '>' + v.filterRemindName + '</button>' +

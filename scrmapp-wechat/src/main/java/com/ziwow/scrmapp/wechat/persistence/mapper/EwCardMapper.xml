@@ -46,7 +46,7 @@
 		set
 		product_bar_code_twenty=#{productBarCode},
 		purch_date=#{purchDate},
-		repair_term=#{repairTerm}
+		repair_term=#{repairTerm},
 		use_status=true
 		where
 		card_no=#{cardNo}

@@ -263,6 +263,8 @@ public class EwCardController {
         //没有使用延保卡的情况
         if (ewCard == null){
             ewCardDetails.setRepairTerm(EwCardUtil.getEndNormalRepairTerm(product.getBuyTime()));
+        }else {
+            ewCardDetails.setRepairTerm(ewCard.getRepairTerm());
         }
 
         // 商品相关信息
@@ -314,7 +316,6 @@ public class EwCardController {
         }
 
         ewCardDetails.setServiceRecords(serviceRecords);
-
 
         result.setReturnCode(Constant.SUCCESS);
         result.setData(ewCardDetails);
