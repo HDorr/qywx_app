@@ -57,9 +57,9 @@ function goToPdtDetail(ele) {
     window.location.href = pageUrls.bindPdtDetail + "?productId=" + productId
 };
 
-//跳转至小程序页面
-function gotoMiniDetail() {
-    wx.miniProgram.navigateTo("pages/ewCodeDetails");
+//跳转至小程序延保详情页面
+function gotoMiniDetail(barCode) {
+    wx.miniProgram.navigateTo({url:'/pages/ewCodeDetails?bar_code='+barCode});
 }
 
 
