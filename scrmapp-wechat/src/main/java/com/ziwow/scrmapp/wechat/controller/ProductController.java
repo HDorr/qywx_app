@@ -296,7 +296,7 @@ public class ProductController {
      * @return
      */
     @RequestMapping(value = "/product/item_name", method = RequestMethod.GET)
-    @MiniAuthentication
+    @ResponseBody
     public Result queryUserProductByItem(@RequestParam("signture") String signture,
                                          @RequestParam("time_stamp") String timeStamp,
                                          @RequestParam("item_name") String itemName,
