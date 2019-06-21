@@ -1,6 +1,7 @@
 package com.ziwow.scrmapp.wechat.controller;
 
 import com.alibaba.druid.util.StringUtils;
+import com.ziwow.scrmapp.common.annotation.MiniAuthentication;
 import com.ziwow.scrmapp.common.constants.Constant;
 import com.ziwow.scrmapp.common.constants.SystemConstants;
 import com.ziwow.scrmapp.common.enums.Guarantee;
@@ -20,6 +21,7 @@ import com.ziwow.scrmapp.wechat.utils.BarCodeConvert;
 import com.ziwow.scrmapp.wechat.utils.JsonApache;
 import com.ziwow.scrmapp.wechat.utils.ProductServiceParamUtil;
 import com.ziwow.scrmapp.wechat.vo.EnumVo;
+import com.ziwow.scrmapp.wechat.vo.EwCardProductVo;
 import com.ziwow.scrmapp.wechat.vo.ProductVo;
 
 import java.util.*;
@@ -29,6 +31,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -286,6 +289,93 @@ public class ProductController {
             logger.error("用户查询产品列表失败，原因[{}]", e);
         }
         return result;
+    }
+
+    /**
+     *  根据型号查询用户的产品,cardNo 所使用的延保卡号
+     * @return
+     */
+    @RequestMapping
+    @MiniAuthentication
+    public Result queryUserProductByItem(@RequestParam("signture") String signture,
+                                         @RequestParam("time_stamp") String timeStamp,
+                                         @RequestParam("item_name") String itemName,
+                                         @RequestParam("unionId") String unionId,
+                                         @RequestParam("card_no") String cardNo){
+        Result result = new BaseResult();
+        final WechatUser user = wechatUserService.getUserByUnionid(unionId);
+        List<Product> products = productService.getProductByModelNameAndUserId(itemName,user.getUserId());
+
+        List<Product> collect = new LinkedList<>();
+        //筛选
+        for (Product product : products) {
+            if (product.getBuyTime()!=null && product.getProductBarCode() != null){
+                collect.add(product);
+            }
+        }
+
+        if (CollectionUtils.isEmpty(collect)){
+            result.setData("没有符合条件的产品!");
+            result.setReturnCode(Constant.FAIL);
+            return result;
+        }
+
+
+        List<EwCardProductVo> productVos = new ArrayList<>();
+        final EwCard ewCard = ewCardService.selectEwCardByNo(cardNo);
+        final WechatFans fans = wechatFansService.getWechatFansByUserId(user.getUserId());
+        //组装信息
+        packageEwCardProductVos(collect, productVos, ewCard, fans);
+
+        result.setData(productVos);
+        result.setReturnCode(Constant.SUCCESS);
+        return result;
+    }
+
+    /**
+     * 组装 使用延保卡加载产品列表 返回信息
+     * @param collect
+     * @param productVos
+     * @param ewCard
+     * @param fans
+     */
+    private void packageEwCardProductVos(List<Product> collect, List<EwCardProductVo> productVos, EwCard ewCard, WechatFans fans) {
+        Date startDate = null;
+        Date endDate = null;
+        for (Product product : collect) {
+            EwCardProductVo epv = new EwCardProductVo();
+            epv.setBarCode(product.getProductBarCode());
+            epv.setProductName(product.getProductName());
+            final EwCard ec = ewCardService.selectEwCardByBarCode(product.getProductBarCode(), fans.getId());
+            if (ec != null){
+                //已经用过延保卡,最新延保卡的基础上添加天数
+                if (EwCardUtil.isExtend(ec.getRepairTerm())){
+                    //在延长延保阶段
+                    startDate = ec.getRepairTerm();
+                    endDate = EwCardUtil.getExtendRepairTerm(ec.getRepairTerm(),ewCard.getValidTime());
+                }else {
+                    //已过延保阶段
+                    startDate = new Date();
+                    endDate = EwCardUtil.getEndRepairTerm(ewCard.getValidTime());
+                }
+            } else {
+                //正常延保阶段
+                if (EwCardUtil.isNormal(product.getBuyTime())){
+                    //在正常延保期限内
+                    startDate = EwCardUtil.getEndNormalRepairTerm(product.getBuyTime());
+                    endDate = EwCardUtil.getNormalRepairTerm(product.getBuyTime(), ewCard.getValidTime());
+                }else {
+                    //过了正常延保期限
+                    startDate = new Date();
+                    endDate = EwCardUtil.getEndRepairTerm(ewCard.getValidTime());
+                }
+            }
+            epv.setStartDate(startDate);
+            epv.setEndDate(endDate);
+            productVos.add(epv);
+            startDate = null;
+            endDate = null;
+        }
     }
 
 

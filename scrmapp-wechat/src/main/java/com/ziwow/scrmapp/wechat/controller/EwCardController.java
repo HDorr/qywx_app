@@ -99,7 +99,7 @@ public class EwCardController {
 
         ewCardVo = thirdPartyService.getEwCardListByNo(cardNo);
         if (ErrorCodeConstants.CODE_E09.equals(ewCardVo.getStatus().getCode())) {
-            logger.error("查询延保卡失败!");
+            logger.error("csm查询延保卡失败!");
             result.setReturnMsg("延保卡查询失败!");
             result.setReturnCode(Constant.FAIL);
             return result;
@@ -164,6 +164,9 @@ public class EwCardController {
 
 
 
+
+
+
     /**
      * 注册延保卡
      * @return
@@ -188,20 +191,8 @@ public class EwCardController {
         }
 
         //该类型用户的产品
-        final List<Product> products = productService.getProductsByUserId(wechatUser.getUserId());
-        Product product = null;
-        for (Product pro : products) {
-            if (pro.getModelName().equals(ewCard.getItemName()) && pro.getBuyTime() != null && StringUtils.isNotBlank(pro.getProductBarCode())){
-                product = pro;
-                break;
-            }
-        }
+        final Product product = productService.getProductsByBarCodeAndUserId(wechatUser.getUserId(),ewCardParam.getProductBarCode());
 
-        if (product == null){
-            result.setReturnMsg(StringUtils.join("对不起,您没有适合",ewCardParam.getCardNo(),"型号的产品!"));
-            result.setReturnCode(Constant.FAIL);
-            return result;
-        }
 
 //        //根据barcode查询 产品
 //        ProductItem productItem = thirdPartyService.getProductItem(new ProductParam(product.getModelName(), product.getProductBarCode()));
@@ -455,50 +446,9 @@ public class EwCardController {
         //组装 EwCardInfo
         for (EwCard ewCard : ewCards) {
             EwCardInfo ewCardInfo = new EwCardInfo();
-            final List<Product> products = productService.getProductsByUserId(userId);
-            Product product = null;
-            for (Product pro : products) {
-                if (pro.getModelName().equals(ewCard.getItemName()) && pro.getBuyTime() != null && StringUtils.isNotBlank(pro.getProductBarCode())){
-                    product = pro;
-                    break;
-                }
-            }
-
-            Date startDate = null;
-            Date endDate = null;
-
-            //有符合条件的机器
-            if (product != null){
-                //查询正在使用的最近延保卡信息
-                final EwCard ec = ewCardService.selectEwCardByBarCode(product.getProductBarCode(), fansId);
-                if (ec != null){
-                    //已经用过延保卡,最新延保卡的基础上添加天数
-                    if (EwCardUtil.isExtend(ec.getRepairTerm())){
-                        //在延长延保阶段
-                        startDate = ec.getRepairTerm();
-                        endDate = EwCardUtil.getExtendRepairTerm(ec.getRepairTerm(),ewCard.getValidTime());
-                    }else {
-                        //已过延保阶段
-                        startDate = new Date();
-                        endDate = EwCardUtil.getEndRepairTerm(ewCard.getValidTime());
-                    }
-                } else {
-                    //正常延保阶段
-                    if (EwCardUtil.isNormal(product.getBuyTime())){
-                        //在正常延保期限内
-                        startDate = EwCardUtil.getEndNormalRepairTerm(product.getBuyTime());
-                        endDate = EwCardUtil.getNormalRepairTerm(product.getBuyTime(), ewCard.getValidTime());
-                    }else {
-                        //过了正常延保期限
-                        startDate = new Date();
-                        endDate = EwCardUtil.getEndRepairTerm(ewCard.getValidTime());
-                    }
-                }
-                ewCardInfo.setStartDate(startDate);
-                ewCardInfo.setEndDate(endDate);
-            }
-
-            BeanUtils.copyProperties(ewCard,ewCardInfo);
+            ewCardInfo.setCardNo(ewCard.getCardNo());
+            ewCardInfo.setItemName(ewCard.getItemName());
+            ewCardInfo.setValidTime(ewCard.getValidTime());
             ewCardInfos.add(ewCardInfo);
         }
         result.setData(ewCardInfos);

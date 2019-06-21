@@ -2,7 +2,6 @@ package com.ziwow.scrmapp.wechat.vo;
 
 import com.ziwow.scrmapp.common.utils.EwCardUtil;
 
-import java.util.Date;
 
 /**
  * 根据卡号查询延保卡vo
@@ -26,15 +25,6 @@ public class EwCardInfo {
      */
     private String itemName;
 
-    /**
-     * 延保起始时间
-     */
-    private Date startDate;
-
-    /**
-     * 延保结束时间
-     */
-    private Date endDate;
 
     /**
      * 卡片属性   例如：年卡 月卡 季卡
@@ -43,23 +33,6 @@ public class EwCardInfo {
 
     public String getCardAttribute() {
         return EwCardUtil.getEwDate(this.validTime);
-    }
-
-
-    public Date getStartDate() {
-        return startDate;
-    }
-
-    public void setStartDate(Date startDate) {
-        this.startDate = startDate;
-    }
-
-    public Date getEndDate() {
-        return endDate;
-    }
-
-    public void setEndDate(Date endDate) {
-        this.endDate = endDate;
     }
 
     public String getCardNo() {

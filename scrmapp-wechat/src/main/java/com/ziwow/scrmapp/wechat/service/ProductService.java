@@ -81,4 +81,12 @@ public interface ProductService {
      * @return
      */
     Product getProductsByBarCodeAndUserId(String userId, String barCode);
+
+    /**
+     * 根据型号和用户id查询产品
+     * @param itemName
+     * @param userId
+     * @return
+     */
+    List<Product> getProductByModelNameAndUserId(String itemName, String userId);
 }

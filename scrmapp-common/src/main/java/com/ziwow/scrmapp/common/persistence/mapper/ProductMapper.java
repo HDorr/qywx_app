@@ -72,4 +72,13 @@ public interface ProductMapper {
      * @return
      */
     Product getProductsByBarCodeAndUserId(@Param("userId") String userId, @Param("barCode") String barCode);
+
+    /**
+     * 根据型号和用户id查询产品
+     * @param itemName
+     * @param userId
+     * @return
+     */
+    @Select("SELECT * FROM t_product WHERE modelName=#{modelName} and userId = #{userId}")
+    List<Product> getProductByModelNameAndUserId(@Param("itemName") String itemName, @Param("userId") String userId);
 }

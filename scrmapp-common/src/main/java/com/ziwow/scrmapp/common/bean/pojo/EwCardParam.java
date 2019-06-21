@@ -15,8 +15,8 @@ public class EwCardParam {
     @JsonProperty("card_no")
     private String cardNo;
 
-//    @JsonProperty("product_bar_code")
-//    private String productBarCode;
+    @JsonProperty("product_bar_code")
+    private String productBarCode;
 
 
 
@@ -28,5 +28,11 @@ public class EwCardParam {
         this.cardNo = cardNo;
     }
 
+    public String getProductBarCode() {
+        return productBarCode;
+    }
 
+    public void setProductBarCode(String productBarCode) {
+        this.productBarCode = productBarCode;
+    }
 }

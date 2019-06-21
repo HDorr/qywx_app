@@ -866,4 +866,10 @@ public class ProductServiceImpl implements ProductService {
         return productMapper.getProductsByBarCodeAndUserId(userId,barCode);
     }
 
+
+    @Override
+    public List<Product> getProductByModelNameAndUserId(String itemName, String userId) {
+        return productMapper.getProductByModelNameAndUserId(itemName,userId);
+    }
+
 }
