@@ -79,6 +79,6 @@ public interface ProductMapper {
      * @param userId
      * @return
      */
-    @Select("SELECT * FROM t_product WHERE modelName=#{modelName} and userId = #{userId}")
+    @Select("SELECT * FROM t_product WHERE modelName=#{itemName} and userId = #{userId}")
     List<Product> getProductByModelNameAndUserId(@Param("itemName") String itemName, @Param("userId") String userId);
 }
