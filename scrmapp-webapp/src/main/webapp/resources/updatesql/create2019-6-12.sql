@@ -8,6 +8,7 @@ create table t_ew_card
   repair_term datetime null comment '保修期限',
   valid_time int null comment '延保期限',
   use_status tinyint(1) null comment '使用状态: (1:已使用 0:未使用)',
+  product_code varchar(50) null comment '产品编号',
   constraint t_ew_card_fans_record_pk
     primary key (id)
 )

@@ -12,6 +12,7 @@
 		<result column="repair_term" property="repairTerm"></result>
 		<result column="valid_time" property="validTime"></result>
 		<result column="use_status" property="useStatus"></result>
+		<result column="product_code" property="productCode"></result>
 		<result column="product_bar_code" property="productBarCodeTwenty"></result>
 	</resultMap>
 
@@ -33,6 +34,10 @@
 		select * from t_ew_card where fans_id=#{fansId} and item_name=#{itemName} and use_status = false
 	</select>
 
+	<select id="selectEwCardByProductCodeAndFansId" resultMap="ewCardMap">
+		select * from t_ew_card where fans_id=#{fansId} and product_code=#{productCode} and use_status = false
+	</select>
+
 	<select id="selectEwCardByNoAndFansId" resultMap="ewCardMap">
 		select * from t_ew_card where fans_id=#{fansId} and card_no=#{cardNo} and use_status=0
 	</select>
@@ -40,6 +45,8 @@
 	<select id="selectEwCardByBarCodeAndFansId" resultMap="ewCardMap">
 		select * from t_ew_card where fans_id=#{fansId} and product_bar_code_twenty=#{barCode} and use_status=1 order by repair_term desc limit 1
 	</select>
+
+
 
 	<update id="updateCard">
 		update t_ew_card

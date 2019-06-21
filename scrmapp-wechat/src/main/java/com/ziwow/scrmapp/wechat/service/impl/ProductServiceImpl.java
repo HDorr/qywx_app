@@ -872,4 +872,9 @@ public class ProductServiceImpl implements ProductService {
         return productMapper.getProductByModelNameAndUserId(itemName,userId);
     }
 
+    @Override
+    public List<Product> getProductByProductCodeAndUserId(String productCode, String userId) {
+        return productMapper.getProductByProductCodeAndUserId(productCode,userId);
+    }
+
 }

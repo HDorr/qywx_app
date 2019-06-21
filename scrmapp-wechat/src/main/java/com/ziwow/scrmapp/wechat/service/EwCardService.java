@@ -65,4 +65,12 @@ public interface EwCardService {
      * @return
      */
     EwCard selectMyEwCardByNo(String cardNo, Long fansId);
+
+    /**
+     * 根据产品编码查询延保卡
+     * @param productCode
+     * @param id
+     * @return
+     */
+    List<EwCard> selectEwCardByProductCode(String productCode, Long id);
 }

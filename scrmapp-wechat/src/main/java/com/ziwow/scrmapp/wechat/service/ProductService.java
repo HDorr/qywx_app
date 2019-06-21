@@ -89,4 +89,12 @@ public interface ProductService {
      * @return
      */
     List<Product> getProductByModelNameAndUserId(String itemName, String userId);
+
+    /**
+     * 根据编码和用户id查询产品
+     * @param productCode
+     * @param userId
+     * @return
+     */
+    List<Product> getProductByProductCodeAndUserId(String productCode, String userId);
 }

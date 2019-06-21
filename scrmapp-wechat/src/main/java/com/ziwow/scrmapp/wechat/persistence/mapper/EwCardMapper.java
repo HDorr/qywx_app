@@ -64,4 +64,12 @@ public interface EwCardMapper {
      * @return
      */
     EwCard selectEwCardByBarCodeAndFansId(@Param("barCode") String barCode, @Param("fansId") Long fansId);
+
+    /**
+     * 根据产品编码查询产品
+     * @param productCode
+     * @param id
+     * @return
+     */
+    List<EwCard> selectEwCardByProductCodeAndFansId(@Param("productCode") String productCode, @Param("fansId")Long id);
 }

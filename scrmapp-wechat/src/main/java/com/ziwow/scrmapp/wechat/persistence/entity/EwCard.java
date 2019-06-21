@@ -53,6 +53,12 @@ public class EwCard {
      */
     private String itemName;
 
+
+    /**
+     * 产品编码
+     */
+    private String productCode;
+
     /**
      * 保修期限
      */
@@ -72,7 +78,13 @@ public class EwCard {
     private Guarantee guarantee;
 
 
+    public String getProductCode() {
+        return productCode;
+    }
 
+    public void setProductCode(String productCode) {
+        this.productCode = productCode;
+    }
 
     public String getGuaMessage(){
         return guarantee.getMessage();

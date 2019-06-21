@@ -299,17 +299,17 @@ public class ProductController {
     @ResponseBody
     public Result queryUserProductByItem(@RequestParam("signture") String signture,
                                          @RequestParam("time_stamp") String timeStamp,
-                                         @RequestParam("item_name") String itemName,
+                                         @RequestParam("product_code") String productCode,
                                          @RequestParam("unionId") String unionId,
                                          @RequestParam("card_no") String cardNo){
         Result result = new BaseResult();
         final WechatUser user = wechatUserService.getUserByUnionid(unionId);
-        List<Product> products = productService.getProductByModelNameAndUserId(itemName,user.getUserId());
+        List<Product> products = productService.getProductByProductCodeAndUserId(productCode,user.getUserId());
 
         List<Product> collect = new LinkedList<>();
         //筛选
         for (Product product : products) {
-            if (product.getBuyTime()!=null && product.getProductBarCode() != null){
+            if (product.getBuyTime()!= null && product.getProductBarCode() != null){
                 collect.add(product);
             }
         }

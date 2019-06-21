@@ -54,4 +54,9 @@ public class EwCardServiceImpl implements EwCardService {
         return ewCardMapper.selectEwCardByNoAndFansId(cardNo,fansId);
     }
 
+    @Override
+    public List<EwCard> selectEwCardByProductCode(String productCode, Long id) {
+        return ewCardMapper.selectEwCardByProductCodeAndFansId(productCode,id);
+    }
+
 }

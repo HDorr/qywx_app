@@ -144,20 +144,20 @@ public class EwCardController {
 
 
     /**
-     * 根据型号查询用户的延保卡
-     * @param itemName
+     * 根据产品编码查询用户的延保卡
+     * @param productCode
      * @return
      */
     @RequestMapping(value = "query/ew_card_by_item",method = RequestMethod.GET)
     @MiniAuthentication
     public Result queryCardByItemName( @RequestParam("signture") String signture,
                                        @RequestParam("time_stamp") String timeStamp,
-                                       @RequestParam("item_name") String itemName,
+                                       @RequestParam("product_code") String productCode,
                                        @RequestParam("unionId") String unionId){
         Result result = new BaseResult();
         final WechatUser user = wechatUserService.getUserByUnionid(unionId);
         final WechatFans fans = wechatFansService.getWechatFansByUserId(user.getUserId());
-        List<EwCard> ewCards = ewCardService.selectEwCardByItemName(itemName,fans.getId());
+        List<EwCard> ewCards = ewCardService.selectEwCardByProductCode(productCode,fans.getId());
         return getSearchResult(result,ewCards,user.getUserId(),fans.getId());
     }
 

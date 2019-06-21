@@ -27,12 +27,29 @@ public class EwCardInfo {
 
 
     /**
+     * 对应的产品编码
+     */
+    private String product_code;
+
+    /**
      * 卡片属性   例如：年卡 月卡 季卡
      */
     private String cardAttribute;
 
     public String getCardAttribute() {
         return EwCardUtil.getEwDate(this.validTime);
+    }
+
+    public String getProduct_code() {
+        return product_code;
+    }
+
+    public void setProduct_code(String product_code) {
+        this.product_code = product_code;
+    }
+
+    public void setCardAttribute(String cardAttribute) {
+        this.cardAttribute = cardAttribute;
     }
 
     public String getCardNo() {
