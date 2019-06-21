@@ -191,7 +191,7 @@ public class EwCardController {
         }
 
         //该类型用户的产品
-        final Product product = productService.getProductsByBarCodeAndUserId(wechatUser.getUserId(),ewCardParam.getProductBarCode());
+        final Product product = productService.getProductsByBarCodeAndUserId(wechatUser.getUserId(),ewCardParam.getBarCode());
 
 
 //        //根据barcode查询 产品

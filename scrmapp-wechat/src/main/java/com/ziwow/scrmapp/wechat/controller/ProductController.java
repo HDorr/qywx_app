@@ -295,7 +295,7 @@ public class ProductController {
      *  根据型号查询用户的产品,cardNo 所使用的延保卡号
      * @return
      */
-    @RequestMapping
+    @RequestMapping(value = "/product/item_name", method = RequestMethod.GET)
     @MiniAuthentication
     public Result queryUserProductByItem(@RequestParam("signture") String signture,
                                          @RequestParam("time_stamp") String timeStamp,
