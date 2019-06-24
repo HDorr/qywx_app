@@ -121,6 +121,7 @@ public class EwCardController {
         result.setReturnMsg("查询成功");
         result.setReturnCode(Constant.SUCCESS);
         result.setData(info);
+        Thread thread = new Thread();
         return result;
     }
 

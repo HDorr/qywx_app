@@ -20,7 +20,7 @@ public interface EwCardMapper {
 
     /**
      * 根据延保卡号查询延保卡
-     * @param cardNo
+     * @param cardNo 卡号
      * @return
      */
     EwCard selectEwCardByNo(@Param("cardNo") String cardNo);
@@ -34,7 +34,7 @@ public interface EwCardMapper {
 
     /**
      * 根据类型名称和fansId查询延保卡
-     * @param itemName
+     * @param itemName 分类名称
      * @param fansId
      * @return
      */
@@ -42,7 +42,7 @@ public interface EwCardMapper {
 
     /**
      * 根据卡号id和fansId查询延保卡
-     * @param cardNo
+     * @param cardNo 卡号
      * @param fansId
      * @return
      */
