@@ -1,6 +1,5 @@
 package com.ziwow.scrmapp.wechat.controller;
 
-import com.alibaba.druid.util.StringUtils;
 import com.ziwow.scrmapp.common.annotation.MiniAuthentication;
 import com.ziwow.scrmapp.common.constants.Constant;
 import com.ziwow.scrmapp.common.constants.SystemConstants;
@@ -26,6 +25,7 @@ import com.ziwow.scrmapp.wechat.vo.ProductVo;
 
 import java.util.*;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -300,7 +300,7 @@ public class ProductController {
         Map<String,Integer> map = new HashMap<>();
         for (Product product : products) {
             if (map.get(product.getProductCode()) != null){
-                product.setProductName(product.getProductName()+"-"+map.get(product.getProductCode())+1);
+                product.setProductName(StringUtils.join(String.valueOf(map.get(product.getProductCode())+1),"-",product.getProductName()));
                 map.put(product.getProductCode(),map.get(product.getProductCode())+1);
             }else {
                 map.put(product.getProductCode(),1);
@@ -314,6 +314,7 @@ public class ProductController {
      */
     @RequestMapping(value = "/product/product_code", method = RequestMethod.GET)
     @ResponseBody
+    @MiniAuthentication
     public Result queryUserProductByItem(@RequestParam("signture") String signture,
                                          @RequestParam("time_stamp") String timeStamp,
                                          @RequestParam("product_code") String productCode,
