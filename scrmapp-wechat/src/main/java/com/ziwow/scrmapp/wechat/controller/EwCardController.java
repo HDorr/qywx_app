@@ -450,6 +450,7 @@ public class EwCardController {
             ewCardInfo.setCardNo(ewCard.getCardNo());
             ewCardInfo.setItemName(ewCard.getItemName());
             ewCardInfo.setValidTime(ewCard.getValidTime());
+            ewCardInfo.setProductCode(ewCard.getProductCode());
             ewCardInfos.add(ewCardInfo);
         }
         result.setData(ewCardInfos);
