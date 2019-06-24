@@ -271,6 +271,7 @@ public class ProductController {
             }
             final WechatFans fans = wechatFansService.getWechatFansByUserId(userId);
             List<Product> products = productService.getProductsByUserId(userId);
+            sameCodeProduct(products);
             //添加商品的保修状态
             for (Product product : products) {
                 //根据产品id获取质保详情
@@ -292,10 +293,26 @@ public class ProductController {
     }
 
     /**
+     * 对于一个用户一种型号有多个产品的处理
+     * @param products
+     */
+    private void sameCodeProduct(List<Product> products) {
+        Map<String,Integer> map = new HashMap<>();
+        for (Product product : products) {
+            if (map.get(product.getProductCode()) != null){
+                product.setProductName(product.getProductName()+"-"+map.get(product.getProductCode())+1);
+                map.put(product.getProductCode(),map.get(product.getProductCode())+1);
+            }else {
+                map.put(product.getProductCode(),1);
+            }
+        }
+    }
+
+    /**
      *  根据型号查询用户的产品,cardNo 所使用的延保卡号
      * @return
      */
-    @RequestMapping(value = "/product/item_name", method = RequestMethod.GET)
+    @RequestMapping(value = "/product/product_code", method = RequestMethod.GET)
     @ResponseBody
     public Result queryUserProductByItem(@RequestParam("signture") String signture,
                                          @RequestParam("time_stamp") String timeStamp,
@@ -324,6 +341,9 @@ public class ProductController {
         List<EwCardProductVo> productVos = new ArrayList<>();
         final EwCard ewCard = ewCardService.selectEwCardByNo(cardNo);
         final WechatFans fans = wechatFansService.getWechatFansByUserId(user.getUserId());
+
+        sameCodeProduct(collect);
+
         //组装信息
         packageEwCardProductVos(collect, productVos, ewCard, fans);
 
