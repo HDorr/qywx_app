@@ -22,23 +22,11 @@ import com.ziwow.scrmapp.tools.weixin.XmlUtils;
 import com.ziwow.scrmapp.tools.weixin.decode.AesException;
 import com.ziwow.scrmapp.tools.weixin.decode.WXBizMsgCrypt;
 import com.ziwow.scrmapp.wechat.constants.RedisKeyConstants;
-import com.ziwow.scrmapp.wechat.persistence.entity.OpenWeixin;
-import com.ziwow.scrmapp.wechat.persistence.entity.WechatCustomerMsg;
-import com.ziwow.scrmapp.wechat.persistence.entity.WechatFans;
-import com.ziwow.scrmapp.wechat.persistence.entity.WechatUser;
+import com.ziwow.scrmapp.wechat.persistence.entity.*;
 import com.ziwow.scrmapp.wechat.vo.Articles;
 import com.ziwow.scrmapp.wechat.vo.TextOutMessage;
 import com.ziwow.scrmapp.wechat.vo.UserInfo;
 import com.ziwow.scrmapp.wechat.vo.callCenter.CallCenterMessage;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.net.URLEncoder;
-import java.util.Calendar;
-import java.util.Date;
-import javax.annotation.Resource;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.lang.StringUtils;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -53,6 +41,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+
+import javax.annotation.Resource;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.net.URLEncoder;
+import java.util.Calendar;
+import java.util.Date;
 
 /**
  * @author hogen
@@ -126,7 +124,8 @@ public class WeChatMessageProcessingHandler {
     public void setWechatMessageLogService(WechatMessageLogService wechatMessageLogService) {
         this.wechatMessageLogService = wechatMessageLogService;
     }
-
+    @Autowired
+    private WechatRegisterService wechatRegisterService;
 
     /**
      * 业务转发组件
@@ -243,6 +242,14 @@ public class WeChatMessageProcessingHandler {
                   record.setIsRead(isInChat?0:1);
                   record.setIsHide(isInChat?0:1);
                   customerMsgService.insertSelective(record);
+                  WechatRegister register = new WechatRegister();
+                  register.setOpenId(inMessage.getFromUserName());
+                  register.setContent(inMessage.getContent());
+                  //根据openid查询手机号
+                  WechatUser wechatUser = wechatUserService
+                        .getUserByOpenId(inMessage.getFromUserName());
+                  register.setPhone(wechatUser.getMobilePhone());
+                  wechatRegisterService.savePullNewRegisterByEngineer(register);
                 } else if ("image".equals(inMessage.getMsgType())) {
                     response.getWriter().write("");
                     response.getWriter().close();
@@ -548,6 +555,8 @@ public class WeChatMessageProcessingHandler {
             return isPushToCallCenter;
         }else if (content.contains("攻略")){
           return false;
+        } else if("除菌去味一步到位".contains(content)){
+            return  false;
         }else {
 
             if (content.equals("completechat")){
