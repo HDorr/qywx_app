@@ -28,10 +28,7 @@ import com.ziwow.scrmapp.tools.utils.Base64;
 import com.ziwow.scrmapp.wechat.constants.WeChatConstants;
 import com.ziwow.scrmapp.wechat.enums.BuyChannel;
 import com.ziwow.scrmapp.wechat.enums.SaleType;
-import com.ziwow.scrmapp.wechat.persistence.entity.WechatArea;
-import com.ziwow.scrmapp.wechat.persistence.entity.WechatCity;
-import com.ziwow.scrmapp.wechat.persistence.entity.WechatFans;
-import com.ziwow.scrmapp.wechat.persistence.entity.WechatProvince;
+import com.ziwow.scrmapp.wechat.persistence.entity.*;
 import com.ziwow.scrmapp.wechat.persistence.mapper.ProductModelMapper;
 import com.ziwow.scrmapp.wechat.persistence.mapper.ProductSeriesMapper;
 import com.ziwow.scrmapp.wechat.persistence.mapper.ProductTypeMapper;
@@ -873,8 +870,12 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<Product> getProductByProductCodeAndUserId(String productCode, String userId) {
-        return productMapper.getProductByProductCodeAndUserId(productCode,userId);
+    public List<Product> getProductByProductCodeAndUserId(List<EwCardItems> productCode, String userId) {
+        List<String> codes = new ArrayList<>(productCode.size());
+        for (EwCardItems ewCardItems : productCode) {
+            codes.add(ewCardItems.getItemCode());
+        }
+        return productMapper.getProductByProductCodeAndUserId(codes,userId);
     }
 
 }

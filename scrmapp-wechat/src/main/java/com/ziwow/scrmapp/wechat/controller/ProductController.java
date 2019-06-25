@@ -309,25 +309,25 @@ public class ProductController {
     }
 
     /**
-     *  根据型号查询用户的产品,cardNo 所使用的延保卡号
+     *  根据编号查询用户的产品,cardNo 所使用的延保卡号
      * @return
      */
-    @RequestMapping(value = "/product/product_code", method = RequestMethod.GET)
+    @RequestMapping(value = "/product/card_no", method = RequestMethod.GET)
     @ResponseBody
     @MiniAuthentication
     public Result queryUserProductByItem(@RequestParam("signture") String signture,
                                          @RequestParam("time_stamp") String timeStamp,
-                                         @RequestParam("product_code") String productCode,
                                          @RequestParam("unionId") String unionId,
                                          @RequestParam("card_no") String cardNo){
         Result result = new BaseResult();
         final WechatUser user = wechatUserService.getUserByUnionid(unionId);
-        List<Product> products = productService.getProductByProductCodeAndUserId(productCode,user.getUserId());
+        final EwCard ewCard = ewCardService.selectEwCardByNo(cardNo);
+        List<Product> products = productService.getProductByProductCodeAndUserId(ewCard.getEwCardItems(),user.getUserId());
 
         List<Product> collect = new LinkedList<>();
         //筛选
         for (Product product : products) {
-            if (product.getBuyTime()!= null && product.getProductBarCode() != null){
+            if (product.getBuyTime() != null && product.getProductBarCode() != null){
                 collect.add(product);
             }
         }
@@ -340,7 +340,7 @@ public class ProductController {
 
 
         List<EwCardProductVo> productVos = new ArrayList<>();
-        final EwCard ewCard = ewCardService.selectEwCardByNo(cardNo);
+
         final WechatFans fans = wechatFansService.getWechatFansByUserId(user.getUserId());
 
         sameCodeProduct(collect);

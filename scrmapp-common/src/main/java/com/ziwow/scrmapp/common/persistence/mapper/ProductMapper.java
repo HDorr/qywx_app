@@ -84,10 +84,10 @@ public interface ProductMapper {
 
     /**
      * 根据编码和用户id查询产品
-     * @param productCode
+     * @param productCodes
      * @param userId
      * @return
      */
     @Select("SELECT * FROM t_product WHERE productCode=#{productCode} and userId = #{userId} order by id desc")
-    List<Product> getProductByProductCodeAndUserId(@Param("productCode") String productCode, @Param("userId") String userId);
+    List<Product> getProductByProductCodeAndUserId(@Param("productCodes") List<String> productCodes, @Param("userId") String userId);
 }

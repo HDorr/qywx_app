@@ -31,7 +31,20 @@
 	    productImage, productBarCode, shoppingOrder, saleType, o2o, buyChannel, filterRemind, 
 	    userId, buyTime, status, createTime,productBarCodeTwenty
 	</sql>
-	
+
+
+    <select id="getProductByProductCodeAndUserId" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from t_product
+        where productCode in
+        <foreach collection="productCodes" open="(" close=")" separator="," item="productCode">
+            #{productCode}
+        </foreach>
+        and userId = #{userId} order by id desc
+    </select>
+
+
     <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
         select
         	<include refid="Base_Column_List"/>

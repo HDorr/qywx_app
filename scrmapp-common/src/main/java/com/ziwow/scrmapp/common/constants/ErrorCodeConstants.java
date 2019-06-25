@@ -33,6 +33,6 @@ public class ErrorCodeConstants {
 
 	//csm延保卡
 	public static final String CODE_E0 = "E0";  //成功
-	public static final String CODE_E09 = "E09"; //失败
+	public static final String CODE_E092 = "E092"; //失败
 
 }

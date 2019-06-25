@@ -91,9 +91,9 @@ public class EwCardController {
         }
 
         ewCardVo = thirdPartyService.getEwCardListByNo(cardNo);
-        if (ErrorCodeConstants.CODE_E09.equals(ewCardVo.getStatus().getCode())) {
-            logger.error("csm查询延保卡失败!");
-            result.setReturnMsg("延保卡查询失败!");
+        if (ErrorCodeConstants.CODE_E0.equals(ewCardVo.getStatus().getCode()) || ErrorCodeConstants.CODE_E092.equals(ewCardVo.getStatus().getCode())) {
+            logger.error("csm调用延保卡失败");
+            result.setReturnMsg("查询延保卡失败，请检查卡号或稍后再试！");
             result.setReturnCode(Constant.FAIL);
             return result;
         }
@@ -155,6 +155,8 @@ public class EwCardController {
         List<EwCard> ewCards = ewCardService.selectEwCardByProductCode(productCode,fans.getId());
         return getSearchResult(result,ewCards,user.getUserId(),fans.getId());
     }
+
+
 
 
 
