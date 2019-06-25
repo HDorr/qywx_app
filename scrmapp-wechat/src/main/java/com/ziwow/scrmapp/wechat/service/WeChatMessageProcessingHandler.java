@@ -242,14 +242,6 @@ public class WeChatMessageProcessingHandler {
                   record.setIsRead(isInChat?0:1);
                   record.setIsHide(isInChat?0:1);
                   customerMsgService.insertSelective(record);
-                  WechatRegister register = new WechatRegister();
-                  register.setOpenId(inMessage.getFromUserName());
-                  register.setContent(inMessage.getContent());
-                  //根据openid查询手机号
-                  WechatUser wechatUser = wechatUserService
-                        .getUserByOpenId(inMessage.getFromUserName());
-                  register.setPhone(wechatUser.getMobilePhone());
-                  wechatRegisterService.savePullNewRegisterByEngineer(register);
                 } else if ("image".equals(inMessage.getMsgType())) {
                     response.getWriter().write("");
                     response.getWriter().close();
@@ -556,6 +548,14 @@ public class WeChatMessageProcessingHandler {
         }else if (content.contains("攻略")){
           return false;
         } else if("除菌去味一步到位".contains(content)){
+            WechatRegister register = new WechatRegister();
+            register.setOpenId(inMessage.getFromUserName());
+            register.setContent(inMessage.getContent());
+            //根据openid查询手机号
+            WechatUser wechatUser = wechatUserService
+                .getUserByOpenId(inMessage.getFromUserName());
+            register.setPhone(wechatUser.getMobilePhone());
+            wechatRegisterService.savePullNewRegisterByEngineer(register);
             return  false;
         }else {
 
