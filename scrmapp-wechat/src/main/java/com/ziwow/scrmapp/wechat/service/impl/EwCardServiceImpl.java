@@ -1,11 +1,15 @@
 package com.ziwow.scrmapp.wechat.service.impl;
 
 import com.ziwow.scrmapp.wechat.persistence.entity.EwCard;
+import com.ziwow.scrmapp.wechat.persistence.entity.EwCardItems;
 import com.ziwow.scrmapp.wechat.persistence.mapper.EwCardMapper;
 import com.ziwow.scrmapp.wechat.service.EwCardService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -20,8 +24,18 @@ public class EwCardServiceImpl implements EwCardService {
     private EwCardMapper ewCardMapper;
 
     @Override
-    public void addEwCard(EwCard ewCard) {
+    @Transactional(rollbackFor = Exception.class)
+    public List<EwCardItems> addEwCard(EwCard ewCard, String[] itemNames, String[] itemCodes) {
         ewCardMapper.saveEwCard(ewCard);
+        List<EwCardItems> ewCardItems = new ArrayList<>(itemCodes.length);
+        for (int i = 0; i < itemNames.length; i++) {
+            EwCardItems ewCardItem = new EwCardItems();
+            ewCardItem.setItemCode(itemCodes[i]);
+            ewCardItem.setItemName(itemNames[i]);
+            ewCardItems.add(ewCardItem);
+            ewCardMapper.addEwCardItems(ewCard.getId(),itemNames[i],itemCodes[i]);
+        }
+        return ewCardItems;
     }
 
     @Override
@@ -56,7 +70,12 @@ public class EwCardServiceImpl implements EwCardService {
 
     @Override
     public List<EwCard> selectEwCardByProductCode(String productCode, Long id) {
-        return ewCardMapper.selectEwCardByProductCodeAndFansId(productCode,id);
+        final List<Long> cardIds = ewCardMapper.selectEwCardIdByCodeAndFansId(productCode, id);
+        if (CollectionUtils.isEmpty(cardIds)){
+            return null;
+        }else {
+            return ewCardMapper.selectEwCardByCardIds(cardIds);
+        }
     }
 
 }

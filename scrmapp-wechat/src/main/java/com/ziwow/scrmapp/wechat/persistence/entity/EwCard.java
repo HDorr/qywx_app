@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.ziwow.scrmapp.common.enums.Guarantee;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * 延保卡
@@ -49,17 +50,6 @@ public class EwCard {
     private Date purchDate;
 
     /**
-     * 对应机型
-     */
-    private String itemName;
-
-
-    /**
-     * 产品编码
-     */
-    private String productCode;
-
-    /**
      * 保修期限
      */
     @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
@@ -78,13 +68,13 @@ public class EwCard {
     private Guarantee guarantee;
 
 
-    public String getProductCode() {
-        return productCode;
-    }
+    /**
+     * 对应延保卡的信息
+     * @return
+     */
+    private List<EwCardItems> ewCardItems;
 
-    public void setProductCode(String productCode) {
-        this.productCode = productCode;
-    }
+
 
     public String getGuaMessage(){
         return guarantee.getMessage();
@@ -146,14 +136,6 @@ public class EwCard {
         this.purchDate = purchDate;
     }
 
-    public String getItemName() {
-        return itemName;
-    }
-
-    public void setItemName(String itemName) {
-        this.itemName = itemName;
-    }
-
     public int getValidTime() {
         return validTime;
     }
@@ -170,5 +152,11 @@ public class EwCard {
         this.repairTerm = repairTerm;
     }
 
+    public List<EwCardItems> getEwCardItems() {
+        return ewCardItems;
+    }
 
+    public void setEwCardItems(List<EwCardItems> ewCardItems) {
+        this.ewCardItems = ewCardItems;
+    }
 }

@@ -1,15 +1,12 @@
 package com.ziwow.scrmapp.wechat.controller;
 
-import com.ctc.wstx.util.DataUtil;
 import com.ziwow.scrmapp.common.annotation.MiniAuthentication;
 import com.ziwow.scrmapp.common.bean.pojo.CSMEwCardParam;
 import com.ziwow.scrmapp.common.bean.pojo.EwCardParam;
-import com.ziwow.scrmapp.common.bean.pojo.ProductParam;
 import com.ziwow.scrmapp.common.bean.vo.WechatOrdersVo;
 import com.ziwow.scrmapp.common.bean.vo.csm.EwCardItem;
 import com.ziwow.scrmapp.common.bean.vo.csm.EwCardVo;
 import com.ziwow.scrmapp.common.bean.vo.csm.ProductItem;
-import com.ziwow.scrmapp.common.bean.vo.csm.Status;
 import com.ziwow.scrmapp.common.constants.Constant;
 import com.ziwow.scrmapp.common.constants.ErrorCodeConstants;
 import com.ziwow.scrmapp.common.enums.Guarantee;
@@ -20,15 +17,11 @@ import com.ziwow.scrmapp.common.service.ThirdPartyService;
 import com.ziwow.scrmapp.common.utils.EwCardUtil;
 import com.ziwow.scrmapp.tools.utils.BeanUtils;
 import com.ziwow.scrmapp.tools.utils.DateUtil;
-import com.ziwow.scrmapp.wechat.persistence.entity.EwCard;
-import com.ziwow.scrmapp.wechat.persistence.entity.WechatFans;
-import com.ziwow.scrmapp.wechat.persistence.entity.WechatUser;
-import com.ziwow.scrmapp.wechat.persistence.entity.WechatUserAddress;
+import com.ziwow.scrmapp.wechat.persistence.entity.*;
 import com.ziwow.scrmapp.wechat.service.*;
 import com.ziwow.scrmapp.wechat.vo.EwCardDetails;
 import com.ziwow.scrmapp.wechat.vo.EwCardInfo;
 import com.ziwow.scrmapp.wechat.vo.ServiceRecord;
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -114,14 +107,15 @@ public class EwCardController {
         final WechatFans fans = wechatFansService.getWechatFansByUserId(user.getUserId());
         ewCard.setFansId(fans.getId());
         ewCard.setUseStatus(false);
-        ewCardService.addEwCard(ewCard);
+        ewCard.setCardNo(cardNo);
+        List<EwCardItems> ewCardItems = ewCardService.addEwCard(ewCard,ewCardVo.getItems().getItemNames(),ewCardVo.getItems().getItemCodes());
 
         EwCardInfo info = new EwCardInfo();
-        BeanUtils.copyProperties(items,info);
+        BeanUtils.copyProperties(ewCard,info);
+        info.setEwCardItems(ewCardItems);
         result.setReturnMsg("查询成功");
         result.setReturnCode(Constant.SUCCESS);
         result.setData(info);
-        Thread thread = new Thread();
         return result;
     }
 
@@ -149,7 +143,7 @@ public class EwCardController {
      * @param productCode
      * @return
      */
-    @RequestMapping(value = "query/ew_card_by_item",method = RequestMethod.GET)
+    @RequestMapping(value = "query/ew_card_by_code",method = RequestMethod.GET)
     @MiniAuthentication
     public Result queryCardByItemName( @RequestParam("signture") String signture,
                                        @RequestParam("time_stamp") String timeStamp,
@@ -161,8 +155,6 @@ public class EwCardController {
         List<EwCard> ewCards = ewCardService.selectEwCardByProductCode(productCode,fans.getId());
         return getSearchResult(result,ewCards,user.getUserId(),fans.getId());
     }
-
-
 
 
 
@@ -265,6 +257,7 @@ public class EwCardController {
         ewCardDetails.setBarCode(product.getProductBarCode());
         ewCardDetails.setItemName(product.getModelName());
         ewCardDetails.setBuyTime(product.getBuyTime());
+        ewCardDetails.setProductCode(product.getProductCode());
         //服务记录
         //安装时间
         List<ServiceRecord> serviceRecords = new ArrayList<>(3);
@@ -448,9 +441,8 @@ public class EwCardController {
         for (EwCard ewCard : ewCards) {
             EwCardInfo ewCardInfo = new EwCardInfo();
             ewCardInfo.setCardNo(ewCard.getCardNo());
-            ewCardInfo.setItemName(ewCard.getItemName());
             ewCardInfo.setValidTime(ewCard.getValidTime());
-            ewCardInfo.setProductCode(ewCard.getProductCode());
+            ewCardInfo.setEwCardItems(ewCard.getEwCardItems());
             ewCardInfos.add(ewCardInfo);
         }
         result.setData(ewCardInfos);

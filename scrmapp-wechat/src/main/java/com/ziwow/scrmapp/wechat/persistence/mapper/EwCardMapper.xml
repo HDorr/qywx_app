@@ -7,45 +7,55 @@
 		<id column="id" property="id"></id>
 		<result column="fans_id" property="fansId"></result>
 		<result column="card_no" property="cardNo"></result>
-		<result column="item_name" property="itemName"></result>
 		<result column="purch_date" property="purchDate"></result>
 		<result column="repair_term" property="repairTerm"></result>
 		<result column="valid_time" property="validTime"></result>
 		<result column="use_status" property="useStatus"></result>
-		<result column="product_code" property="productCode"></result>
 		<result column="product_bar_code" property="productBarCodeTwenty"></result>
+		<collection property="ewCardItems" ofType="com.ziwow.scrmapp.wechat.persistence.entity.EwCardItems" column="id">
+			<id column="eid" property="id"></id>
+			<result column="item_name" property="itemName"></result>
+			<result column="item_code" property="itemCode"></result>
+		</collection>
 	</resultMap>
 
 
-    <insert id="saveEwCard" parameterType="com.ziwow.scrmapp.wechat.persistence.entity.EwCard">
-		insert into t_ew_card(fans_id,card_no,item_name,purch_date,repair_term,valid_time,use_status)
-		values(#{fansId},#{cardNo},#{itemName},#{purchDate},#{repairTerm},#{validTime},#{useStatus})
+    <insert id="saveEwCard" parameterType="com.ziwow.scrmapp.wechat.persistence.entity.EwCard" useGeneratedKeys="true" keyProperty="id">
+		insert into t_ew_card(fans_id,card_no,purch_date,repair_term,valid_time,use_status)
+		values(#{fansId},#{cardNo},#{purchDate},#{repairTerm},#{validTime},#{useStatus})
 	</insert>
 
 	<select id="selectEwCardByNo" resultMap="ewCardMap">
-		select * from t_ew_card where card_no=#{cardNo}
+		select ec.*,eci.id eid,eci.item_name,eci.item_code from t_ew_card ec left join t_ew_card_items eci on eci.ew_card_id=ec.id where ec.card_no=#{cardNo}
 	</select>
 
 	<select id="selectEwCardByFansId" resultMap="ewCardMap">
-		select * from t_ew_card where fans_id=#{fansId} and use_status = false
+		select ec.*,eci.id eid,eci.item_name,eci.item_code from t_ew_card ec left join t_ew_card_items eci on eci.ew_card_id=ec.id where ec.fans_id=#{fansId} and ec.use_status = false
 	</select>
 
 	<select id="selectEwCardByItemNameAndFansId" resultMap="ewCardMap">
-		select * from t_ew_card where fans_id=#{fansId} and item_name=#{itemName} and use_status = false
+		select ec.*,eci.id eid,eci.item_name,eci.item_code from t_ew_card ec left join t_ew_card_items eci on eci.ew_card_id=ec.id where ec.fans_id=#{fansId} and ec.item_name=#{itemName} and ec.use_status = false
 	</select>
 
-	<select id="selectEwCardByProductCodeAndFansId" resultMap="ewCardMap">
-		select * from t_ew_card where fans_id=#{fansId} and product_code=#{productCode} and use_status = false
+	<select id="selectEwCardByCardIds" resultMap="ewCardMap">
+		select ec.*,eci.id eid,eci.item_name,eci.item_code from t_ew_card ec left join t_ew_card_items eci on eci.ew_card_id=ec.id where ec.use_status = false
+		and ec.id in
+		<foreach collection="cardIds" item="cardId" open="(" close=")" separator=",">
+		#{cardId}
+		</foreach>
 	</select>
 
 	<select id="selectEwCardByNoAndFansId" resultMap="ewCardMap">
-		select * from t_ew_card where fans_id=#{fansId} and card_no=#{cardNo} and use_status=0
+		select ec.*,eci.id eid,eci.item_name,eci.item_code from t_ew_card ec left join t_ew_card_items eci on eci.ew_card_id=ec.id and ec.card_no=#{cardNo} and ec.use_status=0
 	</select>
 
 	<select id="selectEwCardByBarCodeAndFansId" resultMap="ewCardMap">
-		select * from t_ew_card where fans_id=#{fansId} and product_bar_code_twenty=#{barCode} and use_status=1 order by repair_term desc limit 1
+		select ec.*,eci.id eid,eci.item_name,eci.item_code from t_ew_card ec left join t_ew_card_items eci on eci.ew_card_id=ec.id where ec.fans_id=#{fansId} and ec.product_bar_code_twenty=#{barCode} and ec.use_status=1 order by ec.repair_term desc limit 1
 	</select>
 
+	<select id="selectEwCardIdByCodeAndFansId" resultType="Long">
+		select ec.id from t_ew_card ec inner join t_ew_card_items eci on eci.ew_card_id=ec.id and eci.item_code=#{productCode} where ec.fans_id=#{fansId}
+	</select>
 
 
 	<update id="updateCard">

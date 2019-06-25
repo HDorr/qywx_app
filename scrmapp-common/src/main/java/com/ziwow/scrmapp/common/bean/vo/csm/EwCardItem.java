@@ -14,24 +14,6 @@ import java.util.Date;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class EwCardItem {
 
-    /**
-     * 卡号
-     */
-    @JsonProperty("card_no")
-    private String cardNo;
-
-    /**
-     * 使用状态
-     */
-    @JsonProperty("card_stat")
-    private String cardStat;
-
-    /**
-     * 购买时间
-     */
-    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
-    @JsonProperty("purch_date")
-    private Date purchDate;
 
     /**
      * 对应机型
@@ -39,52 +21,45 @@ public class EwCardItem {
     @JsonProperty("item_name")
     private String itemName;
 
+
+    /**
+     * 对应编码
+     */
+    @JsonProperty("item_code")
+    private String itemCode;
+
+
     /**
      * 延保期限
      */
     @JsonProperty("valid_time")
     private int validTime;
 
+
     /**
-     * 保修期限
+     * 获取拆分后的结果
+     * @return
      */
-    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
-    @JsonProperty("repair_term")
-    private Date repairTerm;
-
-
-
-
-    public Date getPurchDate() {
-        return purchDate;
+    public String[] getItemNames(){
+        return this.itemName.split(",");
     }
 
-    public void setPurchDate(Date purchDate) {
-        this.purchDate = purchDate;
+    /**
+     * 获取拆分后的结果
+     * @return
+     */
+    public String[] getItemCodes(){
+        return this.itemCode.split(",");
     }
 
-    public Date getRepairTerm() {
-        return repairTerm;
+
+
+    public String getItemCode() {
+        return itemCode;
     }
 
-    public void setRepairTerm(Date repairTerm) {
-        this.repairTerm = repairTerm;
-    }
-
-    public String getCardNo() {
-        return cardNo;
-    }
-
-    public void setCardNo(String cardNo) {
-        this.cardNo = cardNo;
-    }
-
-    public String getCardStat() {
-        return cardStat;
-    }
-
-    public void setCardStat(String cardStat) {
-        this.cardStat = cardStat;
+    public void setItemCode(String itemCode) {
+        this.itemCode = itemCode;
     }
 
     public String getItemName() {

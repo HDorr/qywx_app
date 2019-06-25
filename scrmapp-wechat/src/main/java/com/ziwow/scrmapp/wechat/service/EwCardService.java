@@ -1,6 +1,7 @@
 package com.ziwow.scrmapp.wechat.service;
 
 import com.ziwow.scrmapp.wechat.persistence.entity.EwCard;
+import com.ziwow.scrmapp.wechat.persistence.entity.EwCardItems;
 
 import java.util.Date;
 import java.util.List;
@@ -16,8 +17,11 @@ public interface EwCardService {
     /**
      * 添加延保卡
      * @param ewCard
+     * @param itemNames
+     * @param itemCodes
+     * @return 类型编号集合
      */
-    void addEwCard(EwCard ewCard);
+    List<EwCardItems> addEwCard(EwCard ewCard, String[] itemNames, String[] itemCodes);
 
     /**
      * 根据卡号查询延保卡信息

@@ -1,6 +1,9 @@
 package com.ziwow.scrmapp.wechat.vo;
 
 import com.ziwow.scrmapp.common.utils.EwCardUtil;
+import com.ziwow.scrmapp.wechat.persistence.entity.EwCardItems;
+
+import java.util.List;
 
 
 /**
@@ -21,15 +24,9 @@ public class EwCardInfo {
     private int validTime;
 
     /**
-     * 对应机型
+     * 类型编码信息
      */
-    private String itemName;
-
-
-    /**
-     * 对应的产品编码
-     */
-    private String productCode;
+    private List<EwCardItems> ewCardItems;
 
     /**
      * 卡片属性   例如：年卡 月卡 季卡
@@ -38,15 +35,6 @@ public class EwCardInfo {
 
     public String getCardAttribute() {
         return EwCardUtil.getEwDate(this.validTime);
-    }
-
-
-    public String getProductCode() {
-        return productCode;
-    }
-
-    public void setProductCode(String productCode) {
-        this.productCode = productCode;
     }
 
     public void setCardAttribute(String cardAttribute) {
@@ -69,11 +57,11 @@ public class EwCardInfo {
         this.validTime = validTime;
     }
 
-    public String getItemName() {
-        return itemName;
+    public List<EwCardItems> getEwCardItems() {
+        return ewCardItems;
     }
 
-    public void setItemName(String itemName) {
-        this.itemName = itemName;
+    public void setEwCardItems(List<EwCardItems> ewCardItems) {
+        this.ewCardItems = ewCardItems;
     }
 }

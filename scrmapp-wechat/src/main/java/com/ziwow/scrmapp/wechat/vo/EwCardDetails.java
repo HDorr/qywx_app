@@ -55,6 +55,19 @@ public class EwCardDetails {
      */
     private List<ServiceRecord> serviceRecords;
 
+    /**
+     * 产品编号
+     */
+    private String productCode;
+
+
+    public String getProductCode() {
+        return productCode;
+    }
+
+    public void setProductCode(String productCode) {
+        this.productCode = productCode;
+    }
 
     public Date getBuyTime() {
         return buyTime;

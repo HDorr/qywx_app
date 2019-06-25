@@ -1,6 +1,7 @@
 package com.ziwow.scrmapp.wechat.persistence.mapper;
 
 import com.ziwow.scrmapp.wechat.persistence.entity.EwCard;
+import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.Date;
@@ -66,10 +67,26 @@ public interface EwCardMapper {
     EwCard selectEwCardByBarCodeAndFansId(@Param("barCode") String barCode, @Param("fansId") Long fansId);
 
     /**
-     * 根据产品编码查询产品
-     * @param productCode
-     * @param id
+     * 根据卡号集合查询产品
+     * @param cardIds
      * @return
      */
-    List<EwCard> selectEwCardByProductCodeAndFansId(@Param("productCode") String productCode, @Param("fansId")Long id);
+    List<EwCard> selectEwCardByCardIds(@Param("cardIds") List<Long> cardIds);
+
+    /**
+     * 插入延保
+     * @param cardId
+     * @param itemName
+     * @param itemCode
+     */
+    @Insert("insert into t_ew_card_items(item_name,item_code,ew_card_id) values(#{itemName},#{itemCode},#{cardId})")
+    void addEwCardItems(@Param("cardId") Long cardId, @Param("itemName")String itemName, @Param("itemCode")String itemCode);
+
+    /**
+     * 查询出符合编号的延保卡id
+     * @param productCode
+     * @param fansId
+     * @return
+     */
+    List<Long> selectEwCardIdByCodeAndFansId(@Param("productCode")String productCode,@Param("fansId")Long fansId);
 }
