@@ -41,7 +41,7 @@
         <foreach collection="productCodes" open="(" close=")" separator="," item="productCode">
             #{productCode}
         </foreach>
-        and userId = #{userId} order by id desc
+        and userId = #{userId} order by productCode DESC,id DESC
     </select>
 
 

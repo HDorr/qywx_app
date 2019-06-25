@@ -88,6 +88,5 @@ public interface ProductMapper {
      * @param userId
      * @return
      */
-    @Select("SELECT * FROM t_product WHERE productCode=#{productCode} and userId = #{userId} order by id desc")
     List<Product> getProductByProductCodeAndUserId(@Param("productCodes") List<String> productCodes, @Param("userId") String userId);
 }
