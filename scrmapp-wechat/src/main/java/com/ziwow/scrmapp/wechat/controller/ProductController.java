@@ -302,14 +302,14 @@ public class ProductController {
 
         for (int i = 0; i < products.size(); i++) {
             Product product = products.get(i);
-            if (map.get(product.getProductCode()) != null){
-                if (map.get(product.getProductCode()) == 1){
+            if (map.get(product.getProductName()) != null){
+                if (map.get(product.getProductName()) == 1){
                     products.get(i-1).setProductName(StringUtils.join(1,"-",products.get(i-1).getProductName()));
                 }
-                product.setProductName(StringUtils.join(map.get(product.getProductCode())+1,"-",product.getProductName()));
-                map.put(product.getProductCode(),map.get(product.getProductCode())+1);
+                product.setProductName(StringUtils.join(map.get(product.getProductName())+1,"-",product.getProductName()));
+                map.put(product.getProductName(),map.get(product.getProductName())+1);
             }else {
-                map.put(product.getProductCode(),1);
+                map.put(product.getProductName(),1);
             }
         }
 

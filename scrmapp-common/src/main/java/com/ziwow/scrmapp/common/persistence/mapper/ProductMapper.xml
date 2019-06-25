@@ -41,7 +41,7 @@
         <foreach collection="productCodes" open="(" close=")" separator="," item="productCode">
             #{productCode}
         </foreach>
-        and userId = #{userId} order by productCode DESC,id DESC
+        and userId = #{userId} order by productCode DESC,productName DESC
     </select>
 
 
@@ -56,7 +56,7 @@
 	    select
 	    	id,productName,productBarCode,modelName,levelName,productImage,productBarCodeTwenty,productCode,buyTime
 	    from t_product
-	    where status = 1 and userId = #{userId} order by productCode DESC,id DESC
+	    where status = 1 and userId = #{userId} order by productCode DESC,productName DESC
 	</select>
 
 
