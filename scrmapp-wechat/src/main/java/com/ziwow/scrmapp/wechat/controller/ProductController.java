@@ -307,7 +307,6 @@ public class ProductController {
                     products.get(i-1).setProductName(StringUtils.join(1,"-",products.get(i-1).getProductName()));
                 }
                 product.setProductName(StringUtils.join(map.get(product.getProductCode())+1,"-",product.getProductName()));
-
                 map.put(product.getProductCode(),map.get(product.getProductCode())+1);
             }else {
                 map.put(product.getProductCode(),1);
@@ -324,7 +323,9 @@ public class ProductController {
      */
     @RequestMapping(value = "/product/card_no", method = RequestMethod.GET)
     @ResponseBody
-    public Result queryUserProductByItem(
+    @MiniAuthentication
+    public Result queryUserProductByItem(@RequestParam("signture") String signture,
+                                         @RequestParam("time_stamp") String timeStamp,
                                          @RequestParam("unionId") String unionId,
                                          @RequestParam("card_no") String cardNo){
         Result result = new BaseResult();
