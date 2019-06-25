@@ -46,7 +46,7 @@
 	</select>
 
 	<select id="selectEwCardByNoAndFansId" resultMap="ewCardMap">
-		select ec.*,eci.id eid,eci.item_name,eci.item_code from t_ew_card ec left join t_ew_card_items eci on eci.ew_card_id=ec.id and ec.card_no=#{cardNo} and ec.use_status=0
+		select ec.*,eci.id eid,eci.item_name,eci.item_code from t_ew_card ec left join t_ew_card_items eci on eci.ew_card_id=ec.id where ec.card_no=#{cardNo} and ec.use_status=0
 	</select>
 
 	<select id="selectEwCardByBarCodeAndFansId" resultMap="ewCardMap">
