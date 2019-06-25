@@ -17,6 +17,7 @@ public class WechatRegister {
   private String content;
   private Boolean archive;
   private Date createdAt;
+  private Date updatedAt;
 
   public Long getId() {
     return id;
@@ -66,4 +67,11 @@ public class WechatRegister {
     this.createdAt = createdAt;
   }
 
+  public Date getUpdatedAt() {
+    return updatedAt;
+  }
+
+  public void setUpdatedAt(Date updatedAt) {
+    this.updatedAt = updatedAt;
+  }
 }
