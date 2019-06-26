@@ -1315,6 +1315,6 @@ public class ThirdPartyServiceImpl implements ThirdPartyService {
         return result;
     }
 
-    private static String url = "http://122.227.252.12:802/QYFWService/QYWebService.asmx";//提供接口的地址
+    private static String url = "http://122.227.252.12:802/QYFWService0617/QYWebService.asmx";//提供接口的地址
     private static String soapaction = "http://tempuri.org/";   //域名，这是在server定义的
 }

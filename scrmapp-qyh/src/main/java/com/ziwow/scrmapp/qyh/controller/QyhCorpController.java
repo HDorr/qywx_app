@@ -2,10 +2,12 @@ package com.ziwow.scrmapp.qyh.controller;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.ziwow.scrmapp.tools.utils.Base64;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
@@ -220,4 +222,5 @@ public class QyhCorpController {
             LOG.error("拉取历史服务工程师失败:", e);
         }
     }
+
 }
