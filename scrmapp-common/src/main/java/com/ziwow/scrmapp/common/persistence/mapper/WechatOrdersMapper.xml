@@ -862,7 +862,7 @@
         select count(1) orderNum from t_wechat_orders where DATE_FORMAT(createTime,'%Y-%m-%d') = #{orderDate};
     </select>
 
-    <select id="getWechatOrdersByProductId" resultMap="BaseResultMapVo">
+    <select id="getWechatOrdersByProductId" resultType="com.ziwow.scrmapp.common.bean.vo.WechatOrdersVo">
         select endTime,orderType,status from t_wechat_orders where productId=#{productId}
     </select>
 

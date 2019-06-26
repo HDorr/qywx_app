@@ -69,5 +69,5 @@ public interface WechatOrdersMapper {
 
     int updateOrderStatus(@Param("ordersId") Long ordersId, @Param("status") int status, @Param("date") Date date);
 
-    List<WechatOrdersVo> getWechatOrdersByProductId(Long productId);
+    List<WechatOrdersVo> getWechatOrdersByProductId(@Param("productId") Long productId);
 }

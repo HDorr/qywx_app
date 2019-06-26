@@ -260,10 +260,10 @@ public class EwCardController {
         List<ServiceRecord> serviceRecords = new ArrayList<>(3);
         Date maintainDate = null;
         Date repairDate = null;
-        final List<WechatOrdersVo> wechatOrdersVos = wechatOrdersService.getWechatOrdersByProductId(product.getId());
-        for (WechatOrdersVo wechatOrdersVo : wechatOrdersVos) {
-            //订单必须是已经完成的
-            if (wechatOrdersVo.getStatus() == 5){
+        List<WechatOrdersVo> orders = wechatOrdersService.getWechatOrdersByProductId(product.getId());
+        for (WechatOrdersVo wechatOrdersVo : orders) {
+            //订单必须是已经完成的或者完成评价
+            if (wechatOrdersVo.getStatus() == 5 || wechatOrdersVo.getStatus() == 6){
                 //如果是安装订单并且完成安装
                 if (wechatOrdersVo.getOrderType() == 1){
                     ServiceRecord serviceRecord = new ServiceRecord();
@@ -401,7 +401,7 @@ public class EwCardController {
         final List<WechatOrdersVo> wechatOrdersVos = wechatOrdersService.getWechatOrdersByProductId(productId);
         for (WechatOrdersVo wechatOrdersVo : wechatOrdersVos) {
             //如果是安装订单并且完成安装
-            if (wechatOrdersVo.getOrderType() == 1 && wechatOrdersVo.getStatus() == 5){
+            if (wechatOrdersVo.getOrderType() == 1 && (wechatOrdersVo.getStatus() == 5 || wechatOrdersVo.getStatus() == 6)){
                 CSMEwCardParam.setInstallTime(wechatOrdersVo.getEndTime());
                 break;
             }
