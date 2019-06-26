@@ -114,6 +114,14 @@ public class WechatOrdersServiceImpl implements WechatOrdersService {
     @Autowired
     private WechatUserService wechatUserService;
 
+
+
+    @Override
+    public List<WechatOrdersVo> getWechatOrdersByProductId(Long productId) {
+        return wechatOrdersMapper.getWechatOrdersByProductId(productId);
+    }
+
+
     @Override
     public WechatOrders getWechatOrdersByCode(String ordersCode) {
         return wechatOrdersMapper.getWechatOrdersVoByCode(ordersCode);
@@ -579,6 +587,8 @@ public class WechatOrdersServiceImpl implements WechatOrdersService {
             e.printStackTrace();
         }
     }
+
+
 
     @Override
     public void sendEngineerMsgText(String engineerId, String engineerPhone, WechatOrders wechatOrders) {

@@ -862,6 +862,10 @@
         select count(1) orderNum from t_wechat_orders where DATE_FORMAT(createTime,'%Y-%m-%d') = #{orderDate};
     </select>
 
+    <select id="getWechatOrdersByProductId" resultMap="BaseResultMapVo">
+        select endTime,orderType,status from t_wechat_orders where productId=#{productId}
+    </select>
+
     <update id="updateOrdersNoAndStatus">
         update t_wechat_orders set ordersNo = #{ordersNo},updateTime = #{updateTime},status = #{status},endTime = #{updateTime}
         where ordersCode = #{ordersCode}

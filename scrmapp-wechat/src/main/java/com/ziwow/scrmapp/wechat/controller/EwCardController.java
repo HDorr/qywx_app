@@ -260,7 +260,7 @@ public class EwCardController {
         List<ServiceRecord> serviceRecords = new ArrayList<>(3);
         Date maintainDate = null;
         Date repairDate = null;
-        final List<WechatOrdersVo> wechatOrdersVos = wechatOrdersService.findByUserId(wechatUser.getUserId());
+        final List<WechatOrdersVo> wechatOrdersVos = wechatOrdersService.getWechatOrdersByProductId(product.getId());
         for (WechatOrdersVo wechatOrdersVo : wechatOrdersVos) {
             //订单必须是已经完成的
             if (wechatOrdersVo.getStatus() == 5){
@@ -388,7 +388,7 @@ public class EwCardController {
      * @param productItem
      * @return
      */
-    private CSMEwCardParam getCsmEwCardParam(@RequestBody EwCardParam ewCardParam, WechatUser wechatUser, ProductItem productItem) {
+    private CSMEwCardParam getCsmEwCardParam(@RequestBody EwCardParam ewCardParam, WechatUser wechatUser, ProductItem productItem,Long productId) {
         CSMEwCardParam CSMEwCardParam = new CSMEwCardParam();
         CSMEwCardParam.setCardNo(ewCardParam.getCardNo());
         //拼装产品所需信息
@@ -398,7 +398,7 @@ public class EwCardController {
         CSMEwCardParam.setPurchDate(productItem.getPurchDate());
         //获取安装时间
         CSMEwCardParam.setInstallTime("");
-        final List<WechatOrdersVo> wechatOrdersVos = wechatOrdersService.findByUserId(wechatUser.getUserId());
+        final List<WechatOrdersVo> wechatOrdersVos = wechatOrdersService.getWechatOrdersByProductId(productId);
         for (WechatOrdersVo wechatOrdersVo : wechatOrdersVos) {
             //如果是安装订单并且完成安装
             if (wechatOrdersVo.getOrderType() == 1 && wechatOrdersVo.getStatus() == 5){
