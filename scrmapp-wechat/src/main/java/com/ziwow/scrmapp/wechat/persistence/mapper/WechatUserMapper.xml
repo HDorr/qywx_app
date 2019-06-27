@@ -27,6 +27,11 @@
         <result column="register_src" property="registerSrc"/>
     </resultMap>
 
+    <resultMap id="qtyUserMap" type="com.ziwow.scrmapp.wechat.vo.QtyUserVO" extends="wechatUserMap">
+        <result column="unionid" property="unionid"/>
+    </resultMap>
+
+
     <select id="getUserByOpenId" resultMap="wechatUserMap">
 		SELECT u.* FROM t_wechat_user u ,t_wechat_fans wf WHERE
 		u.wfid=wf.id and wf.openid=#{openId} and u.status=0 LIMIT 0,1
@@ -35,6 +40,10 @@
     <select id="getUserByUnionId" resultMap="wechatUserMap">
         SELECT u.* FROM t_wechat_user u ,t_wechat_fans wf WHERE
         u.wfid=wf.id and wf.unionid=#{unionId} and u.status=0 LIMIT 0,1
+    </select>
+    <select id="getQtyUserByUserId" resultMap="qtyUserMap">
+        SELECT * FROM t_wechat_user u ,t_wechat_fans wf WHERE
+        u.wfid=wf.id and u.userId=#{userId} and u.status=0 LIMIT 0,1
     </select>
 
     <select id="getUserByUserId" resultMap="wechatUserMap">

@@ -1,5 +1,6 @@
 package com.ziwow.scrmapp.wechat.persistence.mapper;
 
+import com.ziwow.scrmapp.wechat.vo.QtyUserVO;
 import com.ziwow.scrmapp.wechat.vo.WechatUserVo;
 import java.util.List;
 import org.apache.ibatis.annotations.Param;
@@ -29,4 +30,6 @@ public interface WechatUserMapper {
     List<WechatUser> getUserByRegisterSrc(@Param("src") Integer src);
 
     WechatUserVo getBaseUserInfoByUserId(String userId);
+
+    QtyUserVO getQtyUserByUserId(@Param("userId") String userId);
 }

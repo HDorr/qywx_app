@@ -23,6 +23,7 @@ import com.ziwow.scrmapp.tools.utils.HttpClientUtils;
 import com.ziwow.scrmapp.tools.utils.MD5;
 import com.ziwow.scrmapp.wechat.service.WechatOrdersRecordService;
 import com.ziwow.scrmapp.wechat.service.WechatOrdersService;
+import com.ziwow.scrmapp.wechat.vo.QtyUserVO;
 import com.ziwow.scrmapp.wechat.vo.WechatUserVo;
 import net.sf.json.JSONObject;
 import org.apache.commons.lang.StringUtils;
@@ -229,7 +230,13 @@ public class WechatUserServiceImpl implements WechatUserService {
         }
     }
 
-    @Override
+  @Override
+  public String loadByUnionId(String userId) {
+      QtyUserVO qytUser = wechatUserMapper.getQtyUserByUserId(userId);
+      return qytUser.getUnionid();
+  }
+
+  @Override
     public List<WechatUser> getUserByRegisterSrc(Integer src) {
         return wechatUserMapper.getUserByRegisterSrc(src);
     }
