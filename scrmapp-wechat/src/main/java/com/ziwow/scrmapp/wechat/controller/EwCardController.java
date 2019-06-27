@@ -3,10 +3,12 @@ package com.ziwow.scrmapp.wechat.controller;
 import com.ziwow.scrmapp.common.annotation.MiniAuthentication;
 import com.ziwow.scrmapp.common.bean.pojo.CSMEwCardParam;
 import com.ziwow.scrmapp.common.bean.pojo.EwCardParam;
+import com.ziwow.scrmapp.common.bean.pojo.ProductParam;
 import com.ziwow.scrmapp.common.bean.vo.WechatOrdersVo;
 import com.ziwow.scrmapp.common.bean.vo.csm.EwCardItem;
 import com.ziwow.scrmapp.common.bean.vo.csm.EwCardVo;
 import com.ziwow.scrmapp.common.bean.vo.csm.ProductItem;
+import com.ziwow.scrmapp.common.bean.vo.csm.Status;
 import com.ziwow.scrmapp.common.constants.Constant;
 import com.ziwow.scrmapp.common.constants.ErrorCodeConstants;
 import com.ziwow.scrmapp.common.enums.Guarantee;
@@ -91,11 +93,10 @@ public class EwCardController {
         }
 
         ewCardVo = thirdPartyService.getEwCardListByNo(cardNo);
-        if (ErrorCodeConstants.CODE_E0.equals(ewCardVo.getStatus().getCode()) || ErrorCodeConstants.CODE_E092.equals(ewCardVo.getStatus().getCode())) {
+        if (ErrorCodeConstants.CODE_E092.equals(ewCardVo.getStatus().getCode())) {
             logger.error("csm调用延保卡失败");
             result.setReturnMsg("查询延保卡失败，请检查卡号或稍后再试！");
             result.setReturnCode(Constant.FAIL);
-            result.setData("no");
             return result;
         }
         //查询到结果
@@ -113,7 +114,6 @@ public class EwCardController {
 
         result.setReturnMsg("查询成功");
         result.setReturnCode(Constant.SUCCESS);
-        result.setData("ok");
         return result;
     }
 
@@ -182,13 +182,12 @@ public class EwCardController {
         final Product product = productService.getProductsByBarCodeAndUserId(wechatUser.getUserId(),ewCardParam.getBarCode());
 
 
-//        //根据barcode查询 产品
-//        ProductItem productItem = thirdPartyService.getProductItem(new ProductParam(product.getModelName(), product.getProductBarCode()));
-//        if(productItem == null){
-//            result.setReturnMsg("产品信息错误!");
-//            result.setReturnCode(Constant.FAIL);
-//            return result;
-//        }
+        //根据barcode查询 产品
+        ProductItem productItem = thirdPartyService.getProductItem(new ProductParam(product.getModelName(), product.getProductBarCode()));
+        if(productItem == null){
+            result.setReturnCode(Constant.FAIL);result.setReturnMsg("产品信息错误!");
+            return result;
+        }
 
         //判断该产品是否可以使用延保卡
         if (!EwCardUtil.isGuantee(product.getBuyTime())){
@@ -197,16 +196,16 @@ public class EwCardController {
             return result;
         }
 
-//        CSMEwCardParam CSMEwCardParam = getCsmEwCardParam(ewCardParam, wechatUser, productItem);
-//
-//        //csm注册延保卡
-//        final Status status = thirdPartyService.registerEwCard(CSMEwCardParam);
-//        if (ErrorCodeConstants.CODE_E09.equals(status.getCode())){
-//            logger.error("scm注册延保卡失败,延保卡号为[{}],产品条码为[{}]",ewCardParam.getCardNo(),product.getProductBarCode());
-//            result.setReturnCode(Constant.FAIL);
-//            result.setReturnMsg(status.getMessage());
-//            return result;
-//        }
+        CSMEwCardParam CSMEwCardParam = getCsmEwCardParam(ewCardParam, wechatUser, productItem,product.getId());
+
+        //csm注册延保卡
+        final Status status = thirdPartyService.registerEwCard(CSMEwCardParam);
+        if (ErrorCodeConstants.CODE_E09.equals(status.getCode())){
+            logger.error("scm注册延保卡失败,延保卡号为[{}],产品条码为[{}]",ewCardParam.getCardNo(),product.getProductBarCode());
+            result.setReturnCode(Constant.FAIL);
+            result.setReturnMsg(status.getMessage());
+            return result;
+        }
         //使用延保卡
         useEwCard(ewCardParam, fans, ewCard.getValidTime(), product.getBuyTime(),product.getProductBarCode());
         result.setReturnMsg("延保卡注册成功");
