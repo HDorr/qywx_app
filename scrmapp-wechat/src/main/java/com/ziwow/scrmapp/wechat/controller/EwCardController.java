@@ -95,6 +95,7 @@ public class EwCardController {
             logger.error("csm调用延保卡失败");
             result.setReturnMsg("查询延保卡失败，请检查卡号或稍后再试！");
             result.setReturnCode(Constant.FAIL);
+            result.setData("no");
             return result;
         }
         //查询到结果
@@ -112,6 +113,7 @@ public class EwCardController {
 
         result.setReturnMsg("查询成功");
         result.setReturnCode(Constant.SUCCESS);
+        result.setData("ok");
         return result;
     }
 
