@@ -14,6 +14,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ApplicationObjectSupport;
 import org.springframework.stereotype.Component;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import javax.annotation.PostConstruct;
 import java.lang.annotation.Annotation;
@@ -46,11 +47,11 @@ public class FuseAop extends ApplicationObjectSupport {
     @Value("${third.fuse.timeoutInMilliSeconds}")
     private Integer timeoutInMilliSeconds;
 
-    private ExecutorService service;
+    private static ExecutorService service;
 
     @PostConstruct
     public void initThreadPool(){
-        service = new ThreadPoolExecutor(corePoolSize,maxPoolSize,keepAliveTime,TimeUnit.SECONDS,new LinkedBlockingQueue<Runnable>(maxQueueSize));
+        service = new ThreadPoolExecutor(corePoolSize,maxPoolSize,keepAliveTime,TimeUnit.SECONDS,new LinkedBlockingQueue<Runnable>(maxQueueSize), new ThreadPoolExecutor.CallerRunsPolicy());
     }
 
 

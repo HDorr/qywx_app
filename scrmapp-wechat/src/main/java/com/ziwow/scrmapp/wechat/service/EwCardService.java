@@ -21,7 +21,7 @@ public interface EwCardService {
      * @param itemCodes
      * @return 类型编号集合
      */
-    List<EwCardItems> addEwCard(EwCard ewCard, String[] itemNames, String[] itemCodes);
+    void addEwCard(EwCard ewCard, String[] itemNames, String[] itemCodes);
 
     /**
      * 根据卡号查询延保卡信息

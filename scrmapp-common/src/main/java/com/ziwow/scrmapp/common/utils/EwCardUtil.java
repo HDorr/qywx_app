@@ -49,7 +49,14 @@ public class EwCardUtil {
      */
     public static Date getEndRepairTerm(int validTime){
         instance.setTime(new Date());
-        instance.add(Calendar.DATE,validTime);
+        //判断时间的大小(为多久)
+        if (validTime % Dates.YEAR.getDay() == 0){
+            //年卡
+            instance.add(Calendar.YEAR,validTime / Dates.YEAR.getDay());
+        }else {
+            //月卡
+            instance.add(Calendar.MONTH,validTime / Dates.MONTH.getDay());
+        }
         return instance.getTime();
     }
 
@@ -61,7 +68,13 @@ public class EwCardUtil {
      */
     public static Date getExtendRepairTerm(Date guaranteeDate,int validTime){
         instance.setTime(guaranteeDate);
-        instance.add(Calendar.DATE,validTime);
+        if (validTime % Dates.YEAR.getDay() == 0){
+            //年卡
+            instance.add(Calendar.YEAR,validTime / Dates.YEAR.getDay());
+        }else {
+            //月卡
+            instance.add(Calendar.MONTH,validTime / Dates.MONTH.getDay());
+        }
         return instance.getTime();
     }
 

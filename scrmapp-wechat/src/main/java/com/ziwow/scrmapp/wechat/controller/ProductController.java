@@ -321,7 +321,9 @@ public class ProductController {
      */
     @RequestMapping(value = "/product/card_no", method = RequestMethod.GET)
     @ResponseBody
-    public Result queryUserProductByItem(
+    @MiniAuthentication
+    public Result queryUserProductByItem(@RequestParam("signture") String signture,
+                                         @RequestParam("time_stamp") String timeStamp,
                                          @RequestParam("unionId") String unionId,
                                          @RequestParam("card_no") String cardNo){
         Result result = new BaseResult();

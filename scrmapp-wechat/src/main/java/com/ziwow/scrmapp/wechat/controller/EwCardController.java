@@ -108,14 +108,10 @@ public class EwCardController {
         ewCard.setFansId(fans.getId());
         ewCard.setUseStatus(false);
         ewCard.setCardNo(cardNo);
-        List<EwCardItems> ewCardItems = ewCardService.addEwCard(ewCard,ewCardVo.getItems().getItemNames(),ewCardVo.getItems().getItemCodes());
+        ewCardService.addEwCard(ewCard,ewCardVo.getItems().getItemNames(),ewCardVo.getItems().getItemCodes());
 
-        EwCardInfo info = new EwCardInfo();
-        BeanUtils.copyProperties(ewCard,info);
-        info.setEwCardItems(ewCardItems);
         result.setReturnMsg("查询成功");
         result.setReturnCode(Constant.SUCCESS);
-        result.setData(info);
         return result;
     }
 
