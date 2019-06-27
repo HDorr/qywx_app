@@ -27,7 +27,7 @@ public interface ThirdPartyService {
 	 * 注册延保卡
 	 * @param CSMEwCardParam
 	 */
-	Status registerEwCard(CSMEwCardParam CSMEwCardParam);
+	BaseCardVo registerEwCard(CSMEwCardParam CSMEwCardParam);
 
 
 	public ProductItem getProductItem(ProductParam productParam);

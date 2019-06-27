@@ -125,7 +125,7 @@ public class ThirdPartyServiceImpl implements ThirdPartyService {
 
 
     @Override
-    public Status registerEwCard(CSMEwCardParam CSMEwCardParam) {
+    public BaseCardVo registerEwCard(CSMEwCardParam CSMEwCardParam) {
         LOG.info("第三方CSM系统注册延保卡信息,CSMEwCardParam:[{}]", CSMEwCardParam);
         BaseCardVo baseCardVo = null;
         try {
@@ -143,7 +143,7 @@ public class ThirdPartyServiceImpl implements ThirdPartyService {
             LOG.info("第三方CSM系统注册延保卡信息失败");
             e.printStackTrace();
         }
-        return baseCardVo.getStatus();
+        return baseCardVo;
     }
 
 

@@ -5,10 +5,7 @@ import com.ziwow.scrmapp.common.bean.pojo.CSMEwCardParam;
 import com.ziwow.scrmapp.common.bean.pojo.EwCardParam;
 import com.ziwow.scrmapp.common.bean.pojo.ProductParam;
 import com.ziwow.scrmapp.common.bean.vo.WechatOrdersVo;
-import com.ziwow.scrmapp.common.bean.vo.csm.EwCardItem;
-import com.ziwow.scrmapp.common.bean.vo.csm.EwCardVo;
-import com.ziwow.scrmapp.common.bean.vo.csm.ProductItem;
-import com.ziwow.scrmapp.common.bean.vo.csm.Status;
+import com.ziwow.scrmapp.common.bean.vo.csm.*;
 import com.ziwow.scrmapp.common.constants.Constant;
 import com.ziwow.scrmapp.common.constants.ErrorCodeConstants;
 import com.ziwow.scrmapp.common.enums.Guarantee;
@@ -182,12 +179,17 @@ public class EwCardController {
 
         //该类型用户的产品
         final Product product = productService.getProductsByBarCodeAndUserId(wechatUser.getUserId(),ewCardParam.getBarCode());
-
+        if(product == null){
+            result.setReturnCode(Constant.FAIL);
+            result.setReturnMsg("不存在改产品!");
+            return result;
+        }
 
         //根据barcode查询 产品
         ProductItem productItem = thirdPartyService.getProductItem(new ProductParam(product.getModelName(), product.getProductBarCode()));
         if(productItem == null){
-            result.setReturnCode(Constant.FAIL);result.setReturnMsg("产品信息错误!");
+            result.setReturnCode(Constant.FAIL);
+            result.setReturnMsg("产品信息错误!");
             return result;
         }
 
@@ -201,11 +203,11 @@ public class EwCardController {
         CSMEwCardParam CSMEwCardParam = getCsmEwCardParam(ewCardParam, wechatUser, productItem,product.getId());
 
         //csm注册延保卡
-        final Status status = thirdPartyService.registerEwCard(CSMEwCardParam);
-        if (ErrorCodeConstants.CODE_E09.equals(status.getCode())){
-            logger.error("scm注册延保卡失败,延保卡号为[{}],产品条码为[{}]",ewCardParam.getCardNo(),product.getProductBarCode());
+        final BaseCardVo baseCardVo = thirdPartyService.registerEwCard(CSMEwCardParam);
+        if (ErrorCodeConstants.CODE_E09.equals(baseCardVo.getStatus().getCode())){
+            logger.error("csm注册延保卡失败,延保卡号为[{}],产品条码为[{}]",ewCardParam.getCardNo(),product.getProductBarCode());
             result.setReturnCode(Constant.FAIL);
-            result.setReturnMsg(status.getMessage());
+            result.setReturnMsg(baseCardVo.getData());
             return result;
         }
         //使用延保卡
@@ -392,9 +394,9 @@ public class EwCardController {
         CSMEwCardParam.setCardNo(ewCardParam.getCardNo());
         //拼装产品所需信息
         CSMEwCardParam.setBarcode(productItem.getBarcode());
-        CSMEwCardParam.setItemCode(productItem.getItemCode());
-        CSMEwCardParam.setSpec(productItem.getSpec());
-        CSMEwCardParam.setPurchDate(productItem.getPurchDate());
+        CSMEwCardParam.setItemCode(productItem.getItemCode() == null ? "" : productItem.getItemCode());
+        CSMEwCardParam.setSpec(productItem.getSpec() == null ? "" : productItem.getSpec());
+        CSMEwCardParam.setPurchDate(productItem.getPurchDate() == null ? "" : productItem.getPurchDate());
         //获取安装时间
         CSMEwCardParam.setInstallTime("");
         final List<WechatOrdersVo> wechatOrdersVos = wechatOrdersService.getWechatOrdersByProductId(productId);
@@ -407,17 +409,17 @@ public class EwCardController {
         }
 
         //用户信息
-        CSMEwCardParam.setMobile(wechatUser.getMobilePhone());
-        CSMEwCardParam.setEnduserName(wechatUser.getUserName());
+        CSMEwCardParam.setMobile(wechatUser.getMobilePhone() == null ? "" : wechatUser.getMobilePhone());
+        CSMEwCardParam.setEnduserName(wechatUser.getUserName() == null ? "" : wechatUser.getUserName());
         //不传电话,但是字段要有
         CSMEwCardParam.setTel("");
         //省市区
         final WechatUserAddress address = wechatUserAddressService.findUserAddresList(wechatUser.getUserId()).get(0);
-        CSMEwCardParam.setProvinceName(address.getProvinceName());
-        CSMEwCardParam.setCityName(address.getCityName());
-        CSMEwCardParam.setCountyName(address.getAreaName());
+        CSMEwCardParam.setProvinceName(address.getProvinceName() == null ? "" : address.getProvinceName());
+        CSMEwCardParam.setCityName(address.getCityName() == null ? "" : address.getCityName());
+        CSMEwCardParam.setCountyName(address.getAreaName() == null ? "" : address.getAreaName());
         //取的街道地址
-        CSMEwCardParam.setEnduserAddress(address.getStreetName());
+        CSMEwCardParam.setEnduserAddress(address.getStreetName() == null ? "" : address.getStreetName());
         return CSMEwCardParam;
     }
 
