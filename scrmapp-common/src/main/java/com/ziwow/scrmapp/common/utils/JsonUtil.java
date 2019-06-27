@@ -137,7 +137,7 @@ public class JsonUtil {
 
 	public static String object2Json(Object object) throws IOException {
 		mapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
-		//mapper.setSerializationInclusion(Include.NON_NULL);
+		mapper.setSerializationInclusion(Include.NON_NULL);
 
 		return mapper.writeValueAsString(object);
 	}

@@ -73,9 +73,7 @@ public class EwCardController {
      * @return
      */
     @RequestMapping(value = "query/ew_card_by_no",method = RequestMethod.GET)
-    @MiniAuthentication
-    public Result queryCardByNo(@RequestParam("signture") String signture,
-                                @RequestParam("time_stamp") String timeStamp,
+    public Result queryCardByNo(
                                 @RequestParam("unionId") String unionId,
                                 @RequestParam("card_no") String cardNo){
         Result result = new BaseResult();
@@ -90,7 +88,7 @@ public class EwCardController {
         }
 
         ewCardVo = thirdPartyService.getEwCardListByNo(cardNo);
-        if (ErrorCodeConstants.CODE_E092.equals(ewCardVo.getStatus().getCode())) {
+        if (ErrorCodeConstants.CODE_E092.equals(ewCardVo.getStatus().getCode()) || "已注册".equals(ewCardVo.getItems().getCardStat())) {
             logger.error("csm调用延保卡失败");
             result.setReturnMsg("查询延保卡失败，请检查卡号或稍后再试！");
             result.setData("no");
@@ -207,7 +205,7 @@ public class EwCardController {
         if (ErrorCodeConstants.CODE_E09.equals(baseCardVo.getStatus().getCode())){
             logger.error("csm注册延保卡失败,延保卡号为[{}],产品条码为[{}]",ewCardParam.getCardNo(),product.getProductBarCode());
             result.setReturnCode(Constant.FAIL);
-            result.setReturnMsg(baseCardVo.getData());
+            result.setReturnMsg("延保卡注册失败");
             return result;
         }
         //使用延保卡

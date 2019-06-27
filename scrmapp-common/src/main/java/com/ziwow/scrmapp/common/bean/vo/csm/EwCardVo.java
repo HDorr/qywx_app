@@ -8,6 +8,7 @@ package com.ziwow.scrmapp.common.bean.vo.csm;
  */
 public class EwCardVo extends BaseCardVo {
 
+    private Status status;
 
     /**
      * 延保卡详细
@@ -19,6 +20,20 @@ public class EwCardVo extends BaseCardVo {
     }
 
     public void setItem(EwCardItem items) {
+        this.items = items;
+    }
+
+    @Override
+    public Status getStatus() {
+        return status;
+    }
+
+    @Override
+    public void setStatus(Status status) {
+        this.status = status;
+    }
+
+    public void setItems(EwCardItem items) {
         this.items = items;
     }
 }

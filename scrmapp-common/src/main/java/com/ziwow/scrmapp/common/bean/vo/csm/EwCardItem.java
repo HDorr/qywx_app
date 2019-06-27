@@ -29,9 +29,8 @@ public class EwCardItem {
     /**
      * 购买时间
      */
-    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
     @JsonProperty("purch_date")
-    private Date purchDate;
+    private String purchDate;
 
     /**
      * 对应机型
@@ -53,6 +52,9 @@ public class EwCardItem {
     @JsonProperty("valid_time")
     private int validTime;
 
+
+    @JsonProperty("repair_term")
+    private String repairTerm;
 
     /**
      * 获取拆分后的结果
@@ -96,7 +98,6 @@ public class EwCardItem {
         this.validTime = validTime;
     }
 
-
     public String getCardNo() {
         return cardNo;
     }
@@ -113,11 +114,20 @@ public class EwCardItem {
         this.cardStat = cardStat;
     }
 
-    public Date getPurchDate() {
+
+    public String getPurchDate() {
         return purchDate;
     }
 
-    public void setPurchDate(Date purchDate) {
+    public void setPurchDate(String purchDate) {
         this.purchDate = purchDate;
+    }
+
+    public String getRepairTerm() {
+        return repairTerm;
+    }
+
+    public void setRepairTerm(String repairTerm) {
+        this.repairTerm = repairTerm;
     }
 }
