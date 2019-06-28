@@ -205,7 +205,7 @@ public class EwCardController {
         if (ErrorCodeConstants.CODE_E09.equals(baseCardVo.getStatus().getCode())){
             logger.error("csm注册延保卡失败,延保卡号为[{}],产品条码为[{}]",ewCardParam.getCardNo(),product.getProductBarCode());
             result.setReturnCode(Constant.FAIL);
-            result.setReturnMsg("延保卡注册失败");
+            result.setReturnMsg(baseCardVo.getData());
             return result;
         }
         //使用延保卡
