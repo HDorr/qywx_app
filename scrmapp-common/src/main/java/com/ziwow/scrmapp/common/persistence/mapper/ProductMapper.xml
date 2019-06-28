@@ -526,6 +526,10 @@
         where userId=#{userId}
     </select>
 
+    <select id="countProductByUserIdAndProduct" resultType="java.lang.Integer">
+        select count(*) from t_product where userId = #{userId} and productCode = #{productCode} limit 1
+    </select>
+
     <update id="updateSmallcNameByOrderCode">
         update t_product set smallcName = #{smallcName,jdbcType=VARCHAR}
         where productCode = #{productCode,jdbcType=VARCHAR} and smallcName is null

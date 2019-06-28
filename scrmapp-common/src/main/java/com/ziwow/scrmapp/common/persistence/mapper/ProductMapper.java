@@ -97,6 +97,5 @@ public interface ProductMapper {
      * @param productCode
      * @return
      */
-    @Select("select count(*) from t_product where userId = #{userId} and productCode = #{productCode} limit 1")
-    Integer countProductByUserIdAndProduct(@Param("userId") String userId, @Param("productCode") String productCode);
+    int countProductByUserIdAndProduct(@Param("userId") String userId, @Param("productCode") String productCode);
 }
