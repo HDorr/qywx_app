@@ -879,8 +879,8 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public boolean isOnlyBindProduct(String userId, String productCode) {
-        return productMapper.countProductByUserIdAndproductBarCode(userId,productCode) == 1;
+    public boolean isOnlyBindProduct(String userId, String productBarCode) {
+        return productMapper.countProductByUserIdAndproductBarCode(userId,productBarCode) == 1;
     }
 
 }

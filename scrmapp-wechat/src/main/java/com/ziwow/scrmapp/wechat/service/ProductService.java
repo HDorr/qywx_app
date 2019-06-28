@@ -102,8 +102,8 @@ public interface ProductService {
     /**
      * 校验用户是否绑定该款产品
      * @param userId
-     * @param productCode
+     * @param productBarCode
      * @return  有该产品就是true 反之false
      */
-    boolean isOnlyBindProduct(String userId, String productCode);
+    boolean isOnlyBindProduct(String userId, String productBarCode);
 }
