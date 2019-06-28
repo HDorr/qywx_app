@@ -98,4 +98,12 @@ public interface ProductService {
      * @return
      */
     List<Product> getProductByProductCodeAndUserId(List<EwCardItems> productCode, String userId);
+
+    /**
+     * 校验用户是否绑定该款产品
+     * @param userId
+     * @param productCode
+     * @return  有该产品就是true 反之false
+     */
+    boolean isOnlyBindProduct(String userId, String productCode);
 }

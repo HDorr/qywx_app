@@ -25,6 +25,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -179,7 +180,7 @@ public class EwCardController {
         final Product product = productService.getProductsByBarCodeAndUserId(wechatUser.getUserId(),ewCardParam.getBarCode());
         if(product == null){
             result.setReturnCode(Constant.FAIL);
-            result.setReturnMsg("不存在改产品!");
+            result.setReturnMsg("产品信息不存在!");
             return result;
         }
 
@@ -412,7 +413,13 @@ public class EwCardController {
         //不传电话,但是字段要有
         CSMEwCardParam.setTel("");
         //省市区
-        final WechatUserAddress address = wechatUserAddressService.findUserAddresList(wechatUser.getUserId()).get(0);
+        WechatUserAddress address = null;
+        final List<WechatUserAddress> userAddresList = wechatUserAddressService.findUserAddresList(wechatUser.getUserId());
+        if (CollectionUtils.isEmpty(userAddresList)){
+             address = new WechatUserAddress();
+        }else {
+            address = userAddresList.get(0);
+        }
         CSMEwCardParam.setProvinceName(address.getProvinceName() == null ? "" : address.getProvinceName());
         CSMEwCardParam.setCityName(address.getCityName() == null ? "" : address.getCityName());
         CSMEwCardParam.setCountyName(address.getAreaName() == null ? "" : address.getAreaName());

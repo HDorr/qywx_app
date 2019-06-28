@@ -221,6 +221,12 @@ public class ProductController {
                 result.setReturnMsg("用户无效，请退出重新操作！");
                 return result;
             }
+            if (productService.isOnlyBindProduct(userId,product.getProductCode())){
+                logger.error("绑定产品条码已存在");
+                result.setReturnCode(Constant.FAIL);
+                result.setReturnMsg("该产品已经绑定！");
+                return result;
+            }
             product.setUserId(userId);
             product.setStatus(1);
             product.setCreateTime(new Date());
@@ -269,8 +275,8 @@ public class ProductController {
                 result.setReturnMsg("用户无效，请退出重新操作！");
                 return result;
             }
-            final WechatFans fans = wechatFansService.getWechatFansByUserId(userId);
             List<Product> products = productService.getProductsByUserId(userId);
+            final WechatFans fans = wechatFansService.getWechatFansByUserId(userId);
             sameCodeProduct(products);
             //添加商品的保修状态
             for (Product product : products) {

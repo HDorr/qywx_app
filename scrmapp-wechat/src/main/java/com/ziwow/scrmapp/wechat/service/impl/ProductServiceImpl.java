@@ -878,4 +878,9 @@ public class ProductServiceImpl implements ProductService {
         return productMapper.getProductByProductCodeAndUserId(codes,userId);
     }
 
+    @Override
+    public boolean isOnlyBindProduct(String userId, String productCode) {
+        return productMapper.countProductByUserIdAndProduct(userId,productCode) == 1;
+    }
+
 }

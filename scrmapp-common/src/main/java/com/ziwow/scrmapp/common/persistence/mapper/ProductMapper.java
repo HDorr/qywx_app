@@ -89,4 +89,14 @@ public interface ProductMapper {
      * @return
      */
     List<Product> getProductByProductCodeAndUserId(@Param("productCodes") List<String> productCodes, @Param("userId") String userId);
+
+
+    /**
+     * 根据用户和条码查询产品信息
+     * @param userId
+     * @param productCode
+     * @return
+     */
+    @Select("select count(*) from t_product where userId = #{userId} and productCode = #{productCode}")
+    Integer countProductByUserIdAndProduct(String userId, String productCode);
 }
