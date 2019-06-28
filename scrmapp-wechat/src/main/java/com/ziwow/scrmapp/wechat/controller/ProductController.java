@@ -221,7 +221,7 @@ public class ProductController {
                 result.setReturnMsg("用户无效，请退出重新操作！");
                 return result;
             }
-            if (productService.isOnlyBindProduct(userId,product.getProductCode())){
+            if (productService.isOnlyBindProduct(userId,product.getProductBarCode())){
                 logger.error("绑定产品条码已存在");
                 result.setReturnCode(Constant.FAIL);
                 result.setReturnMsg("该产品已经绑定！");

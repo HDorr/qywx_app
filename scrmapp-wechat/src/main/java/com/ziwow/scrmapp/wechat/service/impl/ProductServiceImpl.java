@@ -880,7 +880,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public boolean isOnlyBindProduct(String userId, String productCode) {
-        return productMapper.countProductByUserIdAndProduct(userId,productCode) == 1;
+        return productMapper.countProductByUserIdAndproductBarCode(userId,productCode) == 1;
     }
 
 }

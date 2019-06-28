@@ -94,8 +94,8 @@ public interface ProductMapper {
     /**
      * 根据用户和条码查询产品信息
      * @param userId
-     * @param productCode
+     * @param productBarCode
      * @return
      */
-    int countProductByUserIdAndProduct(@Param("userId") String userId, @Param("productCode") String productCode);
+    int countProductByUserIdAndproductBarCode(@Param("userId") String userId, @Param("productBarCode") String productBarCode);
 }

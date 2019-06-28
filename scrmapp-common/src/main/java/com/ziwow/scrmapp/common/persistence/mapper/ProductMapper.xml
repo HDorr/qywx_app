@@ -41,7 +41,7 @@
         <foreach collection="productCodes" open="(" close=")" separator="," item="productCode">
             #{productCode}
         </foreach>
-        and userId = #{userId} order by productCode DESC,productName DESC
+        and userId = #{userId} and status = 1 order by productCode DESC,productName DESC
     </select>
 
 
@@ -526,8 +526,8 @@
         where userId=#{userId}
     </select>
 
-    <select id="countProductByUserIdAndProduct" resultType="java.lang.Integer">
-        select count(*) from t_product where userId = #{userId} and productCode = #{productCode} limit 1
+    <select id="countProductByUserIdAndproductBarCode" resultType="java.lang.Integer">
+        select count(*) from t_product where userId = #{userId} and productBarCode = #{productBarCode} limit 1
     </select>
 
     <update id="updateSmallcNameByOrderCode">
