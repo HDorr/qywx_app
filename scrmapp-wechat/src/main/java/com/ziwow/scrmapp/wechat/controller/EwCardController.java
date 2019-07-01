@@ -34,7 +34,7 @@ import java.util.List;
 
 
 /**
- * 卡
+ * 延保卡
  * @author songkaiqi
  * @since 2019/06/09/上午10:38
  */
@@ -222,11 +222,13 @@ public class EwCardController {
             return result;
         }
         //使用延保卡
-        useEwCard(ewCardParam, fans, ewCard.getValidTime(), product.getBuyTime(),product.getProductBarCode());
+        useEwCard(ewCardParam,  ewCard.getValidTime(), product.getBuyTime(),product.getProductBarCode());
         result.setReturnMsg("延保卡注册成功");
         result.setReturnCode(Constant.SUCCESS);
         return result;
-}
+    }
+
+
 
 
     /**
@@ -246,7 +248,7 @@ public class EwCardController {
         Result result = new BaseResult();
         final WechatUser wechatUser = wechatUserService.getUserByUnionid(unionId);
         final WechatFans fans = wechatFansService.getWechatFansByUserId(wechatUser.getUserId());
-        final EwCard ewCard = ewCardService.selectEwCardByBarCode(barCode, fans.getId());
+        final EwCard ewCard = ewCardService.selectEwCardByBarCode(barCode);
         Product product = productService.getProductsByBarCodeAndUserId(wechatUser.getUserId(),barCode);
         EwCardDetails ewCardDetails = new EwCardDetails();
 
@@ -350,13 +352,12 @@ public class EwCardController {
     /**
      * 更改延保卡的使用状态,以及绑定延保卡的产品条码,延保卡的购买时间,保修的时间
      * @param ewCardParam
-     * @param fans
      * @param validTime
      * @param productBarCode
      */
-    private void useEwCard(@RequestBody EwCardParam ewCardParam, WechatFans fans, int validTime, Date purchDate,String productBarCode) {
+    private void useEwCard(@RequestBody EwCardParam ewCardParam,  int validTime, Date purchDate,String productBarCode) {
         Date repairTerm = null;
-        final EwCard ewCard1 = ewCardService.selectEwCardByBarCode(productBarCode, fans.getId());
+        final EwCard ewCard1 = ewCardService.selectEwCardByBarCode(productBarCode);
         //该机器是否用过延保卡
         repairTerm = getRepairTerm(validTime, purchDate, ewCard1);
         ewCardService.useEwCard(ewCardParam.getCardNo(), productBarCode, purchDate,repairTerm);

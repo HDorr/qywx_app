@@ -48,10 +48,11 @@ public interface EwCardService {
     /**
      * 根据产品条码查询最新的延保卡
      * @param barCode
-     * @param fansId
      * @return
      */
-    EwCard selectEwCardByBarCode(String barCode, Long fansId);
+    EwCard selectEwCardByBarCode(String barCode);
+
+    EwCard selectEwCardByBarCodeAndFansId(String barCode, Long fansId);
 
     /**
      * 使用延保卡

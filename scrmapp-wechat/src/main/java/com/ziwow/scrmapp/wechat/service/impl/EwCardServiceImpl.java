@@ -52,7 +52,12 @@ public class EwCardServiceImpl implements EwCardService {
     }
 
     @Override
-    public EwCard selectEwCardByBarCode(String barCode, Long fansId) {
+    public EwCard selectEwCardByBarCode(String barCode) {
+        return ewCardMapper.selectEwCardByBarCode(barCode);
+    }
+
+    @Override
+    public EwCard selectEwCardByBarCodeAndFansId(String barCode, Long fansId) {
         return ewCardMapper.selectEwCardByBarCodeAndFansId(barCode,fansId);
     }
 

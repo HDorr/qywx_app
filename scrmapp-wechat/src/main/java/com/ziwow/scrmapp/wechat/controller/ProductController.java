@@ -284,7 +284,7 @@ public class ProductController {
                 if (product.getBuyTime() == null){
                     continue;
                 }
-                final EwCard ewCard = ewCardService.selectEwCardByBarCode(product.getProductBarCode(), fans.getId());
+                final EwCard ewCard = ewCardService.selectEwCardByBarCode(product.getProductBarCode());
                 final Guarantee guarantee = EwCardUtil.getGuarantee(product.getBuyTime(),ewCard == null ? null : ewCard.getRepairTerm());
                 product.setGuarantee(guarantee);
             }
@@ -380,7 +380,7 @@ public class ProductController {
             EwCardProductVo epv = new EwCardProductVo();
             epv.setBarCode(product.getProductBarCode());
             epv.setProductName(product.getProductName());
-            final EwCard ec = ewCardService.selectEwCardByBarCode(product.getProductBarCode(), fans.getId());
+            final EwCard ec = ewCardService.selectEwCardByBarCode(product.getProductBarCode());
             if (ec != null){
                 //已经用过延保卡,最新延保卡的基础上添加天数
                 if (EwCardUtil.isExtend(ec.getRepairTerm())){
