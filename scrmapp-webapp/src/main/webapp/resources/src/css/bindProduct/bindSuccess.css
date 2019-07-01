@@ -7,7 +7,15 @@
   padding-top: 1rem;
 }
 .gotoPdtList{
-  background-color: pink;
+  background-color: gray;
+  color: white;
+  height: 1rem;
+  width: 3.6rem;
+  margin: 0 auto;
+  line-height: 1rem;
+  border-radius: 0.5rem;
+  font-size: 0.4rem;
+  margin-top: 0.6rem;
 }
 .main_layer .imgBox {
   width: 1.933333rem;
@@ -55,7 +63,7 @@
   display: none;
 }
 .main_layer .container {
-  padding-top: 1.2rem;
+  padding-top: 0.2rem;
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
