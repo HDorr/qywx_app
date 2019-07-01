@@ -33,14 +33,59 @@
         <div class="tipText">
             <p>1.防伪码位置：饮水设备滤芯防伪码则位于芯体标签，净水设备滤芯防伪码，通常位于滤芯外包装盒顶部，净水桶产品防伪码见桶壁标签。</p>
             <p>2.防伪码为16位或者20位数字。</p>
-            <div class="guide">
-                <div class="box">
-                    <p>防伪码位置指引</p>
-                    <div class="one">
-                        <p class="title">一、模块式滤芯防伪码位置</p>
-                        <div class="tipBox">
-                            <div class="imgOne imgBox">11111</div>
-                            <div class="imgtwo imgBox">22222</div>
+            <div class="box">
+                <p class="guide">防伪码位置指引</p>
+                <div class="giude_item">
+                    <p class="title">一、模块式滤芯防伪码位置</p>
+                    <div class="item_box">
+                        <div class="item_one">
+                            <div>
+                                <img src="${f_ctxpath}/resources/images/securityCheck/guide/icon.jpg"/><span>扫描二维码</span>
+                            </div>
+                            <img src='${f_ctxpath}/resources/images/securityCheck/guide/04.jpg'/>
+                        </div>
+                        <div class="item_one">
+                            <div>
+                                <img src="${f_ctxpath}/resources/images/securityCheck/guide/icon.jpg"/><span>录入刮开式防伪码</span>
+                            </div>
+                            <img src='${f_ctxpath}/resources/images/securityCheck/guide/01.jpg'/>
+                        </div>
+                    </div>
+                </div>
+                <div class="giude_item">
+                    <p class="title">二、外包防伪码位置</p>
+                    <div class="item_box">
+                        <div class="item_one item_two">
+                            <div>
+                                <img src="${f_ctxpath}/resources/images/securityCheck/guide/icon.jpg"/><span>彩包</span>
+                                <div>录入刮刮乐+扫码69码</div>
+                            </div>
+                            <div class="pics">
+                                <img class="imgTop" src='${f_ctxpath}/resources/images/securityCheck/guide/07.jpg'/>
+                                <img class="imgBottom" src='${f_ctxpath}/resources/images/securityCheck/guide/02.jpg'/>
+                            </div>
+                        </div>
+                        <div class="item_one item_two">
+                            <div>
+                                <img src="${f_ctxpath}/resources/images/securityCheck/guide/icon.jpg"/><span>黄包</span>
+                                <div>录入刮刮乐+扫描69码</div>
+                            </div>
+                            <img src='${f_ctxpath}/resources/images/securityCheck/guide/06.jpg'/>
+                        </div>
+                        <div class="item_one item_two">
+                            <div>
+                                <img src="${f_ctxpath}/resources/images/securityCheck/guide/icon.jpg"/><span>黄包</span>
+                                <div>录入刮刮乐+扫描69码</div>
+                            </div>
+                            <img src='${f_ctxpath}/resources/images/securityCheck/guide/03.jpg'/>
+                        </div>
+                    </div>
+                </div>
+                <div class="giude_item">
+                    <p class="title">三、扫描防伪码验证为正品页面</p>
+                    <div class="item_box">
+                        <div class="item_three">
+                            <img src='${f_ctxpath}/resources/images/securityCheck/guide/05.jpg'/>
                         </div>
                     </div>
                 </div>

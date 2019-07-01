@@ -97,7 +97,7 @@ public interface EwCardMapper {
      * @param barCode
      * @return
      */
-    @Select("select * from t_ew_card where product_bar_code_twenty = #{barCode}")
+    @Select("select * from t_ew_card where product_bar_code_twenty = #{barCode} limit 1")
     @ResultMap("ewCardMap")
     EwCard selectEwCardByBarCode(@Param("barCode") String barCode);
 }
