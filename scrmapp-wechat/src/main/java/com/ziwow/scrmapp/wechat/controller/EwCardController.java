@@ -74,7 +74,9 @@ public class EwCardController {
      * @return
      */
     @RequestMapping(value = "query/ew_card_by_no",method = RequestMethod.GET)
-    public Result queryCardByNo(
+    @MiniAuthentication
+    public Result queryCardByNo(@RequestParam("signture") String signture,
+                                @RequestParam("time_stamp") String timeStamp,
                                 @RequestParam("unionId") String unionId,
                                 @RequestParam("card_no") String cardNo){
         Result result = new BaseResult();
