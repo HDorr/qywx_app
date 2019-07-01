@@ -3,6 +3,7 @@ package com.ziwow.scrmapp.wechat.persistence.mapper;
 import com.ziwow.scrmapp.wechat.persistence.entity.EwCard;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
 
 import java.util.Date;
 import java.util.List;
@@ -89,4 +90,12 @@ public interface EwCardMapper {
      * @return
      */
     List<Long> selectEwCardIdByCodeAndFansId(@Param("productCode")String productCode,@Param("fansId")Long fansId);
+
+    /**
+     * 根据产品条码查询对应的延保卡
+     * @param barCode
+     * @return
+     */
+    @Select("select * from t_ew_card where product_bar_code_twenty = #{barCode}")
+    EwCard selectEwCardByBarCode(@Param("barCode") String barCode);
 }

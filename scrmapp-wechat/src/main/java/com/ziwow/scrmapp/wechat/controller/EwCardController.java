@@ -199,6 +199,16 @@ public class EwCardController {
             return result;
         }
 
+
+        //判断该产品是否已经使用过延保卡
+        EwCard existEwCard = ewCardService.existEwCardByBarCode(ewCardParam.getBarCode());
+        if (existEwCard != null){
+            result.setReturnMsg("对不起,该产品已经使用过延保服务!");
+            result.setReturnCode(Constant.FAIL);
+            return result;
+        }
+
+
         CSMEwCardParam CSMEwCardParam = getCsmEwCardParam(ewCardParam, wechatUser, productItem,product.getId());
 
         //csm注册延保卡

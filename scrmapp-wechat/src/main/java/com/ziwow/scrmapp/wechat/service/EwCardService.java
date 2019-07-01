@@ -77,4 +77,11 @@ public interface EwCardService {
      * @return
      */
     List<EwCard> selectEwCardByProductCode(String productCode, Long id);
+
+    /**
+     * 根据产品条码判断该产品是否使用过延保卡
+     * @param barCode
+     * @return
+     */
+    EwCard existEwCardByBarCode(String barCode);
 }
