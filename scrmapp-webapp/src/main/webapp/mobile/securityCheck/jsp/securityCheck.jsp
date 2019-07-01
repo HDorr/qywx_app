@@ -25,7 +25,7 @@
                 <input class="searInput" type="text" id="code" placeholder="请输入防伪码" oninput="if(/\D/.test(this.value)){this.value=this.value.replace(/\D/g,'')}" onpaste="if(/\D/.test(this.value)){this.value=this.value.replace(/\D/g,'')}"  onchange="if(/\D/.test(this.value)){this.value=this.value.replace(/\D/g,'')}">
                 <span class="scanIcon" id="scanQrCode"></span>
             </div>
-            <p class="tipP">格式不符合要求,请重新输入</p>
+            <p class="tipP">格式不符合要求,请重新输s入</p>
         </div>
         <div class="checkArea">
             <button class="qy-btn-all" id="checkCode">立即查询</button>
@@ -33,6 +33,18 @@
         <div class="tipText">
             <p>1.防伪码位置：饮水设备滤芯防伪码则位于芯体标签，净水设备滤芯防伪码，通常位于滤芯外包装盒顶部，净水桶产品防伪码见桶壁标签。</p>
             <p>2.防伪码为16位或者20位数字。</p>
+            <div class="guide">
+                <div class="box">
+                    <p>防伪码位置指引</p>
+                    <div class="one">
+                        <p class="title">一、模块式滤芯防伪码位置</p>
+                        <div class="tipBox">
+                            <div class="imgOne imgBox">11111</div>
+                            <div class="imgtwo imgBox">22222</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <p>温馨提示：</p>
             <p><i></i>如您还需查询净水设备正伪，建议前往【个人中心】-【我的产品】-【新增产品】-输入或扫描产品条码，绑定成功即为正品</p>
             <p><i></i>如您在查验滤芯或绑定机器遇到问题，建议拨打全国统一服务热线 400-111-1222 进行查询热线电话服务时间：8:00 - 20:00</p>

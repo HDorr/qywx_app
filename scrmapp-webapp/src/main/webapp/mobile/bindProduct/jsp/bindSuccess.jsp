@@ -10,7 +10,7 @@
         <meta name="apple-mobile-web-app-capable" content="yes">
         <meta name="apple-mobile-web-app-status-bar-style" content="black">
         <link rel="stylesheet" href="${f_ctxpath}/resources/src/css/reset.css">
-        <link rel="stylesheet" href="${f_ctxpath}/resources/src/css/bindProduct/bindSuccess.css?t=12111111134">
+        <link rel="stylesheet" href="${f_ctxpath}/resources/src/css/bindProduct/bindSuccess.css?t=121111111">
     </head>
     <body>
     <div class="main_layer clearfix">

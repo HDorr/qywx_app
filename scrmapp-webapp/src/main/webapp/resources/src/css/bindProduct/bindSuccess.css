@@ -52,7 +52,7 @@
   display: none;
 }
 .main_layer .container {
-  padding-top: 0.2rem;
+  padding-top: 0.8rem;
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
