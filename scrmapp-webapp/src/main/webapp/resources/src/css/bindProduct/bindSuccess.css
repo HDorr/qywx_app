@@ -6,6 +6,9 @@
   background-color: #fff;
   padding-top: 1rem;
 }
+.gotoPdtList{
+  background-color: pink;
+}
 .main_layer .imgBox {
   width: 1.933333rem;
   height: 1.933333rem;
