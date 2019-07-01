@@ -1,15 +1,20 @@
 package com.ziwow.scrmapp.wechat.schedule;
 
+import com.ziwow.scrmapp.wechat.constants.WeChatConstants;
 import com.ziwow.scrmapp.wechat.persistence.entity.WechatFans;
 import com.ziwow.scrmapp.wechat.service.WechatFansService;
 import com.ziwow.scrmapp.wechat.service.WechatTemplateService;
 import com.ziwow.scrmapp.wechat.service.WechatUserService;
+
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
 import com.ziwow.scrmapp.common.constants.Constant;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +32,12 @@ import com.ziwow.scrmapp.common.utils.OrderUtils;
 @Component
 public class TemplateMsgScheduledTask {
     private final Logger logger = LoggerFactory.getLogger(TemplateMsgScheduledTask.class);
+    @Value("${wechat.appid}")
+    private String appId;
+    @Value("${open.weixin.component_appid}")
+    private String component_appid;
+    @Value("${register.url}")
+    private String registerUrl;
     private WechatTemplateService wechatTemplateService;
     private WechatFansService wechatFansService;
     @Autowired
@@ -110,6 +121,41 @@ public class TemplateMsgScheduledTask {
         }
         long end = System.currentTimeMillis();
         logger.info("模板消息提醒定时任务结束，共耗时：[" + (end - begin) / 1000 + "]秒");
+    }
+
+    @Scheduled(cron = "0 0 10 * * ?")
+    public void notifyForFansToRegister() {
+        long begin = System.currentTimeMillis();
+        Integer totalCount = wechatFansService.loadWechatFansAndNotRegisterCount();
+        logger.info("粉丝注册提醒通知模板开始......count:{}",totalCount);
+        int number = (totalCount / 100) + 1;
+        for (int i = 0; i < number; i++) {
+            List<WechatFans> fans = wechatFansService.loadWechatFansAndNotRegisterByPage(i * 100, 100);
+            for (WechatFans fan : fans) {
+                try{
+                    String[] params = {fan.getWfNickName(),"期待您的加入"};
+                    wechatTemplateService.sendTemplate(fan.getOpenId(),getRegisterPageOauthUrl(),Arrays.asList(params),"fansAdviceTemplate",false);
+                    logger.info("发送通知成功,user:{},{}",fan.getOpenId(),fan.getWfNickName());
+                } catch (Exception e) {
+                    logger.error("发送活动通知失败", e);
+                }
+            }
+        }
+        long end = System.currentTimeMillis();
+        logger.info("提醒未注册粉丝注册模板消息提醒定时任务结束，共耗时：[" + (end - begin) / 1000 + "]秒");
+    }
+
+    private String getRegisterPageOauthUrl() {
+        String url = StringUtils.replace(WeChatConstants.SNSAPI_BASE_COMPONENT, "${APPID}", appId);
+        url = StringUtils.replace(url, "${STATE}", appId);
+        url = StringUtils.replace(url, "{COMPONENT_APPID}", component_appid);
+        try {
+            String encode = URLEncoder.encode(registerUrl, "UTF-8");
+            url = StringUtils.replace(url, "${REDIRECT_URI}", encode);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        return url;
     }
 
 
