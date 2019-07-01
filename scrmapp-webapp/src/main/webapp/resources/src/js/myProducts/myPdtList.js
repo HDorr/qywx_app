@@ -134,7 +134,7 @@ function renderFunc(data) {
                 v.filterRemindName = "关闭滤芯更换提醒"
             }
 
-            if (!$.isEmptyObject(v.guarantee)) {
+            if (!$.isEmptyObject(v.guarantee) && !$.isEmptyObject(v.productBarCode)) {
                 str='                    <div class="btnBox pull-right">' +
                     '                        <button class="ew_btn" onclick="gotoMiniDetail('+v.productBarCode+')"> ' +
                     '                           <div class="ewPdt_one" style="background-image: url(\'' + ewIcon + '\');"></div> ' +
