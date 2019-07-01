@@ -3,6 +3,7 @@
 <mapper namespace="com.ziwow.scrmapp.wechat.persistence.mapper.EwCardMapper">
 
 
+
 	<resultMap id="ewCardMap" type="com.ziwow.scrmapp.wechat.persistence.entity.EwCard">
 		<id column="id" property="id"></id>
 		<result column="fans_id" property="fansId"></result>
@@ -52,6 +53,7 @@
 	<select id="selectEwCardByBarCodeAndFansId" resultMap="ewCardMap">
 		select ec.*,eci.id eid,eci.item_name,eci.item_code from t_ew_card ec left join t_ew_card_items eci on eci.ew_card_id=ec.id where ec.fans_id=#{fansId} and ec.product_bar_code_twenty=#{barCode} and ec.use_status=1 order by ec.repair_term desc limit 1
 	</select>
+
 
 	<select id="selectEwCardIdByCodeAndFansId" resultType="Long">
 		select ec.id from t_ew_card ec inner join t_ew_card_items eci on eci.ew_card_id=ec.id and eci.item_code=#{productCode} where ec.fans_id=#{fansId}
