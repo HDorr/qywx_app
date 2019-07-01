@@ -554,8 +554,10 @@ public class WeChatMessageProcessingHandler {
             //根据openid查询手机号
             WechatUser wechatUser = wechatUserService
                 .getUserByOpenId(inMessage.getFromUserName());
-            register.setPhone(wechatUser.getMobilePhone());
-            wechatRegisterService.savePullNewRegisterByEngineer(register);
+            if(null!=wechatUser){
+                register.setPhone(wechatUser.getMobilePhone());
+                wechatRegisterService.savePullNewRegisterByEngineer(register);
+            }
             return  false;
         }else {
 
