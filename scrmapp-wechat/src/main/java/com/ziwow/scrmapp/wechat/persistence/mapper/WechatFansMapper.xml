@@ -1,123 +1,128 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.ziwow.scrmapp.wechat.persistence.mapper.WechatFansMapper">
-	<resultMap
-		type="com.ziwow.scrmapp.wechat.persistence.entity.WechatFans" id="wechatFansMap">
-		<result column="id" property="id" />
-		<result column="openid" property="openId" />
-		<result column="wf_nickname" property="wfNickName" />
-		<result column="create_time" property="createTime" />
-		<result column="wf_token" property="wfToken" />
-		<result column="source" property="source" />
-		<result column="is_cancel" property="isCancel" />
-		<result column="gender" property="gender" />
-		<result column="headimgurl" property="headImgUrl" />
-		<result column="province" property="province" />
-		<result column="country" property="country" />
-		<result column="city" property="city" />
-		<result column="isMember" property="isMember" />
-		<result column="unionid" property="unionId" />
-	</resultMap>
+  <resultMap
+    type="com.ziwow.scrmapp.wechat.persistence.entity.WechatFans" id="wechatFansMap">
+    <result column="id" property="id"/>
+    <result column="openid" property="openId"/>
+    <result column="wf_nickname" property="wfNickName"/>
+    <result column="create_time" property="createTime"/>
+    <result column="wf_token" property="wfToken"/>
+    <result column="source" property="source"/>
+    <result column="is_cancel" property="isCancel"/>
+    <result column="gender" property="gender"/>
+    <result column="headimgurl" property="headImgUrl"/>
+    <result column="province" property="province"/>
+    <result column="country" property="country"/>
+    <result column="city" property="city"/>
+    <result column="isMember" property="isMember"/>
+    <result column="unionid" property="unionId"/>
+  </resultMap>
 
 
-	<select id="saveWechatFans" parameterType="com.ziwow.scrmapp.wechat.persistence.entity.WechatFans">
+  <select id="saveWechatFans"
+    parameterType="com.ziwow.scrmapp.wechat.persistence.entity.WechatFans">
 		insert into t_wechat_fans (openid,wf_nickname,wf_token,create_time,gender,headimgurl,province,country,city,unionid,channel_id)
 		values (#{openId},#{wfNickName},#{wfToken},NOW(),#{gender},#{headImgUrl},#{province},#{country},#{city},#{unionId},#{channelId}) on
 		duplicate key update is_cancel = 0, create_time = now();
 	</select>
 
-	<insert id="syncUserFansAndGetId" useGeneratedKeys="true" keyProperty="id" parameterType="com.ziwow.scrmapp.wechat.persistence.entity.WechatFans">
+  <insert id="syncUserFansAndGetId" useGeneratedKeys="true" keyProperty="id"
+    parameterType="com.ziwow.scrmapp.wechat.persistence.entity.WechatFans">
 		insert into t_wechat_fans (openid,create_time,isMember,unionid) values (#{unionId},NOW(),#{isMember},#{unionId});
 	</insert>
 
-	<update id="updateWechatFans" parameterType="com.ziwow.scrmapp.wechat.persistence.entity.WechatFans">
-		update t_wechat_fans
-		<set>
-			<if test = "gender != null">
-				gender = #{gender},
-			</if>
-			<if test = "headImgUrl != null">
-				headimgurl = #{headImgUrl},
-			</if>
-			<if test="isCancel != null">
-				is_cancel = #{isCancel},
-			</if>
-			<if test="province != null">
-				province = #{province},
-			</if>
-			<if test="country != null">
-				country = #{country},
-			</if>
-			<if test="city != null">
-				city = #{city},
-			</if>
-			<if test="isMember != null">
-				isMember = #{isMember},
-			</if>
-			<if test="wfNickName != null">
-				wf_nickname = #{wfNickName},
-			</if>
-			<if test="unionId != null">
-				unionid = #{unionId}
-			</if>
-		</set>
-		where openid = #{openId}
-	</update>
+  <update id="updateWechatFans"
+    parameterType="com.ziwow.scrmapp.wechat.persistence.entity.WechatFans">
+    update t_wechat_fans
+    <set>
+      <if test="gender != null">
+        gender = #{gender},
+      </if>
+      <if test="headImgUrl != null">
+        headimgurl = #{headImgUrl},
+      </if>
+      <if test="isCancel != null">
+        is_cancel = #{isCancel},
+      </if>
+      <if test="province != null">
+        province = #{province},
+      </if>
+      <if test="country != null">
+        country = #{country},
+      </if>
+      <if test="city != null">
+        city = #{city},
+      </if>
+      <if test="isMember != null">
+        isMember = #{isMember},
+      </if>
+      <if test="wfNickName != null">
+        wf_nickname = #{wfNickName},
+      </if>
+      <if test="unionId != null">
+        unionid = #{unionId}
+      </if>
+    </set>
+    where openid = #{openId}
+  </update>
 
-	<update id="updWechatFansById" parameterType="com.ziwow.scrmapp.wechat.persistence.entity.WechatFans">
-		update t_wechat_fans
-		<set>
-			<if test = "openId != null">
-				openid = #{openId},
-			</if>
-			<if test = "gender != null">
-				gender = #{gender},
-			</if>
-			<if test = "headImgUrl != null">
-				headimgurl = #{headImgUrl},
-			</if>
-			<if test="isCancel != null">
-				is_cancel = #{isCancel},
-			</if>
-			<if test="province != null">
-				province = #{province},
-			</if>
-			<if test="country != null">
-				country = #{country},
-			</if>
-			<if test="city != null">
-				city = #{city},
-			</if>
-			<if test="isMember != null">
-				isMember = #{isMember},
-			</if>
-			<if test="wfNickName != null">
-				wf_nickname = #{wfNickName},
-			</if>
-			<if test="unionId != null">
-				unionid = #{unionId}
-			</if>
-		</set>
-		where id = #{id}
-	</update>
-	
-	<select id="getWechatFans" resultMap="wechatFansMap">
+  <update id="updWechatFansById"
+    parameterType="com.ziwow.scrmapp.wechat.persistence.entity.WechatFans">
+    update t_wechat_fans
+    <set>
+      <if test="openId != null">
+        openid = #{openId},
+      </if>
+      <if test="gender != null">
+        gender = #{gender},
+      </if>
+      <if test="headImgUrl != null">
+        headimgurl = #{headImgUrl},
+      </if>
+      <if test="isCancel != null">
+        is_cancel = #{isCancel},
+      </if>
+      <if test="province != null">
+        province = #{province},
+      </if>
+      <if test="country != null">
+        country = #{country},
+      </if>
+      <if test="city != null">
+        city = #{city},
+      </if>
+      <if test="isMember != null">
+        isMember = #{isMember},
+      </if>
+      <if test="wfNickName != null">
+        wf_nickname = #{wfNickName},
+      </if>
+      <if test="unionId != null">
+        unionid = #{unionId}
+      </if>
+    </set>
+    where id = #{id}
+  </update>
+
+  <select id="getWechatFans" resultMap="wechatFansMap">
 		select * From t_wechat_fans where openid = #{openId} and is_cancel=0
 	</select>
 
-	<select id="getWechatFansByOpenId" resultMap="wechatFansMap">
+  <select id="getWechatFansByOpenId" resultMap="wechatFansMap">
 		select * From t_wechat_fans where openid = #{openId} limit 0,1
 	</select>
 
-	<select id="getFans" resultMap="wechatFansMap">
+  <select id="getFans" resultMap="wechatFansMap">
 		select * From t_wechat_fans where unionid = #{unionId} limit 0,1
 	</select>
 
-	<select id="getWechatFansById" resultMap="wechatFansMap">
+  <select id="getWechatFansById" resultMap="wechatFansMap">
 		select * From t_wechat_fans where id = #{pkId} and is_cancel=0
 	</select>
-	
-	<select id="getWechatFansByUserId" resultMap="wechatFansMap">
+
+  <select id="getWechatFansByUserId" resultMap="wechatFansMap">
 		SELECT
 			fans.*
 		FROM
@@ -129,13 +134,21 @@
 		  and fans.is_cancel = 0
 	</select>
 
-	<select id="countWechatFans" resultType="java.lang.Integer">
+  <select id="countWechatFans" resultType="java.lang.Integer">
 		select count(*) From t_wechat_fans where  is_cancel=0
 	</select>
 
-	<select id="getWechatFansByPage" resultMap="wechatFansMap">
+  <select id="getWechatFansByPage" resultMap="wechatFansMap">
 		select * From t_wechat_fans where  is_cancel=0 limit #{page},#{size}
 	</select>
 
+  <select id="getWechatFansAndNotRegisterByPage" resultMap="wechatFansMap">
+		SELECT  wf.*  FROM t_wechat_fans AS wf LEFT JOIN t_wechat_user AS wu ON wf.id=wu.wfId
+    WHERE  wu.wfId   is NULL   AND  wf.is_cancel =0 limit #{offset},#{size}
+	</select>
 
+  <select id="getWechatFansAndNotRegisterCount" resultType="java.lang.Integer">
+    SELECT  COUNT(*) FROM t_wechat_fans AS wf LEFT JOIN t_wechat_user AS wu ON wf.id=wu.wfId
+    WHERE  wu.wfId   is NULL   AND  wf.is_cancel =0
+  </select>
 </mapper>

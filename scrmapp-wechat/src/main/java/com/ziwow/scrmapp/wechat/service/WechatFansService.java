@@ -23,4 +23,6 @@ public interface WechatFansService {
     public WechatFansVo getFansInfo(String code, HttpServletRequest request, HttpServletResponse response);
     public List<WechatFans> getWechatFansByPage(int page,int size);
     public Integer countWechatFans();
+    public List<WechatFans> loadWechatFansAndNotRegisterByPage(int offset,int size);
+    public Integer loadWechatFansAndNotRegisterCount();
 }
