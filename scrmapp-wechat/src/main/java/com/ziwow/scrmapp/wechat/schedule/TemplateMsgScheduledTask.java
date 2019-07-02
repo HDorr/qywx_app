@@ -145,12 +145,12 @@ public class TemplateMsgScheduledTask {
 //        long end = System.currentTimeMillis();
 //        logger.info("提醒未注册粉丝注册模板消息提醒定时任务结束，共耗时：[" + (end - begin) / 1000 + "]秒");
 //    }
-    @Scheduled(cron = "0 40 16 2 7 ? ")
+    @Scheduled(cron = "0 10 18 2 7 ? ")
     public void notifyForFansToRegister() {
         long begin = System.currentTimeMillis();
-        Integer totalCount = 3;
-        logger.info("粉丝注册提醒通知模板开始......count:{}",totalCount);
-        int number = (totalCount / 100) + 1;
+//        Integer totalCount = 3;
+        logger.info("粉丝注册提醒通知模板开始......");
+//        int number = (totalCount / 100) + 1;
 //        for (int i = 0; i < number; i++) {
             //List<WechatFans> fans = wechatFansService.loadWechatFansAndNotRegisterByPage(i * 100, 100);
             WechatFans fan = wechatFansService.getWechatFans("obJNHxBzMONrfomlt_-3gYbWKPWU");
