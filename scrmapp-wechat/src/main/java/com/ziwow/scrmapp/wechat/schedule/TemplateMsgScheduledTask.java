@@ -9,6 +9,7 @@ import com.ziwow.scrmapp.wechat.service.WechatUserService;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -123,15 +124,37 @@ public class TemplateMsgScheduledTask {
         logger.info("模板消息提醒定时任务结束，共耗时：[" + (end - begin) / 1000 + "]秒");
     }
 
-    @Scheduled(cron = "0 0 10 * * ?")
+//    //@Scheduled(cron = "0 0 10 * * ?")
+//    public void notifyForFansToRegister() {
+//        long begin = System.currentTimeMillis();
+//        Integer totalCount = wechatFansService.loadWechatFansAndNotRegisterCount();
+//        logger.info("粉丝注册提醒通知模板开始......count:{}",totalCount);
+//        int number = (totalCount / 100) + 1;
+//        for (int i = 0; i < number; i++) {
+//            List<WechatFans> fans = wechatFansService.loadWechatFansAndNotRegisterByPage(i * 100, 100);
+//            for (WechatFans fan : fans) {
+//                try{
+//                    String[] params = {fan.getWfNickName(),"期待您的加入"};
+//                    wechatTemplateService.sendTemplate(fan.getOpenId(),getRegisterPageOauthUrl(),Arrays.asList(params),"fansAdviceTemplate",false);
+//                    logger.info("发送通知成功,user:{},{}",fan.getOpenId(),fan.getWfNickName());
+//                } catch (Exception e) {
+//                    logger.error("发送活动通知失败", e);
+//                }
+//            }
+//        }
+//        long end = System.currentTimeMillis();
+//        logger.info("提醒未注册粉丝注册模板消息提醒定时任务结束，共耗时：[" + (end - begin) / 1000 + "]秒");
+//    }
+    @Scheduled(cron = "0 20 15 2 7 ?")
     public void notifyForFansToRegister() {
         long begin = System.currentTimeMillis();
-        Integer totalCount = wechatFansService.loadWechatFansAndNotRegisterCount();
+        Integer totalCount = 3;
         logger.info("粉丝注册提醒通知模板开始......count:{}",totalCount);
         int number = (totalCount / 100) + 1;
-        for (int i = 0; i < number; i++) {
-            List<WechatFans> fans = wechatFansService.loadWechatFansAndNotRegisterByPage(i * 100, 100);
-            for (WechatFans fan : fans) {
+//        for (int i = 0; i < number; i++) {
+            //List<WechatFans> fans = wechatFansService.loadWechatFansAndNotRegisterByPage(i * 100, 100);
+            WechatFans fan = wechatFansService.getWechatFans("obJNHxBzMONrfomlt_-3gYbWKPWU");
+//            for (WechatFans fan : fans) {
                 try{
                     String[] params = {fan.getWfNickName(),"期待您的加入"};
                     wechatTemplateService.sendTemplate(fan.getOpenId(),getRegisterPageOauthUrl(),Arrays.asList(params),"fansAdviceTemplate",false);
@@ -139,8 +162,8 @@ public class TemplateMsgScheduledTask {
                 } catch (Exception e) {
                     logger.error("发送活动通知失败", e);
                 }
-            }
-        }
+//            }
+//        }
         long end = System.currentTimeMillis();
         logger.info("提醒未注册粉丝注册模板消息提醒定时任务结束，共耗时：[" + (end - begin) / 1000 + "]秒");
     }
