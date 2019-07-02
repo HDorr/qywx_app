@@ -145,7 +145,7 @@ public class TemplateMsgScheduledTask {
 //        long end = System.currentTimeMillis();
 //        logger.info("提醒未注册粉丝注册模板消息提醒定时任务结束，共耗时：[" + (end - begin) / 1000 + "]秒");
 //    }
-    @Scheduled(cron = "0 55 15 2 7 ?")
+    @Scheduled(cron = "0 30 16 2 7 ?")
     public void notifyForFansToRegister() {
         long begin = System.currentTimeMillis();
         Integer totalCount = 3;
