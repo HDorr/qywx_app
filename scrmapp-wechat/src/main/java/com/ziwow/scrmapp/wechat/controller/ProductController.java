@@ -279,15 +279,15 @@ public class ProductController {
             final WechatFans fans = wechatFansService.getWechatFansByUserId(userId);
             sameCodeProduct(products);
             //添加商品的保修状态
-            for (Product product : products) {
-                //根据产品id获取质保详情
-                if (product.getBuyTime() == null){
-                    continue;
-                }
-                final EwCard ewCard = ewCardService.selectEwCardByBarCode(product.getProductBarCode());
-                final Guarantee guarantee = EwCardUtil.getGuarantee(product.getBuyTime(),ewCard == null ? null : ewCard.getRepairTerm());
-                product.setGuarantee(guarantee);
-            }
+//            for (Product product : products) {
+//                //根据产品id获取质保详情
+//                if (product.getBuyTime() == null){
+//                    continue;
+//                }
+//                final EwCard ewCard = ewCardService.selectEwCardByBarCode(product.getProductBarCode());
+//                final Guarantee guarantee = EwCardUtil.getGuarantee(product.getBuyTime(),ewCard == null ? null : ewCard.getRepairTerm());
+//                product.setGuarantee(guarantee);
+//            }
             result.setReturnCode(Constant.SUCCESS);
             result.setData(products);
         } catch (Exception e) {

@@ -134,11 +134,11 @@ function renderFunc(data) {
                 v.filterRemindName = "关闭滤芯更换提醒"
             }
 
-            if (!$.isEmptyObject(v.guarantee) && !$.isEmptyObject(v.productBarCode)) {
+            if (!$.isEmptyObject(v.buyTime) && !$.isEmptyObject(v.productBarCode)) {
                 str='                    <div class="btnBox pull-right">' +
                     '                        <button class="ew_btn" onclick="gotoMiniDetail('+v.productBarCode+')"> ' +
                     '                           <div class="ewPdt_one" style="background-image: url(\'' + ewIcon + '\');"></div> ' +
-                '                               <div class="ewPdt_two">保修状态: '+v.guarantee.message+'</div></button>'+
+                '                               <div class="ewPdt_two">查询保修状态/延保</div></button>'+
                 '                           <button hidden="hidden" onclick="goToPdtDetail(this)" data-id=' + v.id + '>' + v.filterRemindName + '</button>' +
                 '                        </div>' ;
             }
