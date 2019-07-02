@@ -527,7 +527,7 @@
     </select>
 
     <select id="countProductByUserIdAndproductBarCode" resultType="java.lang.Integer">
-        select count(*) from t_product where userId = #{userId} and productBarCode = #{productBarCode} and status = 1 limit 1
+        select count(*) from t_product where userId = #{userId} and productBarCode = #{productBarCode} and productBarCode is not null and status = 1 limit 1
     </select>
 
     <update id="updateSmallcNameByOrderCode">
