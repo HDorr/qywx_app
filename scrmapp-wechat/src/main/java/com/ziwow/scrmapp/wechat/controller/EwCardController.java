@@ -211,7 +211,7 @@ public class EwCardController {
         }
 
 
-        CSMEwCardParam CSMEwCardParam = getCsmEwCardParam(ewCardParam, wechatUser, productItem,product.getId());
+        CSMEwCardParam CSMEwCardParam = getCsmEwCardParam(ewCardParam, wechatUser, productItem,product.getId(),product.getBuyTime());
 
         //csm注册延保卡
         final BaseCardVo baseCardVo = thirdPartyService.registerEwCard(CSMEwCardParam);
@@ -401,14 +401,14 @@ public class EwCardController {
      * @param productItem
      * @return
      */
-    private CSMEwCardParam getCsmEwCardParam(@RequestBody EwCardParam ewCardParam, WechatUser wechatUser, ProductItem productItem,Long productId) {
+    private CSMEwCardParam getCsmEwCardParam(@RequestBody EwCardParam ewCardParam, WechatUser wechatUser, ProductItem productItem,Long productId,Date buyTime) {
         CSMEwCardParam CSMEwCardParam = new CSMEwCardParam();
         CSMEwCardParam.setCardNo(ewCardParam.getCardNo());
         //拼装产品所需信息
         CSMEwCardParam.setBarcode(productItem.getBarcode());
         CSMEwCardParam.setItemCode(productItem.getItemCode() == null ? "" : productItem.getItemCode());
         CSMEwCardParam.setSpec(productItem.getSpec() == null ? "" : productItem.getSpec());
-        CSMEwCardParam.setPurchDate(productItem.getPurchDate() == null ? "" : productItem.getPurchDate());
+        CSMEwCardParam.setPurchDate(buyTime == null ? "" : productItem.getPurchDate());
         //获取安装时间
         CSMEwCardParam.setInstallTime("");
         final List<WechatOrdersVo> wechatOrdersVos = wechatOrdersService.getWechatOrdersByProductId(productId);
