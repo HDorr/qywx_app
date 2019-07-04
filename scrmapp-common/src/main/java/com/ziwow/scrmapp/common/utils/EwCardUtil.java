@@ -168,6 +168,12 @@ public class EwCardUtil {
         }
     }
 
+    public static Date getStartTime(Date repairTerm, int validTime) {
+        instance.setTime(repairTerm);
+        instance.add(Calendar.YEAR,-(validTime/Dates.YEAR.getDay()));
+        return instance.getTime();
+    }
+
     enum Dates{
         /** 年卡 */
         YEAR(365),

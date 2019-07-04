@@ -46,6 +46,16 @@ public class EwCardDetails {
 
 
     /**
+     * 卡号
+     */
+    private String cardNo;
+
+    /**
+     * 延保起始日期
+     */
+    private Date startTime;
+
+    /**
      * 购买时间
      */
     private Date buyTime;
@@ -132,5 +142,21 @@ public class EwCardDetails {
 
     public void setServiceRecords(List<ServiceRecord> serviceRecords) {
         this.serviceRecords = serviceRecords;
+    }
+
+    public String getCardNo() {
+        return cardNo;
+    }
+
+    public void setCardNo(String cardNo) {
+        this.cardNo = cardNo;
+    }
+
+    public Date getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(Date startTime) {
+        this.startTime = startTime;
     }
 }

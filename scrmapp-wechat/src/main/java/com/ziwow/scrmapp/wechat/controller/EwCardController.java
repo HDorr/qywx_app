@@ -247,7 +247,6 @@ public class EwCardController {
                                      @RequestParam("unionId") String unionId){
         Result result = new BaseResult();
         final WechatUser wechatUser = wechatUserService.getUserByUnionid(unionId);
-        final WechatFans fans = wechatFansService.getWechatFansByUserId(wechatUser.getUserId());
         final EwCard ewCard = ewCardService.selectEwCardByBarCode(barCode);
         Product product = productService.getProductsByBarCodeAndUserId(wechatUser.getUserId(),barCode);
         EwCardDetails ewCardDetails = new EwCardDetails();
@@ -260,6 +259,8 @@ public class EwCardController {
             ewCardDetails.setRepairTerm(EwCardUtil.getEndNormalRepairTerm(product.getBuyTime()));
         }else {
             ewCardDetails.setRepairTerm(ewCard.getRepairTerm());
+            ewCardDetails.setCardNo(ewCard.getCardNo());
+            ewCardDetails.setStartTime(EwCardUtil.getStartTime(ewCard.getRepairTerm(),ewCard.getValidTime()));
         }
 
         // 商品相关信息
