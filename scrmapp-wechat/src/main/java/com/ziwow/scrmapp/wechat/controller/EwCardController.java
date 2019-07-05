@@ -91,7 +91,7 @@ public class EwCardController {
         }
 
         ewCardVo = thirdPartyService.getEwCardListByNo(cardNo);
-        if (ErrorCodeConstants.CODE_E092.equals(ewCardVo.getStatus().getCode()) || "已注册".equals(ewCardVo.getItems().getCardStat())) {
+        if (ErrorCodeConstants.CODE_E094.equals(ewCardVo.getStatus().getCode()) || ErrorCodeConstants.CODE_E092.equals(ewCardVo.getStatus().getCode()) || "已注册".equals(ewCardVo.getItems().getCardStat())) {
             logger.error("csm调用延保卡失败");
             result.setReturnMsg("查询延保卡失败，请检查卡号或稍后再试！");
             result.setData("no");
@@ -262,6 +262,8 @@ public class EwCardController {
             ewCardDetails.setCardNo(ewCard.getCardNo());
             ewCardDetails.setStartTime(EwCardUtil.getStartTime(ewCard.getRepairTerm(),ewCard.getValidTime()));
         }
+
+        ewCardDetails.setNormalDate(EwCardUtil.getEndNormalRepairTerm(product.getBuyTime()));
 
         // 商品相关信息
         ewCardDetails.setProductImg(product.getProductImage());

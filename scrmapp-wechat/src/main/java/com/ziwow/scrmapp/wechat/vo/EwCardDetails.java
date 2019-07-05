@@ -70,6 +70,11 @@ public class EwCardDetails {
      */
     private String productCode;
 
+    /**
+     * 正常保修截止日期
+     */
+    private Date normalDate;
+
 
     public String getProductCode() {
         return productCode;
@@ -158,5 +163,13 @@ public class EwCardDetails {
 
     public void setStartTime(Date startTime) {
         this.startTime = startTime;
+    }
+
+    public Date getNormalDate() {
+        return normalDate;
+    }
+
+    public void setNormalDate(Date normalDate) {
+        this.normalDate = normalDate;
     }
 }
