@@ -1,5 +1,6 @@
 package com.ziwow.scrmapp.common.bean.pojo;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.ziwow.scrmapp.common.enums.CardEnum;
 
@@ -50,6 +51,7 @@ public class CSMEwCardParam {
      * 购买时间
      */
     @JsonProperty("purch_date")
+    @JsonFormat(pattern = "yyyy-M-d")
     private Date purchDate;
 
     /**
