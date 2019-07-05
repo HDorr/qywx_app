@@ -208,23 +208,4 @@ public class CSMEwCardParam {
         this.tel = tel;
     }
 
-    @Override
-    public String toString() {
-        return "CSMEwCardParam{" +
-                "cardNo='" + cardNo + '\'' +
-                ", cardType=" + cardType +
-                ", enduserName='" + enduserName + '\'' +
-                ", item_code='" + itemCode + '\'' +
-                ", spec='" + spec + '\'' +
-                ", barcode='" + barcode + '\'' +
-                ", purchDate='" + purchDate + '\'' +
-                ", installTime='" + installTime + '\'' +
-                ", provinceName='" + provinceName + '\'' +
-                ", cityName='" + cityName + '\'' +
-                ", countyName='" + countyName + '\'' +
-                ", enduserAddress='" + enduserAddress + '\'' +
-                ", mobile='" + mobile + '\'' +
-                ", tel='" + tel + '\'' +
-                '}';
-    }
 }

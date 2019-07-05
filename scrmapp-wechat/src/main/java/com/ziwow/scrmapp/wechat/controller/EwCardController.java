@@ -180,9 +180,9 @@ public class EwCardController {
 
         //该类型用户的产品
         final Product product = productService.getProductsByBarCodeAndUserId(wechatUser.getUserId(),ewCardParam.getBarCode());
-        if(product == null){
+        if(product == null && product.getBuyTime() == null && product.getProductBarCode() == null){
             result.setReturnCode(Constant.FAIL);
-            result.setReturnMsg("产品信息不存在!");
+            result.setReturnMsg("产品信息错误!");
             return result;
         }
 
