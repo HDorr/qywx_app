@@ -1,7 +1,9 @@
 package com.ziwow.scrmapp.wechat.vo;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.ziwow.scrmapp.common.enums.Guarantee;
 import com.ziwow.scrmapp.wechat.persistence.entity.EwCard;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
 import java.util.List;
@@ -73,6 +75,7 @@ public class EwCardDetails {
     /**
      * 正常保修截止日期
      */
+    @JsonFormat(pattern = "yyyy/m/d",timezone="GMT+8")
     private Date normal;
 
 
