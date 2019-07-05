@@ -256,14 +256,14 @@ public class EwCardController {
         ewCardDetails.setGuarantee(guarantee);
         //没有使用延保卡的情况
         if (ewCard == null){
-            ewCardDetails.setRepairTerm(EwCardUtil.getEndNormalRepairTerm(product.getBuyTime()));
+            ewCardDetails.setRairTerm(EwCardUtil.getEndNormalRepairTerm(product.getBuyTime()));
         }else {
-            ewCardDetails.setRepairTerm(ewCard.getRepairTerm());
+            ewCardDetails.setRairTerm(ewCard.getRepairTerm());
             ewCardDetails.setCardNo(ewCard.getCardNo());
             ewCardDetails.setStartTime(EwCardUtil.getStartTime(ewCard.getRepairTerm(),ewCard.getValidTime()));
         }
 
-        ewCardDetails.setNormalDate(EwCardUtil.getEndNormalRepairTerm(product.getBuyTime()));
+        ewCardDetails.setNormal(EwCardUtil.getEndNormalRepairTerm(product.getBuyTime()));
 
         // 商品相关信息
         ewCardDetails.setProductImg(product.getProductImage());

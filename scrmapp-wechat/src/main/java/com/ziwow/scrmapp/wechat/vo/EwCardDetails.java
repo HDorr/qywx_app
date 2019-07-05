@@ -42,7 +42,7 @@ public class EwCardDetails {
     /**
      * 保修服务截止时间
      */
-    private Date repairTerm;
+    private Date rairTerm;
 
 
     /**
@@ -73,7 +73,7 @@ public class EwCardDetails {
     /**
      * 正常保修截止日期
      */
-    private Date normalDate;
+    private Date normal;
 
 
     public String getProductCode() {
@@ -116,13 +116,6 @@ public class EwCardDetails {
         this.guarantee = guarantee;
     }
 
-    public Date getRepairTerm() {
-        return repairTerm;
-    }
-
-    public void setRepairTerm(Date repairTerm) {
-        this.repairTerm = repairTerm;
-    }
 
     public String getProductImg() {
         return productImg;
@@ -165,11 +158,19 @@ public class EwCardDetails {
         this.startTime = startTime;
     }
 
-    public Date getNormalDate() {
-        return normalDate;
+    public Date getRairTerm() {
+        return rairTerm;
     }
 
-    public void setNormalDate(Date normalDate) {
-        this.normalDate = normalDate;
+    public void setRairTerm(Date rairTerm) {
+        this.rairTerm = rairTerm;
+    }
+
+    public Date getNormal() {
+        return normal;
+    }
+
+    public void setNormal(Date normal) {
+        this.normal = normal;
     }
 }
