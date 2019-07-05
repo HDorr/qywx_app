@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.ziwow.scrmapp.common.enums.CardEnum;
 
 import javax.xml.crypto.Data;
+import java.util.Date;
 
 /**
  * 注册延保卡 请求CSM参数
@@ -49,7 +50,7 @@ public class CSMEwCardParam {
      * 购买时间
      */
     @JsonProperty("purch_date")
-    private String purchDate;
+    private Date purchDate;
 
     /**
      * 安装时间
@@ -135,11 +136,11 @@ public class CSMEwCardParam {
         this.barcode = barcode;
     }
 
-    public String getPurchDate() {
+    public Date getPurchDate() {
         return purchDate;
     }
 
-    public void setPurchDate(String purchDate) {
+    public void setPurchDate(Date purchDate) {
         this.purchDate = purchDate;
     }
 

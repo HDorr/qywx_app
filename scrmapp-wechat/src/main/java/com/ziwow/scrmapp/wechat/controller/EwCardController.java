@@ -411,7 +411,7 @@ public class EwCardController {
         CSMEwCardParam.setBarcode(productItem.getBarcode());
         CSMEwCardParam.setItemCode(productItem.getItemCode() == null ? "" : productItem.getItemCode());
         CSMEwCardParam.setSpec(productItem.getSpec() == null ? "" : productItem.getSpec());
-        CSMEwCardParam.setPurchDate(buyTime == null ? "" : productItem.getPurchDate());
+        CSMEwCardParam.setPurchDate(buyTime);
         //获取安装时间
         CSMEwCardParam.setInstallTime("");
         final List<WechatOrdersVo> wechatOrdersVos = wechatOrdersService.getWechatOrdersByProductId(productId);
