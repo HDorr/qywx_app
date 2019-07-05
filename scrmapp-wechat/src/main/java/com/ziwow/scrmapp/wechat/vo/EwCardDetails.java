@@ -75,7 +75,7 @@ public class EwCardDetails {
     /**
      * 正常保修截止日期
      */
-    @JsonFormat(pattern = "yyyy/m/d",timezone="GMT+8")
+    @JsonFormat(pattern = "yyyy/M/d",timezone="GMT+8")
     private Date normal;
 
 
