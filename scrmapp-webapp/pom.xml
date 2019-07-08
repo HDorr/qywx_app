@@ -170,7 +170,12 @@
                  <configuration>
                      <serverId>docker-harbor</serverId>
                      <registryUrl>47.96.110.23:8081</registryUrl>
-                     <imageName>47.96.110.23:8081/one_client/test:1.0</imageName>
+
+                     <imageName>47.96.110.23:8081/scrm/app</imageName>
+                     <imageTags>
+                         <imageTag>latest</imageTag>
+                     </imageTags>
+                     <pushImage>true</pushImage>
                      <dockerDirectory>./docker</dockerDirectory>
                      <resources>
                          <resource>
