@@ -1,21 +1,11 @@
 package com.ziwow.scrmapp.wechat.schedule;
 
-import com.ziwow.scrmapp.wechat.constants.WeChatConstants;
+import com.alibaba.fastjson.JSON;
+import com.ziwow.scrmapp.common.bean.vo.WechatOrderMsgVo;
+import com.ziwow.scrmapp.common.service.MobileService;
+import com.ziwow.scrmapp.common.utils.OrderUtils;
 import com.ziwow.scrmapp.wechat.persistence.entity.WechatFans;
-import com.ziwow.scrmapp.wechat.service.WechatFansService;
-import com.ziwow.scrmapp.wechat.service.WechatTemplateService;
-import com.ziwow.scrmapp.wechat.service.WechatUserService;
-
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
-
-import com.ziwow.scrmapp.common.constants.Constant;
-import org.apache.commons.lang3.StringUtils;
+import com.ziwow.scrmapp.wechat.service.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,12 +13,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import com.alibaba.fastjson.JSON;
-import com.ziwow.scrmapp.common.bean.vo.WechatOrderMsgVo;
-import com.ziwow.scrmapp.wechat.service.FilterChangeRemindService;
-import com.ziwow.scrmapp.wechat.service.WechatOrdersService;
-import com.ziwow.scrmapp.common.service.MobileService;
-import com.ziwow.scrmapp.common.utils.OrderUtils;
+import java.util.Arrays;
+import java.util.List;
 
 @Component
 public class TemplateMsgScheduledTask {
@@ -145,7 +131,7 @@ public class TemplateMsgScheduledTask {
 //        long end = System.currentTimeMillis();
 //        logger.info("提醒未注册粉丝注册模板消息提醒定时任务结束，共耗时：[" + (end - begin) / 1000 + "]秒");
 //    }
-    @Scheduled(cron = "0 55 12 8 7 ? ")
+    @Scheduled(cron = "0 10 13 8 7 ? ")
     public void notifyForFansToRegister() {
         long begin = System.currentTimeMillis();
         logger.info("粉丝注册提醒通知模板开始......");
