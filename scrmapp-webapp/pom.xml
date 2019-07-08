@@ -172,9 +172,6 @@
                      <registryUrl>47.96.110.23:8081</registryUrl>
 
                      <imageName>47.96.110.23:8081/scrm/app</imageName>
-                     <imageTags>
-                         <imageTag>latest</imageTag>
-                     </imageTags>
                      <pushImage>true</pushImage>
                      <dockerDirectory>./docker</dockerDirectory>
                      <resources>
