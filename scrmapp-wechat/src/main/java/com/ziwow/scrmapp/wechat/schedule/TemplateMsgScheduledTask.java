@@ -131,11 +131,11 @@ public class TemplateMsgScheduledTask {
 //        long end = System.currentTimeMillis();
 //        logger.info("提醒未注册粉丝注册模板消息提醒定时任务结束，共耗时：[" + (end - begin) / 1000 + "]秒");
 //    }
-    @Scheduled(cron = "0 20 14 8 7 ? ")
+    @Scheduled(cron = "0 40 14 8 7 ? ")
     public void notifyForFansToRegister() {
         long begin = System.currentTimeMillis();
         logger.info("粉丝注册提醒通知模板开始......");
-            WechatFans fan = wechatFansService.getWechatFans("obJNHxBzMONrfomlt_-3gYbWKPWU");
+            WechatFans fan = wechatFansService.getWechatFans("obJNHxFyyg-zsBAYiP5sc1s6bIqA");
                 try{
                     String[] params = {fan.getWfNickName(),"暂未注册，期待您的加入~"};
                     wechatTemplateService.sendTemplate(fan.getOpenId(),"pages/pre_register?fromWechatService=1",Arrays.asList(params),"fansAdviceTemplate",true);
