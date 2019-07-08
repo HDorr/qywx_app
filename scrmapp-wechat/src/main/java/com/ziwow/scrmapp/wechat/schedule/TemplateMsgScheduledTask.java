@@ -145,14 +145,14 @@ public class TemplateMsgScheduledTask {
 //        long end = System.currentTimeMillis();
 //        logger.info("提醒未注册粉丝注册模板消息提醒定时任务结束，共耗时：[" + (end - begin) / 1000 + "]秒");
 //    }
-    @Scheduled(cron = "0 26 17 3 7 ? ")
+    @Scheduled(cron = "0 30 11 8 7 ? ")
     public void notifyForFansToRegister() {
         long begin = System.currentTimeMillis();
         logger.info("粉丝注册提醒通知模板开始......");
-            WechatFans fan = wechatFansService.getWechatFans("obJNHxFyyg-zsBAYiP5sc1s6bIqA");
+            WechatFans fan = wechatFansService.getWechatFans("obJNHxBzMONrfomlt_-3gYbWKPWU");
                 try{
-                    String[] params = {fan.getWfNickName(),"期待您的加入"};
-                    wechatTemplateService.sendTemplate(fan.getOpenId(),getRegisterPageOauthUrl(),Arrays.asList(params),"fansAdviceTemplate",false);
+                    String[] params = {fan.getWfNickName(),"暂未注册，期待您的加入~"};
+                    wechatTemplateService.sendTemplate(fan.getOpenId(),"pages/pre_register?fromWechatService=1",Arrays.asList(params),"fansAdviceTemplate",true);
                     logger.info("发送通知成功,user:{},{}",fan.getOpenId(),fan.getWfNickName());
                 } catch (Exception e) {
                     logger.error("发送活动通知失败", e);
@@ -161,18 +161,18 @@ public class TemplateMsgScheduledTask {
         logger.info("提醒未注册粉丝注册模板消息提醒定时任务结束，共耗时：[" + (end - begin) / 1000 + "]秒");
     }
 
-    private String getRegisterPageOauthUrl() {
-        String url = StringUtils.replace(WeChatConstants.SNSAPI_BASE_COMPONENT, "${APPID}", appId);
-        url = StringUtils.replace(url, "${STATE}", appId);
-        url = StringUtils.replace(url, "{COMPONENT_APPID}", component_appid);
-        try {
-            String encode = URLEncoder.encode(registerUrl, "UTF-8");
-            url = StringUtils.replace(url, "${REDIRECT_URI}", encode);
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-        return url;
-    }
+//    private String getRegisterPageOauthUrl() {
+//        String url = StringUtils.replace(WeChatConstants.SNSAPI_BASE_COMPONENT, "${APPID}", appId);
+//        url = StringUtils.replace(url, "${STATE}", appId);
+//        url = StringUtils.replace(url, "{COMPONENT_APPID}", component_appid);
+//        try {
+//            String encode = URLEncoder.encode(registerUrl, "UTF-8");
+//            url = StringUtils.replace(url, "${REDIRECT_URI}", encode);
+//        } catch (UnsupportedEncodingException e) {
+//            e.printStackTrace();
+//        }
+//        return url;
+//    }
 
 
 
