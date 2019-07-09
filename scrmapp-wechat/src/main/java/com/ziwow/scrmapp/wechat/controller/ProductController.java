@@ -335,12 +335,14 @@ public class ProductController {
         Result result = new BaseResult();
         final WechatUser user = wechatUserService.getUserByUnionid(unionId);
         final EwCard ewCard = ewCardService.selectEwCardByNo(cardNo);
+        //加载符合类型的产品
         List<Product> products = productService.getProductByProductCodeAndUserId(ewCard.getEwCardItems(),user.getUserId());
 
         List<Product> collect = new LinkedList<>();
-        //筛选
+        //筛选有购买时间，有产品条码并且没有使用过延保卡的
         for (Product product : products) {
-            if (product.getBuyTime() != null && product.getProductBarCode() != null){
+            final EwCard ewCard1 = ewCardService.selectEwCardByBarCode(product.getProductBarCode());
+            if (ewCard1 == null && product.getBuyTime() != null && product.getProductBarCode() != null){
                 collect.add(product);
             }
         }
