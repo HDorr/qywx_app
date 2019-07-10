@@ -27,6 +27,7 @@ public class EwCardUtil {
     public static Date getNormalRepairTerm(Date purchDate,int validTime){
         instance.setTime(purchDate);
         instance.add(Calendar.YEAR,1);
+        instance.add(Calendar.DATE,-1);
         instance.add(Calendar.DATE,validTime);
         return instance.getTime();
     }
@@ -40,6 +41,7 @@ public class EwCardUtil {
     public static Date getEndNormalRepairTerm(Date purchDate){
         instance.setTime(purchDate);
         instance.add(Calendar.YEAR,1);
+        instance.add(Calendar.DATE,-1);
         return instance.getTime();
     }
 
@@ -58,6 +60,7 @@ public class EwCardUtil {
             //月卡
             instance.add(Calendar.MONTH,validTime / Dates.MONTH.getDay());
         }
+        instance.add(Calendar.DATE,-1);
         return instance.getTime();
     }
 
@@ -67,6 +70,7 @@ public class EwCardUtil {
      * @param guaranteeDate 最新质保的时间
      * @return
      */
+    @Deprecated
     public static Date getExtendRepairTerm(Date guaranteeDate,int validTime){
         instance.setTime(guaranteeDate);
         if (validTime % Dates.YEAR.getDay() == 0){
@@ -76,6 +80,7 @@ public class EwCardUtil {
             //月卡
             instance.add(Calendar.MONTH,validTime / Dates.MONTH.getDay());
         }
+        instance.add(Calendar.DATE,-1);
         return instance.getTime();
     }
 
@@ -128,6 +133,7 @@ public class EwCardUtil {
     public static boolean isNormal(Date purchDate){
         instance.setTime(purchDate);
         instance.add(Calendar.YEAR,1);
+        instance.add(Calendar.DATE,-1);
         if (instance.getTime().getTime() > System.currentTimeMillis() || DateUtils.isSameDay(new Date(System.currentTimeMillis()),purchDate)){
             return true;
         }
