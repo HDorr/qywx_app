@@ -119,8 +119,7 @@ public class TemplateMsgScheduledTask {
     /***
      * MGM通知-第一批
      */
-    //@Scheduled(cron = "0 0 12 11 7 ? ")
-    @Scheduled(cron = "0 0/1 * * * ? ")
+    @Scheduled(cron = "0 0 12 11 7 ? ")
     public void MGM1() {
         if (!flag.equals("0")) {
             return;
@@ -156,8 +155,7 @@ public class TemplateMsgScheduledTask {
     /***
      * MGM通知-第二批
      */
-    //@Scheduled(cron = "0 0 12 11 7 ? ")
-    @Scheduled(cron = "0 0/1 * * * ? ")
+    @Scheduled(cron = "0 0 12 11 7 ? ")
     public void MGM2() {
         if (!flag.equals("0")) {
             return;
@@ -193,8 +191,7 @@ public class TemplateMsgScheduledTask {
     /***
      * MGM通知-第三批
      */
-    //@Scheduled(cron = "0 0 12 15 7 ? ")
-    @Scheduled(cron = "0 0/1 * * * ? ")
+    @Scheduled(cron = "0 0 12 15 7 ? ")
     public void MGM3() {
         if (!flag.equals("0")) {
             return;
