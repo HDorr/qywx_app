@@ -36,4 +36,13 @@ public class TempWechatFans extends WechatFans {
   public void setProduct(String product) {
     this.product = product;
   }
+
+  @Override
+  public String toString() {
+    return "TempWechatFans{" +
+        "mobile='" + mobile + '\'' +
+        ", product='" + product + '\'' +
+        ", count='" + count + '\'' +
+        '}';
+  }
 }
