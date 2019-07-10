@@ -25,9 +25,7 @@ public class EwCardUtil {
      */
     @Deprecated
     public static Date getNormalRepairTerm(Date purchDate,int validTime){
-        instance.setTime(purchDate);
-        instance.add(Calendar.YEAR,1);
-        instance.add(Calendar.DATE,-1);
+        instance.setTime(getYear(purchDate,0));
         instance.add(Calendar.DATE,validTime);
         return instance.getTime();
     }
@@ -39,10 +37,7 @@ public class EwCardUtil {
      * @return
      */
     public static Date getEndNormalRepairTerm(Date purchDate){
-        instance.setTime(purchDate);
-        instance.add(Calendar.YEAR,1);
-        instance.add(Calendar.DATE,-1);
-        return instance.getTime();
+        return getYear(purchDate,0);
     }
 
     /**
@@ -62,17 +57,7 @@ public class EwCardUtil {
      * @return
      */
     public static Date getEndRepairTerm(Date purchDate,int validTime){
-        instance.setTime(purchDate);
-        //判断时间的大小(为多久)
-        if (validTime % Dates.YEAR.getDay() == 0){
-            //年卡
-            instance.add(Calendar.YEAR,validTime / Dates.YEAR.getDay());
-        }else {
-            //月卡
-            instance.add(Calendar.MONTH,validTime / Dates.MONTH.getDay());
-        }
-        instance.add(Calendar.DATE,-1);
-        return instance.getTime();
+        return getYear(purchDate,validTime / Dates.YEAR.getDay());
     }
 
     /**
@@ -103,10 +88,7 @@ public class EwCardUtil {
      * @return
      */
     public static Guarantee getGuarantee(Date purchDate,Date repairTerm){
-        instance.setTime(purchDate);
-        instance.add(Calendar.YEAR,1);
-        instance.add(Calendar.DATE,-1);
-        final Date normal = instance.getTime();
+        final Date normal = getYear(purchDate,0);
         long now = System.currentTimeMillis();
         if(normal.getTime() > now || DateUtils.isSameDay(new Date(now),normal)){
             //正常质保
@@ -143,10 +125,7 @@ public class EwCardUtil {
      * @return
      */
     public static boolean isNormal(Date purchDate){
-        instance.setTime(purchDate);
-        instance.add(Calendar.YEAR,1);
-        instance.add(Calendar.DATE,-1);
-        if (instance.getTime().getTime() > System.currentTimeMillis() || DateUtils.isSameDay(new Date(System.currentTimeMillis()),purchDate)){
+        if (getYear(purchDate,0).getTime() > System.currentTimeMillis() || DateUtils.isSameDay(new Date(System.currentTimeMillis()),purchDate)){
             return true;
         }
         return false;
@@ -185,6 +164,20 @@ public class EwCardUtil {
         }else {
             return nums[validTime/Dates.YEAR.getDay()]+"年卡";
         }
+    }
+
+
+    /**
+     * 根据日期获取几年后的日期的前一天
+     * @param date
+     * @param year
+     * @return
+     */
+    public static Date getYear(Date date,int year){
+        instance.setTime(date);
+        instance.add(Calendar.YEAR,1+year);
+        instance.add(Calendar.DATE,-1);
+        return instance.getTime();
     }
 
 
