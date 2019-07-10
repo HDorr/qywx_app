@@ -86,7 +86,7 @@
                         <p class="tip">请拍摄照片证明机器上无条码</p>
                     </div>
                     <div class="imgBox" v-show="!isCancel && productImage.length !== 0"> 
-                        <div v-for="(item,index) in 3" class="img" :class="{'hide':!productImage[index] && isComplete}" @click="uploadImage(index)">
+                        <div v-for="(item,index) in 6" class="img" :class="{'hide':!productImage[index] && isComplete}" @click="uploadImage(index)">
                             <i class="delImgIcon" v-show="productImage[index] && !isComplete" @click.stop="delectImg(index)"></i>
                             <img :src="productImage[index]"  v-show="productImage[index]">
                         </div>        
