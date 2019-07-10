@@ -358,43 +358,19 @@ public class EwCardController {
      * @param validTime
      * @param productBarCode
      */
-    private void useEwCard(@RequestBody EwCardParam ewCardParam,  int validTime, Date purchDate,String productBarCode) {
-        Date repairTerm = null;
-        final EwCard ewCard1 = ewCardService.selectEwCardByBarCode(productBarCode);
-        //该机器是否用过延保卡
-        repairTerm = getRepairTerm(validTime, purchDate, ewCard1);
-        ewCardService.useEwCard(ewCardParam.getCardNo(), productBarCode, purchDate,repairTerm);
+    private void useEwCard(EwCardParam ewCardParam,  int validTime, Date purchDate ,String productBarCode) {
+        ewCardService.useEwCard(ewCardParam.getCardNo(), productBarCode, purchDate,getRepairTerm(validTime, purchDate));
     }
 
     /**
      * 获取延保后的期限
      * @param validTime
      * @param purchDate
-     * @param ewCard1
      * @return
      */
-    private Date getRepairTerm(int validTime, Date purchDate, EwCard ewCard1) {
-        Date repairTerm = null;
+    private Date getRepairTerm(int validTime, Date purchDate) {
         //没有用过
-        if (ewCard1 == null){
-            if (EwCardUtil.isNormal(purchDate)){
-                //在正常延保期限内
-                repairTerm = EwCardUtil.getNormalRepairTerm(purchDate, validTime);
-            }else {
-                //过了正常延保期限
-                repairTerm = EwCardUtil.getEndRepairTerm(purchDate,validTime);
-            }
-        }else {
-            //已经用过延保卡,最新延保卡的基础上添加天数
-            if (EwCardUtil.isExtend(ewCard1.getRepairTerm())){
-                //在延长延保阶段
-                repairTerm = EwCardUtil.getExtendRepairTerm(ewCard1.getRepairTerm(),validTime);
-            }else {
-                //已过延保阶段
-                repairTerm = EwCardUtil.getEndRepairTerm(purchDate,ewCard1.getValidTime());
-            }
-        }
-        return repairTerm;
+        return EwCardUtil.getEndRepairTerm(purchDate,validTime);
     }
 
     /**

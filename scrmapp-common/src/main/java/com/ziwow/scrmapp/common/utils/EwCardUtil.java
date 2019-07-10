@@ -23,6 +23,7 @@ public class EwCardUtil {
      * @param validTime 保修天数
      * @return
      */
+    @Deprecated
     public static Date getNormalRepairTerm(Date purchDate,int validTime){
         instance.setTime(purchDate);
         instance.add(Calendar.YEAR,1);
