@@ -47,8 +47,8 @@ public class EwCardUtil {
      * @param validTime 保修天数
      * @return
      */
-    public static Date getEndRepairTerm(int validTime){
-        instance.setTime(new Date());
+    public static Date getEndRepairTerm(Date purchDate,int validTime){
+        instance.setTime(getEndNormalRepairTerm(purchDate));
         //判断时间的大小(为多久)
         if (validTime % Dates.YEAR.getDay() == 0){
             //年卡

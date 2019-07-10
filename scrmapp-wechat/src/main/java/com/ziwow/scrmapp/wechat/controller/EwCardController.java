@@ -382,7 +382,7 @@ public class EwCardController {
                 repairTerm = EwCardUtil.getNormalRepairTerm(purchDate, validTime);
             }else {
                 //过了正常延保期限
-                repairTerm = EwCardUtil.getEndRepairTerm(validTime);
+                repairTerm = EwCardUtil.getEndRepairTerm(purchDate,validTime);
             }
         }else {
             //已经用过延保卡,最新延保卡的基础上添加天数
@@ -391,7 +391,7 @@ public class EwCardController {
                 repairTerm = EwCardUtil.getExtendRepairTerm(ewCard1.getRepairTerm(),validTime);
             }else {
                 //已过延保阶段
-                repairTerm = EwCardUtil.getEndRepairTerm(ewCard1.getValidTime());
+                repairTerm = EwCardUtil.getEndRepairTerm(purchDate,ewCard1.getValidTime());
             }
         }
         return repairTerm;

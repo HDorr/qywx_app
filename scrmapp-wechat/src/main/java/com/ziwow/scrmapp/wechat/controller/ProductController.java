@@ -391,8 +391,8 @@ public class ProductController {
                     endDate = EwCardUtil.getExtendRepairTerm(ec.getRepairTerm(),ewCard.getValidTime());
                 }else {
                     //已过延保阶段
-                    startDate = new Date();
-                    endDate = EwCardUtil.getEndRepairTerm(ewCard.getValidTime());
+                    startDate = EwCardUtil.getEndNormalRepairTerm(product.getBuyTime());
+                    endDate = EwCardUtil.getEndRepairTerm(product.getBuyTime(),ewCard.getValidTime());
                 }
             } else {
                 //正常延保阶段
@@ -402,8 +402,8 @@ public class ProductController {
                     endDate = EwCardUtil.getNormalRepairTerm(product.getBuyTime(), ewCard.getValidTime());
                 }else {
                     //过了正常延保期限
-                    startDate = new Date();
-                    endDate = EwCardUtil.getEndRepairTerm(ewCard.getValidTime());
+                    startDate = EwCardUtil.getEndNormalRepairTerm(product.getBuyTime());
+                    endDate = EwCardUtil.getEndRepairTerm(product.getBuyTime(),ewCard.getValidTime());
                 }
             }
             epv.setStartDate(startDate);
