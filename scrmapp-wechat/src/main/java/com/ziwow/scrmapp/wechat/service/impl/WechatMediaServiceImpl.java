@@ -19,6 +19,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import javax.annotation.Resource;
 
+import org.codehaus.xfire.spring.SpringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
@@ -79,7 +80,7 @@ public class WechatMediaServiceImpl implements WechatMediaService,InitializingBe
 			logger.info("下载图片，返回结果[{}]",JSON.toJSON(res));
 			if(res !=null && res.getError()==null){
 				String resUrl = OSSUtil.uploadFile(res.getFileStream(), res.getSuffix());
-				return resUrl;
+				return resUrl.substring(0, resUrl.indexOf("?"));
 			}else{
 				return res.getError();
 			}
