@@ -86,15 +86,12 @@
                         <p class="tip">请拍摄照片证明机器上无条码</p>
                     </div>
                     <div class="imgBox" v-show="!isCancel && productImage.length !== 0"> 
-                        <div v-for="(item,index) in 3" class="img" :class="{'hide':!productImage[index] && isComplete}" @click="uploadImage(index)">
+                        <div v-for="(item,index) in 6" class="img" :class="{'hide':!productImage[index] && isComplete}" @click="uploadImage(index)">
+                            <br v-if="index === 3">
                             <i class="delImgIcon" v-show="productImage[index] && !isComplete" @click.stop="delectImg(index)"></i>
                             <img :src="productImage[index]"  v-show="productImage[index]">
                         </div>
                         <br>
-                        <div v-for="(item,index) in 3" class="img" :class="{'hide':!productImage[index+3] && isComplete}" @click="uploadImage(index+3)">
-                            <i class="delImgIcon" v-show="productImage[index+3] && !isComplete" @click.stop="delectImg(index+3)"></i>
-                            <img :src="productImage[index+3]"  v-show="productImage[index+3]">
-                        </div>
                     </div>
                     <div class="btnBox">
                         <button class="qy-btn-180" :class="{'cancelBtn':isCancel}"  @click="cancelProduct">{{isCancel ? '已取消' : '取消'}}</button>
