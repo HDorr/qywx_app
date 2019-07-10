@@ -94,6 +94,7 @@ public class EwCardUtil {
     public static Guarantee getGuarantee(Date purchDate,Date repairTerm){
         instance.setTime(purchDate);
         instance.add(Calendar.YEAR,1);
+        instance.add(Calendar.DATE,-1);
         final Date normal = instance.getTime();
         long now = System.currentTimeMillis();
         if(normal.getTime() > now || DateUtils.isSameDay(new Date(now),normal)){
