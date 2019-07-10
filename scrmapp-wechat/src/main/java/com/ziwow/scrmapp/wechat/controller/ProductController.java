@@ -398,11 +398,11 @@ public class ProductController {
                 //正常延保阶段
                 if (EwCardUtil.isNormal(product.getBuyTime())){
                     //在正常延保期限内
-                    startDate = EwCardUtil.getEndNormalRepairTerm(product.getBuyTime());
+                    startDate = EwCardUtil.getStartDate(product.getBuyTime());
                     endDate = EwCardUtil.getEndRepairTerm(product.getBuyTime(), ewCard.getValidTime());
                 }else {
                     //过了正常延保期限
-                    startDate = EwCardUtil.getEndNormalRepairTerm(product.getBuyTime());
+                    startDate = EwCardUtil.getStartDate(product.getBuyTime());
                     endDate = EwCardUtil.getEndRepairTerm(product.getBuyTime(),ewCard.getValidTime());
                 }
             }

@@ -46,12 +46,23 @@ public class EwCardUtil {
     }
 
     /**
-     * 已过正常延保状态= 根据 购买时间和保修天数计算保修日期
+     * 根据购买时间算正常的延保起始时间
+     * @param purchDate
+     * @return
+     */
+    public static Date getStartDate(Date purchDate){
+        instance.setTime(purchDate);
+        instance.add(Calendar.YEAR,1);
+        return instance.getTime();
+    }
+
+    /**
+     * 根据 购买时间和保修天数计算保修日期
      * @param validTime 保修天数
      * @return
      */
     public static Date getEndRepairTerm(Date purchDate,int validTime){
-        instance.setTime(getEndNormalRepairTerm(purchDate));
+        instance.setTime(purchDate);
         //判断时间的大小(为多久)
         if (validTime % Dates.YEAR.getDay() == 0){
             //年卡
@@ -176,11 +187,6 @@ public class EwCardUtil {
         }
     }
 
-    public static Date getStartTime(Date repairTerm, int validTime) {
-        instance.setTime(repairTerm);
-        instance.add(Calendar.YEAR,-(validTime/Dates.YEAR.getDay()));
-        return instance.getTime();
-    }
 
     enum Dates{
         /** 年卡 */

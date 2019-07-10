@@ -260,7 +260,7 @@ public class EwCardController {
         }else {
             ewCardDetails.setRairTerm(ewCard.getRepairTerm());
             ewCardDetails.setCardNo(ewCard.getCardNo());
-            ewCardDetails.setStartTime(EwCardUtil.getStartTime(ewCard.getRepairTerm(),ewCard.getValidTime()));
+            ewCardDetails.setStartTime(EwCardUtil.getStartDate(ewCard.getPurchDate()));
         }
 
         ewCardDetails.setNormal(EwCardUtil.getEndNormalRepairTerm(product.getBuyTime()));
