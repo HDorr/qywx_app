@@ -1,5 +1,6 @@
 package com.ziwow.scrmapp.wechat.service;
 
+import com.ziwow.scrmapp.wechat.persistence.entity.TempWechatFans;
 import com.ziwow.scrmapp.wechat.persistence.entity.WechatFans;
 import com.ziwow.scrmapp.wechat.vo.UserInfo;
 import com.ziwow.scrmapp.wechat.vo.WechatFansVo;
@@ -23,4 +24,7 @@ public interface WechatFansService {
     public WechatFansVo getFansInfo(String code, HttpServletRequest request, HttpServletResponse response);
     public List<WechatFans> getWechatFansByPage(int page,int size);
     public Integer countWechatFans();
+    public List<TempWechatFans> loadTempWechatFansBatch1();
+    public List<TempWechatFans> loadTempWechatFansBatch2();
+    public List<TempWechatFans> loadTempWechatFansBatch3();
 }
