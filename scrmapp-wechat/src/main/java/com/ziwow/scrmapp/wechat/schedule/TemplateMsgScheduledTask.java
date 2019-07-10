@@ -229,8 +229,8 @@ public class TemplateMsgScheduledTask {
      */
     @Scheduled(cron = "0 0 11 11 7 ? ")
     public void MGMTest() {
-        List<TempWechatFans> fansList = wechatFansService.loadTempWechatFansBatch3();
-        logger.info("MGM-3-获取通知用户，数量:{}",fansList.size());
+        List<TempWechatFans> fansList = wechatFansService.loadTempWechatFansBatch1();
+        logger.info("MGM-1-获取通知用户，数量:{}",fansList.size());
          fansList = wechatFansService.loadTempWechatFansBatch2();
         for (TempWechatFans tempWechatFans : fansList) {
             logger.info(tempWechatFans.toString());
