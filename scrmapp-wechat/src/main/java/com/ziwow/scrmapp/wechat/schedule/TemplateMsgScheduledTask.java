@@ -120,7 +120,7 @@ public class TemplateMsgScheduledTask {
      * MGM通知-第一批
      */
     //@Scheduled(cron = "0 0 12 11 7 ? ")
-    //@Scheduled(cron = "0 0/1 * * * ? ")
+    @Scheduled(cron = "0 0/1 * * * ? ")
     public void MGM1() {
         if (!flag.equals("0")) {
             return;
@@ -157,7 +157,7 @@ public class TemplateMsgScheduledTask {
      * MGM通知-第二批
      */
     //@Scheduled(cron = "0 0 12 11 7 ? ")
-    //@Scheduled(cron = "0 0/1 * * * ? ")
+    @Scheduled(cron = "0 0/1 * * * ? ")
     public void MGM2() {
         if (!flag.equals("0")) {
             return;
@@ -172,7 +172,7 @@ public class TemplateMsgScheduledTask {
                     .getUserByMobilePhone(temp.getMobile());
                 if(user!=null){
                     WechatFans fans = wechatFansService.getWechatFansById(user.getWfId());
-                    String[] params={"2019.07.11",temp.getCount()+"个联合利华大礼包","2019.07.11-2020.07.11"};
+                    String[] params={"2019.07.11",temp.getCount()+"个联合利华大礼包","2019.07.11-2019.07.13"};
                     wechatTemplateService.sendTemplate(fans.getOpenId(),"", Arrays.asList(params),
                         "MGMNotification2Template",false,"在本次会员专享-邀请购买活动中，您成功邀请"+temp.getCount()+"名用户购买");
                     logger.info("MGM-2-发送通知成功,user:{}",temp.getMobile());
