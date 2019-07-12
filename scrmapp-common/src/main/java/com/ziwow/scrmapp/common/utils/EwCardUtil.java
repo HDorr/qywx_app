@@ -82,7 +82,8 @@ public class EwCardUtil {
      */
     public static Date getEwEndRepairTerm(Date date,int validTime){
         instance.setTime(date);
-        return getYear(instance.getTime(),validTime / Dates.YEAR.getDay());
+        instance.add(Calendar.DATE,1);
+        return getYear(instance.getTime(),validTime / Dates.YEAR.getDay()-1);
     }
 
 

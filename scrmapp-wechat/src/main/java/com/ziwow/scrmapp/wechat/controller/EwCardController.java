@@ -291,7 +291,6 @@ public class EwCardController {
         if (ewCards.size() != 0){
             ewCardDetails.setCards(collect);
         }
-
         //是否可以继续使用延保卡
         ewCardDetails.setCanUseCard(canUseCard(barCode));
 
