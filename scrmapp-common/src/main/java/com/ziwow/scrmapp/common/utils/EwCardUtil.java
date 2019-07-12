@@ -6,6 +6,7 @@ import org.apache.commons.lang.time.DateUtils;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 /**
  * 关于延保卡的工具类
@@ -52,6 +53,18 @@ public class EwCardUtil {
     }
 
     /**
+     * 根据延保到期计算延保起始时间
+     * @param repairTerm
+     * @return
+     */
+    public static Date getMStartDate(Date repairTerm){
+        instance.setTime(repairTerm);
+        instance.add(Calendar.YEAR,-1);
+        instance.add(Calendar.DATE,1);
+        return instance.getTime();
+    }
+
+    /**
      * 根据 购买时间和保修天数计算保修日期
      * @param validTime 保修天数
      * @return
@@ -59,6 +72,19 @@ public class EwCardUtil {
     public static Date getEndRepairTerm(Date purchDate,int validTime){
         return getYear(purchDate,validTime / Dates.YEAR.getDay());
     }
+
+
+    /**
+     * @param date
+     * @param validTime
+     * @return
+     */
+    public static Date getEwEndRepairTerm(Date date,int validTime){
+        instance.setTime(date);
+        instance.add(Calendar.DATE,1);
+        return getYear(instance.getTime(),validTime / Dates.YEAR.getDay());
+    }
+
 
     /**
      * 已使用延保状态下延长延保期限= 根据 购买时间和保修天数计算保修日期
@@ -181,7 +207,61 @@ public class EwCardUtil {
     }
 
 
-    enum Dates{
+    /**
+     * 判断是否可以继续使用延保卡
+     * @param limitNum  限制使用次数
+     * @param limitYear  使用年限
+     * @param size     实际次数
+     * @param ewCardYear  实际年限
+     * @return
+     */
+    public static boolean isCanUseCard(Integer limitNum, Integer limitYear, int size, int ewCardYear) {
+        if (limitNum != 0 && limitYear != 0){
+            if (limitNum > size && limitYear > ewCardYear){
+                return true;
+            }else {
+                return false;
+            }
+        }else if (limitNum == 0 && limitYear == 0){
+            return true;
+        }else {
+            if (limitNum == 0){
+                return limitYear > ewCardYear ? true : false;
+            }else {
+                return limitNum > size ? true : false;
+            }
+        }
+    }
+
+    /**
+     * 使用过延保卡是否可以满足条件
+     * @param limitNum  限制使用次数
+     * @param limitYear  使用年限
+     * @param size     实际次数
+     * @param ewCardYear  实际年限
+     * @return
+     */
+    public static String contentUseCard(Integer limitNum, Integer limitYear, int size, int ewCardYear) {
+        if (limitNum != 0 && limitYear != 0){
+            if (limitNum >= size && limitYear >= ewCardYear){
+                return null;
+            }else {
+                return "对不起，延保卡的使用次数为".concat(limitNum.toString()).concat("次，")
+                        .concat("且延保期限不能超过").concat(limitYear.toString()).concat("年");
+            }
+        }else if (limitNum == 0 && limitYear == 0){
+            return null;
+        }else {
+            if (limitNum == 0){
+                return limitYear >= ewCardYear ? null : "对不起，延保期限最多延长".concat(limitYear.toString()).concat("年");
+            }else {
+                return limitNum >= size ? null : "对不起，延保卡的使用次数最多为".concat(limitNum.toString()).concat("次");
+            }
+        }
+    }
+
+
+    public enum Dates{
         /** 年卡 */
         YEAR(365),
         /** 月卡 */

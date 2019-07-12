@@ -2,6 +2,7 @@ package com.ziwow.scrmapp.wechat.persistence.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.ziwow.scrmapp.common.enums.Guarantee;
 
@@ -13,6 +14,7 @@ import java.util.List;
  * @author songkaiqi
  * @since 2019/06/12/下午5:13
  */
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class EwCard {
 
 

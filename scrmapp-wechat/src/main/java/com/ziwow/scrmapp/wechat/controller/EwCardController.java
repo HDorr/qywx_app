@@ -20,10 +20,12 @@ import com.ziwow.scrmapp.wechat.persistence.entity.*;
 import com.ziwow.scrmapp.wechat.service.*;
 import com.ziwow.scrmapp.wechat.vo.EwCardDetails;
 import com.ziwow.scrmapp.wechat.vo.EwCardInfo;
+import com.ziwow.scrmapp.wechat.vo.EwCards;
 import com.ziwow.scrmapp.wechat.vo.ServiceRecord;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
@@ -66,6 +68,17 @@ public class EwCardController {
     private ProductService productService;
 
 
+    /**
+     * 延保卡限制使用次数
+     */
+    @Value("${ewcard.limit.num}")
+    private Integer limitNum;
+
+    /**
+     * 延保卡限制使用年限
+     */
+    @Value("${ewcard.limit.year}")
+    private Integer limitYear;
 
 
     /**
@@ -188,6 +201,7 @@ public class EwCardController {
 
         //根据barcode查询 产品
         ProductItem productItem = thirdPartyService.getProductItem(new ProductParam(product.getModelName(), product.getProductBarCode()));
+
         if(productItem == null){
             result.setReturnCode(Constant.FAIL);
             result.setReturnMsg("产品信息错误!");
@@ -201,18 +215,19 @@ public class EwCardController {
             return result;
         }
 
-
-        //判断该产品是否已经使用过延保卡
-        EwCard existEwCard = ewCardService.existEwCardByBarCode(ewCardParam.getBarCode());
-        if (existEwCard != null){
-            result.setReturnMsg("对不起,该产品已经使用过延保服务!");
+        // 判断用户是否满足使用延保卡的条件
+        final List<EwCard> ewCards = ewCardService.selectEwCardsByBarCode(ewCardParam.getBarCode());
+        final int ewCardYear = getEwCardYear(ewCards);
+        final String message = EwCardUtil.contentUseCard(limitNum, limitYear, ewCards.size() + 1, ewCardYear + (ewCard.getValidTime() / EwCardUtil.Dates.YEAR.getDay()));
+        if (message != null){
             result.setReturnCode(Constant.FAIL);
+            result.setReturnMsg(message);
             return result;
         }
 
-
         CSMEwCardParam CSMEwCardParam = getCsmEwCardParam(ewCardParam, wechatUser, productItem,product.getId(),product.getBuyTime());
 
+        /*
         //csm注册延保卡
         final BaseCardVo baseCardVo = thirdPartyService.registerEwCard(CSMEwCardParam);
         if (ErrorCodeConstants.CODE_E09.equals(baseCardVo.getStatus().getCode())){
@@ -221,8 +236,9 @@ public class EwCardController {
             result.setReturnMsg(baseCardVo.getData());
             return result;
         }
+        */
         //使用延保卡
-        useEwCard(ewCardParam,  ewCard.getValidTime(), product.getBuyTime(),product.getProductBarCode());
+        useEwCard(ewCardParam,  ewCard.getValidTime(), product.getBuyTime(), product.getProductBarCode());
         result.setReturnMsg("延保卡注册成功");
         result.setReturnCode(Constant.SUCCESS);
         return result;
@@ -251,17 +267,33 @@ public class EwCardController {
         Product product = productService.getProductsByBarCodeAndUserId(wechatUser.getUserId(),barCode);
         EwCardDetails ewCardDetails = new EwCardDetails();
 
+        if (product == null){
+            result.setReturnCode(Constant.FAIL);
+            result.setReturnMsg("您没有绑定该产品");
+            return result;
+        }
+
         //延保状态
         final Guarantee guarantee = EwCardUtil.getGuarantee(product.getBuyTime(),ewCard == null ? null : ewCard.getRepairTerm());
         ewCardDetails.setGuarantee(guarantee);
-        //没有使用延保卡的情况
-        if (ewCard == null){
-            ewCardDetails.setRairTerm(EwCardUtil.getEndNormalRepairTerm(product.getBuyTime()));
-        }else {
-            ewCardDetails.setRairTerm(ewCard.getRepairTerm());
-            ewCardDetails.setCardNo(ewCard.getCardNo());
-            ewCardDetails.setStartTime(EwCardUtil.getStartDate(ewCard.getPurchDate()));
+
+        List<EwCard> ewCards = ewCardService.selectEwCardsByBarCode(barCode);
+        List<EwCards> collect = new ArrayList<>(ewCards.size());
+        for (EwCard card : ewCards) {
+            EwCards ew = new EwCards();
+            ew.setCardNo(card.getCardNo());
+            ew.setRairTerm(card.getRepairTerm());
+            ew.setStartTime(EwCardUtil.getMStartDate(card.getRepairTerm()));
+            collect.add(ew);
         }
+
+        if (ewCards.size() != 0){
+            ewCardDetails.setCards(collect);
+        }
+
+        //是否可以继续使用延保卡
+        ewCardDetails.setCanUseCard(canUseCard(barCode));
+
 
         ewCardDetails.setNormal(EwCardUtil.getEndNormalRepairTerm(product.getBuyTime()));
 
@@ -324,6 +356,29 @@ public class EwCardController {
 
 
     /**
+     * 判断是否满足使用延保卡的条件
+     * @param barCode
+     * @return
+     */
+    public boolean canUseCard(String barCode){
+        final List<EwCard> ewCards = ewCardService.selectEwCardsByBarCode(barCode);
+        return EwCardUtil.isCanUseCard(limitNum,limitYear,ewCards.size(),getEwCardYear(ewCards));
+    }
+
+    /**
+     * 计算延保卡的总年数
+     * @param ewCards
+     * @return
+     */
+    public int getEwCardYear(List<EwCard> ewCards) {
+        int sum = 0;
+        for (EwCard ewCard : ewCards) {
+            sum += (ewCard.getValidTime()/EwCardUtil.Dates.YEAR.getDay());
+        }
+        return sum;
+    }
+
+    /**
      *  判断是最新的日期并返回
      * @param repairDate
      * @param wechatOrdersVo
@@ -358,8 +413,9 @@ public class EwCardController {
      * @param validTime
      * @param productBarCode
      */
-    private void useEwCard(EwCardParam ewCardParam,  int validTime, Date purchDate ,String productBarCode) {
-        ewCardService.useEwCard(ewCardParam.getCardNo(), productBarCode, purchDate,getRepairTerm(validTime, purchDate));
+    private void useEwCard(EwCardParam ewCardParam, int validTime, Date purchDate, String productBarCode) {
+        final EwCard ewCard = ewCardService.selectEwCardByBarCode(productBarCode);
+        ewCardService.useEwCard(ewCardParam.getCardNo(), productBarCode, purchDate, getRepairTerm(validTime, purchDate, ewCard));
     }
 
     /**
@@ -368,9 +424,16 @@ public class EwCardController {
      * @param purchDate
      * @return
      */
-    private Date getRepairTerm(int validTime, Date purchDate) {
-        //没有用过
-        return EwCardUtil.getEndRepairTerm(purchDate,validTime);
+    private Date getRepairTerm(int validTime, Date purchDate, EwCard ewCard1) {
+        final Date repairTerm;
+        if (ewCard1 == null){
+            //没有用过
+            repairTerm = EwCardUtil.getEndRepairTerm(purchDate,validTime);
+        }else {
+            //用过延保卡的情况
+            repairTerm = EwCardUtil.getEwEndRepairTerm(ewCard1.getRepairTerm(),validTime);
+        }
+        return repairTerm;
     }
 
     /**

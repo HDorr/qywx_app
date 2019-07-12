@@ -1,6 +1,7 @@
 package com.ziwow.scrmapp.wechat.vo;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.ziwow.scrmapp.common.bean.vo.csm.EwCardItem;
 import com.ziwow.scrmapp.common.enums.Guarantee;
 import com.ziwow.scrmapp.wechat.persistence.entity.EwCard;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -41,21 +42,7 @@ public class EwCardDetails {
      */
     private Guarantee guarantee;
 
-    /**
-     * 保修服务截止时间
-     */
-    private Date rairTerm;
 
-
-    /**
-     * 卡号
-     */
-    private String cardNo;
-
-    /**
-     * 延保起始日期
-     */
-    private Date startTime;
 
     /**
      * 购买时间
@@ -78,6 +65,33 @@ public class EwCardDetails {
     @JsonFormat(pattern = "yyyy/M/d",timezone="GMT+8")
     private Date normal;
 
+    /**
+     * 所使用延保卡详情信息
+     */
+    private List<EwCards> cards;
+
+
+    /**
+     * 是否可以使用延保卡（true可使用，false不可使用）
+     */
+    private Boolean canUseCard;
+
+
+    public Boolean getCanUseCard() {
+        return canUseCard;
+    }
+
+    public void setCanUseCard(Boolean canUseCard) {
+        this.canUseCard = canUseCard;
+    }
+
+    public List<EwCards> getCards() {
+        return cards;
+    }
+
+    public void setCards(List<EwCards> cards) {
+        this.cards = cards;
+    }
 
     public String getProductCode() {
         return productCode;
@@ -145,29 +159,6 @@ public class EwCardDetails {
         this.serviceRecords = serviceRecords;
     }
 
-    public String getCardNo() {
-        return cardNo;
-    }
-
-    public void setCardNo(String cardNo) {
-        this.cardNo = cardNo;
-    }
-
-    public Date getStartTime() {
-        return startTime;
-    }
-
-    public void setStartTime(Date startTime) {
-        this.startTime = startTime;
-    }
-
-    public Date getRairTerm() {
-        return rairTerm;
-    }
-
-    public void setRairTerm(Date rairTerm) {
-        this.rairTerm = rairTerm;
-    }
 
     public Date getNormal() {
         return normal;

@@ -86,4 +86,9 @@ public class EwCardServiceImpl implements EwCardService {
         return ewCardMapper.selectEwCardByBarCode(barCode);
     }
 
+    @Override
+    public List<EwCard> selectEwCardsByBarCode(String barCode) {
+        return ewCardMapper.selectEwCardsByBarCode(barCode);
+    }
+
 }

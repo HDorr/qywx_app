@@ -65,6 +65,19 @@ public class ProductController {
     @Value("${scrmapp.protocol}")
     private String protocol;
 
+
+    /**
+     * 延保卡限制使用次数
+     */
+    @Value("${ewcard.limit.num}")
+    private Integer limitNum;
+
+    /**
+     * 延保卡限制使用年限
+     */
+    @Value("${ewcard.limit.year}")
+    private Integer limitYear;
+
     @Autowired
     private MobileService mobileService;
     @Autowired
@@ -341,8 +354,8 @@ public class ProductController {
         List<Product> collect = new LinkedList<>();
         //筛选有购买时间，有产品条码并且没有使用过延保卡的
         for (Product product : products) {
-            final EwCard ewCard1 = ewCardService.selectEwCardByBarCode(product.getProductBarCode());
-            if (ewCard1 == null && product.getBuyTime() != null && product.getProductBarCode() != null){
+            final List<EwCard> ewCards = ewCardService.selectEwCardsByBarCode(product.getProductBarCode());
+            if (product.getBuyTime() != null && EwCardUtil.isCanUseCard(limitNum,limitYear,ewCards.size(),getEwCardYear(ewCards))){
                 collect.add(product);
             }
         }
@@ -366,6 +379,20 @@ public class ProductController {
         result.setData(productVos);
         result.setReturnCode(Constant.SUCCESS);
         return result;
+    }
+
+
+    /**
+     *
+     * @param ewCards
+     * @return
+     */
+    public int getEwCardYear(List<EwCard> ewCards) {
+        int sum = 0;
+        for (EwCard ewCard : ewCards) {
+            sum += (ewCard.getValidTime()/EwCardUtil.Dates.YEAR.getDay());
+        }
+        return sum;
     }
 
     /**

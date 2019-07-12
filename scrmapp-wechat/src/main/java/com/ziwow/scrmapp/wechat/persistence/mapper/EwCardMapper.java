@@ -93,11 +93,20 @@ public interface EwCardMapper {
     List<Long> selectEwCardIdByCodeAndFansId(@Param("productCode")String productCode,@Param("fansId")Long fansId);
 
     /**
-     * 根据产品条码查询对应的延保卡
+     * 根据产品条码查询对应的延保卡(最新的)
      * @param barCode
      * @return
      */
-    @Select("select * from t_ew_card where product_bar_code_twenty = #{barCode} limit 1")
+    @Select("select * from t_ew_card where product_bar_code_twenty = #{barCode} order by repair_term desc limit 1")
     @ResultMap("ewCardMap")
     EwCard selectEwCardByBarCode(@Param("barCode") String barCode);
+
+    /**
+     * 根据产品条码查询该产品使用的延保卡
+     * @param barCode
+     * @return
+     */
+    @Select("select * from t_ew_card where product_bar_code_twenty = #{barCode} order by repair_term asc")
+    @ResultMap("ewCardMap")
+    List<EwCard> selectEwCardsByBarCode(String barCode);
 }
