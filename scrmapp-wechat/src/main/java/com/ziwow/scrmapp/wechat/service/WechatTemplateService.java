@@ -253,8 +253,9 @@ public interface WechatTemplateService {
    * @param params
    * @param type
    * @param toMiniProgram
+   * @param title
    */
 	void sendTemplate(String openId, String url, List<String> params, String type,
-      boolean toMiniProgram);
+      boolean toMiniProgram, String title);
 
 }
