@@ -23,6 +23,18 @@ public class EwCards {
      */
     private Date rairTerm;
 
+    /**
+     * 卡片属性 （年卡 ，二年卡）
+     */
+    private String cardAttributes;
+
+    public String getCardAttributes() {
+        return cardAttributes;
+    }
+
+    public void setCardAttributes(String cardAttributes) {
+        this.cardAttributes = cardAttributes;
+    }
 
     public String getCardNo() {
         return cardNo;

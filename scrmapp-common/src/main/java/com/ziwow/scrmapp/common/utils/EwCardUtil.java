@@ -186,7 +186,7 @@ public class EwCardUtil {
                 return nums[validTime/Dates.MONTH.getDay()]+"月卡";
             }
         }else if (validTime == Dates.YEAR.getDay()){
-            return "年卡";
+            return "一年卡";
         }else {
             return nums[validTime/Dates.YEAR.getDay()]+"年卡";
         }

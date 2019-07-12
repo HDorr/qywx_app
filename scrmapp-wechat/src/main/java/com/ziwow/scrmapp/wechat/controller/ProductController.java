@@ -3,7 +3,6 @@ package com.ziwow.scrmapp.wechat.controller;
 import com.ziwow.scrmapp.common.annotation.MiniAuthentication;
 import com.ziwow.scrmapp.common.constants.Constant;
 import com.ziwow.scrmapp.common.constants.SystemConstants;
-import com.ziwow.scrmapp.common.enums.Guarantee;
 import com.ziwow.scrmapp.common.result.BaseResult;
 import com.ziwow.scrmapp.common.result.Result;
 import com.ziwow.scrmapp.common.service.MobileService;
