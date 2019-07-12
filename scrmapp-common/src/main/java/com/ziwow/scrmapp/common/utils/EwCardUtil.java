@@ -75,13 +75,13 @@ public class EwCardUtil {
 
 
     /**
+     * 根据 上次延保截止时间计算下次延保截止时间
      * @param date
      * @param validTime
      * @return
      */
     public static Date getEwEndRepairTerm(Date date,int validTime){
         instance.setTime(date);
-        instance.add(Calendar.DATE,1);
         return getYear(instance.getTime(),validTime / Dates.YEAR.getDay());
     }
 
