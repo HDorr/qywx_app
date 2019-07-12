@@ -57,9 +57,9 @@ public class EwCardUtil {
      * @param repairTerm
      * @return
      */
-    public static Date getMStartDate(Date repairTerm){
+    public static Date getMStartDate(Date repairTerm,int validTime){
         instance.setTime(repairTerm);
-        instance.add(Calendar.YEAR,-1);
+        instance.add(Calendar.YEAR,- (validTime / Dates.YEAR.getDay()));
         instance.add(Calendar.DATE,1);
         return instance.getTime();
     }

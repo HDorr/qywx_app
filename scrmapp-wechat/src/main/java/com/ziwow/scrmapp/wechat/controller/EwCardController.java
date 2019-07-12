@@ -283,7 +283,7 @@ public class EwCardController {
             EwCards ew = new EwCards();
             ew.setCardNo(card.getCardNo());
             ew.setRairTerm(card.getRepairTerm());
-            ew.setStartTime(EwCardUtil.getMStartDate(card.getRepairTerm()));
+            ew.setStartTime(EwCardUtil.getMStartDate(card.getRepairTerm(),card.getValidTime()));
             ew.setCardAttributes(EwCardUtil.getEwDate(card.getValidTime()));
             collect.add(ew);
         }
