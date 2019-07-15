@@ -73,6 +73,16 @@
                     <input type="text" placeholder="请输入产品条码" v-model="inputBarCode">
                     <span class="scanBarCode" @click="scanCodeHandler"></span>
                 </div>
+                <div class="imageBox" v-show="image">
+                    <div class="image" :style="{'background-image':'url('+image+')'}">
+                        <i class="delImgIcon" @click="image=''"></i>
+                    </div>
+                </div>
+                <div class="uploadImage" v-show="!image" @click="uploadImage">
+                    <span class="addIcon"></span>
+                    <span class="uploadText">如机器上无条码，请点击上传图片证明</span>
+                    <p class="tip">请拍摄照片证明机器上无条码</p>
+                </div>
 
                 <div class="barCode" v-show="isShowBarCodeInput">
                         <span class="left-text">
@@ -95,6 +105,8 @@
                     <button class="qy-btn-180" :class="{'cancelBtn':isCancel}"  @click="cancelProduct">{{isCancel ? '已取消' : '取消'}}</button>
                     <button class="qy-btn-180" @click="edit" v-show="!isCancel">{{isComplete ? '编辑' : '确认'}}</button>
                 </div>
+
+
 
             </div> 
         </script>

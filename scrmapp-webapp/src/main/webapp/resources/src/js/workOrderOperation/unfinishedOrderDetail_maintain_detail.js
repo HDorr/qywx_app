@@ -46,7 +46,7 @@ Vue.component('VCheckBoxLine', {
 
 var Barcode = {
     template: '#barCode_template',
-    props:{
+    props: {
         product:{
             type:Object,
             default(){
@@ -58,8 +58,10 @@ var Barcode = {
             default:false
         }
     },
-    data:function(){
+    data: function () {
         return {
+            inputBarCode: '',
+            image: '',
             barCode:"",
             productImage:[]
         }
@@ -75,27 +77,16 @@ var Barcode = {
             return  !this.isCancel && !this.isComplete && this.productImage.length === 0
         }
     },
-    watch:{
-        barCode:function(cur,old){
-            if(cur){
-                this.barCode = (cur+'').replace(/[^0-9]/ig,"").substr(0,20)
-            }
+    watch: {
+        inputBarCode: function (cur) {
+            this.inputBarCode = (cur+'').replace(/[^0-9]/ig,"")
+            this.emitChange()
+        },
+        image: function () {
+            this.emitChange()
         }
     },
-    methods:{
-        edit:function(){
-            var _this = this
-            if(_this.isComplete){
-                _this.$emit('edit',_this.product.productId)
-                return
-            }
-            _this._checkData().then(function(){
-                var comfirmData = Object.assign({},_this.product,{productBarCode:_this.barCode,productImage:_this.productImage.join(',')})
-                _this.$emit('confirm',comfirmData)
-            }).fail(function(error){
-                alertMsg.error(error)
-            })
-        },
+    methods: {
         scanCodeHandler: function () {
             var _this = this
             if(!WX_CAN_SCAN && !IS_DEVENV){
@@ -111,6 +102,19 @@ var Barcode = {
                 }
             }).fail(function(err){
                 alertMsg.error(err)
+            })
+        },
+        edit:function(){
+            var _this = this
+            if(_this.isComplete){
+                _this.$emit('edit',_this.product.productId)
+                return
+            }
+            _this._checkData().then(function(){
+                var comfirmData = Object.assign({},_this.product,{productBarCode:_this.barCode,productImage:_this.productImage.join(',')})
+                _this.$emit('confirm',comfirmData)
+            }).fail(function(error){
+                alertMsg.error(error)
             })
         },
         uploadImage:function(index){
