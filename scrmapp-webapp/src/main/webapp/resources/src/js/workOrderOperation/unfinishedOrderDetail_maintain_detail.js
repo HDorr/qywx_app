@@ -109,7 +109,7 @@ var Barcode01 = {
 }
 
 var Barcode = {
-    template: '#barCode_template',
+    template: '#products_template',
     props:{
         product:{
             type:Object,

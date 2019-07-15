@@ -66,7 +66,7 @@
 
         <!-- 产品条码模板 -->
 
-        <script type="text/x-template" id="barCode_template">
+        <script type="text/x-template" id="products_template">
             <div class="infoBox">
                 <div class="product">
 
