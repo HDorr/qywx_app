@@ -12,7 +12,7 @@
         <link rel="stylesheet" href="${f_ctxpath}/resources/src/css/reset.css">
         <link rel="stylesheet" href="${f_ctxpath}/resources/src/css/jqweui/weui.min.css">
         <link rel="stylesheet" href="${f_ctxpath}/resources/src/css/jqweui/jquery-weui.css">
-        <link rel="stylesheet" href="${f_ctxpath}/resources/src/css/workOrderOperation/unfinishedOrderDetail_maintain_detail.css${f_ver}">
+        <link rel="stylesheet" href="${f_ctxpath}/resources/src/css/workOrderOperation/unfinishedOrderDetail_maintain_detail.css">
     </head>
     <body>
         <input type="hidden" id="userIdInput" value="${userId}">
