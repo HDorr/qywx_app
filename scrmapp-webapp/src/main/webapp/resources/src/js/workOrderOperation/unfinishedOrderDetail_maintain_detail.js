@@ -44,8 +44,8 @@ Vue.component('VCheckBoxLine', {
     }
 })
 
-var Barcode = {
-    template: '#barCode_template',
+var Barcode01 = {
+    template: '#barCode_template01',
     props: {
         barCode: '',
         productImage: ''
@@ -108,8 +108,8 @@ var Barcode = {
     }
 }
 
-var Product = {
-    template: '#products_template',
+var Barcode = {
+    template: '#barCode_template',
     props:{
         product:{
             type:Object,

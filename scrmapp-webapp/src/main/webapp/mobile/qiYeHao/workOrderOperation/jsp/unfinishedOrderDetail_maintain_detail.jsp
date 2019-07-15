@@ -13,6 +13,7 @@
         <link rel="stylesheet" href="${f_ctxpath}/resources/src/css/jqweui/weui.min.css">
         <link rel="stylesheet" href="${f_ctxpath}/resources/src/css/jqweui/jquery-weui.css">
         <link rel="stylesheet" href="${f_ctxpath}/resources/src/css/workOrderOperation/unfinishedOrderDetail_maintain_detail.css${f_ver}">
+        <link rel="stylesheet" href="${f_ctxpath}/resources/src/css/workOrderOperation/unfinishedOrderDetail_install.css${f_ver}">
     </head>
     <body>
         <input type="hidden" id="userIdInput" value="${userId}">
@@ -65,7 +66,7 @@
 
         <!-- 产品条码模板 -->
 
-        <script type="text/x-template" id="products_template">
+        <script type="text/x-template" id="barCode_template">
             <div class="infoBox">
                 <div class="product">
 
