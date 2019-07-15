@@ -262,15 +262,15 @@ public class WechatTemplateServiceImpl implements WechatTemplateService {
 	private static final String KEY=".id";
 	@Override
 	public void sendTemplate(String openId, String url, List<String> params, String type,
-			boolean toMiniProgram) {
+			boolean toMiniProgram, String title) {
 	  //根据类型获取模板id
     String templateKey=type+KEY;
 		String templateShortId = environment.getProperty(templateKey);
 		String templateID = this.getTemplateID(templateShortId);
 		String remark = wechatTemplateMapper.getTemplateRemark(templateShortId);
-		String title = wechatTemplateMapper.getTemplateTitle(templateShortId);
+		String myTitle = StringUtils.isNotBlank(title)?title:wechatTemplateMapper.getTemplateTitle(templateShortId);
 		List<String> paramList=new ArrayList<>();
-		paramList.add(title);
+		paramList.add(myTitle);
 		paramList.addAll(params);
 		paramList.add(remark);
 		//获取模板的内容

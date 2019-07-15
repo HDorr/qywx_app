@@ -1,5 +1,6 @@
 package com.ziwow.scrmapp.wechat.service.impl;
 
+import com.ziwow.scrmapp.wechat.persistence.entity.TempWechatFans;
 import java.util.List;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -318,4 +319,19 @@ public class WechatFansServiceImpl implements WechatFansService {
 
 
 
+
+	@Override
+	public List<TempWechatFans> loadTempWechatFansBatch1() {
+		return wechatFansMapper.selectTempWechatFansBtach1();
+	}
+
+	@Override
+	public List<TempWechatFans> loadTempWechatFansBatch2() {
+		return wechatFansMapper.selectTempWechatFansBtach2();
+	}
+
+	@Override
+	public List<TempWechatFans> loadTempWechatFansBatch3() {
+		return wechatFansMapper.selectTempWechatFansBtach3();
+	}
 }
