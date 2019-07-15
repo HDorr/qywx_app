@@ -409,28 +409,14 @@ public class ProductController {
             epv.setBarCode(product.getProductBarCode());
             epv.setProductName(product.getProductName());
             final EwCard ec = ewCardService.selectEwCardByBarCode(product.getProductBarCode());
-            if (ec != null){
-                //已经用过延保卡,最新延保卡的基础上添加天数
-                if (EwCardUtil.isExtend(ec.getRepairTerm())){
-                    //在延长延保阶段
-                    startDate = ec.getRepairTerm();
-                    endDate = EwCardUtil.getExtendRepairTerm(ec.getRepairTerm(),ewCard.getValidTime());
-                }else {
-                    //已过延保阶段
-                    startDate = EwCardUtil.getEndNormalRepairTerm(product.getBuyTime());
-                    endDate = EwCardUtil.getEndRepairTerm(product.getBuyTime(),ewCard.getValidTime());
-                }
+            if (ec == null){
+                //第一次使用延保卡
+                startDate = EwCardUtil.getNormalStartDate(product.getBuyTime());
+                endDate = EwCardUtil.getEndRepairTerm(product.getBuyTime(), ewCard.getValidTime());
             } else {
-                //正常延保阶段
-                if (EwCardUtil.isNormal(product.getBuyTime())){
-                    //在正常延保期限内
-                    startDate = EwCardUtil.getStartDate(product.getBuyTime());
-                    endDate = EwCardUtil.getEndRepairTerm(product.getBuyTime(), ewCard.getValidTime());
-                }else {
-                    //过了正常延保期限
-                    startDate = EwCardUtil.getStartDate(product.getBuyTime());
-                    endDate = EwCardUtil.getEndRepairTerm(product.getBuyTime(),ewCard.getValidTime());
-                }
+                //已经用过延保卡,最新延保卡的基础上添加天数
+                startDate = EwCardUtil.getExtStartDate(ec.getRepairTerm());
+                endDate = EwCardUtil.getEwEndRepairTerm(ec.getRepairTerm(),ewCard.getValidTime());
             }
             epv.setStartDate(startDate);
             epv.setEndDate(endDate);
