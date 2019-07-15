@@ -46,9 +46,20 @@ public class EwCardUtil {
      * @param purchDate
      * @return
      */
-    public static Date getStartDate(Date purchDate){
+    public static Date getNormalStartDate(Date purchDate){
         instance.setTime(purchDate);
         instance.add(Calendar.YEAR,1);
+        return instance.getTime();
+    }
+
+
+    /**
+     * 根据上次延保结束时间计算下次的延保起始时间
+     * @param LastRepairTerm 上次延保结束时间
+     */
+    public static Date getExtStartDate(Date LastRepairTerm){
+        instance.setTime(LastRepairTerm);
+        instance.add(Calendar.DATE,1);
         return instance.getTime();
     }
 
@@ -65,7 +76,7 @@ public class EwCardUtil {
     }
 
     /**
-     * 根据 购买时间和保修天数计算保修日期
+     * 根据 购买时间和保修天数计算保修日期（没用过延保卡的情况）
      * @param validTime 保修天数
      * @return
      */
