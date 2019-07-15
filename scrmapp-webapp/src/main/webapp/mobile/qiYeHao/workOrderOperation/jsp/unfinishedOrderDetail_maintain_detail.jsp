@@ -13,6 +13,7 @@
         <link rel="stylesheet" href="${f_ctxpath}/resources/src/css/jqweui/weui.min.css">
         <link rel="stylesheet" href="${f_ctxpath}/resources/src/css/jqweui/jquery-weui.css">
         <link rel="stylesheet" href="${f_ctxpath}/resources/src/css/workOrderOperation/unfinishedOrderDetail_maintain_detail.css${f_ver}">
+        <link rel="stylesheet" href="${f_ctxpath}/resources/src/css/workOrderOperation/unfinishedOrderDetail_install.css${f_ver}">
     </head>
     <body>
         <input type="hidden" id="userIdInput" value="${userId}">
@@ -64,8 +65,10 @@
         </script>
 
         <!-- 产品条码模板 -->
-        <script type="text/x-template" id="barCode_template">
-            <div class="productInfo">
+
+        <script type="text/x-template" id="products_template">
+            <div class="infoBox">
+                <div class="product">
 
                 <div class="barCode" v-show="isShowBarCodeInput">
                         <span class="left-text">
@@ -73,24 +76,29 @@
                     <input type="text" placeholder="请输入产品条码" v-model="barCode">
                     <span class="scanBarCode" @click="scanBarCode"></span>
                 </div>
-                <div class="uploadImage" v-show="isShowUploadImage" @click="uploadImage">
-                    <span class="addIcon"></span>
-                    <span class="uploadText">如机器上无条码，请点击上传图片证明</span>
-                    <p class="tip">请拍摄照片证明机器上无条码</p>
-                </div>
-                <div class="imgBox" v-show="!isCancel && productImage.length !== 0">
-                    <div v-for="(item,index) in 6" class="img" :class="{'hide':!productImage[index] && isComplete}" @click="uploadImage(index)">
-                        <i class="delImgIcon" v-show="productImage[index] && !isComplete" @click.stop="delectImg(index)"></i>
-                        <img :src="productImage[index]"  v-show="productImage[index]">
+                    <div class="barCode" v-show="isShowBarCodeInput">
+                        <span class="left-text">
+                            <i>*</i>输入产品条码:</span>
+                        <input type="text" placeholder="请输入产品条码" v-model="barCode">
+                        <span class="scanBarCode" @click="scanBarCode"></span>
                     </div>
+                    <div class="uploadImage" v-show="isShowUploadImage" @click="uploadImage">
+                        <span class="addIcon"></span>
+                        <span class="uploadText">如机器上无条码，请点击上传图片证明</span>
+                        <p class="tip">请拍摄照片证明机器上无条码</p>
+                    </div>
+                    <div class="imgBox" v-show="!isCancel && productImage.length !== 0">
+                        <div v-for="(item,index) in 6" class="img" :class="{'hide':!productImage[index] && isComplete}" @click="uploadImage(index)">
+                            <i class="delImgIcon" v-show="productImage[index] && !isComplete" @click.stop="delectImg(index)"></i>
+                            <img :src="productImage[index]"  v-show="productImage[index]">
+                        </div>
+                    </div>
+                    <div class="btnBox">
+                        <button class="qy-btn-180" :class="{'cancelBtn':isCancel}"  @click="cancelProduct">{{isCancel ? '已取消' : '取消'}}</button>
+                        <button class="qy-btn-180" @click="edit" v-show="!isCancel">{{isComplete ? '编辑' : '确认'}}</button>
+                    </div>
+
                 </div>
-                <div class="btnBox">
-                    <button class="qy-btn-180" :class="{'cancelBtn':isCancel}"  @click="cancelProduct">{{isCancel ? '已取消' : '取消'}}</button>
-                    <button class="qy-btn-180" @click="edit" v-show="!isCancel">{{isComplete ? '编辑' : '确认'}}</button>
-                </div>
-
-
-
             </div> 
         </script>
 
@@ -123,5 +131,6 @@
         <script src="${f_ctxpath}/resources/thirdparty/jweixin/jweixin-1.0.0.js"></script>
         <script src="${f_ctxpath}/resources/src/js/common.js${f_ver}"></script>
         <script src="${f_ctxpath}/resources/src/js/workOrderOperation/unfinishedOrderDetail_maintain_detail.js${f_ver}"></script>
+        <script src="${f_ctxpath}/resources/src/js/workOrderOperation/unfinishedOrderDetail_install.js${f_ver}"></script>
     </body>
 </html>
