@@ -13,7 +13,6 @@
         <link rel="stylesheet" href="${f_ctxpath}/resources/src/css/jqweui/weui.min.css">
         <link rel="stylesheet" href="${f_ctxpath}/resources/src/css/jqweui/jquery-weui.css">
         <link rel="stylesheet" href="${f_ctxpath}/resources/src/css/workOrderOperation/unfinishedOrderDetail_maintain_detail.css${f_ver}">
-        <link rel="stylesheet" href="${f_ctxpath}/resources/src/css/workOrderOperation/unfinishedOrderDetail_install.css${f_ver}">
     </head>
     <body>
         <input type="hidden" id="userIdInput" value="${userId}">
@@ -131,6 +130,5 @@
         <script src="${f_ctxpath}/resources/thirdparty/jweixin/jweixin-1.0.0.js"></script>
         <script src="${f_ctxpath}/resources/src/js/common.js${f_ver}"></script>
         <script src="${f_ctxpath}/resources/src/js/workOrderOperation/unfinishedOrderDetail_maintain_detail.js${f_ver}"></script>
-        <script src="${f_ctxpath}/resources/src/js/workOrderOperation/unfinishedOrderDetail_install.js${f_ver}"></script>
     </body>
 </html>
