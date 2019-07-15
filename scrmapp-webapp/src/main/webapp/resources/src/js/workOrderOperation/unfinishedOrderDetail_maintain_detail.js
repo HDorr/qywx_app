@@ -108,6 +108,141 @@ var Barcode = {
     }
 }
 
+var Product = {
+    template: '#products_template',
+    props:{
+        product:{
+            type:Object,
+            default(){
+                return {}
+            }
+        },
+        isComplete:{
+            type:Boolean,
+            default:false
+        }
+    },
+    data:function(){
+        return {
+            barCode:"",
+            productImage:[]
+        }
+    },
+    computed:{
+        isCancel:function(){
+            return this.product.status == 2 ? true : false
+        },
+        isShowBarCodeInput:function(){
+            return  !this.isCancel && !this.isComplete
+        },
+        isShowUploadImage:function(){
+            return  !this.isCancel && !this.isComplete && this.productImage.length === 0
+        }
+    },
+    watch:{
+        barCode:function(cur,old){
+            if(cur){
+                this.barCode = (cur+'').replace(/[^0-9]/ig,"").substr(0,20)
+            }
+        }
+    },
+    methods:{
+        edit:function(){
+            var _this = this
+            if(_this.isComplete){
+                _this.$emit('edit',_this.product.productId)
+                return
+            }
+            _this._checkData().then(function(){
+                var comfirmData = Object.assign({},_this.product,{productBarCode:_this.barCode,productImage:_this.productImage.join(',')})
+                _this.$emit('confirm',comfirmData)
+            }).fail(function(error){
+                alertMsg.error(error)
+            })
+        },
+        uploadImage:function(index){
+            if(this.isComplete) return
+            if(typeof(index) === 'number' && this.productImage[index]) return
+            var _this = this
+            if(!WX_READY && !IS_DEVENV){
+                $.toptip("上传图片初始化中，请稍后再试", "warning")
+                return
+            }
+            wxInit_promise.wxUploadImage().then(function(src){
+                _this.productImage = _this._setProductImage(src)
+            }).fail(function(err){
+                alertMsg.error(err)
+            })
+        },
+        delectImg:function(index){
+            this.productImage.splice(index,1)
+        },
+        scanBarCode: function(){
+            var _this = this
+            if(!WX_CAN_SCAN && !IS_DEVENV){
+                $.toptip("暂时无法使用扫一扫，请稍后再试", "warning")
+                return
+            }
+            wxInit_promise.wxScanBarCode().then(function(res){
+                var barCode = _normalizeBarCode(res)
+                if(barCode){
+                    _this.barCode = barCode
+                }else{
+                    alertMsg.error({message:'不是有效的产品码'})
+                }
+            }).fail(function(err){
+                alertMsg.error(err)
+            })
+        },
+        cancelProduct: function($event){
+            if(this.isCancel){
+                return
+            }
+            var emitData = {
+                event:$event,
+                product:this.product
+            }
+            this.$emit('cancel',emitData)
+        },
+        _setProductImage(src){
+            var res = []
+            for(var i = 0; i<this.productImage.length;i++){
+                res.push(this.productImage[i])
+            }
+            if(res.length >= 6){
+                res.splice(2,res.length-2,src)
+            }else{
+                res.push(src)
+            }
+            return res
+        },
+        _checkData:function(){
+            var def = $.Deferred()
+            if(!this.barCode && this.productImage.length === 0){
+                def.reject({message:"请输入产品条码或者产品图片"})
+            }
+            if(this.barCode){
+                ajax.get(queryUrls.queryPdtByCodeOrModal,{"productBarCode":this.barCode},"查询产品中")
+                    .then(function(data){
+                        if(data.returnCode !== ERR_OK) def.reject(data)
+                        def.resolve()
+                    })
+                    .fail(function(error){
+                        def.reject(error)
+                    })
+            }else{
+                def.resolve()
+            }
+            return def.promise()
+        }
+    },
+    mounted(){
+        // this.barCode = this.product.productBarCode || ""
+        this.productImage = this.product.barCodeImage ? this.product.barCodeImage.split(',') : []
+        this.barCode = this.product.status === 3 ? this.product.productBarCode :  ""
+    }
+}
+
 var CheckBoxTable = {
     template:'#check_box_table_template',
     props:{
