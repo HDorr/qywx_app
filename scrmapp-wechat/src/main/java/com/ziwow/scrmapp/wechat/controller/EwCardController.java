@@ -199,6 +199,7 @@ public class EwCardController {
             return result;
         }
 
+        /*
         //根据barcode查询 产品
         ProductItem productItem = thirdPartyService.getProductItem(new ProductParam(product.getModelName(), product.getProductBarCode()));
 
@@ -207,6 +208,8 @@ public class EwCardController {
             result.setReturnMsg("产品信息错误!");
             return result;
         }
+
+       */
 
         //判断该产品是否可以使用延保卡
         if (!EwCardUtil.isGuantee(product.getBuyTime())){
@@ -225,9 +228,10 @@ public class EwCardController {
             return result;
         }
 
+        /*
         CSMEwCardParam CSMEwCardParam = getCsmEwCardParam(ewCardParam, wechatUser, productItem,product.getId(),product.getBuyTime());
 
-        /*
+
         //csm注册延保卡
         final BaseCardVo baseCardVo = thirdPartyService.registerEwCard(CSMEwCardParam);
         if (ErrorCodeConstants.CODE_E09.equals(baseCardVo.getStatus().getCode())){
