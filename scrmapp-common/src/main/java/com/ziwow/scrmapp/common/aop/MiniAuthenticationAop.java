@@ -1,6 +1,7 @@
 package com.ziwow.scrmapp.common.aop;
 
 import com.ziwow.scrmapp.common.constants.Constant;
+import com.ziwow.scrmapp.common.exception.ThirdException;
 import com.ziwow.scrmapp.common.result.BaseResult;
 import com.ziwow.scrmapp.common.result.Result;
 import com.ziwow.scrmapp.common.service.impl.ThirdPartyServiceImpl;
@@ -12,6 +13,8 @@ import org.aspectj.lang.annotation.Pointcut;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
+
+import java.net.ConnectException;
 
 /**
  * 小程序请求服务号认证aop
@@ -46,7 +49,9 @@ public class MiniAuthenticationAop {
         }
         try {
             result = (Result) propoint.proceed();
-        } catch (Throwable throwable) {
+        } catch (ThirdException e) {
+            throw e;
+        } catch (Throwable throwable){
             throwable.printStackTrace();
         }
         return result;

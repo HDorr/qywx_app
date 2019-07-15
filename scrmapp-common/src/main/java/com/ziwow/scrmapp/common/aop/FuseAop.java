@@ -86,7 +86,7 @@ public class FuseAop extends ApplicationObjectSupport {
                 }
             });
             try {
-                result = future.get(900,TimeUnit.MILLISECONDS);
+                result = future.get(3000,TimeUnit.MILLISECONDS);
             } catch (TimeoutException e) {
                 LOG.error("请求第三方超时! TimeoutException:",e);
                 future.cancel(true);

@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.net.ConnectException;
+
 
 /**
  * 全局异常捕获
@@ -22,14 +24,15 @@ public class ApiControllerExceptionHandler {
      * 请求第三方超时异常处理
      * @return
      */
-    @ExceptionHandler(ThirdException.class)
+    @ExceptionHandler({ThirdException.class, ConnectException.class})
     @ResponseBody
     public Result handleTimeOutException(ThirdException e){
         Result result = new BaseResult();
-        result.setReturnMsg(e.getMessage());
+        result.setReturnMsg("请求超时，请稍后再试");
         result.setReturnCode(Constant.FAIL);
         return result;
     }
+
 
 
 }
