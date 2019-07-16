@@ -66,7 +66,7 @@ public class WechatTemplateController {
                 logger.error("发送通知模板出错，用户不存在");
                 return result;
             }
-            wechatTemplateService.sendTemplate(fans.getOpenId(),StringUtils.isNotBlank(url)?url:"", paramList,type, toMni!=null?toMni:false);
+            wechatTemplateService.sendTemplate(fans.getOpenId(),StringUtils.isNotBlank(url)?url:"", paramList,type, toMni!=null?toMni:false,"");
         } catch (Exception e) {
             logger.error("通知发送失败，原因", e);
             result.setReturnCode(Constant.FAIL);
