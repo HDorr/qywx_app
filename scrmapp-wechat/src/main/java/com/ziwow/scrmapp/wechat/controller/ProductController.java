@@ -213,7 +213,6 @@ public class ProductController {
 
     /**
      * 绑定产品信息
-     *
      * @param request
      * @param response
      * @param product
@@ -350,6 +349,8 @@ public class ProductController {
         //加载符合类型的产品
         List<Product> products = productService.getProductByProductCodeAndUserId(ewCard.getEwCardItems(),user.getUserId());
 
+        sameCodeProduct(products);
+
         List<Product> collect = new LinkedList<>();
         //筛选有购买时间，有产品条码并且没有使用过延保卡的
         for (Product product : products) {
@@ -365,12 +366,10 @@ public class ProductController {
             return result;
         }
 
-
         List<EwCardProductVo> productVos = new ArrayList<>();
 
         final WechatFans fans = wechatFansService.getWechatFansByUserId(user.getUserId());
 
-        sameCodeProduct(collect);
 
         //组装信息
         packageEwCardProductVos(collect, productVos, ewCard, fans);

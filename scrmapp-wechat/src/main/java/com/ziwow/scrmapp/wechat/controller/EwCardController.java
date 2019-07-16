@@ -167,7 +167,6 @@ public class EwCardController {
         return getSearchResult(result,ewCards,user.getUserId(),fans.getId());
     }
 
-
     /**
      * 注册延保卡
      * @return
