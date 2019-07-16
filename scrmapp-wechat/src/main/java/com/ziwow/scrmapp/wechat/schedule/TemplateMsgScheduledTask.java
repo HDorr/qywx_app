@@ -116,46 +116,11 @@ public class TemplateMsgScheduledTask {
     }
 
 
-    /***
-     * MGM通知-第一批
-     */
-    @Scheduled(cron = "0 0 12 11 7 ? ")
-    public void MGM1() {
-        if (!flag.equals("0")) {
-            return;
-        }
-        logger.info("MGM-1-批通知开始......");
-        long begin = System.currentTimeMillis();
-        List<TempWechatFans> fansList = wechatFansService.loadTempWechatFansBatch1();
-        logger.info("MGM-1-获取通知用户，数量:{}",fansList.size());
-        for (TempWechatFans temp : fansList) {
-            try{
-                WechatUser user = wechatUserService
-                    .getUserByMobilePhone(temp.getMobile());
-                if(user!=null){
-                    WechatFans fans = wechatFansService.getWechatFansById(user.getWfId());
-                    String[] params={"2019.07.01","一年两次沁园净水器清洗服务","2019.07.11-2020.07.11"};
-                    wechatTemplateService.sendTemplate(fans.getOpenId(),"", Arrays.asList(params),
-                        "MGMNotification1Template",false,StringUtils.EMPTY);
-                    logger.info("MGM-1-发送通知成功,user:{}",temp.getMobile());
-                }else{
-                    logger.info("MGM-1-用户不存在,user:{}",temp.getMobile());
-                }
-            }catch (Exception e){
-                logger.error("MGM-1发送通知失败:", e);
-            }
-
-        }
-        long end = System.currentTimeMillis();
-        logger.info("MGM-1-批通知结束，共耗时：[" + (end - begin) / 1000 + "]秒");
-    }
-
-
 
     /***
      * MGM通知-第二批
      */
-    @Scheduled(cron = "0 0 12 11 7 ? ")
+    @Scheduled(cron = "0 30 11 17 7 ? ")
     public void MGM2() {
         if (!flag.equals("0")) {
             return;
@@ -170,7 +135,7 @@ public class TemplateMsgScheduledTask {
                     .getUserByMobilePhone(temp.getMobile());
                 if(user!=null){
                     WechatFans fans = wechatFansService.getWechatFansById(user.getWfId());
-                    String[] params={"2019.07.11",temp.getCount()+"个联合利华大礼包","2019.07.11-2019.07.13"};
+                    String[] params={"2019.07.11",temp.getCount()+"个联合利华大礼包","奖品已发货，请注意查收"};
                     wechatTemplateService.sendTemplate(fans.getOpenId(),"", Arrays.asList(params),
                         "MGMNotification2Template",false,"在本次会员专享-邀请购买活动中，您成功邀请"+temp.getCount()+"名用户购买");
                     logger.info("MGM-2-发送通知成功,user:{}",temp.getMobile());
@@ -227,48 +192,22 @@ public class TemplateMsgScheduledTask {
     /***
      * MGM通知内测
      */
-    @Scheduled(cron = "0 0 11 11 7 ? ")
+    @Scheduled(cron = "0 0 10 17 7 ? ")
     public void MGMTest() {
-        List<TempWechatFans> fansList = wechatFansService.loadTempWechatFansBatch1();
-        logger.info("MGM-1-获取通知用户，数量:{}",fansList.size());
-         fansList = wechatFansService.loadTempWechatFansBatch2();
-        for (TempWechatFans tempWechatFans : fansList) {
-            logger.info(tempWechatFans.toString());
-        }
+        List<TempWechatFans> fansList = wechatFansService.loadTempWechatFansBatch2();
         logger.info("MGM-2-获取通知用户，数量:{}",fansList.size());
          fansList = wechatFansService.loadTempWechatFansBatch3();
         for (TempWechatFans tempWechatFans : fansList) {
             logger.info(tempWechatFans.toString());
         }
-        logger.info("MGM-3-获取通知用户，数量:{}",fansList.size());
-        for (TempWechatFans tempWechatFans : fansList) {
-            logger.info(tempWechatFans.toString());
-        }
-        String[] testUser={"18358733695","13818072004","13661632837","13816454513"};
+        String[] testUser={"18358733695","13818072004","13661632837"};
         for (String s : testUser) {
             try{
                 WechatUser user = wechatUserService
                     .getUserByMobilePhone(s);
                 if(user!=null){
                     WechatFans fans = wechatFansService.getWechatFansById(user.getWfId());
-                    String[] params={"2019.07.01","一年两次沁园净水器清洗服务","2019.07.11-2020.07.11"};
-                    wechatTemplateService.sendTemplate(fans.getOpenId(),"", Arrays.asList(params),
-                        "MGMNotification1Template",false,StringUtils.EMPTY);
-                    logger.info("MGM-1-发送通知成功,user:{}",s);
-                }else{
-                    logger.info("MGM-1-用户不存在,user:{}",s);
-                }
-            }catch (Exception e){
-                logger.error("MGM-1发送通知失败:", e);
-            }
-        }
-        for (String s : testUser) {
-            try{
-                WechatUser user = wechatUserService
-                    .getUserByMobilePhone(s);
-                if(user!=null){
-                    WechatFans fans = wechatFansService.getWechatFansById(user.getWfId());
-                    String[] params={"2019.07.11","2"+"个联合利华大礼包","2019.07.11-2019.07.13"};
+                    String[] params={"2019.07.11","2"+"个联合利华大礼包","奖品已发货，请注意查收"};
                     wechatTemplateService.sendTemplate(fans.getOpenId(),"", Arrays.asList(params),
                         "MGMNotification2Template",false,"在本次会员专享-邀请购买活动中，您成功邀请"+"2"+"名用户购买");
                     logger.info("MGM-2-发送通知成功,user:{}",s);
@@ -280,30 +219,6 @@ public class TemplateMsgScheduledTask {
             }
         }
 
-
-        for (String s : testUser) {
-            try{
-                WechatUser user = wechatUserService
-                    .getUserByMobilePhone(s);
-                if(user!=null){
-                    WechatFans fans = wechatFansService.getWechatFansById(user.getWfId());
-                    String[] params={"190100-0031*1，天猫精灵*1，2年延保","2019.07.15-2019.07.31"};
-                    wechatTemplateService.sendTemplate(fans.getOpenId(),"", Arrays.asList(params),
-                        "MGMNotification3Template",false,StringUtils.EMPTY);
-                    logger.info("MGM-3-发送通知成功,user:{}",s);
-                }else{
-                    logger.info("MGM-3-用户不存在,user:{}",s);
-                }
-            }catch (Exception e){
-                logger.error("MGM-3-发送通知失败:", e);
-            }
-
-        }
-
-
-
-        for (TempWechatFans temp : fansList) {
-        }
     }
 
 
