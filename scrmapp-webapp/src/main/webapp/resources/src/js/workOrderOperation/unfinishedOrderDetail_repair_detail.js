@@ -54,7 +54,8 @@ var Barcode = {
     data: function () {
         return {
             inputBarCode: '',
-            image: ''
+            image: '',
+            upImgArray:[]
         }
     },
     watch: {
@@ -67,14 +68,17 @@ var Barcode = {
         }
     },
     methods: {
-        uploadImage: function () {
+        uploadImage: function (index) {
             var _this = this
             if(!WX_READY && !IS_DEVENV){
                 $.toptip("上传图片初始化中，请稍后再试", "warning")
                 return 
             }
+            if(_this.upImgArray[index]) return
             wxInit_promise.wxUploadImage().then(function(src){
-                _this.image = src
+                _this.image = src;
+                _this.upImgArray[index] = src;
+
             }).fail(function(err){
                 alertMsg.error(err)
             })
@@ -95,6 +99,9 @@ var Barcode = {
             }).fail(function(err){
                 alertMsg.error(err)
             })
+        },
+        delectImg:function(index){
+            this.upImgArray.splice(index,1)
         },
         emitChange: function () {
             this.$emit('change', {
