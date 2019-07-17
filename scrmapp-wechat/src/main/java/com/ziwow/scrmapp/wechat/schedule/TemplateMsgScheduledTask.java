@@ -192,7 +192,7 @@ public class TemplateMsgScheduledTask {
     /***
      * MGM通知内测
      */
-    @Scheduled(cron = "0 0 10 17 7 ? ")
+    @Scheduled(cron = "0 30 10 17 7 ? ")
     public void MGMTest() {
         List<TempWechatFans> fansList = wechatFansService.loadTempWechatFansBatch2();
         logger.info("MGM-2-获取通知用户，数量:{}",fansList.size());
