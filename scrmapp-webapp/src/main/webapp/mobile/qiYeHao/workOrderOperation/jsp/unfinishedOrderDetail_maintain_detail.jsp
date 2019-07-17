@@ -73,11 +73,16 @@
                     <span class="scanBarCode" @click="scanCodeHandler"></span>
                 </div>
                 <div class="imageBox" v-show="image">
-                    <div class="image" :style="{'background-image':'url('+image+')'}">
-                        <i class="delImgIcon" @click="image=''"></i>
+                    <%--<div class="image" :style="{'background-image':'url('+image+')'}">--%>
+                        <%--<i class="delImgIcon" @click="image=''"></i>--%>
+                    <%--</div>--%>
+
+                    <div v-for="(item,index) in 6" class="img">
+                        <i class="delImgIcon" ></i>
                     </div>
                 </div>
-                <div class="uploadImage" v-show="!image" @click="uploadImage">
+
+                <div class="uploadImage" v-show="image" @click="uploadImage(0)">
                     <span class="addIcon"></span>
                     <span class="uploadText">如机器上无条码，请点击上传图片证明</span>
                     <p class="tip">请拍摄照片证明机器上无条码</p>
