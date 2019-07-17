@@ -137,7 +137,7 @@ public class TemplateMsgScheduledTask {
                     WechatFans fans = wechatFansService.getWechatFansById(user.getWfId());
                     String[] params={"2019.07.11",temp.getCount()+"个联合利华大礼包","奖品已发货，请注意查收"};
                     wechatTemplateService.sendTemplate(fans.getOpenId(),"", Arrays.asList(params),
-                        "MGMNotification2Template",false,"在本次会员专享-邀请购买活动中，您成功邀请"+temp.getCount()+"名用户购买");
+                        "MGMNotification2Template",false,"本次您获得的"+temp.getCount()+"个联合利华大礼包已发货");
                     logger.info("MGM-2-发送通知成功,user:{}",temp.getMobile());
                 }else{
                     logger.info("MGM-2-用户不存在,user:{}",temp.getMobile());
@@ -192,7 +192,7 @@ public class TemplateMsgScheduledTask {
     /***
      * MGM通知内测
      */
-    @Scheduled(cron = "0 30 10 17 7 ? ")
+    @Scheduled(cron = "0 0 11 17 7 ? ")
     public void MGMTest() {
         List<TempWechatFans> fansList = wechatFansService.loadTempWechatFansBatch2();
         logger.info("MGM-2-获取通知用户，数量:{}",fansList.size());
@@ -209,7 +209,7 @@ public class TemplateMsgScheduledTask {
                     WechatFans fans = wechatFansService.getWechatFansById(user.getWfId());
                     String[] params={"2019.07.11","2"+"个联合利华大礼包","奖品已发货，请注意查收"};
                     wechatTemplateService.sendTemplate(fans.getOpenId(),"", Arrays.asList(params),
-                        "MGMNotification2Template",false,"在本次会员专享-邀请购买活动中，您成功邀请"+"2"+"名用户购买");
+                        "MGMNotification2Template",false,"本次您获得的2个联合利华大礼包已发货");
                     logger.info("MGM-2-发送通知成功,user:{}",s);
                 }else{
                     logger.info("MGM-2-用户不存在,user:{}",s);
