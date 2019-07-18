@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.ziwow.scrmapp.common.enums.EwCardStatus;
 import com.ziwow.scrmapp.common.enums.Guarantee;
 
 import java.util.Date;
@@ -77,6 +78,19 @@ public class EwCard {
     private List<EwCardItems> ewCardItems;
 
 
+    /**
+     * 延保卡状态
+     */
+    private EwCardStatus cardStatus;
+
+
+    public EwCardStatus getCardStatus() {
+        return cardStatus;
+    }
+
+    public void setCardStatus(EwCardStatus cardStatus) {
+        this.cardStatus = cardStatus;
+    }
 
     public String getGuaMessage(){
         return guarantee.getMessage();

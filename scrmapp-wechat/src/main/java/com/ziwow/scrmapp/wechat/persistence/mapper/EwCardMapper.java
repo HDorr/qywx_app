@@ -1,5 +1,6 @@
 package com.ziwow.scrmapp.wechat.persistence.mapper;
 
+import com.ziwow.scrmapp.common.enums.EwCardStatus;
 import com.ziwow.scrmapp.wechat.persistence.entity.EwCard;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Param;
@@ -109,4 +110,11 @@ public interface EwCardMapper {
     @Select("select * from t_ew_card where product_bar_code_twenty = #{barCode} order by repair_term asc")
     @ResultMap("ewCardMap")
     List<EwCard> selectEwCardsByBarCode(String barCode);
+
+    /**
+     * 修改延保卡的状态
+     * @param cardStatus
+     * @param cardNo
+     */
+    void updateCardStatus(@Param("cardStatus") EwCardStatus cardStatus,@Param("cardNo") String cardNo);
 }

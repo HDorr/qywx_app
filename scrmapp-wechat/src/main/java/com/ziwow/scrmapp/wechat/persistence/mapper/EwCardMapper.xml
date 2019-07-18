@@ -13,6 +13,7 @@
 		<result column="valid_time" property="validTime"></result>
 		<result column="use_status" property="useStatus"></result>
 		<result column="product_bar_code" property="productBarCodeTwenty"></result>
+		<result column="card_status" property="cardStatus"></result>
 		<collection property="ewCardItems" ofType="com.ziwow.scrmapp.wechat.persistence.entity.EwCardItems" column="id">
 			<id column="eid" property="id"></id>
 			<result column="item_name" property="itemName"></result>
@@ -22,8 +23,8 @@
 
 
     <insert id="saveEwCard" parameterType="com.ziwow.scrmapp.wechat.persistence.entity.EwCard" useGeneratedKeys="true" keyProperty="id">
-		insert into t_ew_card(fans_id,card_no,purch_date,repair_term,valid_time,use_status)
-		values(#{fansId},#{cardNo},#{purchDate},#{repairTerm},#{validTime},#{useStatus})
+		insert into t_ew_card(fans_id,card_no,purch_date,repair_term,valid_time,use_status,card_status)
+		values(#{fansId},#{cardNo},#{purchDate},#{repairTerm},#{validTime},#{useStatus},#{cardStatus})
 	</insert>
 
 	<select id="selectEwCardByNo" resultMap="ewCardMap">
@@ -67,6 +68,14 @@
 		purch_date=#{purchDate},
 		repair_term=#{repairTerm},
 		use_status=true
+		where
+		card_no=#{cardNo}
+	</update>
+
+	<update id="updateCardStatus">
+		update t_ew_card
+		set
+		card_status=#{cardStatus}
 		where
 		card_no=#{cardNo}
 	</update>
