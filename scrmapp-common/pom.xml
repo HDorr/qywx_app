@@ -231,7 +231,37 @@
 			<artifactId>tomcat-servlet-api</artifactId>
 			<scope>provided</scope>
 		</dependency>
-	</dependencies>
+        <dependency>
+            <groupId>net.sf.json-lib</groupId>
+            <artifactId>json-lib</artifactId>
+        </dependency>
+
+		<!-- xxljob -->
+		<!-- https://mvnrepository.com/artifact/com.xuxueli/xxl-job-core -->
+		<dependency>
+			<groupId>com.xuxueli</groupId>
+			<artifactId>xxl-job-core</artifactId>
+		</dependency>
+
+		<!-- xxl-rpc-core -->
+		<dependency>
+			<groupId>com.xuxueli</groupId>
+			<artifactId>xxl-rpc-core</artifactId>
+		</dependency>
+
+		<!-- groovy-all -->
+		<dependency>
+			<groupId>org.codehaus.groovy</groupId>
+			<artifactId>groovy</artifactId>
+		</dependency>
+
+		<!-- commons-exec -->
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-exec</artifactId>
+		</dependency>
+
+    </dependencies>
 	<build>
 		<plugins>
 			<plugin>
