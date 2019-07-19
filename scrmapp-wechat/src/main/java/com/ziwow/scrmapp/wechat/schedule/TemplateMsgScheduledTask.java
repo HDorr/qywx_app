@@ -1,23 +1,14 @@
 package com.ziwow.scrmapp.wechat.schedule;
 
-import com.ziwow.scrmapp.wechat.persistence.entity.TempWechatFans;
 import com.alibaba.fastjson.JSON;
 import com.ziwow.scrmapp.common.bean.vo.WechatOrderMsgVo;
 import com.ziwow.scrmapp.common.service.MobileService;
 import com.ziwow.scrmapp.common.utils.OrderUtils;
+import com.ziwow.scrmapp.wechat.persistence.entity.TempWechatFans;
 import com.ziwow.scrmapp.wechat.persistence.entity.WechatFans;
 import com.ziwow.scrmapp.wechat.persistence.entity.WechatUser;
-import com.ziwow.scrmapp.wechat.service.WechatFansService;
-import com.ziwow.scrmapp.wechat.service.WechatTemplateService;
-import com.ziwow.scrmapp.wechat.service.WechatUserService;
-import java.text.SimpleDateFormat;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
-
-import com.ziwow.scrmapp.common.constants.Constant;
-import org.apache.commons.lang.StringUtils;
 import com.ziwow.scrmapp.wechat.service.*;
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,18 +16,14 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.List;
 
 @Component
 public class TemplateMsgScheduledTask {
     private final Logger logger = LoggerFactory.getLogger(TemplateMsgScheduledTask.class);
-    @Value("${wechat.appid}")
-    private String appId;
-    @Value("${open.weixin.component_appid}")
-    private String component_appid;
-    @Value("${register.url}")
-    private String registerUrl;
     private WechatTemplateService wechatTemplateService;
     private WechatFansService wechatFansService;
     @Autowired
@@ -143,14 +130,16 @@ public class TemplateMsgScheduledTask {
 //        long end = System.currentTimeMillis();
 //        logger.info("提醒未注册粉丝注册模板消息提醒定时任务结束，共耗时：[" + (end - begin) / 1000 + "]秒");
 //    }
-    @Scheduled(cron = "0 16 10 11 7 ? ")
+    @Scheduled(cron = "0 34 11 15 7 ? ")
     public void notifyForFansToRegister() {
         long begin = System.currentTimeMillis();
         logger.info("粉丝注册提醒通知模板开始......");
-            WechatFans fan = wechatFansService.getWechatFans("obJNHxI0j60STXPqbxEanDYDVoCY");
+            WechatFans fan = wechatFansService.getWechatFans("obJNHxBzMONrfomlt_-3gYbWKPWU");
                 try{
-                    String[] params = {fan.getWfNickName(),"暂未注册，期待您的加入~"};
-                    wechatTemplateService.sendTemplate(fan.getOpenId(),"pages/pre_register?fromWechatService=1",Arrays.asList(params),"fansAdviceTemplate",true);
+                    DateFormat df=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                    String format = df.format(fan.getCreateTime());
+                    String[] params = {fan.getWfNickName(),format};
+                    wechatTemplateService.sendTemplate(fan.getOpenId(),"pages/pre_register?fromWechatService=1",Arrays.asList(params),"fansAdviceTemplate",true,StringUtils.EMPTY);
                     logger.info("发送通知成功,user:{},{}",fan.getOpenId(),fan.getWfNickName());
                 } catch (Exception e) {
                     logger.error("发送活动通知失败", e);
@@ -158,20 +147,6 @@ public class TemplateMsgScheduledTask {
         long end = System.currentTimeMillis();
         logger.info("提醒未注册粉丝注册模板消息提醒定时任务结束，共耗时：[" + (end - begin) / 1000 + "]秒");
     }
-
-//    private String getRegisterPageOauthUrl() {
-//        String url = StringUtils.replace(WeChatConstants.SNSAPI_BASE_COMPONENT, "${APPID}", appId);
-//        url = StringUtils.replace(url, "${STATE}", appId);
-//        url = StringUtils.replace(url, "{COMPONENT_APPID}", component_appid);
-//        try {
-//            String encode = URLEncoder.encode(registerUrl, "UTF-8");
-//            url = StringUtils.replace(url, "${REDIRECT_URI}", encode);
-//        } catch (UnsupportedEncodingException e) {
-//            e.printStackTrace();
-//        }
-//        return url;
-//    }
-
 
     /***
      * MGM通知-第一批
