@@ -41,7 +41,7 @@ public class WechatTemplateController {
     public Result sendTemplateNotify(@RequestParam("timestamp") String timestamp,
                                          @RequestParam("signture") String signture,
                                          @RequestParam("unionId") String unionId,@RequestParam String type,
-        @RequestParam String param,String url,Boolean toMni) {
+        @RequestParam String param,String url,Boolean toMini) {
         Result result = new BaseResult();
         try {
             boolean isLegal = SignUtil.checkSignature(signture, timestamp, Constant.AUTH_KEY);
@@ -66,7 +66,8 @@ public class WechatTemplateController {
                 logger.error("发送通知模板出错，用户不存在");
                 return result;
             }
-            wechatTemplateService.sendTemplate(fans.getOpenId(),StringUtils.isNotBlank(url)?url:"", paramList,type, toMni!=null?toMni:false,"");
+            wechatTemplateService.sendTemplate(fans.getOpenId(),StringUtils.isNotBlank(url)?url:"", paramList,type, toMini
+                !=null? toMini :false,"");
         } catch (Exception e) {
             logger.error("通知发送失败，原因", e);
             result.setReturnCode(Constant.FAIL);
