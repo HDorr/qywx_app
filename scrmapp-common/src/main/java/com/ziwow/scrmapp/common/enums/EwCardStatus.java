@@ -7,12 +7,14 @@ package com.ziwow.scrmapp.common.enums;
  */
 public enum EwCardStatus {
 
+    /** 未使用 */
+    NOT_USE("未使用",-1),
     /** 待审核 */
     TO_BE_AUDITED("待审核",0),
     /** 已生效 */
     ENTERED_INTO_FORCE("已生效",1),
     /** 审核失败 */
-    AUDIT_FAILURE("审核失败",2)
+    AUDIT_FAILURE("审核失败",2),
 
     ;
     private String message;

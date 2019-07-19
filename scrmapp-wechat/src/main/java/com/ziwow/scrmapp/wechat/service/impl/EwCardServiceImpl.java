@@ -1,5 +1,6 @@
 package com.ziwow.scrmapp.wechat.service.impl;
 
+import com.ziwow.scrmapp.common.enums.EwCardStatus;
 import com.ziwow.scrmapp.wechat.persistence.entity.EwCard;
 import com.ziwow.scrmapp.wechat.persistence.entity.EwCardItems;
 import com.ziwow.scrmapp.wechat.persistence.mapper.EwCardMapper;
@@ -9,10 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * @author songkaiqi
@@ -89,6 +87,11 @@ public class EwCardServiceImpl implements EwCardService {
     @Override
     public List<EwCard> selectEwCardsByBarCode(String barCode) {
         return ewCardMapper.selectEwCardsByBarCode(barCode);
+    }
+
+    @Override
+    public Set<String> selectEwCardsByStatus(EwCardStatus status) {
+        return ewCardMapper.selectEwCardsByStatus(status);
     }
 
 }

@@ -35,11 +35,6 @@ public class EwCard {
      */
     private String cardNo;
 
-    /**
-     * 使用状态  true 已使用   false 未使用
-     */
-    @JsonIgnore
-    private Boolean useStatus;
 
     /**
      * 延保期限
@@ -134,14 +129,6 @@ public class EwCard {
 
     public void setCardNo(String cardNo) {
         this.cardNo = cardNo;
-    }
-
-    public Boolean getUseStatus() {
-        return useStatus;
-    }
-
-    public void setUseStatus(Boolean useStatus) {
-        this.useStatus = useStatus;
     }
 
     public Date getPurchDate() {

@@ -8,6 +8,7 @@ import com.ziwow.scrmapp.common.bean.vo.WechatOrdersVo;
 import com.ziwow.scrmapp.common.bean.vo.csm.*;
 import com.ziwow.scrmapp.common.constants.Constant;
 import com.ziwow.scrmapp.common.constants.ErrorCodeConstants;
+import com.ziwow.scrmapp.common.enums.EwCardStatus;
 import com.ziwow.scrmapp.common.enums.Guarantee;
 import com.ziwow.scrmapp.common.persistence.entity.Product;
 import com.ziwow.scrmapp.common.result.BaseResult;
@@ -105,7 +106,7 @@ public class EwCardController {
 
         ewCardVo = thirdPartyService.getEwCardListByNo(cardNo);
         if (ErrorCodeConstants.CODE_E094.equals(ewCardVo.getStatus().getCode()) || ErrorCodeConstants.CODE_E092.equals(ewCardVo.getStatus().getCode()) || "已注册".equals(ewCardVo.getItems().getCardStat())) {
-            logger.error("csm调用延保卡失败");
+            logger.error("csm注册延保卡失败");
             result.setReturnMsg("查询延保卡失败，请检查卡号或稍后再试！");
             result.setData("no");
             result.setReturnCode(Constant.FAIL);
@@ -120,7 +121,7 @@ public class EwCardController {
         final WechatUser user = wechatUserService.getUserByUnionid(unionId);
         final WechatFans fans = wechatFansService.getWechatFansByUserId(user.getUserId());
         ewCard.setFansId(fans.getId());
-        ewCard.setUseStatus(false);
+        ewCard.setCardStatus(EwCardStatus.NOT_USE);
         ewCard.setCardNo(cardNo);
         ewCardService.addEwCard(ewCard,ewCardVo.getItems().getItemNames(),ewCardVo.getItems().getItemCodes());
 
@@ -289,6 +290,7 @@ public class EwCardController {
             ew.setRairTerm(card.getRepairTerm());
             ew.setStartTime(EwCardUtil.getMStartDate(card.getRepairTerm(),card.getValidTime()));
             ew.setCardAttributes(EwCardUtil.getEwDate(card.getValidTime()));
+            ew.setCardStatus(card.getCardStatus().getMessage());
             collect.add(ew);
         }
 

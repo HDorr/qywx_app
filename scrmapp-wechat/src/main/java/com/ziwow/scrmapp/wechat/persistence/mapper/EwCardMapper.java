@@ -9,6 +9,7 @@ import org.apache.ibatis.annotations.Select;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 /**
  * 延保卡
@@ -117,4 +118,11 @@ public interface EwCardMapper {
      * @param cardNo
      */
     void updateCardStatus(@Param("cardStatus") EwCardStatus cardStatus,@Param("cardNo") String cardNo);
+
+    /**
+     * 根据状态查询延保卡
+     * @param status
+     * @return
+     */
+    Set<String> selectEwCardsByStatus(@Param("status") EwCardStatus status);
 }

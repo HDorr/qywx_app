@@ -28,6 +28,20 @@ public class EwCards {
      */
     private String cardAttributes;
 
+    /**
+     * 卡片属性
+     */
+    private String cardStatus;
+
+
+    public String getCardStatus() {
+        return cardStatus;
+    }
+
+    public void setCardStatus(String cardStatus) {
+        this.cardStatus = cardStatus;
+    }
+
     public String getCardAttributes() {
         return cardAttributes;
     }

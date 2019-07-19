@@ -1,10 +1,12 @@
 package com.ziwow.scrmapp.wechat.service;
 
+import com.ziwow.scrmapp.common.enums.EwCardStatus;
 import com.ziwow.scrmapp.wechat.persistence.entity.EwCard;
 import com.ziwow.scrmapp.wechat.persistence.entity.EwCardItems;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 /**
  * 延保卡
@@ -92,4 +94,11 @@ public interface EwCardService {
      * @return
      */
     List<EwCard> selectEwCardsByBarCode(String barCode);
+
+    /**
+     * 根据延保卡的状态查询已注册的延保卡记录
+     * @param status
+     * @return
+     */
+    Set<String> selectEwCardsByStatus(EwCardStatus status);
 }
