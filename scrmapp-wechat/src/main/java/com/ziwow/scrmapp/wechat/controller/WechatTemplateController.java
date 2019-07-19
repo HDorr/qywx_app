@@ -41,7 +41,7 @@ public class WechatTemplateController {
     public Result sendTemplateNotify(@RequestParam("timestamp") String timestamp,
                                          @RequestParam("signture") String signture,
                                          @RequestParam("unionId") String unionId,@RequestParam String type,
-        @RequestParam String param,String url,Boolean toMini) {
+        @RequestParam String param,String url,@RequestParam(value="toMini", defaultValue="false")Boolean toMini) {
         Result result = new BaseResult();
         try {
             boolean isLegal = SignUtil.checkSignature(signture, timestamp, Constant.AUTH_KEY);
