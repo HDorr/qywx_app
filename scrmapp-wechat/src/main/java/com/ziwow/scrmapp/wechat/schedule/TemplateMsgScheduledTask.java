@@ -191,7 +191,7 @@ public class TemplateMsgScheduledTask {
     /***
      * MGM通知-第三批
      */
-    @Scheduled(cron = "0 0 12 15 7 ? ")
+    @Scheduled(cron = "0 0 15 15 7 ? ")
     public void MGM3() {
         if (!flag.equals("0")) {
             return;
