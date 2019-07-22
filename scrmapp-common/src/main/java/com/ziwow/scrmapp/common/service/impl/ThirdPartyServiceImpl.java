@@ -146,6 +146,11 @@ public class ThirdPartyServiceImpl implements ThirdPartyService {
         return baseCardVo;
     }
 
+    @Override
+    public boolean existInstallList(String productBarCode) {
+        return false;
+    }
+
 
     @Override
     public boolean registerCheck(String userName) {

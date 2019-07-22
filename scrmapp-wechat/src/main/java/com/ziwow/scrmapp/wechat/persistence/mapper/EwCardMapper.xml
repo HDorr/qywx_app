@@ -4,7 +4,7 @@
 
 
 
-	<resultMap id="ewCardMap" type="com.ziwow.scrmapp.wechat.persistence.entity.EwCard">
+	<resultMap id="BaseEwCardMap" type="com.ziwow.scrmapp.wechat.persistence.entity.EwCard">
 		<id column="id" property="id"></id>
 		<result column="fans_id" property="fansId"></result>
 		<result column="card_no" property="cardNo"></result>
@@ -13,6 +13,10 @@
 		<result column="valid_time" property="validTime"></result>
 		<result column="product_bar_code" property="productBarCodeTwenty"></result>
 		<result column="card_status" property="cardStatus"></result>
+		<result column="install_list" property="installList"></result>
+	</resultMap>
+
+	<resultMap id="ewCardMap" type="com.ziwow.scrmapp.wechat.persistence.entity.EwCard" extends="BaseEwCardMap">
 		<collection property="ewCardItems" ofType="com.ziwow.scrmapp.wechat.persistence.entity.EwCardItems" column="id">
 			<id column="eid" property="id"></id>
 			<result column="item_name" property="itemName"></result>
@@ -51,7 +55,7 @@
 	</select>
 
 	<select id="selectEwCardByBarCodeAndFansId" resultMap="ewCardMap">
-		select ec.*,eci.id eid,eci.item_name,eci.item_code from t_ew_card ec left join t_ew_card_items eci on eci.ew_card_id=ec.id where ec.fans_id=#{fansId} and ec.product_bar_code_twenty=#{barCode} and ec.use_status != "NOT_USE" order by ec.repair_term desc limit 1
+		select ec.*,eci.id eid,eci.item_name,eci.item_code from t_ew_card ec left join t_ew_card_items eci on eci.ew_card_id=ec.id where ec.fans_id=#{fansId} and ec.product_bar_code_twenty=#{barCode} and ec.card_status != "NOT_USE" order by ec.repair_term desc limit 1
 	</select>
 
 
@@ -66,7 +70,8 @@
 		product_bar_code_twenty=#{productBarCode},
 		purch_date=#{purchDate},
 		repair_term=#{repairTerm},
-		ec.use_status != "NOT_USE"
+		card_status=#{cardStatus},
+		install_list=#{installList}
 		where
 		card_no=#{cardNo}
 	</update>
@@ -74,14 +79,17 @@
 	<update id="updateCardStatus">
 		update t_ew_card
 		set
-		card_status=#{cardStatus}
+		card_status=#{ewCardStatus}
 		where
 		card_no=#{cardNo}
 	</update>
 
 	<select id="selectEwCardsByStatus" resultType="string">
-		select product_bar_code_twenty from t_ew_card where card_status=#{status}
+		select product_bar_code_twenty from t_ew_card where card_status=#{ewCardStatus}
 	</select>
 
+	<select id="selectEwCardsByStatusAndInstall" resultMap="BaseEwCardMap">
+		select card_no,product_bar_code_twenty from t_ew_card where card_status=#{ewCardStatus} and install_list=#{installList}
+	</select>
 
 </mapper>

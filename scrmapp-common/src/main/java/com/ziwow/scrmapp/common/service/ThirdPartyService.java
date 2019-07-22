@@ -29,6 +29,13 @@ public interface ThirdPartyService {
 	 */
 	BaseCardVo registerEwCard(CSMEwCardParam CSMEwCardParam);
 
+	/**
+	 * 根据产品编号判断是否存在安装工单
+	 * @param productBarCode
+	 * @return
+	 */
+	boolean existInstallList(String productBarCode);
+
 
 	public ProductItem getProductItem(ProductParam productParam);
 	public List<ProductItem> getProductList(String itemCodes);

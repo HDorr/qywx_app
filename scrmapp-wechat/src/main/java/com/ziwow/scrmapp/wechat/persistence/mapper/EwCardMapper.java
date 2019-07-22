@@ -59,8 +59,9 @@ public interface EwCardMapper {
      * @param productBarCode 产品条码
      * @param purchDate 购买时间
      * @param repairTerm 保修时间
+     * @param installList 是否有安装单
      */
-    void updateCard(@Param("cardNo") String cardNo, @Param("productBarCode") String productBarCode, @Param("purchDate") Date purchDate, @Param("repairTerm") Date repairTerm);
+    void updateCard(@Param("cardNo") String cardNo, @Param("productBarCode") String productBarCode, @Param("purchDate") Date purchDate, @Param("repairTerm") Date repairTerm, @Param("installList") Boolean installList, @Param("cardStatus")EwCardStatus ewCardStatus);
 
     /**
      * 根据产品条码和fansId查询最新的延保卡
@@ -117,12 +118,20 @@ public interface EwCardMapper {
      * @param cardStatus
      * @param cardNo
      */
-    void updateCardStatus(@Param("cardStatus") EwCardStatus cardStatus,@Param("cardNo") String cardNo);
+    void updateCardStatus(@Param("ewCardStatus") EwCardStatus cardStatus,@Param("cardNo") String cardNo);
 
     /**
      * 根据状态查询延保卡
      * @param status
      * @return
      */
-    Set<String> selectEwCardsByStatus(@Param("status") EwCardStatus status);
+    Set<String> selectEwCardsByStatus(@Param("ewCardStatus") EwCardStatus status);
+
+    /**
+     * 根据延保卡状态和延保卡是否含有安装单查询出延保卡对应的产品条码
+     * @param ewCardStatus
+     * @param installList
+     * @return
+     */
+    List<EwCard> selectEwCardsByStatusAndInstall(@Param("ewCardStatus") EwCardStatus ewCardStatus, @Param("installList") boolean installList);
 }

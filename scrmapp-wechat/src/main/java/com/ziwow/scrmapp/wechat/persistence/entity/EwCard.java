@@ -79,6 +79,20 @@ public class EwCard {
     private EwCardStatus cardStatus;
 
 
+    /**
+     * 改延保卡绑定的产品是否有安装单
+     */
+    private Boolean installList;
+
+
+    public Boolean getInstallList() {
+        return installList;
+    }
+
+    public void setInstallList(Boolean installList) {
+        this.installList = installList;
+    }
+
     public EwCardStatus getCardStatus() {
         return cardStatus;
     }

@@ -218,6 +218,7 @@ public class EwCardController {
             return result;
         }
 
+
         // 判断用户是否满足使用延保卡的条件
         final List<EwCard> ewCards = ewCardService.selectEwCardsByBarCode(ewCardParam.getBarCode());
         final int ewCardYear = getEwCardYear(ewCards);
@@ -231,6 +232,22 @@ public class EwCardController {
 
         CSMEwCardParam CSMEwCardParam = getCsmEwCardParam(ewCardParam, wechatUser, productItem,product.getId(),product.getBuyTime());
 
+        //todo 判断是否存在安装工单
+        if (thirdPartyService.existInstallList(product.getProductBarCode())){
+            ewCard.setCardStatus(EwCardStatus.ENTERED_INTO_FORCE);
+            ewCard.setInstallList(true);
+            //todo 官方注册
+
+        }else {
+            ewCard.setInstallList(false);
+            if (EwCardUtil.gtSevenDay(product.getBuyTime())){
+                //todo 第三方注册
+                ewCard.setCardStatus(EwCardStatus.ENTERED_INTO_FORCE);
+            }else {
+                //todo 设置为待审核 无安装单
+                ewCard.setCardStatus(EwCardStatus.TO_BE_AUDITED);
+            }
+        }
 
         //csm注册延保卡
         final BaseCardVo baseCardVo = thirdPartyService.registerEwCard(CSMEwCardParam);
@@ -242,7 +259,7 @@ public class EwCardController {
         }
 
         //使用延保卡
-        useEwCard(ewCardParam,  ewCard.getValidTime(), product.getBuyTime(), product.getProductBarCode());
+        useEwCard(ewCardParam,  ewCard.getValidTime(), product.getBuyTime(), product.getProductBarCode(), ewCard.getInstallList(), ewCard.getCardStatus());
         result.setReturnMsg("延保卡注册成功");
         result.setReturnCode(Constant.SUCCESS);
         return result;
@@ -419,9 +436,9 @@ public class EwCardController {
      * @param validTime
      * @param productBarCode
      */
-    private void useEwCard(EwCardParam ewCardParam, int validTime, Date purchDate, String productBarCode) {
+    private void useEwCard(EwCardParam ewCardParam, int validTime, Date purchDate, String productBarCode, Boolean installlList, EwCardStatus ewCardStatus) {
         final EwCard ewCard = ewCardService.selectEwCardByBarCode(productBarCode);
-        ewCardService.useEwCard(ewCardParam.getCardNo(), productBarCode, purchDate, getRepairTerm(validTime, purchDate, ewCard));
+        ewCardService.useEwCard(ewCardParam.getCardNo(), productBarCode, purchDate, getRepairTerm(validTime, purchDate, ewCard), installlList, ewCardStatus);
     }
 
     /**

@@ -63,7 +63,7 @@ public interface EwCardService {
      * @param purchDate 购买时间
      * @param repairTerm 保修期限
      */
-    void useEwCard(String cardNo, String productBarCode, Date purchDate,Date repairTerm);
+    void useEwCard(String cardNo, String productBarCode, Date purchDate,Date repairTerm, Boolean installList, EwCardStatus ewCardStatus);
 
     /**
      * 查询根据延保卡号用户未使用的延保卡
@@ -96,9 +96,17 @@ public interface EwCardService {
     List<EwCard> selectEwCardsByBarCode(String barCode);
 
     /**
-     * 根据延保卡的状态查询已注册的延保卡记录
+     * 根据延保卡的状态查询对应的产品条码
      * @param status
      * @return
      */
     Set<String> selectEwCardsByStatus(EwCardStatus status);
+
+    /**
+     * 根据延保卡状态和延保卡是否含有安装单查询出延保卡对应的产品条码
+     * @param ewCardStatus
+     * @param installList
+     * @return
+     */
+    List<EwCard> selectEwCardsByStatusAndInstall(EwCardStatus ewCardStatus, boolean installList);
 }

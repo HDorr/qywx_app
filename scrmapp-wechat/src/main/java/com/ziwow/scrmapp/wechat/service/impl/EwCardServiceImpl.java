@@ -60,8 +60,8 @@ public class EwCardServiceImpl implements EwCardService {
     }
 
     @Override
-    public void useEwCard(String cardNo, String productBarCode, Date purchDate, Date repairTerm) {
-        ewCardMapper.updateCard(cardNo,productBarCode,purchDate,repairTerm);
+    public void useEwCard(String cardNo, String productBarCode, Date purchDate, Date repairTerm, Boolean installList, EwCardStatus ewCardStatus) {
+        ewCardMapper.updateCard(cardNo,productBarCode,purchDate,repairTerm,installList,ewCardStatus);
     }
 
     @Override
@@ -92,6 +92,11 @@ public class EwCardServiceImpl implements EwCardService {
     @Override
     public Set<String> selectEwCardsByStatus(EwCardStatus status) {
         return ewCardMapper.selectEwCardsByStatus(status);
+    }
+
+    @Override
+    public List<EwCard> selectEwCardsByStatusAndInstall(EwCardStatus ewCardStatus, boolean installList) {
+        return ewCardMapper.selectEwCardsByStatusAndInstall(ewCardStatus,installList);
     }
 
 }

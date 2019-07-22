@@ -182,6 +182,20 @@ public class EwCardUtil {
         return false;
     }
 
+    /**
+     * 判断购买时间是否大约7天
+     * @return
+     */
+    public static boolean gtSevenDay(Date buyTime){
+        instance.setTime(buyTime);
+        instance.add(Calendar.DATE,7);
+        if (System.currentTimeMillis() < instance.getTime().getTime()){
+            return false;
+        }else {
+            return true;
+        }
+    }
+
 
     /**
      * 根据时间判断卡片
