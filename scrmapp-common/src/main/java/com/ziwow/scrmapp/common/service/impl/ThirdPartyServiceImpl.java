@@ -151,6 +151,16 @@ public class ThirdPartyServiceImpl implements ThirdPartyService {
         return false;
     }
 
+    @Override
+    public void officialRegisterEwCard(CSMEwCardParam csmEwCardParam) {
+
+    }
+
+    @Override
+    public void unOfficialRegisterEwCard(CSMEwCardParam csmEwCardParam) {
+
+    }
+
 
     @Override
     public boolean registerCheck(String userName) {

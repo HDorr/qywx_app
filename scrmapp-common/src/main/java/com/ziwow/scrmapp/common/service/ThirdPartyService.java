@@ -37,6 +37,20 @@ public interface ThirdPartyService {
 	boolean existInstallList(String productBarCode);
 
 
+	/**
+	 * 存在安装单情况下注册 官方购买
+	 * @param csmEwCardParam
+	 */
+	void officialRegisterEwCard(CSMEwCardParam csmEwCardParam);
+
+
+	/**
+	 * 不存在安装单情况下注册 第三方购买
+	 * @param csmEwCardParam
+	 */
+	void unOfficialRegisterEwCard(CSMEwCardParam csmEwCardParam);
+
+
 	public ProductItem getProductItem(ProductParam productParam);
 	public List<ProductItem> getProductList(String itemCodes);
 	public List<ProductFilterGrade> getItemFilterGrade(ProductFilterGradeParam productFilterGradeParam);
@@ -59,5 +73,7 @@ public interface ThirdPartyService {
 	Result getCemAssetsInfo(String phone);
 
 	Result getCemProductInfo(String productCode);
+
+
 
 }

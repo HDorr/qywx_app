@@ -233,19 +233,22 @@ public class EwCardController {
         CSMEwCardParam CSMEwCardParam = getCsmEwCardParam(ewCardParam, wechatUser, productItem,product.getId(),product.getBuyTime());
 
         //todo 判断是否存在安装工单
+        ewCard.setCardStatus(EwCardStatus.TO_BE_AUDITED);
         if (thirdPartyService.existInstallList(product.getProductBarCode())){
-            ewCard.setCardStatus(EwCardStatus.ENTERED_INTO_FORCE);
             ewCard.setInstallList(true);
             //todo 官方注册
-
+            thirdPartyService.officialRegisterEwCard(CSMEwCardParam);
+            if (true){
+                ewCard.setCardStatus(EwCardStatus.ENTERED_INTO_FORCE);
+            }
         }else {
             ewCard.setInstallList(false);
             if (EwCardUtil.gtSevenDay(product.getBuyTime())){
-                //todo 第三方注册
-                ewCard.setCardStatus(EwCardStatus.ENTERED_INTO_FORCE);
-            }else {
-                //todo 设置为待审核 无安装单
-                ewCard.setCardStatus(EwCardStatus.TO_BE_AUDITED);
+                //todo 大于7天
+                thirdPartyService.unOfficialRegisterEwCard(CSMEwCardParam);
+                if (true){
+                    ewCard.setCardStatus(EwCardStatus.ENTERED_INTO_FORCE);
+                }
             }
         }
 
