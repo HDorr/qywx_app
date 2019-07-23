@@ -215,7 +215,6 @@ public class WechatUserController {
      *
      * @param openId
      * @param mobile
-     * @param password
      * @param httpReq
      * @param httpRes
      * @return
@@ -394,7 +393,8 @@ public class WechatUserController {
     public Result syncUserFromMiniApp(@RequestParam("timestamp") String timestamp,
                                       @RequestParam("signture") String signture,
                                       @RequestParam("mobile") String mobile,
-                                      @RequestParam("unionId") String unionId) {
+                                      @RequestParam("unionId") String unionId,
+                                      @RequestParam(required = false) Integer registerSrc) {
         logger.info("同步小程序注册的用户,mobile:{},unionId:{}", mobile, unionId);
         Result result = new BaseResult();
         try {
@@ -432,6 +432,7 @@ public class WechatUserController {
                 WechatUser wechatUser = new WechatUser();
                 wechatUser.setUserId(userId);
                 wechatUser.setMobilePhone(mobile.trim());
+                wechatUser.setRegisterSrc(registerSrc);
                 wechatUserService.syncUserFromMiniApp(wechatFans, wechatUser);
 
               // 刷新短信营销记录
