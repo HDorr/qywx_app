@@ -99,4 +99,9 @@ public class EwCardServiceImpl implements EwCardService {
         return ewCardMapper.selectEwCardsByStatusAndInstall(ewCardStatus,installList);
     }
 
+    @Override
+    public void updateCardStatus(String cardNo, EwCardStatus status) {
+        ewCardMapper.updateCardStatus(status,cardNo);
+    }
+
 }

@@ -193,7 +193,7 @@ public class EwCardController {
 
         //该类型用户的产品
         final Product product = productService.getProductsByBarCodeAndUserId(wechatUser.getUserId(),ewCardParam.getBarCode());
-        if(product == null && product.getBuyTime() == null && product.getProductBarCode() == null){
+        if(product == null || product.getBuyTime() == null || product.getProductBarCode() == null){
             result.setReturnCode(Constant.FAIL);
             result.setReturnMsg("产品信息错误!");
             return result;
@@ -245,9 +245,9 @@ public class EwCardController {
             }
         }
 
-        if (baseCardVo == null || baseCardVo.getStatus().getCode().equals(ErrorCodeConstants.CODE_E0)){
+        if (baseCardVo != null && baseCardVo.getStatus().getCode().equals(ErrorCodeConstants.CODE_E0)){
             ewCard.setCardStatus(EwCardStatus.ENTERED_INTO_FORCE);
-        }else if (ErrorCodeConstants.CODE_E09.equals(baseCardVo.getStatus().getCode())){
+        }else if (baseCardVo != null && ErrorCodeConstants.CODE_E09.equals(baseCardVo.getStatus().getCode()) && !"资产未属实,待资产属实后再绑定,请耐心等待。".equals(baseCardVo.getData())){
             logger.error("csm注册延保卡失败,延保卡号为[{}],产品条码为[{}]",ewCardParam.getCardNo(),product.getProductBarCode());
             result.setReturnCode(Constant.FAIL);
             result.setReturnMsg(baseCardVo.getData());

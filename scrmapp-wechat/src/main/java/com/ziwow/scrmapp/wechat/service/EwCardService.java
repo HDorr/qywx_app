@@ -109,4 +109,11 @@ public interface EwCardService {
      * @return
      */
     List<EwCard> selectEwCardsByStatusAndInstall(EwCardStatus ewCardStatus, boolean installList);
+
+    /**
+     * 修改延保卡的状态
+     * @param cardNo
+     * @param status
+     */
+    void updateCardStatus(String cardNo, EwCardStatus status);
 }

@@ -11,7 +11,7 @@
 		<result column="purch_date" property="purchDate"></result>
 		<result column="repair_term" property="repairTerm"></result>
 		<result column="valid_time" property="validTime"></result>
-		<result column="product_bar_code" property="productBarCodeTwenty"></result>
+		<result column="product_bar_code_twenty" property="productBarCodeTwenty"></result>
 		<result column="card_status" property="cardStatus"></result>
 		<result column="install_list" property="installList"></result>
 	</resultMap>
@@ -89,7 +89,7 @@
 	</select>
 
 	<select id="selectEwCardsByStatusAndInstall" resultMap="BaseEwCardMap">
-		select card_no,product_bar_code_twenty from t_ew_card where card_status=#{ewCardStatus} and install_list=#{installList}
+		select card_no,product_bar_code_twenty,fans_id,purch_date from t_ew_card where card_status=#{ewCardStatus} and install_list=#{installList}
 	</select>
 
 </mapper>
