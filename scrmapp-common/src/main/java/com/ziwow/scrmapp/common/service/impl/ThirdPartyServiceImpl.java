@@ -16,6 +16,7 @@ import com.ziwow.scrmapp.common.bean.vo.csm.*;
 import com.ziwow.scrmapp.common.bean.vo.mall.MallOrderVo;
 import com.ziwow.scrmapp.common.bean.vo.mall.OrderItem;
 import com.ziwow.scrmapp.common.constants.Constant;
+import com.ziwow.scrmapp.common.constants.ErrorCodeConstants;
 import com.ziwow.scrmapp.common.persistence.entity.InstallPart;
 import com.ziwow.scrmapp.common.persistence.entity.RepairItem;
 import com.ziwow.scrmapp.common.persistence.entity.RepairPart;
@@ -83,6 +84,12 @@ public class ThirdPartyServiceImpl implements ThirdPartyService {
      */
     @Value("${csm.registerewcard.url}")
     private String registerEwCardUrl;
+    /**
+     * 查询是否存在安装单
+     */
+    @Value("${csm.existinstalllisturl.url}")
+    private String existInstallListUrl;
+
     @Value("${csm.csswx.url}")
     private String cssWxUrl;
     @Value("${csm.cssappealWx.url}")
@@ -148,17 +155,15 @@ public class ThirdPartyServiceImpl implements ThirdPartyService {
 
     @Override
     public boolean existInstallList(String productBarCode) {
-        return false;
-    }
-
-    @Override
-    public void officialRegisterEwCard(CSMEwCardParam csmEwCardParam) {
-
-    }
-
-    @Override
-    public void unOfficialRegisterEwCard(CSMEwCardParam csmEwCardParam) {
-
+        ExistInstallVo existInstallVo = null;
+        try {
+            final String s = restTemplate.postForObject(existInstallListUrl, JsonUtil.object2Json(ImmutableMap.of("mobile",productBarCode)), String.class);
+            LOG.info("收到csm的数据:[{}]",s);
+            existInstallVo = JsonUtil.json2Object(s, ExistInstallVo.class);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return existInstallVo.getStatus().getCode().equals(ErrorCodeConstants.CODE_E0);
     }
 
 

@@ -229,32 +229,25 @@ public class EwCardController {
             return result;
         }
 
+        CSMEwCardParam CSMEwCardParam = getCsmEwCardParam(ewCardParam.getCardNo(), wechatUser, productItem,product.getId(),product.getBuyTime());
 
-        CSMEwCardParam CSMEwCardParam = getCsmEwCardParam(ewCardParam, wechatUser, productItem,product.getId(),product.getBuyTime());
-
-        //todo 判断是否存在安装工单
+        //判断是否存在安装工单
         ewCard.setCardStatus(EwCardStatus.TO_BE_AUDITED);
-        if (thirdPartyService.existInstallList(product.getProductBarCode())){
+        BaseCardVo baseCardVo = null;
+        if (thirdPartyService.existInstallList(wechatUser.getMobilePhone())){
             ewCard.setInstallList(true);
-            //todo 官方注册
-            thirdPartyService.officialRegisterEwCard(CSMEwCardParam);
-            if (true){
-                ewCard.setCardStatus(EwCardStatus.ENTERED_INTO_FORCE);
-            }
+            baseCardVo = thirdPartyService.registerEwCard(CSMEwCardParam);
         }else {
             ewCard.setInstallList(false);
             if (EwCardUtil.gtSevenDay(product.getBuyTime())){
-                //todo 大于7天
-                thirdPartyService.unOfficialRegisterEwCard(CSMEwCardParam);
-                if (true){
-                    ewCard.setCardStatus(EwCardStatus.ENTERED_INTO_FORCE);
-                }
+                //非官方 大于7天
+                baseCardVo = thirdPartyService.registerEwCard(CSMEwCardParam);
             }
         }
 
-        //csm注册延保卡
-        final BaseCardVo baseCardVo = thirdPartyService.registerEwCard(CSMEwCardParam);
-        if (ErrorCodeConstants.CODE_E09.equals(baseCardVo.getStatus().getCode())){
+        if (baseCardVo == null || baseCardVo.getStatus().getCode().equals(ErrorCodeConstants.CODE_E0)){
+            ewCard.setCardStatus(EwCardStatus.ENTERED_INTO_FORCE);
+        }else if (ErrorCodeConstants.CODE_E09.equals(baseCardVo.getStatus().getCode())){
             logger.error("csm注册延保卡失败,延保卡号为[{}],产品条码为[{}]",ewCardParam.getCardNo(),product.getProductBarCode());
             result.setReturnCode(Constant.FAIL);
             result.setReturnMsg(baseCardVo.getData());
@@ -464,14 +457,13 @@ public class EwCardController {
 
     /**
      * 组装延保卡基本信息
-     * @param ewCardParam
      * @param wechatUser
      * @param productItem
      * @return
      */
-    private CSMEwCardParam getCsmEwCardParam(@RequestBody EwCardParam ewCardParam, WechatUser wechatUser, ProductItem productItem,Long productId,Date buyTime) {
+    private CSMEwCardParam getCsmEwCardParam(String cardNo, WechatUser wechatUser, ProductItem productItem,Long productId,Date buyTime) {
         CSMEwCardParam CSMEwCardParam = new CSMEwCardParam();
-        CSMEwCardParam.setCardNo(ewCardParam.getCardNo());
+        CSMEwCardParam.setCardNo(cardNo);
         //拼装产品所需信息
         CSMEwCardParam.setBarcode(productItem.getBarcode());
         CSMEwCardParam.setItemCode(productItem.getItemCode() == null ? "" : productItem.getItemCode());
