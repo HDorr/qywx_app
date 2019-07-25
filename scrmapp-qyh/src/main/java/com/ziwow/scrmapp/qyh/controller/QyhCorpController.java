@@ -146,7 +146,7 @@ public class QyhCorpController {
                 //禁用企业号员工
                 errorCode = qyhUserService.updateQyhUser(qyhApiUser);
                 LOG.info("禁用企业号用户返回结果:{}",errorCode);
-            }
+                }
             } else {
                 if (null != usable && usable == 2) {
                     // 通过企业号接口创建员工
