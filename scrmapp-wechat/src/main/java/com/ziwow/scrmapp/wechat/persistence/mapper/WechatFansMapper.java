@@ -27,6 +27,9 @@ public interface WechatFansMapper {
     public WechatFans getWechatFansByUserId(@Param("userId") String userId);
     public List<WechatFans> getWechatFansByPage(@Param("page")int page, @Param("size")int size);
     public Integer countWechatFans();
+    public List<WechatFans> getWechatFansAndNotRegisterByPage(@Param("offset")int offset, @Param("size")int size);
+    public Integer getWechatFansAndNotRegisterCount();
+
     List<TempWechatFans> selectTempWechatFansBtach1();
     List<TempWechatFans> selectTempWechatFansBtach2();
     List<TempWechatFans> selectTempWechatFansBtach3();

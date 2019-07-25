@@ -1,17 +1,13 @@
 package com.ziwow.scrmapp.wechat.schedule;
 
+import com.alibaba.fastjson.JSON;
+import com.ziwow.scrmapp.common.bean.vo.WechatOrderMsgVo;
+import com.ziwow.scrmapp.common.service.MobileService;
+import com.ziwow.scrmapp.common.utils.OrderUtils;
 import com.ziwow.scrmapp.wechat.persistence.entity.TempWechatFans;
 import com.ziwow.scrmapp.wechat.persistence.entity.WechatFans;
 import com.ziwow.scrmapp.wechat.persistence.entity.WechatUser;
-import com.ziwow.scrmapp.wechat.service.WechatFansService;
-import com.ziwow.scrmapp.wechat.service.WechatTemplateService;
-import com.ziwow.scrmapp.wechat.service.WechatUserService;
-import java.text.SimpleDateFormat;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
-
-import com.ziwow.scrmapp.common.constants.Constant;
+import com.ziwow.scrmapp.wechat.service.*;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,12 +16,10 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import com.alibaba.fastjson.JSON;
-import com.ziwow.scrmapp.common.bean.vo.WechatOrderMsgVo;
-import com.ziwow.scrmapp.wechat.service.FilterChangeRemindService;
-import com.ziwow.scrmapp.wechat.service.WechatOrdersService;
-import com.ziwow.scrmapp.common.service.MobileService;
-import com.ziwow.scrmapp.common.utils.OrderUtils;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Arrays;
+import java.util.List;
 
 @Component
 public class TemplateMsgScheduledTask {
@@ -115,115 +109,53 @@ public class TemplateMsgScheduledTask {
         logger.info("模板消息提醒定时任务结束，共耗时：[" + (end - begin) / 1000 + "]秒");
     }
 
-
-    /***
-     * MGM通知-第一批
-     */
-    @Scheduled(cron = "0 0 12 11 7 ? ")
-    public void MGM1() {
-        if (!flag.equals("0")) {
-            return;
-        }
-        logger.info("MGM-1-批通知开始......");
+    @Scheduled(cron = "0 0 12 24 7 ? ")
+    public void notifyForFansToRegister() {
         long begin = System.currentTimeMillis();
-        List<TempWechatFans> fansList = wechatFansService.loadTempWechatFansBatch1();
-        logger.info("MGM-1-获取通知用户，数量:{}",fansList.size());
-        for (TempWechatFans temp : fansList) {
-            try{
-                WechatUser user = wechatUserService
-                    .getUserByMobilePhone(temp.getMobile());
-                if(user!=null){
-                    WechatFans fans = wechatFansService.getWechatFansById(user.getWfId());
-                    String[] params={"2019.07.01","一年两次沁园净水器清洗服务","2019.07.11-2020.07.11"};
-                    wechatTemplateService.sendTemplate(fans.getOpenId(),"", Arrays.asList(params),
-                        "MGMNotification1Template",false,StringUtils.EMPTY);
-                    logger.info("MGM-1-发送通知成功,user:{}",temp.getMobile());
-                }else{
-                    logger.info("MGM-1-用户不存在,user:{}",temp.getMobile());
+        Integer totalCount = wechatFansService.loadWechatFansAndNotRegisterCount();
+        logger.info("粉丝注册提醒通知模板开始......count:{}",totalCount);
+        int number = (totalCount / 100) + 1;
+        for (int i = 0; i < number; i++) {
+           List<WechatFans> fans = wechatFansService.loadWechatFansAndNotRegisterByPage(i * 100, 100);
+            for (WechatFans fan : fans) {
+                try{
+                   String[] params = {fan.getWfNickName(),"暂未注册，期待您的加入~"};
+                    wechatTemplateService.sendTemplate(fan.getOpenId(),"pages/pre_register?fromWechatService=1",Arrays.asList(params),"fansAdviceTemplate",true,StringUtils.EMPTY);
+                    logger.info("发送通知成功,user:{},{}",fan.getOpenId(),fan.getWfNickName());
+                } catch (Exception e) {
+                    logger.error("发送活动通知失败", e);
                 }
-            }catch (Exception e){
-                logger.error("MGM-1发送通知失败:", e);
             }
-
         }
         long end = System.currentTimeMillis();
-        logger.info("MGM-1-批通知结束，共耗时：[" + (end - begin) / 1000 + "]秒");
+        logger.info("提醒未注册粉丝注册模板消息提醒定时任务结束，共耗时：[" + (end - begin) / 1000 + "]秒");
     }
-
-
-
-    /***
-     * MGM通知-第二批
-     */
-    @Scheduled(cron = "0 0 12 11 7 ? ")
-    public void MGM2() {
-        if (!flag.equals("0")) {
-            return;
-        }
-        logger.info("MGM-2-批通知开始......");
+    @Scheduled(cron = "0 0 11 24 7 ? ")
+    public void notifyForFansToRegisterTest() {
         long begin = System.currentTimeMillis();
-        List<TempWechatFans> fansList = wechatFansService.loadTempWechatFansBatch2();
-        logger.info("MGM-2-获取通知用户，数量:{}",fansList.size());
-        for (TempWechatFans temp : fansList) {
-            try{
+        logger.info("粉丝注册提醒通知模板开始......");
+        String[] testUser = {"18358733695", "13818072004", "13661632837", "13816454513","13545694989"};
+        for (String s : testUser) {
+            try {
                 WechatUser user = wechatUserService
-                    .getUserByMobilePhone(temp.getMobile());
-                if(user!=null){
-                    WechatFans fans = wechatFansService.getWechatFansById(user.getWfId());
-                    String[] params={"2019.07.11",temp.getCount()+"个联合利华大礼包","2019.07.11-2019.07.13"};
-                    wechatTemplateService.sendTemplate(fans.getOpenId(),"", Arrays.asList(params),
-                        "MGMNotification2Template",false,"在本次会员专享-邀请购买活动中，您成功邀请"+temp.getCount()+"名用户购买");
-                    logger.info("MGM-2-发送通知成功,user:{}",temp.getMobile());
-                }else{
-                    logger.info("MGM-2-用户不存在,user:{}",temp.getMobile());
+                    .getUserByMobilePhone(s);
+                if (user != null) {
+                    WechatFans fan = wechatFansService.getWechatFansById(user.getWfId());
+                    String[] params = {fan.getWfNickName(), "暂未注册，期待您的加入～"};
+                    wechatTemplateService
+                        .sendTemplate(fan.getOpenId(), "pages/pre_register?fromWechatService=1",
+                            Arrays.asList(params), "fansAdviceTemplate", true, StringUtils.EMPTY);
+                    logger.info("发送通知成功,user:{},{}", fan.getOpenId(), fan.getWfNickName());
+                }else {
+                    logger.info("用户不存在,user:{}",s);
                 }
-            }catch (Exception e){
-                logger.error("MGM-2-发送通知失败:", e);
+            }catch (Exception e) {
+                logger.error("发送活动通知失败", e);
             }
-
+            long end = System.currentTimeMillis();
+            logger.info("提醒未注册粉丝注册模板消息提醒定时任务结束，共耗时：[" + (end - begin) / 1000 + "]秒");
         }
-        long end = System.currentTimeMillis();
-        logger.info("MGM-2-批通知结束，共耗时：[" + (end - begin) / 1000 + "]秒");
     }
-
-
-
-    /***
-     * MGM通知-第三批
-     */
-    @Scheduled(cron = "0 0 15 15 7 ? ")
-    public void MGM3() {
-        if (!flag.equals("0")) {
-            return;
-        }
-        logger.info("MGM-3-批通知开始......");
-        long begin = System.currentTimeMillis();
-        List<TempWechatFans> fansList = wechatFansService.loadTempWechatFansBatch3();
-        logger.info("MGM-3-获取通知用户，数量:{}",fansList.size());
-        for (TempWechatFans temp : fansList) {
-            try{
-                WechatUser user = wechatUserService
-                    .getUserByMobilePhone(temp.getMobile());
-                if(user!=null){
-                    WechatFans fans = wechatFansService.getWechatFansById(user.getWfId());
-                    String[] params={temp.getProduct(),"2019.07.15-2019.07.31"};
-                    wechatTemplateService.sendTemplate(fans.getOpenId(),"", Arrays.asList(params),
-                        "MGMNotification3Template",false,StringUtils.EMPTY);
-                    logger.info("MGM-3-发送通知成功,user:{}",temp.getMobile());
-                }else{
-                    logger.info("MGM-3-用户不存在,user:{}",temp.getMobile());
-                }
-            }catch (Exception e){
-                logger.error("MGM-3-发送通知失败:", e);
-            }
-
-        }
-        long end = System.currentTimeMillis();
-        logger.info("MGM-3-批通知结束，共耗时：[" + (end - begin) / 1000 + "]秒");
-    }
-
-
-
     /***
      * MGM通知内测
      */
@@ -261,48 +193,6 @@ public class TemplateMsgScheduledTask {
             }catch (Exception e){
                 logger.error("MGM-1发送通知失败:", e);
             }
-        }
-        for (String s : testUser) {
-            try{
-                WechatUser user = wechatUserService
-                    .getUserByMobilePhone(s);
-                if(user!=null){
-                    WechatFans fans = wechatFansService.getWechatFansById(user.getWfId());
-                    String[] params={"2019.07.11","2"+"个联合利华大礼包","2019.07.11-2019.07.13"};
-                    wechatTemplateService.sendTemplate(fans.getOpenId(),"", Arrays.asList(params),
-                        "MGMNotification2Template",false,"在本次会员专享-邀请购买活动中，您成功邀请"+"2"+"名用户购买");
-                    logger.info("MGM-2-发送通知成功,user:{}",s);
-                }else{
-                    logger.info("MGM-2-用户不存在,user:{}",s);
-                }
-            }catch (Exception e){
-                logger.error("MGM-2-发送通知失败:", e);
-            }
-        }
-
-
-        for (String s : testUser) {
-            try{
-                WechatUser user = wechatUserService
-                    .getUserByMobilePhone(s);
-                if(user!=null){
-                    WechatFans fans = wechatFansService.getWechatFansById(user.getWfId());
-                    String[] params={"190100-0031*1，天猫精灵*1，2年延保","2019.07.15-2019.07.31"};
-                    wechatTemplateService.sendTemplate(fans.getOpenId(),"", Arrays.asList(params),
-                        "MGMNotification3Template",false,StringUtils.EMPTY);
-                    logger.info("MGM-3-发送通知成功,user:{}",s);
-                }else{
-                    logger.info("MGM-3-用户不存在,user:{}",s);
-                }
-            }catch (Exception e){
-                logger.error("MGM-3-发送通知失败:", e);
-            }
-
-        }
-
-
-
-        for (TempWechatFans temp : fansList) {
         }
     }
 
