@@ -121,6 +121,9 @@ public class QyhCorpController {
             if (null != position) {
                 qyhApiUser.setPosition(PositionType.getNameByCode(position));
             }
+            if(null != usable && usable == 3){
+                qyhApiUser.setEnable(0);
+            }
             qyhApiUser.setDepartment(Lists.newArrayList(Integer.valueOf(qyhDepartment.getId() + "")));
             qyhApiUser.setStatus(4);
             String jsonData = JSON.toJSONString(qyhApiUser);
@@ -139,7 +142,11 @@ public class QyhCorpController {
                     if (0 == errorCode) {
                         qyhUserService.deleteQyhUser(engineerId, corpId);
                     }
-                }
+                } else if (null != usable && usable == 3) {
+                //禁用企业号员工
+                errorCode = qyhUserService.updateQyhUser(qyhApiUser);
+                LOG.info("禁用企业号用户返回结果:{}",errorCode);
+            }
             } else {
                 if (null != usable && usable == 2) {
                     // 通过企业号接口创建员工
