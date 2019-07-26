@@ -71,7 +71,7 @@ public class OfficialEwCardTask extends IJobHandler {
                 XxlJobLogger.log("延保卡号" + ewCard.getCardNo());
                 final WechatUser wechatUser = wechatUserService.getUserByOpenId(wechatFansService.getWechatFansById(ewCard.getFansId()).getOpenId());
                 XxlJobLogger.log("userId" + wechatUser.getUserId());
-                final Product product = productService.getProductsByBarCodeAndUserId(wechatUser.getUserId(),ewCard.getProductBarCodeTwenty());
+                final Product product = productService.getProductsByBarCode(ewCard.getProductBarCodeTwenty());
                 ProductItem productItem = thirdPartyService.getProductItem(new ProductParam(product.getModelName(), product.getProductBarCode()));
                 final BaseCardVo baseCardVo = thirdPartyService.registerEwCard(getCsmEwCardParam(ewCard.getCardNo(), wechatUser, productItem, product.getId(), ewCard.getPurchDate()));
                 if (baseCardVo.getStatus().getCode().equals(ErrorCodeConstants.CODE_E0)){

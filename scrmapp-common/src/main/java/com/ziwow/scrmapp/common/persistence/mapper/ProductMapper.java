@@ -98,4 +98,11 @@ public interface ProductMapper {
      * @return
      */
     int countProductByUserIdAndproductBarCode(@Param("userId") String userId, @Param("productBarCode") String productBarCode);
+
+    /**
+     * 根据产品条码查询产品信息
+     * @param barCode
+     * @return
+     */
+    Product getProductsByBarCode(@Param("barCode") String barCode);
 }

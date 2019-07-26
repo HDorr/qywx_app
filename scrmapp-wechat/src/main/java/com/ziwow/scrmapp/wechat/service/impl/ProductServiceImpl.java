@@ -883,4 +883,9 @@ public class ProductServiceImpl implements ProductService {
         return productMapper.countProductByUserIdAndproductBarCode(userId,productBarCode) == 1;
     }
 
+    @Override
+    public Product getProductsByBarCode(String productBarCodeTwenty) {
+        return productMapper.getProductsByBarCode(productBarCodeTwenty);
+    }
+
 }

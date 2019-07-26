@@ -106,4 +106,12 @@ public interface ProductService {
      * @return  有该产品就是true 反之false
      */
     boolean isOnlyBindProduct(String userId, String productBarCode);
+
+
+    /**
+     * 根据产品条码查询用户所绑定产品
+     * @param productBarCodeTwenty
+     * @return
+     */
+    Product getProductsByBarCode(String productBarCodeTwenty);
 }

@@ -45,6 +45,14 @@
     </select>
 
 
+    <select id="getProductsByBarCode" resultMap="BaseResultMap">
+	    select
+	    	id,productName,productBarCode,modelName,levelName,productImage,productBarCodeTwenty,productCode,buyTime
+	    from t_product
+	    where status = 1 and productBarCode = #{barCode} limit 1
+	</select>
+
+
     <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
         select
         	<include refid="Base_Column_List"/>
