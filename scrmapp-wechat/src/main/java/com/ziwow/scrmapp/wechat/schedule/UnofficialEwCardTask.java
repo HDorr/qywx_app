@@ -68,11 +68,12 @@ public class UnofficialEwCardTask extends IJobHandler {
         for (EwCard ewCard : ewCards) {
             if (EwCardUtil.gtSevenDay(ewCard.getPurchDate())){
                 try {
-                    XxlJobLogger.log("产品条码" + ewCard.getProductBarCodeTwenty());
-                    XxlJobLogger.log("延保卡号" + ewCard.getCardNo());
+                    XxlJobLogger.log("产品条码=====" + ewCard.getProductBarCodeTwenty());
+                    XxlJobLogger.log("延保卡号=====" + ewCard.getCardNo());
                     final WechatUser wechatUser = wechatUserService.getUserByOpenId(wechatFansService.getWechatFansById(ewCard.getFansId()).getOpenId());
-                    XxlJobLogger.log("userId" + wechatUser.getUserId());
+                    XxlJobLogger.log("userId =====" + wechatUser.getUserId());
                     final Product product = productService.getProductsByBarCode(ewCard.getProductBarCodeTwenty());
+                    XxlJobLogger.log("productId =====" + wechatUser.getUserId());
                     ProductItem productItem = thirdPartyService.getProductItem(new ProductParam(product.getModelName(), product.getProductBarCode()));
                     final BaseCardVo baseCardVo = thirdPartyService.registerEwCard(getCsmEwCardParam(ewCard.getCardNo(), wechatUser, productItem, product.getId(), ewCard.getPurchDate()));
                     if (baseCardVo.getStatus().getCode().equals(ErrorCodeConstants.CODE_E0)){
