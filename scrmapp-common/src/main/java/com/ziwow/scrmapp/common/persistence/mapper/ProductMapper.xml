@@ -72,7 +72,7 @@
 	    select
 	    	id,productName,productBarCode,modelName,levelName,productImage,productBarCodeTwenty,productCode,buyTime
 	    from t_product
-	    where status = 1 and userId = #{userId} and productBarCode = #{barCode}
+	    where status = 1 and userId = #{userId} and productBarCode = #{barCode} limit 1
 	</select>
 	
     <select id="findBaseInfoById" parameterType="java.lang.Long" resultMap="BaseResultMap">
