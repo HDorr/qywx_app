@@ -547,15 +547,17 @@ public class WeChatMessageProcessingHandler {
             return isPushToCallCenter;
         }else if (content.contains("攻略")){
           return false;
-        } else if("除菌去味一步到位".contains(content)){
+        } else if("除菌去味一步到位".contains(content)||"除菌去味一喷到位".contains(content)||"卫宝".contains(content)){
             WechatRegister register = new WechatRegister();
             register.setOpenId(inMessage.getFromUserName());
             register.setContent(inMessage.getContent());
             //根据openid查询手机号
             WechatUser wechatUser = wechatUserService
                 .getUserByOpenId(inMessage.getFromUserName());
-            register.setPhone(wechatUser.getMobilePhone());
-            wechatRegisterService.savePullNewRegisterByEngineer(register);
+            if(null!=wechatUser){
+                register.setPhone(wechatUser.getMobilePhone());
+                wechatRegisterService.savePullNewRegisterByEngineer(register);
+            }
             return  false;
         }else {
 

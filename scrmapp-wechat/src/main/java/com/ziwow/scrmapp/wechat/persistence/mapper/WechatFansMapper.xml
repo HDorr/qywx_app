@@ -163,5 +163,13 @@
 		from t_wechat_user_temp_3 temp
 	</select>
 
+  <select id="getWechatFansAndNotRegisterByPage" resultMap="wechatFansMap">
+		SELECT  wf.*  FROM t_wechat_fans AS wf LEFT JOIN t_wechat_user AS wu ON wf.id=wu.wfId
+    WHERE  wu.wfId   is NULL   AND  wf.is_cancel =0 limit #{offset},#{size}
+	</select>
 
+  <select id="getWechatFansAndNotRegisterCount" resultType="java.lang.Integer">
+    SELECT  COUNT(*) FROM t_wechat_fans AS wf LEFT JOIN t_wechat_user AS wu ON wf.id=wu.wfId
+    WHERE  wu.wfId   is NULL   AND  wf.is_cancel =0
+  </select>
 </mapper>

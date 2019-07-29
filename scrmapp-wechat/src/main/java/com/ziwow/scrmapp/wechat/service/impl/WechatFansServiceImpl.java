@@ -306,6 +306,19 @@ public class WechatFansServiceImpl implements WechatFansService {
 		return wechatFansMapper.countWechatFans();
   }
 
+	@Override
+	public List<WechatFans> loadWechatFansAndNotRegisterByPage(int offset, int size) {
+		return wechatFansMapper.getWechatFansAndNotRegisterByPage(offset,size);
+	}
+
+	@Override
+	public Integer loadWechatFansAndNotRegisterCount() {
+		return wechatFansMapper.getWechatFansAndNotRegisterCount();
+	}
+
+
+
+
 
 	@Override
 	public List<TempWechatFans> loadTempWechatFansBatch1() {
