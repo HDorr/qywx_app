@@ -76,7 +76,7 @@ var Barcode = {
             }
             if(_this.upImgArray[index]) return
             wxInit_promise.wxUploadImage().then(function(src){
-                _this.image = src;
+                _this.image = _this.image + "," + src;
                 _this.upImgArray[index] = src;
 
             }).fail(function(err){
