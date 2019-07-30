@@ -41,6 +41,7 @@ public class UnofficialEwCardTask extends AbstractEwCardTask {
     @Autowired
     private EwCardService ewCardService;
 
+    @Autowired
     public UnofficialEwCardTask(EwCardService ewCardService, WechatOrdersService wechatOrdersService, WechatUserAddressService wechatUserAddressService, ThirdPartyService thirdPartyService, ProductService productService, WechatUserService wechatUserService, WechatFansService wechatFansService) {
         super(ewCardService, wechatOrdersService, wechatUserAddressService, thirdPartyService, productService, wechatUserService, wechatFansService);
     }
