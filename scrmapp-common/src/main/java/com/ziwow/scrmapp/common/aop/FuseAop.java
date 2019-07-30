@@ -55,8 +55,10 @@ public class FuseAop extends ApplicationObjectSupport {
     }
 
 
+
     @Pointcut("execution(* com.ziwow.scrmapp.common.service.impl.ThirdPartyServiceImpl.*(..))")
     public void conference(){}
+
 
     @Pointcut("@annotation(com.ziwow.scrmapp.common.annotation.Fuse)")
     public void anConference(){}
@@ -86,11 +88,12 @@ public class FuseAop extends ApplicationObjectSupport {
                 }
             });
             try {
-                result = future.get(timeoutInMilliSeconds,TimeUnit.MILLISECONDS);
-            } catch (TimeoutException e) {
-                LOG.error("请求第三方超时! TimeoutException:",e);
-                future.cancel(true);
-                throw new ThirdException("请求超时,请稍后再试");
+                //result = future.get(timeoutInMilliSeconds,TimeUnit.MILLISECONDS);
+                result = future.get();
+//            } catch (TimeoutException e) {
+//                LOG.error("请求第三方超时! TimeoutException:",e);
+//                future.cancel(true);
+//                throw new ThirdException("请求超时,请稍后再试");
             }catch (InterruptedException e){
                 //当前线程被中断 log throw
                 LOG.info("因超时线程强行停止运行");
