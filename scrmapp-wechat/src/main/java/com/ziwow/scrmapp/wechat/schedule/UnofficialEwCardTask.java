@@ -34,30 +34,17 @@ import java.util.List;
  */
 @Component
 @JobHandler("unOfficialEwCardTask")
-public class UnofficialEwCardTask extends IJobHandler {
+public class UnofficialEwCardTask extends AbstractEwCardTask {
 
     private static final Logger logger = LoggerFactory.getLogger(EwCardController.class);
 
     @Autowired
     private EwCardService ewCardService;
 
-    @Autowired
-    private WechatOrdersService wechatOrdersService;
+    public UnofficialEwCardTask(EwCardService ewCardService, WechatOrdersService wechatOrdersService, WechatUserAddressService wechatUserAddressService, ThirdPartyService thirdPartyService, ProductService productService, WechatUserService wechatUserService, WechatFansService wechatFansService) {
+        super(ewCardService, wechatOrdersService, wechatUserAddressService, thirdPartyService, productService, wechatUserService, wechatFansService);
+    }
 
-    @Autowired
-    private WechatUserAddressService wechatUserAddressService;
-
-    @Autowired
-    private ThirdPartyService thirdPartyService;
-
-    @Autowired
-    private ProductService productService;
-
-    @Autowired
-    private WechatUserService wechatUserService;
-
-    @Autowired
-    private WechatFansService wechatFansService;
 
     @Override
     public ReturnT<String> execute(String s) throws Exception {
@@ -67,72 +54,9 @@ public class UnofficialEwCardTask extends IJobHandler {
         List<EwCard> ewCards = ewCardService.selectEwCardsByStatusAndInstall(EwCardStatus.TO_BE_AUDITED,false);
         for (EwCard ewCard : ewCards) {
             if (EwCardUtil.gtSevenDay(ewCard.getPurchDate())){
-                try {
-                    XxlJobLogger.log("产品条码=====" + ewCard.getProductBarCodeTwenty());
-                    XxlJobLogger.log("延保卡号=====" + ewCard.getCardNo());
-                    final WechatUser wechatUser = wechatUserService.getUserByOpenId(wechatFansService.getWechatFansById(ewCard.getFansId()).getOpenId());
-                    XxlJobLogger.log("userId =====" + wechatUser.getUserId());
-                    final Product product = productService.getProductsByBarCode(ewCard.getProductBarCodeTwenty());
-                    XxlJobLogger.log("productId =====" + wechatUser.getUserId());
-                    ProductItem productItem = thirdPartyService.getProductItem(new ProductParam(product.getModelName(), product.getProductBarCode()));
-                    final BaseCardVo baseCardVo = thirdPartyService.registerEwCard(getCsmEwCardParam(ewCard.getCardNo(), wechatUser, productItem, product.getId(), ewCard.getPurchDate()));
-                    if (baseCardVo.getStatus().getCode().equals(ErrorCodeConstants.CODE_E0)){
-                        //修改资产状态为使用
-                        ewCardService.updateCardStatus(ewCard.getCardNo(),EwCardStatus.ENTERED_INTO_FORCE);
-                    }
-                } catch (Exception e) {
-                    logger.error(e.getMessage());
-                    XxlJobLogger.log(e);
-                    XxlJobLogger.log("推送失败，产品条码为+",ewCard.getProductBarCodeTwenty(),"延保卡号为"+ewCard.getCardNo());
-                }
+                registerEwCard(ewCard);
             }
         }
         return ReturnT.SUCCESS;
-    }
-    /**
-     * 组装延保卡基本信息
-     * @param cardNo
-     * @param wechatUser
-     * @param productItem
-     * @return
-     */
-    private CSMEwCardParam getCsmEwCardParam(String cardNo, WechatUser wechatUser, ProductItem productItem, Long productId, Date buyTime) {
-        CSMEwCardParam CSMEwCardParam = new CSMEwCardParam();
-        CSMEwCardParam.setCardNo(cardNo);
-        //拼装产品所需信息
-        CSMEwCardParam.setBarcode(productItem.getBarcode());
-        CSMEwCardParam.setItemCode(productItem.getItemCode() == null ? "" : productItem.getItemCode());
-        CSMEwCardParam.setSpec(productItem.getSpec() == null ? "" : productItem.getSpec());
-        CSMEwCardParam.setPurchDate(buyTime);
-        //获取安装时间
-        CSMEwCardParam.setInstallTime("");
-        final List<WechatOrdersVo> wechatOrdersVos = wechatOrdersService.getWechatOrdersByProductId(productId);
-        for (WechatOrdersVo wechatOrdersVo : wechatOrdersVos) {
-            //如果是安装订单并且完成安装
-            if (wechatOrdersVo.getOrderType() == 1 && (wechatOrdersVo.getStatus() == 5 || wechatOrdersVo.getStatus() == 6)){
-                CSMEwCardParam.setInstallTime(wechatOrdersVo.getEndTime());
-                break;
-            }
-        }
-
-        //用户信息
-        CSMEwCardParam.setMobile(wechatUser.getMobilePhone() == null ? "" : wechatUser.getMobilePhone());
-        CSMEwCardParam.setEnduserName(wechatUser.getUserName() == null ? "" : wechatUser.getUserName());
-        //不传电话,但是字段要有
-        CSMEwCardParam.setTel("");
-        //省市区
-        WechatUserAddress address = null;
-        final List<WechatUserAddress> userAddresList = wechatUserAddressService.findUserAddresList(wechatUser.getUserId());
-        if (CollectionUtils.isEmpty(userAddresList)){
-            address = new WechatUserAddress();
-        }else {
-            address = userAddresList.get(0);
-        }
-        CSMEwCardParam.setProvinceName(address.getProvinceName() == null ? "" : address.getProvinceName());
-        CSMEwCardParam.setCityName(address.getCityName() == null ? "" : address.getCityName());
-        CSMEwCardParam.setCountyName(address.getAreaName() == null ? "" : address.getAreaName());
-        //取的街道地址
-        CSMEwCardParam.setEnduserAddress(address.getStreetName() == null ? "" : address.getStreetName());
-        return CSMEwCardParam;
     }
 }
