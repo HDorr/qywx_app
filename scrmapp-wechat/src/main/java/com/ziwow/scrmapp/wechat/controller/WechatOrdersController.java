@@ -1,22 +1,60 @@
 package com.ziwow.scrmapp.wechat.controller;
 
 import com.alibaba.fastjson.JSON;
-import com.ziwow.scrmapp.wechat.enums.SmsMarketingEmus;
+import com.alibaba.fastjson.JSONObject;
+import com.ziwow.scrmapp.common.bean.pojo.EvaluateParam;
+import com.ziwow.scrmapp.common.bean.pojo.WechatOrdersParam;
+import com.ziwow.scrmapp.common.bean.pojo.ext.WechatOrdersParamExt;
+import com.ziwow.scrmapp.common.bean.vo.ProductVo;
+import com.ziwow.scrmapp.common.bean.vo.QyhUserMsgVo;
+import com.ziwow.scrmapp.common.bean.vo.QyhUserVo;
+import com.ziwow.scrmapp.common.bean.vo.WechatOrderVo;
+import com.ziwow.scrmapp.common.bean.vo.WechatOrdersVo;
+import com.ziwow.scrmapp.common.constants.Constant;
+import com.ziwow.scrmapp.common.constants.SystemConstants;
+import com.ziwow.scrmapp.common.enums.AppraiseEnum;
+import com.ziwow.scrmapp.common.persistence.entity.QyhUser;
+import com.ziwow.scrmapp.common.persistence.entity.QyhUserAppraisal;
+import com.ziwow.scrmapp.common.persistence.entity.QyhUserAppraisalVo;
+import com.ziwow.scrmapp.common.persistence.entity.ServiceFeeProduct;
+import com.ziwow.scrmapp.common.persistence.entity.SmsMarketing;
+import com.ziwow.scrmapp.common.persistence.entity.WechatOrderAppraise;
+import com.ziwow.scrmapp.common.persistence.entity.WechatOrderServiceFee;
+import com.ziwow.scrmapp.common.persistence.entity.WechatOrders;
+import com.ziwow.scrmapp.common.persistence.entity.WechatOrdersRecord;
+import com.ziwow.scrmapp.common.result.BaseResult;
+import com.ziwow.scrmapp.common.result.Result;
+import com.ziwow.scrmapp.common.service.MobileService;
+import com.ziwow.scrmapp.common.utils.OrderUtils;
+import com.ziwow.scrmapp.tools.queue.EngineerQueue;
+import com.ziwow.scrmapp.tools.utils.Base64;
+import com.ziwow.scrmapp.tools.utils.BeanUtils;
+import com.ziwow.scrmapp.tools.utils.CookieUtil;
+import com.ziwow.scrmapp.tools.utils.DateUtil;
+import com.ziwow.scrmapp.tools.utils.StringUtil;
+import com.ziwow.scrmapp.wechat.constants.WeChatConstants;
 import com.ziwow.scrmapp.wechat.enums.SmsMarketingEmus.SmsTypeEnum;
+import com.ziwow.scrmapp.wechat.persistence.entity.WechatUser;
 import com.ziwow.scrmapp.wechat.schedule.SmsMarketingTask;
+import com.ziwow.scrmapp.wechat.service.FailRecordService;
+import com.ziwow.scrmapp.wechat.service.GrantPointService;
+import com.ziwow.scrmapp.wechat.service.OrdersProRelationsService;
+import com.ziwow.scrmapp.wechat.service.ProductService;
+import com.ziwow.scrmapp.wechat.service.SmsMarketingService;
+import com.ziwow.scrmapp.wechat.service.WXPayService;
+import com.ziwow.scrmapp.wechat.service.WechatFansService;
+import com.ziwow.scrmapp.wechat.service.WechatOrderServiceFeeService;
+import com.ziwow.scrmapp.wechat.service.WechatOrdersRecordService;
+import com.ziwow.scrmapp.wechat.service.WechatOrdersService;
+import com.ziwow.scrmapp.wechat.service.WechatQyhUserService;
+import com.ziwow.scrmapp.wechat.service.WechatUserService;
 import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.util.Date;
 import java.util.List;
-
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import com.ziwow.scrmapp.common.bean.vo.*;
-import com.ziwow.scrmapp.common.enums.AppraiseEnum;
-import com.ziwow.scrmapp.common.persistence.entity.*;
-import com.ziwow.scrmapp.wechat.service.*;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,29 +67,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
-
-import com.alibaba.fastjson.JSONObject;
-import com.ziwow.scrmapp.common.bean.pojo.EvaluateParam;
-import com.ziwow.scrmapp.common.bean.pojo.WechatOrdersParam;
-import com.ziwow.scrmapp.common.bean.pojo.ext.WechatOrdersParamExt;
-import com.ziwow.scrmapp.common.bean.vo.ProductVo;
-import com.ziwow.scrmapp.common.bean.vo.QyhUserMsgVo;
-import com.ziwow.scrmapp.common.bean.vo.QyhUserVo;
-import com.ziwow.scrmapp.common.bean.vo.WechatOrdersVo;
-import com.ziwow.scrmapp.common.constants.Constant;
-import com.ziwow.scrmapp.common.constants.SystemConstants;
-import com.ziwow.scrmapp.common.result.BaseResult;
-import com.ziwow.scrmapp.common.result.Result;
-import com.ziwow.scrmapp.common.service.MobileService;
-import com.ziwow.scrmapp.common.utils.OrderUtils;
-import com.ziwow.scrmapp.tools.queue.EngineerQueue;
-import com.ziwow.scrmapp.tools.utils.Base64;
-import com.ziwow.scrmapp.tools.utils.BeanUtils;
-import com.ziwow.scrmapp.tools.utils.CookieUtil;
-import com.ziwow.scrmapp.tools.utils.DateUtil;
-import com.ziwow.scrmapp.tools.utils.StringUtil;
-import com.ziwow.scrmapp.wechat.constants.WeChatConstants;
-import com.ziwow.scrmapp.wechat.persistence.entity.WechatUser;
 
 /**
  * Created by xiaohei on 2017/4/7.
@@ -92,6 +107,8 @@ public class WechatOrdersController {
     private WechatOrderServiceFeeService wechatOrderServiceFeeService;
     @Autowired
     private SmsMarketingService smsMarketingService;
+    @Autowired
+    private GrantPointService grantPointService;
 
 
     /**
@@ -251,7 +268,8 @@ public class WechatOrdersController {
                 String mobilePhone = wechatUser.getMobilePhone();
                 int originalType = SmsMarketingTask.convertOriginalType(SmsTypeEnum.TODAY.getCode(), orderType);
                 SmsMarketing smsMarketing = smsTemplateMap.get(originalType);
-                mobileService.sendContentByEmay(mobilePhone, smsMarketing.getSmsContent(), Constant.CUSTOMER);
+                //短信开口关闭 2019年06月19日
+                //mobileService.sendContentByEmay(mobilePhone, smsMarketing.getSmsContent(), Constant.CUSTOMER);
                 // 预约提交成功模板消息提醒
                 wechatOrdersService.sendAppointmentTemplateMsg(wechatOrders.getOrdersCode(), serverType);
                 WechatOrdersRecord wechatOrdersRecord = new WechatOrdersRecord();
@@ -548,7 +566,8 @@ public class WechatOrdersController {
                     // 给用户发送发送短信提醒
                     String mobile = wechatUser.getMobilePhone();
                     String msgContent = "亲爱的用户，您预约的" + serverType + "服务已撤销。如须重新预约，您可进入“沁园”官方微信服务号进行操作。";
-                    mobileService.sendContentByEmay(mobile, msgContent, Constant.CUSTOMER);
+                    //短信开口关闭 2019年06月19日
+                    //mobileService.sendContentByEmay(mobile, msgContent, Constant.CUSTOMER);
                     // 给用户发送发送模板消息
                     wechatOrdersService.sendOrderCancelTemplateMsg(userId, serverType);
                     // 如果服务工程师接单了，用户侧取消需要给服务工程师发送取消通知
@@ -558,7 +577,8 @@ public class WechatOrdersController {
                         String engineerMsgContent = "请注意，" + contacts + "用户已取消" + serverType + "服务！您可进入“沁园”WX企业号查看该工单详情！";
                         QyhUser qyhUser = wechatQyhUserService.getQyhUser(engineerId);
                         String qyhUserMobile = (null != qyhUser) ? qyhUser.getMobile() : "";
-                        mobileService.sendContentByEmay(qyhUserMobile, engineerMsgContent, Constant.ENGINEER);
+                        //短信开口关闭 2019年06月19日
+                        //mobileService.sendContentByEmay(qyhUserMobile, engineerMsgContent, Constant.ENGINEER);
                         // 给工程师发送取消公告通知
                         String url = orderDetailUrl + "?userId=" + engineerId + "&ordersCode=" + ordersCode;
                         String content = "工单撤销通知！\n" +
@@ -804,7 +824,8 @@ public class WechatOrdersController {
                 String engineerMsgContent = "您服务的工单" + ordersCode + "，用户已经评价啦，谢谢提供服务！请登录“沁园服务之家”的售后服务个人中心，可以查看评分。";
                 QyhUser qyhUser = wechatQyhUserService.getQyhUser(wechatOrders.getQyhUserId());
                 String qyhUserMobile = (null != qyhUser) ? qyhUser.getMobile() : "";
-                mobileService.sendContentByEmay(qyhUserMobile, engineerMsgContent, Constant.ENGINEER);
+                //短信开口关闭 2019年06月19日
+                //mobileService.sendContentByEmay(qyhUserMobile, engineerMsgContent, Constant.ENGINEER);
             } else {
                 return invokeResult;
             }
@@ -985,6 +1006,9 @@ public class WechatOrdersController {
                 if (count > 0) {
                     //修改预约单状态为已评价
                     wechatOrdersService.updateOrdersStatus(ordersCode, userId, date, SystemConstants.APPRAISE);
+                    //发送评价积分
+                    grantPointService.grantOrderComment(userId,ordersCode,wechatOrders.getOrderType());
+
                 } else {
                     throw new SQLException("qyhUserAppraisalVo:" + JSONObject.toJSONString(qyhUserAppraisalVo));
                 }
@@ -1001,7 +1025,8 @@ public class WechatOrdersController {
                 String engineerMsgContent = "您服务的工单" + ordersCode + "，用户已经评价啦，谢谢提供服务！请登录“沁园服务之家”的售后服务个人中心，可以查看评分。";
                 QyhUser qyhUser = wechatQyhUserService.getQyhUser(wechatOrders.getQyhUserId());
                 String qyhUserMobile = (null != qyhUser) ? qyhUser.getMobile() : "";
-                mobileService.sendContentByEmay(qyhUserMobile, engineerMsgContent, Constant.ENGINEER);
+                //短信开口关闭 2019年06月19日
+                //mobileService.sendContentByEmay(qyhUserMobile, engineerMsgContent, Constant.ENGINEER);
             } else {
                 result.setReturnCode(Constant.FAIL);
                 result.setReturnMsg("用户评分失败!");

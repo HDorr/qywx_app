@@ -19,6 +19,13 @@
 		<result column="unionid" property="unionId" />
 	</resultMap>
 
+  <resultMap id="TempWechatMap" type="com.ziwow.scrmapp.wechat.persistence.entity.TempWechatFans" extends="wechatFansMap">
+    <result column="mobile" property="mobile"/>
+		<result column="count" property="count"/>
+		<result column="product" property="product"/>
+  </resultMap>
+
+
 	<select id="saveWechatFans" parameterType="com.ziwow.scrmapp.wechat.persistence.entity.WechatFans">
 		insert into t_wechat_fans (openid,wf_nickname,wf_token,create_time,gender,headimgurl,province,country,city,unionid,channel_id)
 		values (#{openId},#{wfNickName},#{wfToken},NOW(),#{gender},#{headImgUrl},#{province},#{country},#{city},#{unionId},#{channelId}) on
@@ -127,4 +134,42 @@
 		  and usr.userId = #{userId}
 		  and fans.is_cancel = 0
 	</select>
+
+	<select id="countWechatFans" resultType="java.lang.Integer">
+		select count(*) From t_wechat_fans where  is_cancel=0
+	</select>
+
+	<select id="getWechatFansByPage" resultMap="wechatFansMap">
+		select * From t_wechat_fans where  is_cancel=0 limit #{page},#{size}
+	</select>
+
+
+	<!--临时查询-->
+	<select id="selectTempWechatFansBtach1" resultMap="TempWechatMap">
+		select temp.mobile,temp.count
+		from t_wechat_user_temp_1 temp
+	</select>
+
+	<!--临时查询-->
+	<select id="selectTempWechatFansBtach2" resultMap="TempWechatMap">
+		select temp.mobile,temp.count
+		from t_wechat_user_temp_2 temp
+	</select>
+
+
+	<!--临时查询-->
+	<select id="selectTempWechatFansBtach3" resultMap="TempWechatMap">
+		select temp.mobile,temp.product
+		from t_wechat_user_temp_3 temp
+	</select>
+
+  <select id="getWechatFansAndNotRegisterByPage" resultMap="wechatFansMap">
+		SELECT  wf.*  FROM t_wechat_fans AS wf LEFT JOIN t_wechat_user AS wu ON wf.id=wu.wfId
+    WHERE  wu.wfId   is NULL   AND  wf.is_cancel =0 limit #{offset},#{size}
+	</select>
+
+  <select id="getWechatFansAndNotRegisterCount" resultType="java.lang.Integer">
+    SELECT  COUNT(*) FROM t_wechat_fans AS wf LEFT JOIN t_wechat_user AS wu ON wf.id=wu.wfId
+    WHERE  wu.wfId   is NULL   AND  wf.is_cancel =0
+  </select>
 </mapper>

@@ -106,7 +106,8 @@ public class QyhProductServiceImpl implements QyhProductService {
 
     @Override
     public String queryProductImage(String modelName) {
-        String productImg = thirdPartyService.getProductImg(modelName);
+        //String productImg = thirdPartyService.getProductImg(modelName);
+        String productImg = "https://wx.qinyuan.cn/wx/resources/images/defaultPdtImg.jpg";
         if (!StringUtils.isEmpty(productImg)) {
             updateProductImage(modelName, productImg);
         }

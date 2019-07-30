@@ -1,5 +1,7 @@
 package com.ziwow.scrmapp.wechat.service.impl;
 
+import com.ziwow.scrmapp.wechat.persistence.entity.TempWechatFans;
+import java.util.List;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -292,5 +294,44 @@ public class WechatFansServiceImpl implements WechatFansService {
 			LOG.info("通过静默认证获取用户信息失败:", e);
 		}
 		return wechatFansVo;
+	}
+
+  @Override
+  public List<WechatFans> getWechatFansByPage(int page, int size) {
+    return wechatFansMapper.getWechatFansByPage(page,size);
+  }
+
+  @Override
+  public Integer countWechatFans() {
+		return wechatFansMapper.countWechatFans();
+  }
+
+	@Override
+	public List<WechatFans> loadWechatFansAndNotRegisterByPage(int offset, int size) {
+		return wechatFansMapper.getWechatFansAndNotRegisterByPage(offset,size);
+	}
+
+	@Override
+	public Integer loadWechatFansAndNotRegisterCount() {
+		return wechatFansMapper.getWechatFansAndNotRegisterCount();
+	}
+
+
+
+
+
+	@Override
+	public List<TempWechatFans> loadTempWechatFansBatch1() {
+		return wechatFansMapper.selectTempWechatFansBtach1();
+	}
+
+	@Override
+	public List<TempWechatFans> loadTempWechatFansBatch2() {
+		return wechatFansMapper.selectTempWechatFansBtach2();
+	}
+
+	@Override
+	public List<TempWechatFans> loadTempWechatFansBatch3() {
+		return wechatFansMapper.selectTempWechatFansBtach3();
 	}
 }

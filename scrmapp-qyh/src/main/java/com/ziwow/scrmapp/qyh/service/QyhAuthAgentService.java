@@ -23,4 +23,6 @@ public interface QyhAuthAgentService extends GenericService<QyhAuthAgent, Long>{
 	public boolean checkAuthAgenExist(String appid,String authcorpid);
 	
 	public void changeAuth(String suiteId,String authCorpId);
+
+
 }

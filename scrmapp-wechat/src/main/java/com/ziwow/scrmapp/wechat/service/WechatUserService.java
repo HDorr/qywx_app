@@ -8,6 +8,7 @@ import com.ziwow.scrmapp.common.result.Result;
 import com.ziwow.scrmapp.wechat.persistence.entity.MallPcUser;
 import com.ziwow.scrmapp.wechat.persistence.entity.WechatFans;
 import com.ziwow.scrmapp.wechat.persistence.entity.WechatUser;
+import com.ziwow.scrmapp.wechat.vo.QtyUserVO;
 import com.ziwow.scrmapp.wechat.vo.WechatUserVo;
 
 import java.util.Date;
@@ -58,6 +59,8 @@ public interface WechatUserService {
     public void syncUserFromMiniApp(WechatFans fans, WechatUser wechatUser);
 
     public void syncUserToMiniApp(String unionId, String mobile);
+
+    String loadByUnionId(String userId);
 
 
     List<WechatUser> getUserByRegisterSrc(Integer src);

@@ -1124,7 +1124,8 @@ public class QyhOrdersServiceImpl implements QyhOrdersService {
                 QyhUser qyhUser = qyhUserService.getQyhUserByUserIdAndCorpId(qyhUserId, corpId);
                 String mobilePhone = (null != qyhUser) ? qyhUser.getMobile() : "";
                 String msgContent = "您已拒绝" + contacts + "用户预约的" + serviceType + "服务，您可进入“沁园”WX企业号查看该工单详情！";
-                mobileService.sendContentByEmay(mobilePhone, msgContent, Constant.ENGINEER);
+                //短信开口关闭 2019年06月19日
+                //mobileService.sendContentByEmay(mobilePhone, msgContent, Constant.ENGINEER);
                 // 服务工程师修改预约时间给自己发送通知
                 String url = orderDetailUrl + "?userId=" + qyhUserId + "&ordersCode=" + orderCode;
                 String content = "工单撤销通知！\n" +
