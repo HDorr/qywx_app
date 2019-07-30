@@ -101,12 +101,13 @@ public class EwCardController {
         if(ewCard != null){
             result.setReturnCode(Constant.FAIL);
             result.setReturnMsg("该延保卡已经被注册");
+            logger.info("该延保卡已经被注册,{}",cardNo);
             return result;
         }
 
         ewCardVo = thirdPartyService.getEwCardListByNo(cardNo);
         if (ErrorCodeConstants.CODE_E094.equals(ewCardVo.getStatus().getCode()) || ErrorCodeConstants.CODE_E092.equals(ewCardVo.getStatus().getCode()) || "已注册".equals(ewCardVo.getItems().getCardStat())) {
-            logger.error("csm注册延保卡失败");
+            logger.error("csm查询延保卡失败,{}",cardNo);
             result.setReturnMsg("查询延保卡失败，请检查卡号或稍后再试！");
             result.setData("no");
             result.setReturnCode(Constant.FAIL);
@@ -188,6 +189,7 @@ public class EwCardController {
         if(ewCard == null){
             result.setReturnMsg("延保卡号错误!");
             result.setReturnCode(Constant.FAIL);
+            logger.info("延保卡错误,卡号:{},用户:{}",ewCardParam.getCardNo(),wechatUser.getMobilePhone());
             return result;
         }
 
@@ -196,9 +198,9 @@ public class EwCardController {
         if(product == null || product.getBuyTime() == null || product.getProductBarCode() == null){
             result.setReturnCode(Constant.FAIL);
             result.setReturnMsg("产品信息错误!");
+            logger.info("当前用户不存在此产品或无购买时间,卡号:{},用户:{}",ewCardParam.getCardNo(),wechatUser.getMobilePhone());
             return result;
         }
-
 
         //根据barcode查询 产品
         ProductItem productItem = thirdPartyService.getProductItem(new ProductParam(product.getModelName(), product.getProductBarCode()));
@@ -206,18 +208,17 @@ public class EwCardController {
         if(productItem == null){
             result.setReturnCode(Constant.FAIL);
             result.setReturnMsg("产品信息错误!");
+            logger.info("CSM不存在改产品或产品有误,卡号:{},用户:{}",ewCardParam.getCardNo(),wechatUser.getMobilePhone());
             return result;
         }
-
-
 
         //判断该产品是否可以使用延保卡
         if (!EwCardUtil.isGuantee(product.getBuyTime())){
             result.setReturnMsg("对不起,该产品购买超过2年,不能使用延保服务!");
             result.setReturnCode(Constant.FAIL);
+            logger.info("该产品购买超过2年,不能使用延保服务,卡号:{},用户:{}",ewCardParam.getCardNo(),wechatUser.getMobilePhone());
             return result;
         }
-
 
         // 判断用户是否满足使用延保卡的条件
         final List<EwCard> ewCards = ewCardService.selectEwCardsByBarCode(ewCardParam.getBarCode());
@@ -226,6 +227,7 @@ public class EwCardController {
         if (message != null){
             result.setReturnCode(Constant.FAIL);
             result.setReturnMsg(message);
+            logger.info("用户不满足延保卡使用条件,卡号:{},用户:{},问题:{}",ewCardParam.getCardNo(),wechatUser.getMobilePhone(),message);
             return result;
         }
 
@@ -257,9 +259,9 @@ public class EwCardController {
         //使用延保卡
         useEwCard(ewCardParam,  ewCard.getValidTime(), product.getBuyTime(), product.getProductBarCode(), ewCard.getInstallList(), ewCard.getCardStatus());
         result.setReturnMsg("延保卡注册成功");
+        logger.info("延保卡注册成功:延保卡号为[{}],产品条码为[{}]",ewCardParam.getCardNo(),product.getProductBarCode());
         result.setReturnCode(Constant.SUCCESS);
         return result;
-
     }
 
 
