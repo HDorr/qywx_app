@@ -66,4 +66,11 @@ public interface WechatOrdersService {
     void cancelMakeAppointment(String ordersCode);
 
     void syncAddAppraise(AppraiseParam appraiseParam) throws ParamException;
+
+    /**
+     * 查询某款产品相关的订单
+     * @param productId
+     * @return
+     */
+    List<WechatOrdersVo> getWechatOrdersByProductId(Long productId);
 }

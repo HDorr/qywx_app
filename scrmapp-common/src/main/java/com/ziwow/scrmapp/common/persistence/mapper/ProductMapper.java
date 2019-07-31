@@ -64,4 +64,45 @@ public interface ProductMapper {
     int updateProductStatus(@Param("ordersId") Long ordersId,@Param("productId") Long productId);
 
     List<Integer> getAllStatus(@Param("ordersId") Long ordersId);
+
+    /**
+     * 根据 userId 和 编码查
+     * @param userId
+     * @param barCode
+     * @return
+     */
+    Product getProductsByBarCodeAndUserId(@Param("userId") String userId, @Param("barCode") String barCode);
+
+    /**
+     * 根据型号和用户id查询产品
+     * @param itemName
+     * @param userId
+     * @return
+     */
+    @Select("SELECT * FROM t_product WHERE modelName=#{itemName} and userId = #{userId} order by id desc")
+    List<Product> getProductByModelNameAndUserId(@Param("itemName") String itemName, @Param("userId") String userId);
+
+    /**
+     * 根据编码和用户id查询产品
+     * @param productCodes
+     * @param userId
+     * @return
+     */
+    List<Product> getProductByProductCodeAndUserId(@Param("productCodes") List<String> productCodes, @Param("userId") String userId);
+
+
+    /**
+     * 根据用户和条码查询产品信息
+     * @param userId
+     * @param productBarCode
+     * @return
+     */
+    int countProductByUserIdAndproductBarCode(@Param("userId") String userId, @Param("productBarCode") String productBarCode);
+
+    /**
+     * 根据产品条码查询产品信息
+     * @param barCode
+     * @return
+     */
+    Product getProductsByBarCode(@Param("barCode") String barCode);
 }

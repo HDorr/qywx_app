@@ -30,5 +30,11 @@ public class ErrorCodeConstants {
 	 public static final Integer CODE_40008 = 40008;//该公告收藏失败
 	 public static final Integer CODE_40009 = 40009;//该公告取消收藏成功
 	 public static final Integer CODE_400010 = 400010;//该公告取消收藏失败
-	
+
+	//csm延保卡
+	public static final String CODE_E0 = "E0";  //成功
+	public static final String CODE_E092 = "E092"; //失败
+	public static final String CODE_E094 = "E094"; //异常
+	public static final String CODE_E09 = "E09"; //延保卡注册失败
+
 }

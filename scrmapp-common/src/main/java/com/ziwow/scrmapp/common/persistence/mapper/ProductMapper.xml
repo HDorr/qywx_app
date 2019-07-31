@@ -31,7 +31,28 @@
 	    productImage, productBarCode, shoppingOrder, saleType, o2o, buyChannel, filterRemind, 
 	    userId, buyTime, status, createTime,productBarCodeTwenty
 	</sql>
-	
+
+
+    <select id="getProductByProductCodeAndUserId" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from t_product
+        where productCode in
+        <foreach collection="productCodes" open="(" close=")" separator="," item="productCode">
+            #{productCode}
+        </foreach>
+        and userId = #{userId} and status = 1 order by productCode DESC,productName DESC
+    </select>
+
+
+    <select id="getProductsByBarCode" resultMap="BaseResultMap">
+	    select
+	    	id,productName,productBarCode,modelName,levelName,productImage,productBarCodeTwenty,productCode,buyTime
+	    from t_product
+	    where status = 1 and productBarCode = #{barCode} limit 1
+	</select>
+
+
     <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
         select
         	<include refid="Base_Column_List"/>
@@ -41,9 +62,17 @@
     
     <select id="findByUserId" resultMap="BaseResultMap" parameterType="java.lang.String">
 	    select
-	    	id,productName,productBarCode,modelName,levelName,productImage,productBarCodeTwenty,productCode
+	    	id,productName,productBarCode,modelName,levelName,productImage,productBarCodeTwenty,productCode,buyTime
 	    from t_product
-	    where status = 1 and userId = #{userId} order by id DESC
+	    where status = 1 and userId = #{userId} order by productCode DESC,productName DESC
+	</select>
+
+
+    <select id="getProductsByBarCodeAndUserId" resultMap="BaseResultMap">
+	    select
+	    	id,productName,productBarCode,modelName,levelName,productImage,productBarCodeTwenty,productCode,buyTime
+	    from t_product
+	    where status = 1 and userId = #{userId} and productBarCode = #{barCode} limit 1
 	</select>
 	
     <select id="findBaseInfoById" parameterType="java.lang.Long" resultMap="BaseResultMap">
@@ -503,6 +532,10 @@
     <select id="countProductByUserIdWithoutStatus" resultType="java.lang.Integer">
         select count(*) from t_product
         where userId=#{userId}
+    </select>
+
+    <select id="countProductByUserIdAndproductBarCode" resultType="java.lang.Integer">
+        select count(*) from t_product where userId = #{userId} and productBarCode = #{productBarCode} and productBarCode is not null and productBarCode != '' and status = 1 limit 1
     </select>
 
     <update id="updateSmallcNameByOrderCode">

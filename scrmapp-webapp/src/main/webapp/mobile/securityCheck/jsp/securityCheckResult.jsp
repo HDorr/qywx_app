@@ -34,7 +34,7 @@
                 $(".resultText").text("很抱歉，您输入的防伪码无法识别，请重新输入，或与卖家联系咨询。")
                 $(".container").addClass('fail');
             }else{
-                 $(".btnLikeTip").text("感谢使用");
+                $(".btnLikeTip").text("感谢使用");
                 $(".resultText").text("您验证的产品是沁园官方正品。")
                 $(".container").addClass('success');
             }

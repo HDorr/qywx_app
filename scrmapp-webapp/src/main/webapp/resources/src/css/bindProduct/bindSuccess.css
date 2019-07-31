@@ -52,7 +52,7 @@
   display: none;
 }
 .main_layer .container {
-  padding-top: 1.2rem;
+  padding-top: 0.8rem;
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
@@ -85,5 +85,19 @@
 }
 .main_layer .container .flex-item.active {
   transform: scale(0.95, 0.95);
+}
+.main_layer .gotoPdtList{
+  background-color: gray;
+  color: white;
+  height: 1rem;
+  width: 3.6rem;
+  margin: 0 auto;
+  line-height: 1rem;
+  border-radius: 0.5rem;
+  font-size: 0.4rem;
+  margin-top: 0.6rem;
+}
+.main_layer .gotoPdtList a{
+  color: white;
 }
 /*# sourceMappingURL=bindSuccess.css.map */

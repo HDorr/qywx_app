@@ -10,12 +10,13 @@
         <meta name="apple-mobile-web-app-capable" content="yes">
         <meta name="apple-mobile-web-app-status-bar-style" content="black">
         <link rel="stylesheet" href="${f_ctxpath}/resources/src/css/reset.css">
-        <link rel="stylesheet" href="${f_ctxpath}/resources/src/css/bindProduct/bindSuccess.css?t=12111111134">
+        <link rel="stylesheet" href="${f_ctxpath}/resources/src/css/bindProduct/bindSuccess.css?t=121111111">
     </head>
     <body>
     <div class="main_layer clearfix">
         <div class="imgBox" style="background-image: url('${f_ctxpath}/resources/images/bindProduct/bindSuccess.png${f_ver}')"></div>
         <p><i style="background-image: url('${f_ctxpath}/resources/src/images/icons/successIcon.png${f_ver}')"></i>恭喜您，绑定成功</p>
+        <p class="gotoPdtList"><a href="${f_ctxpath}/scrmapp/consumer/user/filter/myProducts/jsp/myPdtList">产品列表</a></p>
         <ul class="container">
             <li class="flex-item">
                 <a href="${securityCheckUrl}">
