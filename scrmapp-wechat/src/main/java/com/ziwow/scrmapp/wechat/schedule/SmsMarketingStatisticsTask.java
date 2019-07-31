@@ -26,7 +26,7 @@ import java.util.List;
 @JobHandler("SmsMarketingStatisticsTask")
 public class SmsMarketingStatisticsTask extends IJobHandler {
 
-    private final Logger logger = LoggerFactory.getLogger(SmsMarketingTask.class);
+    private final Logger logger = LoggerFactory.getLogger(SmsMarketingStatisticsTask.class);
 
     @Autowired
     private SmsSendRecordService smsSendRecordService;

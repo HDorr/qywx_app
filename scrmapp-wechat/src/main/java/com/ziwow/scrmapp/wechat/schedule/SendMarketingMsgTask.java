@@ -31,7 +31,7 @@ import java.util.Map;
 @JobHandler("SendMarketingMsgTask")
 public class SendMarketingMsgTask extends IJobHandler {
 
-    private final Logger logger = LoggerFactory.getLogger(SmsMarketingTask.class);
+    private final Logger logger = LoggerFactory.getLogger(SendMarketingMsgTask.class);
 
     @Autowired
     private SmsSendRecordService smsSendRecordService;
