@@ -68,7 +68,7 @@ var flags = {
             alert(data.buyTime)
             var str = '<input placeholder="请选择购买日期" type="text" id="datetime-picker"/>'
             if (data.buyTime != ""){
-                '<input placeholder="请选择购买日期" type="text" readonly="true" id="datetime-picker" value="' +
+                str = '<input placeholder="请选择购买日期" type="text" readonly="true" id="datetime-picker" value="' +
                 data.buyTime +'"/>'
             }
             var str = '<li class="pdtImg" style="background-image: url(\'' + data.productImage + '\');"></li>' +
