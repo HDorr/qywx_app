@@ -56,8 +56,8 @@ public class FuseAop extends ApplicationObjectSupport {
 
 
 
-    @Pointcut("execution(* com.ziwow.scrmapp.common.service.impl.ThirdPartyServiceImpl.*(..))")
-    public void conference(){}
+/*    @Pointcut("execution(* com.ziwow.scrmapp.common.service.impl.ThirdPartyServiceImpl.*(..))")
+    public void conference(){}*/
 
 
     @Pointcut("@annotation(com.ziwow.scrmapp.common.annotation.Fuse)")
@@ -67,7 +67,7 @@ public class FuseAop extends ApplicationObjectSupport {
      * @param point
      * @return
      */
-    @Around("conference()")
+    //@Around("conference()")
     public Object exec(final ProceedingJoinPoint point) throws Exception {
         Object result = null;
             final Future<Object> future = service.submit(new Callable<Object>() {
