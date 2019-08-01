@@ -66,9 +66,10 @@ var flags = {
         //通过条码查询
         if (data.productBarCode) {
             alert(data.buyTime)
+            var str = '<input placeholder="请选择购买日期" type="text" id="datetime-picker"/>'
             if (data.buyTime != ""){
-                $("#datetime-picker").val(data.buyTime)
-                $("#datetime-picker").attr("readonly",true)
+                '<input placeholder="请选择购买日期" type="text" readonly="true" id="datetime-picker" value="' +
+                data.buyTime +'"/>'
             }
             var str = '<li class="pdtImg" style="background-image: url(\'' + data.productImage + '\');"></li>' +
                 '                <li class="pdtInfoTitle">产品信息</li>' +
@@ -96,7 +97,9 @@ var flags = {
                 '                    <select id="selectBox">' +
                 '                        </select>' +
                 '                </li>'+
-                '<li class="pdtInfoForm"><span>购买日期:</span><span><input placeholder="请选择购买日期" type="text" id="datetime-picker"/></span></li>';
+                '<li class="pdtInfoForm"><span>购买日期:</span><span>' +
+                str +
+                '</span></li>';
 
             //通过名字
         } else {
