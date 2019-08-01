@@ -27,7 +27,8 @@ var flags = {
             "o2o": 1,
             "saleTypeName": null,
             "smallcName":"",
-            "buyChannel": null
+            "buyChannel": null,
+            "buyTime": null
         };
 
     if (model) {
@@ -64,6 +65,10 @@ var flags = {
     function renderContent(data) {
         //通过条码查询
         if (data.productBarCode) {
+            if (data.buyTime != ""){
+                $("#datetime-picker").val("data.buyTime")
+                $("#datetime-picker").attr("readonly",true)
+            }
             var str = '<li class="pdtImg" style="background-image: url(\'' + data.productImage + '\');"></li>' +
                 '                <li class="pdtInfoTitle">产品信息</li>' +
                 '                <li class="pdtInfoForm firstThree"><span>产品条码:</span><span>' + data.productBarCode + '</span></li>' +
@@ -122,11 +127,16 @@ var flags = {
         }
 
         $(".pdtInfo").html(str);
-        $("#datetime-picker").datetimePicker(
+        /*$("#datetime-picker").datetimePicker(
             {
                 times: function() {
                     return [];
                 }
+            }
+        )*/
+        $("#datetime-picker").calendar(
+            {
+                maxDate:new Date(new Date().getTime() - (1000 * 60 * 60 * 24))
             }
         )
 
