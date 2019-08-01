@@ -65,7 +65,6 @@ var flags = {
     function renderContent(data) {
         //通过条码查询
         if (data.productBarCode) {
-            alert(data.buyTime)
             var str = '<input placeholder="请选择购买日期" type="text" id="datetime-picker"/>'
             if (data.buyTime != ""){
                 str = '<input placeholder="请选择购买日期" type="text" readonly="true" id="datetime-picker" value="' +
