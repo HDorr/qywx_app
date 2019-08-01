@@ -138,8 +138,9 @@ public class ProductServiceImpl implements ProductService {
             product.setLevelName(productItem.getFilterGrade());
             product.setProductName(productItem.getItemName());
             product.setProductCode(productItem.getItemCode());
-            //TODO 查询购买时间
-            product.setBuyTime(thirdPartyService.getPurchDate(productBarCode));
+            if(null!=productBarCode){
+                product.setBuyTime(thirdPartyService.getPurchDate(productBarCode));
+            }
             if (!StringUtils.isEmpty(productItem.getBarcode())) {
                 product.setProductBarCode(productItem.getBarcode());
                 product.setSaleType(productItem.getFromChannel());
