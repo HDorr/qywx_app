@@ -65,6 +65,7 @@ var flags = {
     function renderContent(data) {
         //通过条码查询
         if (data.productBarCode) {
+            alert(data.buyTime)
             if (data.buyTime != ""){
                 $("#datetime-picker").val(data.buyTime)
                 $("#datetime-picker").attr("readonly",true)
@@ -127,16 +128,12 @@ var flags = {
         }
 
         $(".pdtInfo").html(str);
-        /*$("#datetime-picker").datetimePicker(
+        $("#datetime-picker").datetimePicker(
             {
                 times: function() {
                     return [];
-                }
-            }
-        )*/
-        $("#datetime-picker").calendar(
-            {
-                maxDate:new Date(new Date().getTime() - (1000 * 60 * 60 * 24))
+                },
+                max: new Date(new Date().getTime() - (1000 * 60 * 60 * 24))
             }
         )
 
