@@ -132,7 +132,7 @@ var flags = {
                 max: new Date(new Date().getTime() - (1000 * 60 * 60 * 24))
             }
         );
-        if(data.buyTime!=""){
+        if(data.buyTime!=""&&data.buyTime!=null){
             $("#datetime-picker").val(data.buyTime);
             $("#datetime-picker").attr('disabled','disabled');
         }
