@@ -56,7 +56,9 @@ public class SendMarketingMsgTask extends IJobHandler {
                 String smsContent = smsMarketing.getSmsContent();
                 String msgMobile = sendRecord.getMobile();
                 if (smsSendRecordService.checkLaterSmsSend(msgMobile, smsContent)) {
-                    boolean flag = mobileService.sendContentByEmay(msgMobile, smsContent, Constant.MARKETING);
+                    //短信开口关闭 2019年06月19日
+                    boolean flag=true;
+                    //boolean flag = mobileService.sendContentByEmay(msgMobile, smsContent, Constant.MARKETING);
                     // 短信发送成功加入记录表
                     if(flag) {
                         sendRecord.setSendCount(SmsMarketingEmus.SmsSendEnum.TWO.getCode());
@@ -77,8 +79,9 @@ public class SendMarketingMsgTask extends IJobHandler {
                     String smsContent = smsMarketing.getSmsContent();
                     String msgMobile = sendRecord.getMobile();
                     if (smsSendRecordService.checkLaterSmsSend(msgMobile, smsContent)) {
-                        boolean flag = mobileService.sendContentByEmay(msgMobile, smsContent, Constant.MARKETING);
-                        // 短信发送成功加入记录表
+                        //短信开口关闭 2019年06月19日
+                        boolean flag=true;
+                        //boolean flag = mobileService.sendContentByEmay(msgMobile, smsContent, Constant.MARKETING);
                         if(flag) {
                             sendRecord.setSendCount(SmsMarketingEmus.SmsSendEnum.THREE.getCode());
                             sms5RecordLst.add(sendRecord);
