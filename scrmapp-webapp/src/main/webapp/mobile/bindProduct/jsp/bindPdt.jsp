@@ -14,6 +14,15 @@
         <link rel="stylesheet" href="${f_ctxpath}/resources/src/css/jqweui/jquery-weui.css">
         <link rel="stylesheet" href="${f_ctxpath}/resources/src/css/bindProduct/bindProduct.css${f_ver}">
     </head>
+    <style type="text/css">
+        input:disabled{
+            background-color:#fff;
+            color:#666;
+            opacity:1;
+            -webkit-text-fill-color:#666;
+            -webkit-opacity:1;
+        }
+    </style>
     <body>
         <input type="hidden" id="barCodeIdInput" value="${data}">
         <input type="hidden" id="securityCodeInput" value="${securityCode}">
