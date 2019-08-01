@@ -106,7 +106,7 @@
                         <p class="tipText">拒绝操作无法撤回</p>
                         <div class="textAreaBox">
                             <div style="border:1px solid #000">
-                                <textarea placeholder="请输入原因,1-30个字(必填)" maxlength="30" v-model="reason"></textarea>
+                                <textarea placeholder="请输入原因,1-个字(必填)" maxlength="30" v-model="reason"></textarea>
                             </div>
                         </div>
                         <div class="btnBox">

@@ -160,6 +160,7 @@ public class ThirdPartyServiceImpl implements ThirdPartyService {
 
     @Override
     public boolean existInstallList(String productBarCode) {
+        LOG.info("第三方CSM系统是否存在安装单,productBarCode:[{}]", productBarCode);
         ExistInstallVo existInstallVo = null;
         try {
             final String s = restTemplate.postForObject(existInstallListUrl, JsonUtil.object2Json(ImmutableMap.of("mobile",productBarCode)), String.class);
@@ -173,6 +174,7 @@ public class ThirdPartyServiceImpl implements ThirdPartyService {
 
     @Override
     public String getPurchDate(String productBarCode) {
+        LOG.info("第三方CSM系统根据产品条码查询安装单时间,productBarCode:[{}]", productBarCode);
         try {
             final String s = restTemplate.postForObject(purchDateUrl, JsonUtil.object2Json(ImmutableMap.of("barcode",productBarCode)), String.class);
             LOG.info("收到csm的数据:[{}]",s);

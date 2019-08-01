@@ -66,7 +66,7 @@ var flags = {
         //通过条码查询
         if (data.productBarCode) {
             if (data.buyTime != ""){
-                $("#datetime-picker").val("data.buyTime")
+                $("#datetime-picker").val(data.buyTime)
                 $("#datetime-picker").attr("readonly",true)
             }
             var str = '<li class="pdtImg" style="background-image: url(\'' + data.productImage + '\');"></li>' +

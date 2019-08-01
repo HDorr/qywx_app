@@ -71,7 +71,7 @@
         <input type="hidden" id="productBarCodeInput" value=${productBarCode}>
         <script src="${f_ctxpath}/resources/src/js/flexible.js"></script>
         <script src="${f_ctxpath}/resources/thirdparty/jquery/dist/jquery.min.js"></script>
-        <script src="${f_ctxpath}/resources/thirdparty/jqweui/jquery-weui.min.js"></script>
+        <script src="${f_ctxpath}/resources/thirdparty/jqweui/jquery-weui-1.js"></script>
         <script src="${f_ctxpath}/resources/src/js/common.js${f_ver}"></script>
         <script src="${f_ctxpath}/resources/src/js/bindProduct/bindPdt.js${f_ver}"></script>
     </body>
