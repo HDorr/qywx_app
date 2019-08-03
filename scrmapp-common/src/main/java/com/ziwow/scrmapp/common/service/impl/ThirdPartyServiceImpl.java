@@ -89,6 +89,11 @@ public class ThirdPartyServiceImpl implements ThirdPartyService {
      */
     @Value("${csm.existinstalllisturl.url}")
     private String existInstallListUrl;
+    /**
+     * 根据条码查询购买时间
+     */
+    @Value("${csm.purchdateurl.url}")
+    private String purchDateUrl;
 
     @Value("${csm.csswx.url}")
     private String cssWxUrl;
@@ -155,6 +160,7 @@ public class ThirdPartyServiceImpl implements ThirdPartyService {
 
     @Override
     public boolean existInstallList(String productBarCode) {
+        LOG.info("第三方CSM系统是否存在安装单,productBarCode:[{}]", productBarCode);
         ExistInstallVo existInstallVo = null;
         try {
             final String s = restTemplate.postForObject(existInstallListUrl, JsonUtil.object2Json(ImmutableMap.of("mobile",productBarCode)), String.class);
@@ -164,6 +170,24 @@ public class ThirdPartyServiceImpl implements ThirdPartyService {
             e.printStackTrace();
         }
         return existInstallVo.getStatus().getCode().equals(ErrorCodeConstants.CODE_E0);
+    }
+
+    @Override
+    public String getPurchDate(String productBarCode) {
+        LOG.info("第三方CSM系统根据产品条码查询安装单时间,productBarCode:[{}]", productBarCode);
+        try {
+            final String s = restTemplate.postForObject(purchDateUrl, JsonUtil.object2Json(ImmutableMap.of("barcode",productBarCode)), String.class);
+            LOG.info("收到csm的数据:[{}]",s);
+            net.sf.json.JSONObject jsonObj = net.sf.json.JSONObject.fromObject(s);
+            final JSONObject status = jsonObj.getJSONObject("status");
+            final String code = status.getString("code");
+            if (ErrorCodeConstants.CODE_E0.equals(code)){
+                return JsonUtil.json2Object(s, PurchDateVo.class).getItems().getPurchDate();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return "";
     }
 
 

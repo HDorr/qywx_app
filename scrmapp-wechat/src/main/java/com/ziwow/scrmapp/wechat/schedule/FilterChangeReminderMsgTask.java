@@ -26,7 +26,7 @@ import java.util.List;
 @JobHandler("FilterChangeReminderMsgTask")
 public class FilterChangeReminderMsgTask extends IJobHandler {
 
-    private final Logger logger = LoggerFactory.getLogger(TemplateMsgScheduledTask.class);
+    private final Logger logger = LoggerFactory.getLogger(FilterChangeReminderMsgTask.class);
 
     @Autowired
     private FilterChangeRemindService filterChangeRemindService;

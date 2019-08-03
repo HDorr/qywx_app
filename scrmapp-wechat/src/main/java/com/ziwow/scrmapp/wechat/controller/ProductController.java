@@ -329,8 +329,30 @@ public class ProductController {
                 map.put(key,1);
             }
         }
-
     }
+
+    /**
+     * 对于一个用户一种型号有多个产品的处理
+     * @param products
+     */
+    private void sameCodeProductType(List<Product> products) {
+        Map<String,Integer> map = new HashMap<>();
+
+        for (int i = 0; i < products.size(); i++) {
+            Product product = products.get(i);
+            String key = product.getProductName()+product.getProductCode();
+            if (map.get(key) != null){
+                map.put(key,map.get(key)+1);
+                if (map.get(key) == 2){
+                    products.get(i-1).setProductName(StringUtils.join(1,"-",products.get(i-1).getModelName()));
+                }
+                product.setProductName(StringUtils.join(map.get(key),"-",product.getModelName()));
+            }else {
+                map.put(key,1);
+            }
+        }
+    }
+
 
     /**
      *  根据编号查询用户的产品,cardNo 所使用的延保卡号
@@ -349,7 +371,7 @@ public class ProductController {
         //加载符合类型的产品
         List<Product> products = productService.getProductByProductCodeAndUserId(ewCard.getEwCardItems(),user.getUserId());
 
-        sameCodeProduct(products);
+        sameCodeProductType(products);
 
         List<Product> collect = new LinkedList<>();
         //筛选有购买时间，有产品条码并且没有使用过延保卡的

@@ -36,7 +36,12 @@ public interface ThirdPartyService {
 	 */
 	boolean existInstallList(String phone);
 
-
+	/**
+	 * 根据产品条码查询安装单的购买时间
+	 * @param productBarCode
+	 * @return
+	 */
+	String getPurchDate(String productBarCode);
 
 	public ProductItem getProductItem(ProductParam productParam);
 	public List<ProductItem> getProductList(String itemCodes);

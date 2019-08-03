@@ -1,31 +1,21 @@
 package com.ziwow.scrmapp.wechat.schedule;
 
 import com.xxl.job.core.biz.model.ReturnT;
-import com.xxl.job.core.handler.IJobHandler;
 import com.xxl.job.core.handler.annotation.JobHandler;
 import com.xxl.job.core.log.XxlJobLogger;
-import com.ziwow.scrmapp.common.bean.pojo.CSMEwCardParam;
-import com.ziwow.scrmapp.common.bean.pojo.ProductParam;
-import com.ziwow.scrmapp.common.bean.vo.WechatOrdersVo;
-import com.ziwow.scrmapp.common.bean.vo.csm.BaseCardVo;
-import com.ziwow.scrmapp.common.bean.vo.csm.ProductItem;
-import com.ziwow.scrmapp.common.constants.ErrorCodeConstants;
+
 import com.ziwow.scrmapp.common.enums.EwCardStatus;
-import com.ziwow.scrmapp.common.persistence.entity.Product;
 import com.ziwow.scrmapp.common.service.ThirdPartyService;
 import com.ziwow.scrmapp.common.utils.EwCardUtil;
 import com.ziwow.scrmapp.wechat.controller.EwCardController;
 import com.ziwow.scrmapp.wechat.persistence.entity.EwCard;
-import com.ziwow.scrmapp.wechat.persistence.entity.WechatUser;
-import com.ziwow.scrmapp.wechat.persistence.entity.WechatUserAddress;
+
 import com.ziwow.scrmapp.wechat.service.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.util.CollectionUtils;
 
-import java.util.Date;
 import java.util.List;
 
 /**

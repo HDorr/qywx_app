@@ -126,6 +126,7 @@ public class ProductServiceImpl implements ProductService {
         ProductVo product = null;
         /*调用沁园查询产品接口方法*/
         ProductItem productItem = thirdPartyService.getProductItem(new ProductParam(modelName, productBarCode));
+
         if (productItem != null) {
             product = new ProductVo();
             //实例化对象
@@ -137,6 +138,9 @@ public class ProductServiceImpl implements ProductService {
             product.setLevelName(productItem.getFilterGrade());
             product.setProductName(productItem.getItemName());
             product.setProductCode(productItem.getItemCode());
+            if(null!=productBarCode){
+                product.setBuyTime(thirdPartyService.getPurchDate(productBarCode));
+            }
             if (!StringUtils.isEmpty(productItem.getBarcode())) {
                 product.setProductBarCode(productItem.getBarcode());
                 product.setSaleType(productItem.getFromChannel());
