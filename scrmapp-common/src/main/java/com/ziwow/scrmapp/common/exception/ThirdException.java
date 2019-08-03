@@ -14,4 +14,11 @@ public class ThirdException extends RuntimeException{
     public ThirdException(){
 
     }
+    public ThirdException(Throwable t){
+        super.initCause(t);
+    }
+    public ThirdException(String message,Throwable t){
+        super(message);
+        super.initCause(t);
+    }
 }

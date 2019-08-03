@@ -17,6 +17,7 @@ import com.ziwow.scrmapp.common.bean.vo.mall.MallOrderVo;
 import com.ziwow.scrmapp.common.bean.vo.mall.OrderItem;
 import com.ziwow.scrmapp.common.constants.Constant;
 import com.ziwow.scrmapp.common.constants.ErrorCodeConstants;
+import com.ziwow.scrmapp.common.exception.ThirdException;
 import com.ziwow.scrmapp.common.persistence.entity.InstallPart;
 import com.ziwow.scrmapp.common.persistence.entity.RepairItem;
 import com.ziwow.scrmapp.common.persistence.entity.RepairPart;
@@ -201,9 +202,8 @@ public class ThirdPartyServiceImpl implements ThirdPartyService {
             LOG.info("获取第三方商城判断用户是否注册结果:[{}]", result);
             return Boolean.parseBoolean(result);
         } catch (Exception e) {
-            LOG.error("获取第三方商城判断用户注册接口失败:", e);
+            throw new ThirdException("获取第三方商城判断用户注册接口失败",e);
         }
-        return false;
     }
 
     @Override
@@ -219,7 +219,7 @@ public class ThirdPartyServiceImpl implements ThirdPartyService {
             String result = HttpKit.get(mallRegisterMemberUrl, params);
             LOG.info("微信端会员[{}],密码[{}],openId[{}]注册信息同步结果:[{}]", mobile, password, openId, result);
         } catch (Exception e) {
-            LOG.error("同步会员注册信息失败:", e);
+            throw new ThirdException("同步会员注册信息失败",e);
         }
     }
 
@@ -377,6 +377,7 @@ public class ThirdPartyServiceImpl implements ThirdPartyService {
             }
         } catch (Exception e) {
             LOG.error("根据产品条码或产品型号查询产品信息失败:", e);
+            throw new ThirdException(e);
         } finally {
             client.close();
         }
