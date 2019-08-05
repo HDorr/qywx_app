@@ -32,7 +32,7 @@ public class ApiControllerExceptionHandler {
     public Result handleTimeOutException(ThirdException e){
         logger.error("第三方系统请求故障:",e);
         Result result = new BaseResult();
-        result.setReturnMsg("第三方系统请求超时，请稍后再试");
+        result.setReturnMsg(e.getPromptMessage());
         result.setReturnCode(Constant.FAIL);
         return result;
     }

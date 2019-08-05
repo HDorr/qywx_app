@@ -131,7 +131,7 @@ public class ThirdPartyServiceImpl implements ThirdPartyService {
             LOG.info("收到csm的数据:[{}]",s);
             ewCardVo = JsonUtil.json2Object(s, EwCardVo.class);
         } catch (IOException e) {
-            LOG.error("http reqeust csm fail",e);
+            throw new ThirdException("调用第三方CSM系统根据卡号查询延保卡失败","查询延保卡失败，请稍后再试",e);
         }
         return ewCardVo;
     }
@@ -153,8 +153,7 @@ public class ThirdPartyServiceImpl implements ThirdPartyService {
             LOG.info("收到csm的数据:[{}]",s);
             baseCardVo = JsonUtil.json2Object(s, BaseCardVo.class);
         } catch (IOException e) {
-            LOG.info("第三方CSM系统注册延保卡信息失败");
-            e.printStackTrace();
+            throw new ThirdException("调用第三方CSM系统注册延保卡信息失败", "注册延保卡失败，请稍后再试",e);
         }
         return baseCardVo;
     }
@@ -168,7 +167,7 @@ public class ThirdPartyServiceImpl implements ThirdPartyService {
             LOG.info("收到csm的数据:[{}]",s);
             existInstallVo = JsonUtil.json2Object(s, ExistInstallVo.class);
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new ThirdException("调用第三方CSM系统是否存在安装单失败", "注册延保卡失败，请稍后再试",e);
         }
         return existInstallVo.getStatus().getCode().equals(ErrorCodeConstants.CODE_E0);
     }
@@ -186,7 +185,7 @@ public class ThirdPartyServiceImpl implements ThirdPartyService {
                 return JsonUtil.json2Object(s, PurchDateVo.class).getItems().getPurchDate();
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new ThirdException("调用第三方CSM系统根据产品条码查询安装单时间失败", "查询产品失败，请稍后再试",e);
         }
         return "";
     }
@@ -202,7 +201,7 @@ public class ThirdPartyServiceImpl implements ThirdPartyService {
             LOG.info("获取第三方商城判断用户是否注册结果:[{}]", result);
             return Boolean.parseBoolean(result);
         } catch (Exception e) {
-            throw new ThirdException("获取第三方商城判断用户注册接口失败",e);
+            throw new ThirdException("调用第三方商城系统判断该用户是否注册参数失败" ,"系统繁忙，请稍后再试",e);
         }
     }
 
@@ -219,7 +218,7 @@ public class ThirdPartyServiceImpl implements ThirdPartyService {
             String result = HttpKit.get(mallRegisterMemberUrl, params);
             LOG.info("微信端会员[{}],密码[{}],openId[{}]注册信息同步结果:[{}]", mobile, password, openId, result);
         } catch (Exception e) {
-            throw new ThirdException("同步会员注册信息失败",e);
+            throw new ThirdException("将注册信息同步到第三方商城系统参数失败", "系统繁忙，请稍后再试",e);
         }
     }
 
@@ -245,7 +244,7 @@ public class ThirdPartyServiceImpl implements ThirdPartyService {
                 }
             }
         } catch (Exception e) {
-            LOG.error("获取第三方商城判断用户注册接口失败:", e);
+            throw new ThirdException("获取第三方商城判断用户注册接口失败", "系统繁忙，请稍后再试",e);
         }
         return null;
     }
@@ -268,7 +267,7 @@ public class ThirdPartyServiceImpl implements ThirdPartyService {
                 }
             }
         } catch (Exception e) {
-            LOG.error("第三方商城系统根据产品型号获取产品图片接口失败:", e);
+            throw new ThirdException("第三方商城系统根据产品型号获取产品图片接口失败", "系统繁忙，请稍后再试",e);
         }
         return imgUrl;
     }
@@ -376,8 +375,7 @@ public class ThirdPartyServiceImpl implements ThirdPartyService {
                 }
             }
         } catch (Exception e) {
-            LOG.error("根据产品条码或产品型号查询产品信息失败:", e);
-            throw new ThirdException(e);
+            throw new ThirdException("根据产品条码或产品型号查询产品信息失败", "查询产品失败，请稍后再试",e);
         } finally {
             client.close();
         }
@@ -430,7 +428,7 @@ public class ThirdPartyServiceImpl implements ThirdPartyService {
                 }
             }
         } catch (Exception e) {
-            LOG.error("批量获取产品信息接口失败:", e);
+            throw new ThirdException("批量获取产品信息接口失败", "系统繁忙，请稍后再试",e);
         } finally {
             client.close();
         }
@@ -489,7 +487,7 @@ public class ThirdPartyServiceImpl implements ThirdPartyService {
                 }
             }
         } catch (Exception e) {
-            LOG.error("根据产品获取滤芯信息失败:", e);
+            throw new ThirdException("根据产品获取滤芯信息失败", "取滤芯信息失败，请稍后再试",e);
         } finally {
             client.close();
         }
@@ -534,9 +532,7 @@ public class ThirdPartyServiceImpl implements ThirdPartyService {
                 }
             }
         } catch (Exception e) {
-            LOG.error("预约生成受理单号接口失败:", e);
-            rtnResult.setReturnCode(Constant.FAIL);
-            rtnResult.setReturnMsg(e.getMessage());
+            throw new ThirdException("预约生成受理单号接口失败", "预约生成受理单号失败，请稍后再试",e);
         } finally {
             client.close();
         }
@@ -584,9 +580,7 @@ public class ThirdPartyServiceImpl implements ThirdPartyService {
                 }
             }
         } catch (Exception e) {
-            LOG.error("变更预约时间接口失败:", e);
-            rtnResult.setReturnCode(Constant.FAIL);
-            rtnResult.setReturnMsg(e.getMessage());
+            throw new ThirdException("变更预约时间接口失败", "变更预约时间失败，请稍后再试",e);
         } finally {
             client.close();
         }
@@ -632,9 +626,7 @@ public class ThirdPartyServiceImpl implements ThirdPartyService {
                 }
             }
         } catch (Exception e) {
-            LOG.error("取消预约单接口失败:", e);
-            rtnResult.setReturnCode(Constant.FAIL);
-            rtnResult.setReturnMsg(e.getMessage());
+            throw new ThirdException("取消预约单接口失败", "取消预约单失败，请稍后再试",e);
         } finally {
             client.close();
         }
@@ -678,9 +670,7 @@ public class ThirdPartyServiceImpl implements ThirdPartyService {
                 }
             }
         } catch (Exception e) {
-            LOG.error("师傅拒绝预约单接口失败:", e);
-            rtnResult.setReturnCode(Constant.FAIL);
-            rtnResult.setReturnMsg(e.getMessage());
+            throw new ThirdException("师傅拒绝预约单接口失败", "拒绝预约单失败，请稍后再试",e);
         } finally {
             client.close();
         }
@@ -729,9 +719,7 @@ public class ThirdPartyServiceImpl implements ThirdPartyService {
                 }
             }
         } catch (Exception e) {
-            LOG.error("安装单同步接口失败:", e);
-            rtnResult.setReturnCode(Constant.FAIL);
-            rtnResult.setReturnMsg(e.getMessage());
+            throw new ThirdException("安装单同步接口失败", "系统繁忙，请稍后再试",e);
         } finally {
             client.close();
         }
@@ -781,9 +769,7 @@ public class ThirdPartyServiceImpl implements ThirdPartyService {
                 }
             }
         } catch (Exception e) {
-            LOG.error("保养单同步接口失败:", e);
-            rtnResult.setReturnCode(Constant.FAIL);
-            rtnResult.setReturnMsg(e.getMessage());
+            throw new ThirdException("保养单同步接口失败", "系统繁忙，请稍后再试",e);
         } finally {
             client.close();
         }
@@ -831,9 +817,7 @@ public class ThirdPartyServiceImpl implements ThirdPartyService {
                 }
             }
         } catch (Exception e) {
-            LOG.error("维修单同步接口失败:", e);
-            rtnResult.setReturnCode(Constant.FAIL);
-            rtnResult.setReturnMsg(e.getMessage());
+            throw new ThirdException("维修单同步接口失败", "系统繁忙，请稍后再试",e);
         } finally {
             client.close();
         }
@@ -874,9 +858,7 @@ public class ThirdPartyServiceImpl implements ThirdPartyService {
                 }
             }
         } catch (Exception e) {
-            LOG.error("评价同步接口失败:", e);
-            rtnResult.setReturnCode(Constant.FAIL);
-            rtnResult.setReturnMsg(e.getMessage());
+            throw new ThirdException("评价同步接口失败", "系统繁忙，请稍后再试",e);
         } finally {
             client.close();
         }
@@ -937,7 +919,7 @@ public class ThirdPartyServiceImpl implements ThirdPartyService {
                 }
             }
         } catch (Exception e) {
-            LOG.error("根据产品获取保养项信息失败:", e);
+            throw new ThirdException("根据产品获取保养项信息失败", "系统繁忙，请稍后再试",e);
         } finally {
             client.close();
         }
@@ -1043,7 +1025,7 @@ public class ThirdPartyServiceImpl implements ThirdPartyService {
                 }
             }
         } catch (Exception e) {
-            LOG.error("用户历史受理信息查询接口失败:", e);
+            throw new ThirdException("用户历史受理信息查询接口失败", "受理信息查询失败，请稍后再试",e);
         } finally {
             client.close();
         }
@@ -1103,9 +1085,7 @@ public class ThirdPartyServiceImpl implements ThirdPartyService {
                 }
             }
         } catch (Exception e) {
-            LOG.error("维修措施查询接口失败:", e);
-            rtnResult.setReturnCode(Constant.FAIL);
-            rtnResult.setReturnMsg(e.getMessage());
+            throw new ThirdException("维修措施查询接口失败", "维修措施查询失败，请稍后再试",e);
         } finally {
             client.close();
         }
@@ -1165,9 +1145,7 @@ public class ThirdPartyServiceImpl implements ThirdPartyService {
                 }
             }
         } catch (Exception e) {
-            LOG.error("安装配件查询接口口失败:", e);
-            rtnResult.setReturnCode(Constant.FAIL);
-            rtnResult.setReturnMsg(e.getMessage());
+            throw new ThirdException("安装配件查询接口失败", "安装配件查询失败，请稍后再试",e);
         } finally {
             client.close();
         }
@@ -1226,9 +1204,7 @@ public class ThirdPartyServiceImpl implements ThirdPartyService {
                 }
             }
         } catch (Exception e) {
-            LOG.error("安装配件查询接口口失败:", e);
-            rtnResult.setReturnCode(Constant.FAIL);
-            rtnResult.setReturnMsg(e.getMessage());
+            throw new ThirdException("调用维修配件查询接口失败", "维修配件查询失败，请稍后再试",e);
         } finally {
             client.close();
         }
@@ -1304,7 +1280,7 @@ public class ThirdPartyServiceImpl implements ThirdPartyService {
             }
 
         } catch (Exception ex) {
-            ex.printStackTrace();
+            throw new ThirdException("调用防伪码查询接口失败", "系统繁忙，请稍后再试",ex);
         }
         return result;
     }
@@ -1330,7 +1306,7 @@ public class ThirdPartyServiceImpl implements ThirdPartyService {
         try {
             content = cemPost(baseUrl, params);
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new ThirdException("com.ziwow.scrmapp.common.service.impl.ThirdPartyServiceImpl.getCemAssetsInfo 方法调用失败", "系统繁忙，请稍后再试",e);
         }
         CemResp<CemAssertInfo> cemResp = JSON.parseObject(content, new TypeReference<CemResp<CemAssertInfo>>(){});
         if (cemResp!=null){
@@ -1363,7 +1339,7 @@ public class ThirdPartyServiceImpl implements ThirdPartyService {
         try {
             content = cemGet(url);
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new ThirdException("com.ziwow.scrmapp.common.service.impl.ThirdPartyServiceImpl.getCemProductInfo 方法调用失败", "系统繁忙，请稍后再试",e);
         }
         CemResp<CemProductInfo> cemResp = JSON.parseObject(content, new TypeReference<CemResp<CemProductInfo>>(){});
         if (cemResp!=null){
