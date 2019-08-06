@@ -53,10 +53,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import javax.annotation.PostConstruct;
 import javax.xml.namespace.QName;
 import java.lang.reflect.Proxy;
 import java.math.BigDecimal;
@@ -117,9 +119,26 @@ public class ThirdPartyServiceImpl implements ThirdPartyService {
     private String cemAssetsUrl;
     @Value("${cem.productInfo.url}")
     private String cemProductInfoUrl;
+    /**
+     * 读取超时时间
+     */
+    @Value("${csm.readtimeout}")
+    private int readTimeout;
+    /**
+     * 连接超时时间
+     */
+    @Value("${csm.connecttimeout}")
+    private int connectTimeout;
 
-    @Autowired
     private RestTemplate restTemplate;
+
+    @PostConstruct
+    public void restTemplate(){
+        SimpleClientHttpRequestFactory requestFactory = new SimpleClientHttpRequestFactory();
+        requestFactory.setReadTimeout(readTimeout);
+        requestFactory.setConnectTimeout(connectTimeout);
+        restTemplate = new RestTemplate(requestFactory);
+    }
 
 
     @Override
@@ -324,6 +343,14 @@ public class ThirdPartyServiceImpl implements ThirdPartyService {
         return service;
     }
 
+
+    private Client getClient(XFireProxy proxy) {
+        Client client = proxy.getClient();
+        client.addOutHandler(new ClientAuthenticationHandler(authUserName, authPassword));
+        client.setTimeout(readTimeout);
+        return client;
+    }
+
     /**
      * 根据产品条码或产品型号查询产品信息
      */
@@ -337,8 +364,7 @@ public class ThirdPartyServiceImpl implements ThirdPartyService {
             LOG.info("============开始调用csm系统的产品信息查询接口================");
             CssWxService service = this.getCssWxService();
             XFireProxy proxy = (XFireProxy) Proxy.getInvocationHandler(service);
-            client = proxy.getClient();
-            client.addOutHandler(new ClientAuthenticationHandler(authUserName, authPassword));
+            client = getClient(proxy);
             // 传条件 二选一不能都为空
             CssWxRequest req = new CssWxRequest();
             if (StringUtils.isNotEmpty(productParam.getItem_code())) {
@@ -395,8 +421,7 @@ public class ThirdPartyServiceImpl implements ThirdPartyService {
             LOG.info("============开始调用csm系统的批量获取产品信息查询接口================");
             CssWxService service = this.getCssWxService();
             XFireProxy proxy = (XFireProxy) Proxy.getInvocationHandler(service);
-            client = proxy.getClient();
-            client.addOutHandler(new ClientAuthenticationHandler(authUserName, authPassword));
+            client = getClient(proxy);
             // 传条件 二选一不能都为空
             CssWxRequest req = new CssWxRequest();
             req.setItem_Code(itemCodes);
@@ -449,8 +474,7 @@ public class ThirdPartyServiceImpl implements ThirdPartyService {
             LOG.info("============开始调用csm系统的根据产品获取滤芯接口================");
             CssWxService service = this.getCssWxService();
             XFireProxy proxy = (XFireProxy) Proxy.getInvocationHandler(service);
-            client = proxy.getClient();
-            client.addOutHandler(new ClientAuthenticationHandler(authUserName, authPassword));
+            client = getClient(proxy);
             // 传条件 二选一 不能都为空
             CssWxRequest req = new CssWxRequest();
             if (StringUtils.isNotEmpty(productFilterGradeParam.getItemCode())) {
@@ -508,8 +532,7 @@ public class ThirdPartyServiceImpl implements ThirdPartyService {
             LOG.info("调用csm系统的预约生成受理单接口，参数为:[{}]", JSON.toJSONString(acceptanceFormParam));
             CssAppealWxService service = this.getCssAppealWxService();
             XFireProxy proxy = (XFireProxy) Proxy.getInvocationHandler(service);
-            client = proxy.getClient();
-            client.addOutHandler(new ClientAuthenticationHandler(authUserName, authPassword));
+            client = getClient(proxy);
             // 传条件 不能为空
             CssWxRequest req = new CssWxRequest();
             req.setFlag(1);//操作类型  1:新增  2:修改预约时间 3:取消预约
@@ -552,8 +575,7 @@ public class ThirdPartyServiceImpl implements ThirdPartyService {
             LOG.info("============开始调用csm系统的变更预约时间接口================");
             CssAppealWxService service = this.getCssAppealWxService();
             XFireProxy proxy = (XFireProxy) Proxy.getInvocationHandler(service);
-            client = proxy.getClient();
-            client.addOutHandler(new ClientAuthenticationHandler(authUserName, authPassword));
+            client = getClient(proxy);
             JSONArray jsonArray = new JSONArray();
             Map<String, Object> map = new HashMap<String, Object>();
             map.put("no", webAppealNo);// CSM返回的单据号
@@ -600,8 +622,7 @@ public class ThirdPartyServiceImpl implements ThirdPartyService {
             LOG.info("============开始调用csm系统的取消预约单接口================");
             CssAppealWxService service = this.getCssAppealWxService();
             XFireProxy proxy = (XFireProxy) Proxy.getInvocationHandler(service);
-            client = proxy.getClient();
-            client.addOutHandler(new ClientAuthenticationHandler(authUserName, authPassword));
+            client = getClient(proxy);
             JSONArray jsonArray = new JSONArray();
             Map<String, Object> map = new HashMap<String, Object>();
             map.put("no", webAppealNo);// CSM返回的单据号
@@ -646,8 +667,7 @@ public class ThirdPartyServiceImpl implements ThirdPartyService {
             LOG.info("============开始调用csm系统的师傅拒绝预约单接口================");
             CssWsRPService service = this.getCssWsRPService();
             XFireProxy proxy = (XFireProxy) Proxy.getInvocationHandler(service);
-            client = proxy.getClient();
-            client.addOutHandler(new ClientAuthenticationHandler(authUserName, authPassword));
+            client = getClient(proxy);
             JSONObject jsonObject = new JSONObject();
             jsonObject.put("appeal_no", webAppealNo);// 师傅拒绝工单单号
             jsonObject.put("reject_season", reject_season);// 师傅拒绝工单单号
@@ -677,6 +697,8 @@ public class ThirdPartyServiceImpl implements ThirdPartyService {
         return rtnResult;
     }
 
+
+
     /**
      * 安装单同步接口
      */
@@ -691,8 +713,7 @@ public class ThirdPartyServiceImpl implements ThirdPartyService {
         try {
             CssWsRPService service = this.getCssWsRPService();
             XFireProxy proxy = (XFireProxy) Proxy.getInvocationHandler(service);
-            client = proxy.getClient();
-            client.addOutHandler(new ClientAuthenticationHandler(authUserName, authPassword));
+            client = getClient(proxy);
             // One_V_Msg传安装单信息
             CssWxRequest req = new CssWxRequest();
             JsonConfig jsonConfig = new JsonConfig();
@@ -739,9 +760,7 @@ public class ThirdPartyServiceImpl implements ThirdPartyService {
         LOG.info("调用csm保养单同步接口,参数为:[{}]", JSON.toJSON(appealMaintainParam));
         try {
             CssWsRPService service = this.getCssWsRPService();
-            XFireProxy proxy = (XFireProxy) Proxy.getInvocationHandler(service);
-            client = proxy.getClient();
-            client.addOutHandler(new ClientAuthenticationHandler(authUserName, authPassword));
+            client = getClient(client, service);
             // 传条件 不能为空
             CssWxRequest req = new CssWxRequest();
             req.setOne_V_Msg(JSONArray.fromObject(appealMaintainParam).toString());// 数据集
@@ -776,6 +795,12 @@ public class ThirdPartyServiceImpl implements ThirdPartyService {
         return rtnResult;
     }
 
+    private Client getClient(Client client, CssWsRPService service) {
+        XFireProxy proxy = (XFireProxy) Proxy.getInvocationHandler(service);
+        client = getClient(proxy);
+        return client;
+    }
+
     /**
      * 维修单同步接口
      */
@@ -791,8 +816,7 @@ public class ThirdPartyServiceImpl implements ThirdPartyService {
             LOG.info("============开始调用csm系统的维修单同步接口================");
             CssWsRPService service = this.getCssWsRPService();
             XFireProxy proxy = (XFireProxy) Proxy.getInvocationHandler(service);
-            client = proxy.getClient();
-            client.addOutHandler(new ClientAuthenticationHandler(authUserName, authPassword));
+            client = getClient(proxy);
             // 传条件 不能为空
             CssWxRequest req = new CssWxRequest();
             req.setOne_V_Msg(JSONArray.fromObject(appealMaintenanceParam).toString());// 数据集
@@ -837,8 +861,7 @@ public class ThirdPartyServiceImpl implements ThirdPartyService {
             LOG.info("============开始调用csm系统的评价同步接口================");
             CssWsRPService service = this.getCssWsRPService();
             XFireProxy proxy = (XFireProxy) Proxy.getInvocationHandler(service);
-            client = proxy.getClient();
-            client.addOutHandler(new ClientAuthenticationHandler(authUserName, authPassword));
+            client = getClient(proxy);
             // 传条件 不能为空
             CssWxRequest req = new CssWxRequest();
             req.setOne_V_Msg(JSON.toJSONString(evaluateParam));// 数据集
@@ -879,8 +902,7 @@ public class ThirdPartyServiceImpl implements ThirdPartyService {
             LOG.info("============开始调用csm系统的根据产品获取保养项接口================");
             CssWsRPService service = this.getCssWsRPService();
             XFireProxy proxy = (XFireProxy) Proxy.getInvocationHandler(service);
-            client = proxy.getClient();
-            client.addOutHandler(new ClientAuthenticationHandler(authUserName, authPassword));
+            client = getClient(proxy);
             // 传条件 二选一 不能都为空
             CssWxRequest req = new CssWxRequest();
             if (StringUtils.isNotEmpty(productFilterGradeParam.getItemCode())) {
@@ -939,8 +961,7 @@ public class ThirdPartyServiceImpl implements ThirdPartyService {
             LOG.info("============开始调用csm系统的用户历史受理信息查询接口================");
             CssWxService service = this.getCssWxService();
             XFireProxy proxy = (XFireProxy) Proxy.getInvocationHandler(service);
-            client = proxy.getClient();
-            client.addOutHandler(new ClientAuthenticationHandler(authUserName, authPassword));
+            client = getClient(proxy);
             //传条件
             CssWxRequest req = new CssWxRequest();
             req.setTel(mobilePhone);
@@ -1043,8 +1064,7 @@ public class ThirdPartyServiceImpl implements ThirdPartyService {
             LOG.info("============开始调用维修维修措施查询接口================");
             CssWxService service = this.getCssWxService();
             XFireProxy proxy = (XFireProxy) Proxy.getInvocationHandler(service);
-            client = proxy.getClient();
-            client.addOutHandler(new ClientAuthenticationHandler(authUserName, authPassword));
+            client = getClient(proxy);
             //传条件
             CssWxRequest req = new CssWxRequest();
             if (StringUtils.isEmpty(typeName)) {
@@ -1103,8 +1123,7 @@ public class ThirdPartyServiceImpl implements ThirdPartyService {
             LOG.info("============开始调用安装配件查询接口================");
             CssWxService service = this.getCssWxService();
             XFireProxy proxy = (XFireProxy) Proxy.getInvocationHandler(service);
-            client = proxy.getClient();
-            client.addOutHandler(new ClientAuthenticationHandler(authUserName, authPassword));
+            client = getClient(proxy);
             //传条件
             CssWxRequest req = new CssWxRequest();
             req.setSpec(modelName);
@@ -1163,8 +1182,7 @@ public class ThirdPartyServiceImpl implements ThirdPartyService {
             LOG.info("============开始调用维修配件查询接口================");
             CssWxService service = this.getCssWxService();
             XFireProxy proxy = (XFireProxy) Proxy.getInvocationHandler(service);
-            client = proxy.getClient();
-            client.addOutHandler(new ClientAuthenticationHandler(authUserName, authPassword));
+            client = getClient(proxy);
             //传条件
             CssWxRequest req = new CssWxRequest();
             req.setSpec(modelName);
