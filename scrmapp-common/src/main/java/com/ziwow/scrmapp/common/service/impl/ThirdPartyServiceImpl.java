@@ -348,7 +348,8 @@ public class ThirdPartyServiceImpl implements ThirdPartyService {
     private Client getClient(XFireProxy proxy) {
         Client client = proxy.getClient();
         client.addOutHandler(new ClientAuthenticationHandler(authUserName, authPassword));
-        client.setProperty(CommonsHttpMessageSender.HTTP_TIMEOUT, String.valueOf( 10 ));
+        client.setTimeout(readTimeout);
+        client.setProperty(CommonsHttpMessageSender.HTTP_TIMEOUT, String.valueOf( connectTimeout ));
         return client;
     }
 
