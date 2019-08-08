@@ -47,6 +47,7 @@ import org.codehaus.xfire.client.Client;
 import org.codehaus.xfire.client.XFireProxy;
 import org.codehaus.xfire.client.XFireProxyFactory;
 import org.codehaus.xfire.service.binding.ObjectServiceFactory;
+import org.codehaus.xfire.transport.http.CommonsHttpMessageSender;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -347,7 +348,7 @@ public class ThirdPartyServiceImpl implements ThirdPartyService {
     private Client getClient(XFireProxy proxy) {
         Client client = proxy.getClient();
         client.addOutHandler(new ClientAuthenticationHandler(authUserName, authPassword));
-        client.setTimeout(1);
+        client.setProperty(CommonsHttpMessageSender.HTTP_TIMEOUT, String.valueOf( 10 ));
         return client;
     }
 
