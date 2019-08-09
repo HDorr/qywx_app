@@ -2,9 +2,7 @@ package com.ziwow.scrmapp.wechat.persistence.mapper;
 
 import com.ziwow.scrmapp.common.enums.EwCardTypeEnum;
 import com.ziwow.scrmapp.wechat.persistence.entity.EwCardActivity;
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
-import org.apache.ibatis.annotations.Update;
+import org.apache.ibatis.annotations.*;
 
 import java.util.List;
 
@@ -60,6 +58,8 @@ public interface EwCardActivityMapper {
      * 获取已经发送，但是没有领取，未到期的延保卡号
      * @return
      */
+    @Results({@Result(column = "card_no",property = "cardNo"),
+            @Result(column = "send_time",property = "sendTime")})
     @Select("select card_no,send_time from t_ew_card_activity where  receive = false and send_time is not null ")
     List<EwCardActivity> selectCardByNoReceive();
 
