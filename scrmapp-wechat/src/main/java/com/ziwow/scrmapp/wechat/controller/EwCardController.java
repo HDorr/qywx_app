@@ -23,6 +23,7 @@ import com.ziwow.scrmapp.wechat.vo.EwCardDetails;
 import com.ziwow.scrmapp.wechat.vo.EwCardInfo;
 import com.ziwow.scrmapp.wechat.vo.EwCards;
 import com.ziwow.scrmapp.wechat.vo.ServiceRecord;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -68,6 +69,8 @@ public class EwCardController {
     @Autowired
     private ProductService productService;
 
+    @Autowired
+    private EwCardActivityService ewCardActivityService;
 
     /**
      * 延保卡限制使用次数
@@ -89,6 +92,7 @@ public class EwCardController {
      */
     @RequestMapping(value = "query/ew_card_by_no",method = RequestMethod.GET)
     @MiniAuthentication
+    @Transactional
     public Result queryCardByNo(@RequestParam("signture") String signture,
                                 @RequestParam("time_stamp") String timeStamp,
                                 @RequestParam("unionId") String unionId,
@@ -103,6 +107,18 @@ public class EwCardController {
             result.setReturnMsg("该延保卡已经被注册");
             logger.info("该延保卡已经被注册,{}",cardNo);
             return result;
+        }
+
+        boolean isActivity = false;
+        if (isActivity(cardNo)){
+            //查出真正的卡号
+            cardNo = ewCardActivityService.selectCardNoByMask(cardNo);
+            if (cardNo == null){
+                result.setReturnCode(Constant.FAIL);
+                result.setReturnMsg("卡号错误或卡号已过期");
+                return result;
+            }
+            isActivity = true;
         }
 
         ewCardVo = thirdPartyService.getEwCardListByNo(cardNo);
@@ -126,10 +142,27 @@ public class EwCardController {
         ewCard.setCardNo(cardNo);
         ewCardService.addEwCard(ewCard,ewCardVo.getItems().getItemNames(),ewCardVo.getItems().getItemCodes());
 
+        //如果是活动送的卡
+        if (isActivity){
+            ewCardActivityService.updateReceiveByCardNo(cardNo,true);
+        }
+
         result.setReturnMsg("查询成功");
         result.setReturnCode(Constant.SUCCESS);
         result.setData("ok");
         return result;
+    }
+
+    /**
+     * 判断是否是掩码
+     * @param cardNo
+     * @return
+     */
+    private boolean isActivity(String cardNo) {
+        if (StringUtils.startsWith(cardNo,"QY")){
+            return true;
+        }
+        return false;
     }
 
     /**

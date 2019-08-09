@@ -1,12 +1,12 @@
 package com.ziwow.scrmapp.common.utils;
 
 import com.ziwow.scrmapp.common.enums.Guarantee;
-import org.apache.commons.httpclient.util.DateUtil;
+import org.apache.commons.lang.RandomStringUtils;
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.time.DateUtils;
 
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 
 /**
  * 关于延保卡的工具类
@@ -186,8 +186,8 @@ public class EwCardUtil {
      * 判断购买时间是否大约7天
      * @return
      */
-    public static boolean gtSevenDay(Date buyTime){
-        instance.setTime(buyTime);
+    public static boolean gtSevenDay(Date date){
+        instance.setTime(date);
         instance.add(Calendar.DATE,7);
         if (System.currentTimeMillis() < instance.getTime().getTime()){
             return false;
@@ -287,6 +287,9 @@ public class EwCardUtil {
     }
 
 
+
+
+
     public enum Dates{
         /** 年卡 */
         YEAR(365),
@@ -307,5 +310,16 @@ public class EwCardUtil {
     }
 
 
+    /**
+     * 获取掩码
+     * @return
+     */
+    public static String getMask(){
+        return new StringBuffer()
+                .append("QY")
+                .append(System.currentTimeMillis()%10000002)
+                .append(RandomStringUtils.randomAlphanumeric(5))
+                .toString();
+    }
 }
 

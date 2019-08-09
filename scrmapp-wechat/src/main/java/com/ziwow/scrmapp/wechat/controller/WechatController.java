@@ -12,6 +12,7 @@ import com.alibaba.fastjson.JSON;
 import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
 import com.sun.tools.jxc.apt.Const;
+import com.ziwow.scrmapp.common.annotation.MiniAuthentication;
 import com.ziwow.scrmapp.common.bean.pojo.AppraiseParam;
 import com.ziwow.scrmapp.common.bean.pojo.DispatchDotParam;
 import com.ziwow.scrmapp.common.bean.pojo.DispatchMasterParam;
@@ -20,6 +21,7 @@ import com.ziwow.scrmapp.common.bean.vo.csm.ProductItem;
 import com.ziwow.scrmapp.common.bean.vo.mall.MallOrderVo;
 import com.ziwow.scrmapp.common.bean.vo.mall.OrderItem;
 import com.ziwow.scrmapp.common.constants.Constant;
+import com.ziwow.scrmapp.common.enums.EwCardTypeEnum;
 import com.ziwow.scrmapp.common.exception.ParamException;
 import com.ziwow.scrmapp.common.persistence.entity.FilterLevel;
 import com.ziwow.scrmapp.common.persistence.entity.Product;
@@ -27,6 +29,7 @@ import com.ziwow.scrmapp.common.result.BaseResult;
 import com.ziwow.scrmapp.common.result.Result;
 import com.ziwow.scrmapp.common.service.MobileService;
 import com.ziwow.scrmapp.common.service.ThirdPartyService;
+import com.ziwow.scrmapp.common.utils.EwCardUtil;
 import com.ziwow.scrmapp.tools.thirdParty.SignUtil;
 import com.ziwow.scrmapp.tools.utils.DateUtil;
 import com.ziwow.scrmapp.tools.utils.StringUtil;
@@ -51,6 +54,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -102,6 +106,47 @@ public class WechatController {
 
     @Autowired
     private MobileService mobileService;
+
+    @Autowired
+    private EwCardActivityService ewCardActivityService;
+
+    @RequestMapping(value = "grant_ew_card",method = RequestMethod.GET)
+    @MiniAuthentication
+    @ResponseBody
+    @Transactional(rollbackFor = Exception.class)
+    public Result send(@RequestParam("signture") String signture,
+                       @RequestParam("timestamp") String timeStamp,
+                       @RequestParam("mobile") String mobile,
+                       @RequestParam("type") EwCardTypeEnum type){
+        String cardNo = ewCardActivityService.selectCardNo(type);
+        Result result = new BaseResult();
+        if (cardNo == null){
+            result.setReturnMsg("延保卡资源不足");
+            result.setReturnCode(Constant.FAIL);
+            return result;
+        }
+        final String mask = EwCardUtil.getMask();
+        ewCardActivityService.addMaskByCardNo(cardNo, mask);
+        result.setReturnMsg("发送成功");
+        result.setReturnCode(Constant.SUCCESS);
+        try {
+            //发短信
+            String msgContent = "您近期预约的服务已完成。恭喜您获得限时免费的一年延保卡。您的延保卡号为:【".concat(mask).concat("】。\n" +
+                    "\n" +
+                    "使用方式：关注沁园公众号-【我的沁园】-【个人中心】-【延保服务】-【领取卡券】，复制券码并绑定至您的机器，即可延长一年质保（点击券码可直接复制）！\n" +
+                    "\n" +
+                    "卡券码有效期7天，请尽快使用");
+            mobileService.sendContentByEmay(mobile,msgContent, Constant.MARKETING);
+        } catch (Exception e) {
+            logger.error("发送短信失败，手机号码为:{},错误信息为:{}",mobile,e);
+            result.setReturnCode(Constant.FAIL);
+            result.setReturnMsg("短信发送失败");
+        }
+        //增加发送时间
+        ewCardActivityService.addSendTimeByCardNo(cardNo);
+        return result;
+    }
+
 
     @RequestMapping(value = "/getWechatGetAccessToken", method = RequestMethod.GET)
     @ResponseBody
