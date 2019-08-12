@@ -125,7 +125,7 @@ public class WechatController {
             result.setReturnCode(Constant.FAIL);
             return result;
         }
-        if (!ewCardActivityService.existCardByPhone(mobile)){
+        if (ewCardActivityService.existCardByPhone(mobile)){
             result.setReturnMsg("该手机号已发放");
             result.setReturnCode(Constant.FAIL);
             return result;
@@ -140,7 +140,7 @@ public class WechatController {
                     "\n" +
                     "使用方式：关注沁园公众号-【我的沁园】-【个人中心】-【延保服务】-【领取卡券】，复制券码并绑定至您的机器，即可延长一年质保（点击券码可直接复制）！\n" +
                     "\n" +
-                    "卡券码有效期7天，请尽快使用");
+                    "卡券码有效期7天，请尽快使用，");
             mobileService.sendContentByEmay(mobile,msgContent, Constant.MARKETING);
         } catch (Exception e) {
             logger.error("发送短信失败，手机号码为:{},错误信息为:{}",mobile,e);
