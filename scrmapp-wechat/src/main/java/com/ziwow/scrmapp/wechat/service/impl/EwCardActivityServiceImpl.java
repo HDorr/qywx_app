@@ -45,8 +45,8 @@ public class EwCardActivityServiceImpl implements EwCardActivityService {
     }
 
     @Override
-    public void addSendTimeByCardNo(String cardNo) {
-        ewCardActivityMapper.addSendTimeByCardNo(cardNo);
+    public void addSendTimeAndPhoneByCardNo(String cardNo,String phone) {
+        ewCardActivityMapper.addSendTimeAndPhoneByCardNo(cardNo,phone);
     }
 
     @Override

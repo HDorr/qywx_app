@@ -40,6 +40,19 @@ public class EwCardActivity {
      */
     private EwCardTypeEnum type;
 
+    /**
+     * 发送的手机号码
+     */
+    private String phone;
+
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
 
     public EwCardTypeEnum getType() {
         return type;

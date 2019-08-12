@@ -43,8 +43,9 @@ public interface EwCardActivityService {
     /**
      * 增加发送时间
      * @param cardNo
+     * @param phone
      */
-    void addSendTimeByCardNo(String cardNo);
+    void addSendTimeAndPhoneByCardNo(String cardNo,String phone);
 
     /**
      * 获取已经发送，但是没有领取，未到期的延保卡号

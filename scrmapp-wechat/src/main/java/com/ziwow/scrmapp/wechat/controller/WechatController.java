@@ -114,7 +114,7 @@ public class WechatController {
     @MiniAuthentication
     @ResponseBody
     @Transactional(rollbackFor = Exception.class)
-    public Result send(@RequestParam("signture") String signture,
+    public Result grantEwCard(@RequestParam("signture") String signture,
                        @RequestParam("timestamp") String timeStamp,
                        @RequestParam("mobile") String mobile,
                        @RequestParam("type") EwCardTypeEnum type){
@@ -143,7 +143,7 @@ public class WechatController {
             result.setReturnMsg("短信发送失败");
         }
         //增加发送时间
-        ewCardActivityService.addSendTimeByCardNo(cardNo);
+        ewCardActivityService.addSendTimeAndPhoneByCardNo(cardNo,mobile);
         return result;
     }
 
