@@ -316,10 +316,11 @@ public class EwCardUtil {
      */
     public static String getMask(){
         return new StringBuffer()
-                .append("QY")
-                .append(System.currentTimeMillis()%10000002)
-                .append(RandomStringUtils.randomAlphanumeric(5))
+                .append("16")
+                .append(System.currentTimeMillis()%100001)
+                .append(RandomStringUtils.randomNumeric(4))
                 .toString();
     }
+
 }
 

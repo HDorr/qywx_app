@@ -125,13 +125,18 @@ public class WechatController {
             result.setReturnCode(Constant.FAIL);
             return result;
         }
+        if (!ewCardActivityService.existCardByPhone(mobile)){
+            result.setReturnMsg("该手机号已发放");
+            result.setReturnCode(Constant.FAIL);
+            return result;
+        }
         final String mask = EwCardUtil.getMask();
         ewCardActivityService.addMaskByCardNo(cardNo, mask);
         result.setReturnMsg("发送成功");
         result.setReturnCode(Constant.SUCCESS);
         try {
             //发短信
-            String msgContent = "您近期预约的服务已完成。恭喜您获得限时免费的一年延保卡。您的延保卡号为:【".concat(mask).concat("】。\n" +
+            String msgContent = "您近期预约的服务已完成。恭喜您获得限时免费的一年延保卡。您的延保秘钥为:".concat(mask).concat("。\n" +
                     "\n" +
                     "使用方式：关注沁园公众号-【我的沁园】-【个人中心】-【延保服务】-【领取卡券】，复制券码并绑定至您的机器，即可延长一年质保（点击券码可直接复制）！\n" +
                     "\n" +

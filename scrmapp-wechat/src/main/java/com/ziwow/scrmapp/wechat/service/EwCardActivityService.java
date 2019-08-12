@@ -58,4 +58,13 @@ public interface EwCardActivityService {
      * @param cardNo
      */
     void resetActivityCard(String cardNo);
+
+
+    /**
+     * 判断改手机号是否发放
+     * @return
+     * @param phone
+     */
+    boolean existCardByPhone(String phone);
+
 }

@@ -58,4 +58,12 @@ public class EwCardActivityServiceImpl implements EwCardActivityService {
     public void resetActivityCard(String cardNo) {
         ewCardActivityMapper.resetActivityCard(cardNo);
     }
+
+    @Override
+    public boolean existCardByPhone(String phone) {
+        if (ewCardActivityMapper.selectCardByPhone(phone) == null){
+            return false;
+        }
+        return true;
+    }
 }

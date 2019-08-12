@@ -79,5 +79,14 @@ public interface EwCardActivityMapper {
      * @param cardNo
      */
     @Update("update t_ew_card_activity set send_time = null,receive = false,mask = null where card_no = #{cardNo}")
-    void resetActivityCard(String cardNo);
+    void resetActivityCard(@Param("cardNo") String cardNo);
+
+    /**
+     * 根据手机号查找发放记录
+     * @param phone
+     * @return
+     */
+    @Select("select id from t_ew_card_activity where phone = #{phone} limit 1")
+    String selectCardByPhone(@Param("phone") String phone);
+
 }
