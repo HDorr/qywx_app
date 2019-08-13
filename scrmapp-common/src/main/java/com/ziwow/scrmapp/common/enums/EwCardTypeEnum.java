@@ -1,5 +1,7 @@
 package com.ziwow.scrmapp.common.enums;
 
+import java.math.BigDecimal;
+
 /**
  * 延保卡对应机器类型 例如 50g   400g
  * @author songkaiqi
@@ -7,18 +9,25 @@ package com.ziwow.scrmapp.common.enums;
  */
 public enum  EwCardTypeEnum {
 
-    FOUR_HUNDRED("400g"),
+    FOUR_HUNDRED("400g",new BigDecimal(98)),
 
-    FIFTY("50g"),
+    FIFTY("50g",new BigDecimal(88)),
     ;
 
-    EwCardTypeEnum(String name) {
+    EwCardTypeEnum(String name, BigDecimal price) {
         this.name = name;
+        this.price = price;
     }
 
     private String name;
 
+    private BigDecimal price;
+
     public String getName() {
         return name;
+    }
+
+    public BigDecimal getPrice() {
+        return price;
     }
 }
