@@ -349,7 +349,7 @@ public class ThirdPartyServiceImpl implements ThirdPartyService {
         Client client = proxy.getClient();
         client.addOutHandler(new ClientAuthenticationHandler(authUserName, authPassword));
         client.setTimeout(readTimeout);
-        client.setProperty(CommonsHttpMessageSender.HTTP_TIMEOUT, String.valueOf( connectTimeout ));
+        client.setProperty(CommonsHttpMessageSender.HTTP_TIMEOUT, String.valueOf( 10000 ));
         return client;
     }
 
