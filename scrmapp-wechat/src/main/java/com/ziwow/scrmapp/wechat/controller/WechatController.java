@@ -131,6 +131,11 @@ public class WechatController {
             result.setReturnCode(Constant.FAIL);
             return result;
         }
+        if (wechatUserService.getUserByMobilePhone(mobile) == null){
+            result.setReturnMsg("该用户不是微信会员");
+            result.setReturnCode(Constant.FAIL);
+            return result;
+        }
         final String mask = EwCardUtil.getMask();
         ewCardActivityService.addMaskByCardNo(cardNo, mask);
         result.setReturnMsg("发送成功");
