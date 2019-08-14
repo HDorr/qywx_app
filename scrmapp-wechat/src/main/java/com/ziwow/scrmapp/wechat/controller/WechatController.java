@@ -122,16 +122,19 @@ public class WechatController {
         String cardNo = ewCardActivityService.selectCardNo(type);
         Result result = new BaseResult();
         if (cardNo == null){
+            logger.error("延保卡资源不足，手机号码为:{}",mobile);
             result.setReturnMsg("延保卡资源不足");
             result.setReturnCode(Constant.FAIL);
             return result;
         }
         if (ewCardActivityService.existCardByPhone(mobile)){
+            logger.error("该手机号已发放，手机号码为:{}",mobile);
             result.setReturnMsg("该手机号已发放");
             result.setReturnCode(Constant.FAIL);
             return result;
         }
         if (wechatUserService.getUserByMobilePhone(mobile) == null){
+            logger.error("该用户不是微信会员，手机号码为:{}",mobile);
             result.setReturnMsg("该用户不是微信会员");
             result.setReturnCode(Constant.FAIL);
             return result;
