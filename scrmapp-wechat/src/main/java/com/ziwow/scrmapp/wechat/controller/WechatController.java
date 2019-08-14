@@ -119,6 +119,7 @@ public class WechatController {
                        @RequestParam("timestamp") String timeStamp,
                        @RequestParam("mobile") String mobile,
                        @RequestParam("type") EwCardTypeEnum type){
+        logger.info("CSM调用微信短信发放延保卡开始，手机号码为:{}，类型为:{}",mobile,type);
         String cardNo = ewCardActivityService.selectCardNo(type);
         Result result = new BaseResult();
         if (cardNo == null){
