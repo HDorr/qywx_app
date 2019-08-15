@@ -287,7 +287,6 @@ public class ProductController {
                 return result;
             }
             List<Product> products = productService.getProductsByUserId(userId);
-            final WechatFans fans = wechatFansService.getWechatFansByUserId(userId);
             sameCodeProduct(products);
             //添加商品的保修状态
 //            for (Product product : products) {
