@@ -47,7 +47,7 @@ public abstract class AbstractGrantEwCard extends IJobHandler {
         try {
             //发短信
 
-            final String msgContent = MessageFormat.format("您近期预约的服务已完成。恭喜您成为幸运用户，获赠限量免费的一年延保卡（价值{0}元），您的延保卡号为{1}。\n\n使用方式：关注沁园公众号-【我的沁园】-【个人中心】-【延保服务】-【领取卡券】，复制券码并绑定至您的机器，即可延长一年质保（点击券码可直接复制）！\n\n卡券码有效期7天，请尽快使用。", type.getPrice(), mask);
+            final String msgContent = MessageFormat.format("亲爱的沁粉，您的保修将于半月内过期。恭喜您成为幸运用户，获赠限量免费的一年延保卡（价值{0}元），您的延保卡号为{1}。\n\n使用方式：关注沁园公众号-【我的沁园】-【个人中心】-【延保服务】-【领取卡券】，复制券码并绑定至您的机器，即可延长一年质保（点击券码可直接复制）！\n\n卡券码有效期7天，请尽快使用。", type.getPrice(), mask);
 
             mobileService.sendContentByEmay(mobile,msgContent, Constant.MARKETING);
         } catch (Exception e) {
