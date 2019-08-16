@@ -317,21 +317,8 @@ public class WechatFansServiceImpl implements WechatFansService {
 	}
 
 
-
-
-
 	@Override
 	public List<TempWechatFans> loadTempWechatFansBatch1() {
 		return wechatFansMapper.selectTempWechatFansBtach1();
-	}
-
-	@Override
-	public List<TempWechatFans> loadTempWechatFansBatch2() {
-		return wechatFansMapper.selectTempWechatFansBtach2();
-	}
-
-	@Override
-	public List<TempWechatFans> loadTempWechatFansBatch3() {
-		return wechatFansMapper.selectTempWechatFansBtach3();
 	}
 }
