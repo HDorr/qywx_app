@@ -57,6 +57,7 @@ public abstract class AbstractGrantEwCard extends IJobHandler {
         }
         //增加发送时间
         ewCardActivityService.addSendTimeAndPhoneByCardNo(cardNo,mobile);
+        XxlJobLogger.log("发送短信成功，手机号码为:{}",mobile);
         return true;
     }
 
