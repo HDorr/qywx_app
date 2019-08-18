@@ -150,18 +150,6 @@
 		from t_wechat_user_temp_1 temp
 	</select>
 
-	<!--临时查询-->
-	<select id="selectTempWechatFansBtach2" resultMap="TempWechatMap">
-		select temp.mobile,temp.count
-		from t_wechat_user_temp_2 temp
-	</select>
-
-
-	<!--临时查询-->
-	<select id="selectTempWechatFansBtach3" resultMap="TempWechatMap">
-		select temp.mobile,temp.product
-		from t_wechat_user_temp_3 temp
-	</select>
 
   <select id="getWechatFansAndNotRegisterByPage" resultMap="wechatFansMap">
 		SELECT  wf.*  FROM t_wechat_fans AS wf LEFT JOIN t_wechat_user AS wu ON wf.id=wu.wfId
