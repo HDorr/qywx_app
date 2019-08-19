@@ -159,10 +159,7 @@ public class EwCardController {
      * @return
      */
     private boolean isActivity(String cardNo) {
-        if (StringUtils.startsWith(cardNo,"16")){
-            return true;
-        }
-        return false;
+        return StringUtils.startsWith(cardNo,"16");
     }
 
     /**

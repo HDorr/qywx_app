@@ -315,10 +315,10 @@ public class EwCardUtil {
     public static String getMask(){
         return new StringBuffer()
                 .append("16")
-                .append(System.currentTimeMillis()%100001)
-                .append(RandomStringUtils.randomNumeric(4))
+                .append(RandomStringUtils.randomNumeric(9))
                 .toString();
     }
+
 
 
 }

@@ -152,6 +152,8 @@ public class ThirdPartyServiceImpl implements ThirdPartyService {
             ewCardVo = JsonUtil.json2Object(s, EwCardVo.class);
         } catch (IOException e) {
             throw new ThirdException("调用第三方CSM系统根据卡号查询延保卡失败","查询延保卡失败，请稍后再试",e);
+        } catch (Exception e) {
+            throw new ThirdException("调用第三方CSM系统根据卡号查询延保卡失败","查询延保卡失败，请稍后再试",e);
         }
         return ewCardVo;
     }
@@ -174,6 +176,8 @@ public class ThirdPartyServiceImpl implements ThirdPartyService {
             baseCardVo = JsonUtil.json2Object(s, BaseCardVo.class);
         } catch (IOException e) {
             throw new ThirdException("调用第三方CSM系统注册延保卡信息失败", "注册延保卡失败，请稍后再试",e);
+        } catch (Exception e) {
+            throw new ThirdException("调用第三方CSM系统注册延保卡信息失败", "注册延保卡失败，请稍后再试",e);
         }
         return baseCardVo;
     }
@@ -187,6 +191,8 @@ public class ThirdPartyServiceImpl implements ThirdPartyService {
             LOG.info("收到csm的数据:[{}]",s);
             existInstallVo = JsonUtil.json2Object(s, ExistInstallVo.class);
         } catch (IOException e) {
+            throw new ThirdException("调用第三方CSM系统是否存在安装单失败", "注册延保卡失败，请稍后再试",e);
+        } catch (Exception e) {
             throw new ThirdException("调用第三方CSM系统是否存在安装单失败", "注册延保卡失败，请稍后再试",e);
         }
         return existInstallVo.getStatus().getCode().equals(ErrorCodeConstants.CODE_E0);
@@ -205,6 +211,8 @@ public class ThirdPartyServiceImpl implements ThirdPartyService {
                 return JsonUtil.json2Object(s, PurchDateVo.class).getItems().getPurchDate();
             }
         } catch (IOException e) {
+            throw new ThirdException("调用第三方CSM系统根据产品条码查询安装单时间失败", "查询产品失败，请稍后再试",e);
+        } catch (Exception e) {
             throw new ThirdException("调用第三方CSM系统根据产品条码查询安装单时间失败", "查询产品失败，请稍后再试",e);
         }
         return "";
@@ -349,7 +357,7 @@ public class ThirdPartyServiceImpl implements ThirdPartyService {
         Client client = proxy.getClient();
         client.addOutHandler(new ClientAuthenticationHandler(authUserName, authPassword));
         client.setTimeout(readTimeout);
-        client.setProperty(CommonsHttpMessageSender.HTTP_TIMEOUT, String.valueOf( 10000 ));
+        client.setProperty(CommonsHttpMessageSender.HTTP_TIMEOUT, String.valueOf( connectTimeout ));
         return client;
     }
 
