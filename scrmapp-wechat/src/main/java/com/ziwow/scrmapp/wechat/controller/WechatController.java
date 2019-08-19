@@ -137,9 +137,9 @@ public class WechatController {
             result.setReturnCode(Constant.FAIL);
             return result;
         }
-        if (wechatUserService.getUserByMobilePhone(mobile) == null){
-            logger.error("该用户不是微信会员，手机号码为:{}",mobile);
-            result.setReturnMsg("该用户不是微信会员");
+        if (wechatUserService.getUserByMobilePhone(mobile) != null){
+            logger.error("该用户是微信会员，手机号码为:{}",mobile);
+            result.setReturnMsg("该用户是微信会员,不满足发放条件");
             result.setReturnCode(Constant.FAIL);
             return result;
         }
@@ -149,7 +149,7 @@ public class WechatController {
         result.setReturnCode(Constant.SUCCESS);
         try {
             //发短信
-            final String msgContent = MessageFormat.format("您近期预约的服务已完成。恭喜您成为幸运用户，获赠限量免费的一年延保卡（价值{0}元），您的延保卡号为{1}。\n\n使用方式：关注沁园公众号-【我的沁园】-【个人中心】-【延保服务】-【领取卡券】，复制券码并绑定至您的机器，即可延长一年质保，绑定时请扫描机身条形码，即可识别机器！（点击券码可直接复制）！\n\n卡券码有效期7天，请尽快使用。", type.getPrice(), mask);
+            final String msgContent = MessageFormat.format("您近期预约的服务已完成。恭喜您成为幸运用户，获赠限量免费的一年延保卡（价值{0}元），您的延保卡号为{1}。（点击券码可直接复制）！\n\n使用方式：关注沁园公众号-【我的沁园】-【个人中心】-【延保服务】-【领取卡券】，复制券码并绑定至您的机器，即可延长一年质保，绑定时请扫描机身条形码，即可识别机器！\n\n卡券码有效期7天，请尽快使用。", type.getPrice(), mask);
             mobileService.sendContentByEmay(mobile,msgContent, Constant.MARKETING);
         } catch (Exception e) {
             logger.error("发送短信失败，手机号码为:{},错误信息为:{}",mobile,e);

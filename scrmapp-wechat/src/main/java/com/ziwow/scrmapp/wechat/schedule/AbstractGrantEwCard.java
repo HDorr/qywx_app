@@ -9,6 +9,7 @@ import com.ziwow.scrmapp.common.utils.EwCardUtil;
 import com.ziwow.scrmapp.wechat.controller.EwCardController;
 import com.ziwow.scrmapp.wechat.service.EwCardActivityService;
 import com.ziwow.scrmapp.wechat.service.GrantEwCardRecordService;
+import com.ziwow.scrmapp.wechat.service.WechatUserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +34,9 @@ public abstract class AbstractGrantEwCard extends IJobHandler {
     @Autowired
     private GrantEwCardRecordService grantEwCardRecordService;
 
+    @Autowired
+    private WechatUserService wechatUserService;
+
     @Transactional(rollbackFor = Exception.class)
     public boolean grantEwCard(String mobile, EwCardTypeEnum type){
         String cardNo = ewCardActivityService.selectCardNo(type);
@@ -46,11 +50,16 @@ public abstract class AbstractGrantEwCard extends IJobHandler {
             XxlJobLogger.log("该手机号已发放,手机号码为{}",mobile);
             return false;
         }
+        if (wechatUserService.getUserByMobilePhone(mobile) != null){
+            logger.error("该用户是微信会员，手机号码为:{}",mobile);
+            XxlJobLogger.log("该用户是微信会员，手机号码为:{}",mobile);
+            return false;
+        }
         final String mask = EwCardUtil.getMask();
         grantEwCardRecordService.addMaskByMobile(mask,mobile);
         try {
             //发短信
-            final String msgContent = MessageFormat.format("亲爱的沁粉，您的保修将于半月内过期。恭喜您成为幸运用户，获赠限量免费的一年延保卡（价值{0}元），您的延保卡号为{1}。\n\n使用方式：关注沁园公众号-【我的沁园】-【个人中心】-【延保服务】-【领取卡券】，复制券码并绑定至您的机器，即可延长一年质保，绑定时请扫描机身条形码，即可识别机器！（点击券码可直接复制）！\n\n卡券码有效期7天，请尽快使用。", type.getPrice(), mask);
+            final String msgContent = MessageFormat.format("亲爱的沁粉，您的保修将于半月内过期。恭喜您成为幸运用户，获赠限量免费的一年延保卡（价值{0}元），您的延保卡号为{1}。（点击券码可直接复制）！\n\n使用方式：关注沁园公众号-【我的沁园】-【个人中心】-【延保服务】-【领取卡券】，复制券码并绑定至您的机器，即可延长一年质保，绑定时请扫描机身条形码，即可识别机器！\n\n卡券码有效期7天，请尽快使用。", type.getPrice(), mask);
             mobileService.sendContentByEmay(mobile,msgContent, Constant.MARKETING);
         } catch (Exception e) {
             logger.error("发送短信失败，手机号码为:{},错误信息为:{}",mobile,e);

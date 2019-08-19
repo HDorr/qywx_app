@@ -112,9 +112,9 @@ public class EwCardController {
             return result;
         }
 
-        boolean isActivity = false;
+        boolean isActivity = isActivity(cardNo);
         GrantEwCardRecord gwr = null;
-        if (isActivity(cardNo)){
+        if (isActivity){
             gwr = grantEwCardRecordService.selectRecordByMask(cardNo);
             if (gwr == null){
                 result.setReturnCode(Constant.FAIL);
