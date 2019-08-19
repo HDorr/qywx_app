@@ -2,6 +2,8 @@ package com.ziwow.scrmapp.wechat.persistence.entity;
 
 import com.ziwow.scrmapp.common.enums.EwCardTypeEnum;
 
+import java.util.Date;
+
 /**
  * 发放延保卡记录
  * @author songkaiqi
@@ -26,6 +28,46 @@ public class GrantEwCardRecord {
      */
     private Boolean send;
 
+    /**
+     * 掩码
+     */
+    private String mask;
+
+    /**
+     * 发送时间
+     */
+    private Date sendTime;
+
+
+    /**
+     * 是否领取 true:已领取
+     */
+    private Boolean recevice;
+
+
+    public Boolean getRecevice() {
+        return recevice;
+    }
+
+    public void setRecevice(Boolean recevice) {
+        this.recevice = recevice;
+    }
+
+    public String getMask() {
+        return mask;
+    }
+
+    public void setMask(String mask) {
+        this.mask = mask;
+    }
+
+    public Date getSendTime() {
+        return sendTime;
+    }
+
+    public void setSendTime(Date sendTime) {
+        this.sendTime = sendTime;
+    }
 
     public String getId() {
         return id;

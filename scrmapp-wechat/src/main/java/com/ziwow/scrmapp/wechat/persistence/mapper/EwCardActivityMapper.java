@@ -40,7 +40,7 @@ public interface EwCardActivityMapper {
      * @param type 延保卡类型
      * @return
      */
-    @Select("select card_no from t_ew_card_activity where receive = false and type = #{type} and send_time is null  limit 1")
+    @Select("select card_no from t_ew_card_activity where  type = #{type} and receive = false limit 1")
     String selectCardNo(@Param("type") EwCardTypeEnum type);
 
     /**
@@ -89,4 +89,20 @@ public interface EwCardActivityMapper {
     @Select("select id from t_ew_card_activity where phone = #{phone} limit 1")
     String selectCardByPhone(@Param("phone") String phone);
 
+    /**
+     * 根据卡号增加发放手机号记录并修改发放标识
+     * @param cardNo
+     * @param phone
+     */
+    @Update("update t_ew_card_activity set phone = #{phone},receive = true where card_no = #{cardNo}")
+    void addPhoneByCardNo(@Param("cardNo") String cardNo, @Param("phone")String phone);
+
+    /**
+     * 根据手机号和类型查询卡号
+     * @param phone
+     * @param type
+     * @return
+     */
+    @Select("select card_no from t_ew_card_activity where phone = #{phone} and type = #{type}")
+    String selectCardNoByPhoneAndType(@Param("phone") String phone, @Param("type") EwCardTypeEnum type);
 }

@@ -67,4 +67,18 @@ public interface EwCardActivityService {
      */
     boolean existCardByPhone(String phone);
 
+    /**
+     * 根据卡号增加发放手机号码记录
+     * @param cardNo
+     * @param mobile
+     */
+    void addPhoneByCardNo(String cardNo, String mobile);
+
+    /**
+     * 根据手机号和类型查询真正的卡号
+     * @param phone
+     * @param type
+     * @return
+     */
+    String selectCardNoByPhoneAndType(String phone, EwCardTypeEnum type);
 }

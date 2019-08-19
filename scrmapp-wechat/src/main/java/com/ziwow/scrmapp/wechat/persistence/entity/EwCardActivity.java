@@ -19,17 +19,6 @@ public class EwCardActivity {
      */
     private Boolean receive;
 
-
-    /**
-     * 发送时间
-     */
-    private Date sendTime;
-
-    /**
-     * 掩码
-     */
-    private String mask;
-
     /**
      * 延保卡号
      */
@@ -77,22 +66,6 @@ public class EwCardActivity {
 
     public void setReceive(Boolean receive) {
         this.receive = receive;
-    }
-
-    public Date getSendTime() {
-        return sendTime;
-    }
-
-    public void setSendTime(Date sendTime) {
-        this.sendTime = sendTime;
-    }
-
-    public String getMask() {
-        return mask;
-    }
-
-    public void setMask(String mask) {
-        this.mask = mask;
     }
 
     public String getCardNo() {

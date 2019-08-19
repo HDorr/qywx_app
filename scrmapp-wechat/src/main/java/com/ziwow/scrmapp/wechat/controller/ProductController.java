@@ -376,7 +376,8 @@ public class ProductController {
         //筛选有购买时间，有产品条码并且没有使用过延保卡的
         for (Product product : products) {
             final List<EwCard> ewCards = ewCardService.selectEwCardsByBarCode(product.getProductBarCode());
-            if (product.getBuyTime() != null && EwCardUtil.isCanUseCard(limitNum,limitYear,ewCards.size(),getEwCardYear(ewCards))){
+            if (product.getBuyTime() != null && EwCardUtil.isCanUseCard(limitNum,limitYear,ewCards.size(),
+                    getEwCardYear(ewCards)) && StringUtils.isNotBlank(product.getProductBarCode())){
                 collect.add(product);
             }
         }
