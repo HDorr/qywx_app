@@ -50,10 +50,10 @@ public interface GrantEwCardRecordMapper {
     /**
      * 根据手机号增加掩码
      * @param mask
-     * @param mobile
+     * @param phone
      */
     @Update("update t_grant_ew_card_record set mask = #{mask} where phone = #{phone}")
-    void addMaskByMobile(String mask, String mobile);
+    void addMaskByMobile(@Param("mask") String mask, @Param("phone") String phone);
 
     /**
      * 根据掩码查询出对应的发放记录
