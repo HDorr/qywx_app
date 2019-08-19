@@ -148,7 +148,7 @@ public class ThirdPartyServiceImpl implements ThirdPartyService {
         EwCardVo ewCardVo = null;
         try {
             final String s = restTemplate.postForObject(queryEwCardUrl, JsonUtil.object2Json(ImmutableMap.of("card_no",cardNo,"mobile","")), String.class);
-            LOG.info("收到csm的数据:[{}]",s);
+            LOG.info("第三方CSM系统根据卡号查询延保卡,收到csm的数据:[{}]",s);
             ewCardVo = JsonUtil.json2Object(s, EwCardVo.class);
         } catch (IOException e) {
             throw new ThirdException("调用第三方CSM系统根据卡号查询延保卡失败","查询延保卡失败，请稍后再试",e);
@@ -170,7 +170,7 @@ public class ThirdPartyServiceImpl implements ThirdPartyService {
             org.springframework.http.HttpEntity<String> formEntity = new org.springframework.http.HttpEntity<String>(s1, headers);
 
             final String s = restTemplate.postForObject(registerEwCardUrl, formEntity , String.class);
-            LOG.info("收到csm的数据:[{}]",s);
+            LOG.info("第三方CSM系统注册延保卡信息,收到csm的数据:[{}]",s);
             baseCardVo = JsonUtil.json2Object(s, BaseCardVo.class);
         } catch (IOException e) {
             throw new ThirdException("调用第三方CSM系统注册延保卡信息失败", "注册延保卡失败，请稍后再试",e);
@@ -179,12 +179,12 @@ public class ThirdPartyServiceImpl implements ThirdPartyService {
     }
 
     @Override
-    public boolean existInstallList(String productBarCode) {
-        LOG.info("第三方CSM系统是否存在安装单,productBarCode:[{}]", productBarCode);
+    public boolean existInstallList(String mobile) {
+        LOG.info("第三方CSM系统是否存在安装单,productBarCode:[{}]", mobile);
         ExistInstallVo existInstallVo = null;
         try {
-            final String s = restTemplate.postForObject(existInstallListUrl, JsonUtil.object2Json(ImmutableMap.of("mobile",productBarCode)), String.class);
-            LOG.info("收到csm的数据:[{}]",s);
+            final String s = restTemplate.postForObject(existInstallListUrl, JsonUtil.object2Json(ImmutableMap.of("mobile",mobile)), String.class);
+            LOG.info("第三方CSM系统是否存在安装单,收到csm的数据:[{}]",s);
             existInstallVo = JsonUtil.json2Object(s, ExistInstallVo.class);
         } catch (IOException e) {
             throw new ThirdException("调用第三方CSM系统是否存在安装单失败", "注册延保卡失败，请稍后再试",e);

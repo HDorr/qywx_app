@@ -66,4 +66,14 @@ public class EwCardActivityServiceImpl implements EwCardActivityService {
         }
         return true;
     }
+
+    @Override
+    public void addPhoneByCardNo(String cardNo, String mobile) {
+        ewCardActivityMapper.addPhoneByCardNo(cardNo,mobile);
+    }
+
+    @Override
+    public String selectCardNoByPhoneAndType(String phone, EwCardTypeEnum type) {
+        return ewCardActivityMapper.selectCardNoByPhoneAndType(phone,type);
+    }
 }

@@ -72,6 +72,9 @@ public class EwCardController {
     @Autowired
     private EwCardActivityService ewCardActivityService;
 
+    @Autowired
+    private GrantEwCardRecordService grantEwCardRecordService;
+
     /**
      * 延保卡限制使用次数
      */
@@ -110,12 +113,18 @@ public class EwCardController {
         }
 
         boolean isActivity = false;
+        GrantEwCardRecord gwr = null;
         if (isActivity(cardNo)){
-            //查出真正的卡号
-            cardNo = ewCardActivityService.selectCardNoByMask(cardNo);
-            if (cardNo == null){
+            gwr = grantEwCardRecordService.selectRecordByMask(cardNo);
+            if (gwr == null){
                 result.setReturnCode(Constant.FAIL);
                 result.setReturnMsg("卡号错误或卡号已过期");
+                return result;
+            }
+            cardNo = ewCardActivityService.selectCardNo(gwr.getType());
+            if (StringUtils.isBlank(cardNo)){
+                result.setReturnCode(Constant.FAIL);
+                result.setReturnMsg("对不起，延保卡发放完毕");
                 return result;
             }
             isActivity = true;
@@ -144,9 +153,9 @@ public class EwCardController {
 
         //如果是活动送的卡
         if (isActivity){
-            ewCardActivityService.updateReceiveByCardNo(cardNo,true);
+            grantEwCardRecordService.updateReceiveByPhone(gwr.getPhone(),true);
+            ewCardActivityService.addPhoneByCardNo(cardNo,gwr.getPhone());
         }
-
         result.setReturnMsg("查询成功");
         result.setReturnCode(Constant.SUCCESS);
         result.setData("ok");
@@ -228,7 +237,7 @@ public class EwCardController {
 
         //该类型用户的产品
         final Product product = productService.getProductsByBarCodeAndUserId(wechatUser.getUserId(),ewCardParam.getBarCode());
-        if(product == null || product.getBuyTime() == null || product.getProductBarCode() == null){
+        if(product == null || product.getBuyTime() == null || StringUtils.isNotBlank(product.getProductBarCode())){
             result.setReturnCode(Constant.FAIL);
             result.setReturnMsg("产品信息错误!");
             logger.info("当前用户不存在此产品或无购买时间,卡号:{},用户:{}",ewCardParam.getCardNo(),wechatUser.getMobilePhone());
