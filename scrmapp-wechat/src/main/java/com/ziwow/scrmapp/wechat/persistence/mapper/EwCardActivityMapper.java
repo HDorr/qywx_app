@@ -94,7 +94,7 @@ public interface EwCardActivityMapper {
      * @param cardNo
      * @param phone
      */
-    @Update("update t_ew_card_activity set phone = #{phone} where card_no = #{cardNo}")
+    @Update("update t_ew_card_activity set phone = #{phone},receive = true where card_no = #{cardNo}")
     void addPhoneByCardNo(@Param("cardNo") String cardNo, @Param("phone")String phone);
 
     /**
