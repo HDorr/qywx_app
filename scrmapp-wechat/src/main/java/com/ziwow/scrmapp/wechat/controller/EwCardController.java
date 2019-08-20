@@ -127,7 +127,6 @@ public class EwCardController {
                 result.setReturnMsg("对不起，延保卡发放完毕");
                 return result;
             }
-            isActivity = true;
         }
 
         ewCardVo = thirdPartyService.getEwCardListByNo(cardNo);
@@ -234,7 +233,7 @@ public class EwCardController {
 
         //该类型用户的产品
         final Product product = productService.getProductsByBarCodeAndUserId(wechatUser.getUserId(),ewCardParam.getBarCode());
-        if(product == null || product.getBuyTime() == null || StringUtils.isNotBlank(product.getProductBarCode())){
+        if(product == null || product.getBuyTime() == null || StringUtils.isBlank(product.getProductBarCode())){
             result.setReturnCode(Constant.FAIL);
             result.setReturnMsg("产品信息错误!");
             logger.info("当前用户不存在此产品或无购买时间,卡号:{},用户:{}",ewCardParam.getCardNo(),wechatUser.getMobilePhone());
