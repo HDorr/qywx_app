@@ -23,6 +23,7 @@ import com.ziwow.scrmapp.wechat.vo.EwCardDetails;
 import com.ziwow.scrmapp.wechat.vo.EwCardInfo;
 import com.ziwow.scrmapp.wechat.vo.EwCards;
 import com.ziwow.scrmapp.wechat.vo.ServiceRecord;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -68,6 +69,11 @@ public class EwCardController {
     @Autowired
     private ProductService productService;
 
+    @Autowired
+    private EwCardActivityService ewCardActivityService;
+
+    @Autowired
+    private GrantEwCardRecordService grantEwCardRecordService;
 
     /**
      * 延保卡限制使用次数
@@ -89,6 +95,7 @@ public class EwCardController {
      */
     @RequestMapping(value = "query/ew_card_by_no",method = RequestMethod.GET)
     @MiniAuthentication
+    @Transactional
     public Result queryCardByNo(@RequestParam("signture") String signture,
                                 @RequestParam("time_stamp") String timeStamp,
                                 @RequestParam("unionId") String unionId,
@@ -103,6 +110,23 @@ public class EwCardController {
             result.setReturnMsg("该延保卡已经被注册");
             logger.info("该延保卡已经被注册,{}",cardNo);
             return result;
+        }
+
+        boolean isActivity = isActivity(cardNo);
+        GrantEwCardRecord gwr = null;
+        if (isActivity){
+            gwr = grantEwCardRecordService.selectRecordByMask(cardNo);
+            if (gwr == null){
+                result.setReturnCode(Constant.FAIL);
+                result.setReturnMsg("卡号错误或卡号已过期");
+                return result;
+            }
+            cardNo = ewCardActivityService.selectCardNo(gwr.getType());
+            if (StringUtils.isBlank(cardNo)){
+                result.setReturnCode(Constant.FAIL);
+                result.setReturnMsg("对不起，延保卡发放完毕");
+                return result;
+            }
         }
 
         ewCardVo = thirdPartyService.getEwCardListByNo(cardNo);
@@ -126,10 +150,24 @@ public class EwCardController {
         ewCard.setCardNo(cardNo);
         ewCardService.addEwCard(ewCard,ewCardVo.getItems().getItemNames(),ewCardVo.getItems().getItemCodes());
 
+        //如果是活动送的卡
+        if (isActivity){
+            grantEwCardRecordService.updateReceiveByPhone(gwr.getPhone(),true);
+            ewCardActivityService.addPhoneByCardNo(cardNo,gwr.getPhone());
+        }
         result.setReturnMsg("查询成功");
         result.setReturnCode(Constant.SUCCESS);
         result.setData("ok");
         return result;
+    }
+
+    /**
+     * 判断是否是掩码
+     * @param cardNo
+     * @return
+     */
+    private boolean isActivity(String cardNo) {
+        return StringUtils.startsWith(cardNo,"16");
     }
 
     /**
@@ -195,7 +233,7 @@ public class EwCardController {
 
         //该类型用户的产品
         final Product product = productService.getProductsByBarCodeAndUserId(wechatUser.getUserId(),ewCardParam.getBarCode());
-        if(product == null || product.getBuyTime() == null || product.getProductBarCode() == null){
+        if(product == null || product.getBuyTime() == null || StringUtils.isBlank(product.getProductBarCode())){
             result.setReturnCode(Constant.FAIL);
             result.setReturnMsg("产品信息错误!");
             logger.info("当前用户不存在此产品或无购买时间,卡号:{},用户:{}",ewCardParam.getCardNo(),wechatUser.getMobilePhone());
