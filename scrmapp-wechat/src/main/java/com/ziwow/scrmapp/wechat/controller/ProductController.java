@@ -969,4 +969,22 @@ public class ProductController {
         ModelAndView modelAndView = new ModelAndView("/reserveService/jsp/reserveService_updateFilter", map);
         return modelAndView;
     }
+    /**
+     * 根据unionId，查询 对应用户绑定的产品
+     */
+    @RequestMapping(value = "/product/bind_product", method = RequestMethod.GET)
+    @ResponseBody
+    @MiniAuthentication
+    public Result queryUserProductByItem(@RequestParam("signture") String signture,
+        @RequestParam("time_stamp") String timeStamp,
+        @RequestParam("unionId") String unionId){
+        Result result = new BaseResult();
+        WechatUser user = wechatUserService.getUserByUnionid(unionId);
+        String userId = user.getUserId();
+        List<Product> products = productService.getProductsByUserId(userId);
+        result.setData(products);
+        result.setReturnCode(Constant.SUCCESS);
+        return result;
+    }
+
 }
