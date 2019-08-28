@@ -976,7 +976,7 @@ public class ProductController {
     @ResponseBody
     @MiniAuthentication
     public Result queryUserProductByItem(@RequestParam("signture") String signture,
-        @RequestParam("time_stamp") String timeStamp,
+        @RequestParam("timestamp") String timeStamp,
         @RequestParam("unionId") String unionId){
         Result result = new BaseResult();
         WechatUser user = wechatUserService.getUserByUnionid(unionId);
