@@ -113,8 +113,8 @@ public class WechatOrdersController {
     @RequestMapping("/wechat/qysc_save_order")
     public Result qyscSaveOrder(HttpServletRequest request, HttpServletResponse response,@RequestBody WechatOrdersParamExt wechatOrdersParamExt){
         logger.info("收到商城原单原回受理单,[{}]", JSON.toJSONString(wechatOrdersParamExt));
-        //String userId = wechatUserService.getUserByUnionid(wechatOrdersParamExt.getUnionId()).getUserId();
-        String userId = "G5WST99A";
+        String userId = wechatUserService.getUserByUnionid(wechatOrdersParamExt.getUnionId()).getUserId();
+        //String userId = "G5WST99A";
         wechatOrdersParamExt.setUserId(userId);
         wechatOrdersParamExt.setDeliveryType(DeliveryType.NORMAL);
         if (StringUtils.isNotBlank(wechatOrdersParamExt.getDepartmentName())){
