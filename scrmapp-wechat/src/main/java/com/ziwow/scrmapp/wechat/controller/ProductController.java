@@ -972,7 +972,7 @@ public class ProductController {
     /**
      * 根据unionId，查询 对应用户绑定的产品
      */
-    @RequestMapping(value = "/product/bind_product", method = RequestMethod.GET)
+    @RequestMapping(value = "/product/bind_product", method = RequestMethod.POST)
     @ResponseBody
     @MiniAuthentication
     public Result queryUserProductByItem(@RequestParam("signture") String signture,
