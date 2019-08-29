@@ -56,7 +56,7 @@ public interface ProductMapper {
 
     List<Product> getProductsByIds(List<Integer> list);
 
-    @Select("SELECT * FROM t_product WHERE modelName=#{modelName}")
+    @Select("SELECT * FROM t_product WHERE modelName=#{modelName} limit 1")
     Product getProductByModelName(@Param("modelName")String modelName);
 
     int countProductByUserIdWithoutStatus(@Param("userId") String userId);
@@ -79,7 +79,7 @@ public interface ProductMapper {
      * @param userId
      * @return
      */
-    @Select("SELECT * FROM t_product WHERE modelName=#{itemName} and userId = #{userId} order by id desc")
+    @Select("SELECT * FROM t_product WHERE modelName=#{itemName} and userId = #{userId}  and status = 1 order by id desc")
     List<Product> getProductByModelNameAndUserId(@Param("itemName") String itemName, @Param("userId") String userId);
 
     /**

@@ -114,4 +114,11 @@ public interface ProductService {
      * @return
      */
     Product getProductsByBarCode(String productBarCodeTwenty);
+
+    /**
+     * 根据产品编码查询产品信息
+     * @param productModelNames
+     * @return
+     */
+    List<com.ziwow.scrmapp.common.bean.vo.ProductVo> getProductByModelNames(List<String> productModelNames);
 }

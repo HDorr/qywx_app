@@ -107,8 +107,8 @@ public class EwCardController {
         ewCard = ewCardService.selectEwCardByNo(cardNo);
         if(ewCard != null){
             result.setReturnCode(Constant.FAIL);
-            result.setReturnMsg("该延保卡已经被注册");
-            logger.info("该延保卡已经被注册,{}",cardNo);
+            result.setReturnMsg("该卡券已领取");
+            logger.info("延保卡已经被注册,{}",cardNo);
             return result;
         }
 
@@ -118,7 +118,7 @@ public class EwCardController {
             gwr = grantEwCardRecordService.selectRecordByMask(cardNo);
             if (gwr == null){
                 result.setReturnCode(Constant.FAIL);
-                result.setReturnMsg("卡号错误或卡号已过期");
+                result.setReturnMsg("该卡券已领取或卡号错误");
                 return result;
             }
             cardNo = ewCardActivityService.selectCardNo(gwr.getType());

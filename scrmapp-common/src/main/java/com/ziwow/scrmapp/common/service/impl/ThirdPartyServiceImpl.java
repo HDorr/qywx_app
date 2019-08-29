@@ -141,7 +141,6 @@ public class ThirdPartyServiceImpl implements ThirdPartyService {
         restTemplate = new RestTemplate(requestFactory);
     }
 
-
     @Override
     public EwCardVo getEwCardListByNo(String cardNo){
         LOG.info("第三方CSM系统根据卡号查询延保卡,cardNo:[{}]", cardNo);

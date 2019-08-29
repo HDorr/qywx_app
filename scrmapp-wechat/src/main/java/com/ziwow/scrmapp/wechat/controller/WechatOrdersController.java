@@ -13,15 +13,8 @@ import com.ziwow.scrmapp.common.bean.vo.WechatOrdersVo;
 import com.ziwow.scrmapp.common.constants.Constant;
 import com.ziwow.scrmapp.common.constants.SystemConstants;
 import com.ziwow.scrmapp.common.enums.AppraiseEnum;
-import com.ziwow.scrmapp.common.persistence.entity.QyhUser;
-import com.ziwow.scrmapp.common.persistence.entity.QyhUserAppraisal;
-import com.ziwow.scrmapp.common.persistence.entity.QyhUserAppraisalVo;
-import com.ziwow.scrmapp.common.persistence.entity.ServiceFeeProduct;
-import com.ziwow.scrmapp.common.persistence.entity.SmsMarketing;
-import com.ziwow.scrmapp.common.persistence.entity.WechatOrderAppraise;
-import com.ziwow.scrmapp.common.persistence.entity.WechatOrderServiceFee;
-import com.ziwow.scrmapp.common.persistence.entity.WechatOrders;
-import com.ziwow.scrmapp.common.persistence.entity.WechatOrdersRecord;
+import com.ziwow.scrmapp.common.enums.DeliveryType;
+import com.ziwow.scrmapp.common.persistence.entity.*;
 import com.ziwow.scrmapp.common.result.BaseResult;
 import com.ziwow.scrmapp.common.result.Result;
 import com.ziwow.scrmapp.common.service.MobileService;
@@ -49,6 +42,7 @@ import com.ziwow.scrmapp.wechat.service.WechatOrdersService;
 import com.ziwow.scrmapp.wechat.service.WechatQyhUserService;
 import com.ziwow.scrmapp.wechat.service.WechatUserService;
 import java.math.BigDecimal;
+import java.sql.SQLDataException;
 import java.sql.SQLException;
 import java.util.Date;
 import java.util.List;
@@ -112,6 +106,64 @@ public class WechatOrdersController {
 
 
     /**
+     * 商城调用生成
+     * @param wechatOrdersParamExt
+     * @return
+     */
+    @RequestMapping("/wechat/qysc_save_order")
+    public Result qyscSaveOrder(HttpServletRequest request, HttpServletResponse response,@RequestBody WechatOrdersParamExt wechatOrdersParamExt){
+        logger.info("收到商城原单原回受理单,[{}]", JSON.toJSONString(wechatOrdersParamExt));
+        //String userId = wechatUserService.getUserByUnionid(wechatOrdersParamExt.getUnionId()).getUserId();
+        String userId = "G5WST99A";
+        wechatOrdersParamExt.setUserId(userId);
+        wechatOrdersParamExt.setDeliveryType(DeliveryType.NORMAL);
+        if (StringUtils.isNotBlank(wechatOrdersParamExt.getDepartmentName())){
+            wechatOrdersParamExt.setDeliveryType(DeliveryType.DEALER);
+        }
+        //买的是滤芯
+        if (wechatOrdersParamExt.getFilter()){
+            List<ProductVo> list = productService.getProductByModelNames(wechatOrdersParamExt.getProductModelNames());
+            wechatOrdersParamExt.setProducts(list);
+        }
+        StringBuilder pids = new StringBuilder();
+        try {
+            for (ProductVo pv : wechatOrdersParamExt.getProducts()) {
+                final List<Product> products = productService.getProductByModelNameAndUserId(pv.getModelName(), userId);
+                //用户没有绑定则进行绑定
+                if (products.isEmpty()){
+                    Product product = new Product();
+                    product.setUserId(userId);
+                    product.setStatus(1);
+                    product.setCreateTime(new Date());
+                    product.setFilterRemind(SystemConstants.REMIND);
+                    product.setModelName(pv.getModelName());
+                    product.setProductCode(pv.getProductCode());
+                    product.setO2o(1);
+                    product.setBuyChannel(16);
+                    product.setItemKind("净水器");
+                    product.setProductName(pv.getProductName());
+                    product.setProductBarCode("");
+                    product.setBuyTime(new Date());
+
+                    boolean isFirst=productService.isFirstBindProduct(userId);
+
+                    final Long pid = productService.save(product);
+                    pids.append(pid).append(",");
+                    // 绑定产品成功后异步推送给小程序
+                    productService.syncProdBindToMiniApp(userId, product.getProductCode(),isFirst);
+                }else {
+                    pids.append(products.get(0).getId()).append(",");
+                }
+            }
+        } catch (SQLDataException e) {
+            logger.error("",e);
+        }
+        wechatOrdersParamExt.setProductIds(pids.toString());
+        return this.addWechatOrders(request,response,wechatOrdersParamExt);
+    }
+
+
+    /**
      * 用户预约
      * 1.先调用沁园接口，生成受理单
      * 2.本地数据库增加预约单
@@ -128,8 +180,14 @@ public class WechatOrdersController {
         Result result = new BaseResult();
 
         try {
-            String encode = CookieUtil.readCookie(request, response, WeChatConstants.SCRMAPP_USER);
-            String userId = new String(Base64.decode(encode));
+            String userId = null;
+            if (org.apache.commons.lang3.StringUtils.isBlank(wechatOrdersParamExt.getUserId())){
+                String encode = CookieUtil.readCookie(request, response, WeChatConstants.SCRMAPP_USER);
+                userId = new String(Base64.decode(encode));
+                wechatOrdersParamExt.setDeliveryType(DeliveryType.NORMAL);
+            }else {
+                userId = wechatOrdersParamExt.getUserId();
+            }
 
             //用户id不存在
             WechatUser wechatUser = wechatUserService.getUserByUserId(userId);
@@ -244,6 +302,10 @@ public class WechatOrdersController {
             //来源是微信
             wechatOrders.setSource(SystemConstants.WEIXIN);
             wechatOrders.setScOrderNo(scOrderNos);
+            //发货类型
+            wechatOrders.setDeliveryType(wechatOrdersParamExt.getDeliveryType());
+            //服务网点
+            wechatOrders.setDepartmentName(wechatOrdersParamExt.getDepartmentName());
 
             //新增一单多产品接口
             wechatOrders = wechatOrdersService.saveOrdersMultiProduct(wechatOrders, wechatOrdersParamExt.getProductIds());
