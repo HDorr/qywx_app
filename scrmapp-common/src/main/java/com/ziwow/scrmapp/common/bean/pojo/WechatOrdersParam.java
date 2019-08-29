@@ -2,6 +2,7 @@ package com.ziwow.scrmapp.common.bean.pojo;
 
 import com.ziwow.scrmapp.common.bean.vo.ProductVo;
 
+import com.ziwow.scrmapp.common.enums.DeliveryType;
 import com.ziwow.scrmapp.common.persistence.entity.ServiceFeeProduct;
 import java.util.List;
 
@@ -63,6 +64,33 @@ public class WechatOrdersParam {
     private String contactsTelephone;
 
     private List<ProductVo> products;
+
+    /**
+     *  发货方式
+     */
+    private DeliveryType deliveryType;
+
+
+    /**
+     * 服务商名称
+     */
+    private String departmentName;
+
+    public DeliveryType getDeliveryType() {
+        return deliveryType;
+    }
+
+    public void setDeliveryType(DeliveryType deliveryType) {
+        this.deliveryType = deliveryType;
+    }
+
+    public String getDepartmentName() {
+        return departmentName;
+    }
+
+    public void setDepartmentName(String departmentName) {
+        this.departmentName = departmentName;
+    }
 
     public Long getOrdersId() {
         return ordersId;

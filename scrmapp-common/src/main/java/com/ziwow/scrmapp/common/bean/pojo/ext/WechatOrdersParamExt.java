@@ -18,8 +18,57 @@ public class WechatOrdersParamExt extends WechatOrdersParam{
 
 	private String serviceFeeIds;
 
+    /**
+     * 商城调用做身份验证
+     */
+    private String unionId;
 
-	public String getServiceFeeIds() {
+
+	private String userId;
+
+	/**
+	 * 产品是否是滤芯 （商城）
+	 */
+	private Boolean filter;
+
+	/**
+	 * 滤芯所匹配的产品code
+	 */
+	List<String> productModelNames;
+
+	public String getUserId() {
+		return userId;
+	}
+
+	public void setUserId(String userId) {
+		this.userId = userId;
+	}
+
+	public List<String> getProductModelNames() {
+		return productModelNames;
+	}
+
+	public void setProductModelNames(List<String> productModelNames) {
+		this.productModelNames = productModelNames;
+	}
+
+	public Boolean getFilter() {
+		return filter;
+	}
+
+	public void setFilter(Boolean filter) {
+		this.filter = filter;
+	}
+
+	public String getUnionId() {
+        return unionId;
+    }
+
+    public void setUnionId(String unionId) {
+        this.unionId = unionId;
+    }
+
+    public String getServiceFeeIds() {
 		return serviceFeeIds;
 	}
 
