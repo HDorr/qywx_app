@@ -111,6 +111,7 @@ public class WechatOrdersController {
      * @return
      */
     @RequestMapping(value = "/wechat/qysc_save_order",method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+    @ResponseBody
     public Result qyscSaveOrder(HttpServletRequest request, HttpServletResponse response,@RequestBody WechatOrdersParamExt wechatOrdersParamExt){
         logger.info("收到商城原单原回受理单,[{}]", JSON.toJSONString(wechatOrdersParamExt));
         String userId = wechatUserService.getUserByUnionid(wechatOrdersParamExt.getUnionId()).getUserId();
