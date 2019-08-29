@@ -116,7 +116,7 @@ public interface ProductService {
     Product getProductsByBarCode(String productBarCodeTwenty);
 
     /**
-     * 根据产品编码查询产品信息
+     * 根据产品型号查询产品信息
      * @param productModelNames
      * @return
      */
