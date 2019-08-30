@@ -145,6 +145,8 @@ public class WechatOrdersController {
                     product.setProductName(pv.getProductName());
                     product.setProductBarCode("");
                     product.setBuyTime(new Date());
+                    //默认图片
+                    product.setProductImage("https://wx.qinyuan.cn/wx/resources/images/defaultPdtImg.jpg");
 
                     boolean isFirst=productService.isFirstBindProduct(userId);
 
