@@ -102,10 +102,7 @@ public class WechatOrdersController {
         for (WechatOrdersParamExt wechatOrdersParamExt : mallOrdersForm.getForms()) {
             try {
                 wechatOrdersParamExt.setUserId(userId);
-                wechatOrdersParamExt.setDeliveryType(DeliveryType.NORMAL);
-                if (StringUtils.isNotBlank(wechatOrdersParamExt.getDepartmentName())) {
-                    wechatOrdersParamExt.setDeliveryType(DeliveryType.DEALER);
-                }
+                wechatOrdersParamExt.setDeliveryType(DeliveryType.DEALER);
                 //买的是滤芯
                 if (wechatOrdersParamExt.getFilter()) {
                     List<ProductVo> list = productService.getProductByModelNames(wechatOrdersParamExt.getProductModelNames());
