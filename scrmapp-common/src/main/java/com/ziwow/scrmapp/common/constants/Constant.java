@@ -42,4 +42,7 @@ public class Constant {
     public static final int HIDDEN = 1;
 
     public static final int DEAL = 0, FINISH = 1;
+
+    public static final String SUCCESS_MSG = "success";
+    public static final String ERROR_MSG = "error";
 }

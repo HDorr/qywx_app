@@ -3,13 +3,11 @@ package com.ziwow.scrmapp.web.advice;
 import com.ziwow.scrmapp.common.constants.Constant;
 import com.ziwow.scrmapp.common.exception.BizException;
 import com.ziwow.scrmapp.common.exception.ThirdException;
-import com.ziwow.scrmapp.common.response.ResponseObject;
 import com.ziwow.scrmapp.common.result.BaseResult;
 import com.ziwow.scrmapp.common.result.Result;
+import com.ziwow.scrmapp.common.result.ResultHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -44,9 +42,8 @@ public class ApiControllerExceptionHandler {
 
   @ExceptionHandler(BizException.class)
   @ResponseBody
-  public ResponseEntity<Object> handler(BizException e) {
+  public Result handler(BizException e) {
     logger.error("异常拦截器截取到业务异常", e);
-    return new ResponseEntity<Object>(
-        ResponseObject.error(e.getErrorCode().getCode(), e.getMessage()), HttpStatus.OK);
+    return ResultHelper.error(null, e.getMessage());
   }
 }

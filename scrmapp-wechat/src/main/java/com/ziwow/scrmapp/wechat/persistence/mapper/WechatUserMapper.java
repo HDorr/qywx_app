@@ -32,4 +32,6 @@ public interface WechatUserMapper {
     WechatUserVo getBaseUserInfoByUserId(String userId);
 
     QtyUserVO getQtyUserByUserId(@Param("userId") String userId);
+
+    WechatUser selectUserByFansUnionId(@Param("unionId") String unionId);
 }
