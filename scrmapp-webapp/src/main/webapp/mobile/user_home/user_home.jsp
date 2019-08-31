@@ -37,7 +37,7 @@
             </p>
             <p class="shadow"></p>
         </a>
-        <a href="${f_ctxpath}/scrmapp/consumer/wechatuser/address/index" class="weui-grid js_grid">
+        <a href="javascript:void(0);" onclick="gotoMiniAddress()" class="weui-grid js_grid">
             <div class="weui-grid__icon">
                 <img src="${f_ctxpath}/resources/images/home_menu/my_address_blue.png${f_ver}" alt="">
             </div>
@@ -142,6 +142,10 @@
     function gotoMiniEwCard() {
         wx.miniProgram.navigateTo({url:'/pages/guarantee_card'});
     }
+
+  function gotoMiniAddress() {
+      wx.miniProgram.navigateTo({url:'/pages/address'});
+  }
   
 </script>
 </body>

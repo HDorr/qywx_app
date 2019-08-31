@@ -26,13 +26,13 @@ import java.util.concurrent.*;
  * @author songkaiqi
  * @since 2019/06/10/上午10:35
  */
-@Component
-@Aspect
+//@Component
+//@Aspect
 public class FuseAop extends ApplicationObjectSupport {
 
     private static final Logger LOG = LoggerFactory.getLogger(ThirdPartyServiceImpl.class);
 
-    @Value("${third.fuse.corePoolSize}")
+    /*@Value("${third.fuse.corePoolSize}")
     private Integer corePoolSize;
 
     @Value("${third.fuse.maxPoolSize}")
@@ -56,9 +56,13 @@ public class FuseAop extends ApplicationObjectSupport {
 
 
 
-/*    @Pointcut("execution(* com.ziwow.scrmapp.common.service.impl.ThirdPartyServiceImpl.*(..))")
+    @Pointcut("execution(* com.ziwow.scrmapp.common.service.impl.ThirdPartyServiceImpl.*(..))")
     public void conference(){}*/
 
+
+    private static ExecutorService service;
+
+    private Integer timeoutInMilliSeconds;
 
     @Pointcut("@annotation(com.ziwow.scrmapp.common.annotation.Fuse)")
     public void anConference(){}
