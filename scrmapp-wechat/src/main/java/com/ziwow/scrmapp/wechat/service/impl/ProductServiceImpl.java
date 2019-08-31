@@ -904,7 +904,7 @@ public class ProductServiceImpl implements ProductService {
             pv.setModelName(productVo.getModelName());
             pv.setO2o(1);
             pv.setBuyChannel(16);
-            pv.setItemKind("净水机");
+            pv.setItemKind("1");
             pv.setProductCode(productVo.getProductCode());
             pv.setBuyTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
             list.add(pv);

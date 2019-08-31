@@ -31,6 +31,28 @@ public class AcceptanceFormParam implements java.io.Serializable {
 	//服务商名称
 	private String fix_org_name;
 
+	//服务子类型1
+	private String kind_name;
+
+	//服务子类型2
+	private String kind_name2;
+
+	public String getKind_name() {
+		return kind_name;
+	}
+
+	public void setKind_name(String kind_name) {
+		this.kind_name = kind_name;
+	}
+
+	public String getKind_name2() {
+		return kind_name2;
+	}
+
+	public void setKind_name2(String kind_name2) {
+		this.kind_name2 = kind_name2;
+	}
+
 	public Integer getFrom_type() {
 		return from_type;
 	}

@@ -11,17 +11,9 @@ import java.util.List;
 public class WechatOrdersParamExt extends WechatOrdersParam{
 	private String productIds;
 
-
-
-
 	private String scOrderItemId;
 
 	private String serviceFeeIds;
-
-    /**
-     * 商城调用做身份验证
-     */
-    private String unionId;
 
 
 	private String userId;
@@ -60,13 +52,6 @@ public class WechatOrdersParamExt extends WechatOrdersParam{
 		this.filter = filter;
 	}
 
-	public String getUnionId() {
-        return unionId;
-    }
-
-    public void setUnionId(String unionId) {
-        this.unionId = unionId;
-    }
 
     public String getServiceFeeIds() {
 		return serviceFeeIds;

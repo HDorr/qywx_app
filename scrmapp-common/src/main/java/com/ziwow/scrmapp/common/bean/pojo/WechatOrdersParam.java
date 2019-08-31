@@ -76,6 +76,33 @@ public class WechatOrdersParam {
      */
     private String departmentName;
 
+
+    /**
+     * 服务子类型1
+     */
+    private String kindName;
+
+    /**
+     * 服务子类型2
+     */
+    private String kindName2;
+
+    public String getKindName() {
+        return kindName;
+    }
+
+    public void setKindName(String kindName) {
+        this.kindName = kindName;
+    }
+
+    public String getKindName2() {
+        return kindName2;
+    }
+
+    public void setKindName2(String kindName2) {
+        this.kindName2 = kindName2;
+    }
+
     public DeliveryType getDeliveryType() {
         return deliveryType;
     }

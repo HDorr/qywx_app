@@ -3,6 +3,7 @@ package com.ziwow.scrmapp.wechat.controller;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.ziwow.scrmapp.common.bean.pojo.EvaluateParam;
+import com.ziwow.scrmapp.common.bean.pojo.MallOrdersForm;
 import com.ziwow.scrmapp.common.bean.pojo.WechatOrdersParam;
 import com.ziwow.scrmapp.common.bean.pojo.ext.WechatOrdersParamExt;
 import com.ziwow.scrmapp.common.bean.vo.ProductVo;
@@ -44,6 +45,7 @@ import com.ziwow.scrmapp.wechat.service.WechatUserService;
 import java.math.BigDecimal;
 import java.sql.SQLDataException;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -107,62 +109,75 @@ public class WechatOrdersController {
 
     /**
      * 商城调用生成
-     * @param wechatOrdersParamExt
+     * @param mallOrdersForm
      * @return
      */
     @RequestMapping(value = "/wechat/qysc_save_order",method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
     @ResponseBody
-    public Result qyscSaveOrder(HttpServletRequest request, HttpServletResponse response,@RequestBody WechatOrdersParamExt wechatOrdersParamExt){
-        logger.info("收到商城原单原回受理单,[{}]", JSON.toJSONString(wechatOrdersParamExt));
-        String userId = wechatUserService.getUserByUnionid(wechatOrdersParamExt.getUnionId()).getUserId();
-        //String userId = "G5WST99A";
-        wechatOrdersParamExt.setUserId(userId);
-        wechatOrdersParamExt.setDeliveryType(DeliveryType.NORMAL);
-        if (StringUtils.isNotBlank(wechatOrdersParamExt.getDepartmentName())){
-            wechatOrdersParamExt.setDeliveryType(DeliveryType.DEALER);
-        }
-        //买的是滤芯
-        if (wechatOrdersParamExt.getFilter()){
-            List<ProductVo> list = productService.getProductByModelNames(wechatOrdersParamExt.getProductModelNames());
-            wechatOrdersParamExt.setProducts(list);
-        }
-        StringBuilder pids = new StringBuilder();
-        try {
-            for (ProductVo pv : wechatOrdersParamExt.getProducts()) {
-                final List<Product> products = productService.getProductByModelNameAndUserId(pv.getModelName(), userId);
-                //用户没有绑定则进行绑定
-                if (products.isEmpty()){
-                    Product product = new Product();
-                    product.setUserId(userId);
-                    product.setStatus(1);
-                    product.setCreateTime(new Date());
-                    product.setFilterRemind(SystemConstants.REMIND);
-                    product.setModelName(pv.getModelName());
-                    product.setProductCode(pv.getProductCode());
-                    product.setO2o(1);
-                    product.setBuyChannel(16);
-                    product.setItemKind("净水器");
-                    product.setProductName(pv.getProductName());
-                    product.setProductBarCode("");
-                    product.setBuyTime(new Date());
-                    //默认图片
-                    product.setProductImage("https://wx.qinyuan.cn/wx/resources/images/defaultPdtImg.jpg");
-
-                    boolean isFirst=productService.isFirstBindProduct(userId);
-
-                    final Long pid = productService.save(product);
-                    pids.append(pid).append(",");
-                    // 绑定产品成功后异步推送给小程序
-                    productService.syncProdBindToMiniApp(userId, product.getProductCode(),isFirst);
-                }else {
-                    pids.append(products.get(0).getId()).append(",");
-                }
+    public Result qyscSaveOrder(HttpServletRequest request, HttpServletResponse response,@RequestBody MallOrdersForm mallOrdersForm){
+        logger.info("收到商城原单原回受理单,[{}]", JSON.toJSONString(mallOrdersForm));
+        String userId = wechatUserService.getUserByUnionid(mallOrdersForm.getUnionId()).getUserId();
+        //保存工单号，以便于回滚
+        List<String> orderNos = new ArrayList<>();
+        Result result = new BaseResult();
+        for (WechatOrdersParamExt wechatOrdersParamExt : mallOrdersForm.getForms()) {
+            wechatOrdersParamExt.setUserId(userId);
+            wechatOrdersParamExt.setDeliveryType(DeliveryType.NORMAL);
+            if (StringUtils.isNotBlank(wechatOrdersParamExt.getDepartmentName())){
+                wechatOrdersParamExt.setDeliveryType(DeliveryType.DEALER);
             }
-        } catch (SQLDataException e) {
-            logger.error("",e);
+            //买的是滤芯
+            if (wechatOrdersParamExt.getFilter()){
+                List<ProductVo> list = productService.getProductByModelNames(wechatOrdersParamExt.getProductModelNames());
+                wechatOrdersParamExt.setProducts(list);
+            }
+            StringBuilder pids = new StringBuilder();
+            try {
+                for (ProductVo pv : wechatOrdersParamExt.getProducts()) {
+                    final List<Product> products = productService.getProductByModelNameAndUserId(pv.getModelName(), userId);
+                    //用户没有绑定则进行绑定
+                    if (products.isEmpty()){
+                        Product product = new Product();
+                        product.setUserId(userId);
+                        product.setStatus(1);
+                        product.setCreateTime(new Date());
+                        product.setFilterRemind(SystemConstants.REMIND);
+                        product.setModelName(pv.getModelName());
+                        product.setProductCode(pv.getProductCode());
+                        product.setO2o(1);
+                        product.setBuyChannel(16);
+                        product.setItemKind("1");
+                        product.setProductName(pv.getProductName());
+                        product.setProductBarCode("");
+                        product.setBuyTime(new Date());
+                        //默认图片
+                        product.setProductImage("https://wx.qinyuan.cn/wx/resources/images/defaultPdtImg.jpg");
+                        boolean isFirst=productService.isFirstBindProduct(userId);
+                        final Long pid = productService.save(product);
+                        pids.append(pid).append(",");
+                        // 绑定产品成功后异步推送给小程序
+                        productService.syncProdBindToMiniApp(userId, product.getProductCode(),isFirst);
+                    }else {
+                        pids.append(products.get(0).getId()).append(",");
+                    }
+                }
+            } catch (SQLDataException e) {
+                logger.error("",e);
+            }
+            wechatOrdersParamExt.setProductIds(pids.toString());
+            result = this.addWechatOrders(request, response, wechatOrdersParamExt);
+            if (result.getReturnCode() == 0){
+                //取消预约
+                for (String orderNo : orderNos) {
+                    wechatOrdersService.cancelOrders(orderNo);
+                }
+                return result;
+            }
+            orderNos.add((String) result.getData());
         }
-        wechatOrdersParamExt.setProductIds(pids.toString());
-        return this.addWechatOrders(request,response,wechatOrdersParamExt);
+        result.setReturnMsg("预约成功");
+        result.setReturnCode(mallOrdersForm.getForms().size() / orderNos.size());
+        return result;
     }
 
 
@@ -345,6 +360,7 @@ public class WechatOrdersController {
 
                 result.setReturnCode(Constant.SUCCESS);
                 result.setReturnMsg("预约成功!");
+                result.setData(webAppealNo);
                 logger.info("生成受理单,userId = [{}] , ordersCode = [{}]", userId, webAppealNo);
 
                 // 向沁园小程序推送预约成功

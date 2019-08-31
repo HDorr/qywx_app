@@ -165,6 +165,8 @@ public class WechatOrdersServiceImpl implements WechatOrdersService {
         acceptanceFormParam.setCounty_name(wechatOrdersParam.getArea());
         acceptanceFormParam.setAppeal_kind_id(wechatOrdersParam.getOrderType());
         acceptanceFormParam.setFrom_type(wechatOrdersParam.getDeliveryType().getCode());
+        acceptanceFormParam.setKind_name(wechatOrdersParam.getKindName());
+        acceptanceFormParam.setKind_name2(wechatOrdersParam.getKindName2());
         String orderTime = wechatOrdersParam.getOrderTime();
         if (StringUtils.isBlank(orderTime)){
             acceptanceFormParam.setAppeal_content(wechatOrdersParam.getDescription());
