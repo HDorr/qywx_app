@@ -1,5 +1,7 @@
 package com.ziwow.scrmapp.common.persistence.entity;
 
+import com.ziwow.scrmapp.common.enums.DeliveryType;
+
 import java.util.Date;
 
 public class WechatOrders {
@@ -30,6 +32,17 @@ public class WechatOrders {
     //1:已购买滤芯  2:未购买滤芯'
     private int buyFilter;
 
+    /**
+     * 发货类型
+     */
+    private DeliveryType deliveryType;
+
+    /**
+     * 服务商名称
+     */
+    private String departmentName;
+
+
     private Date orderTime;
 
     private Date createTime;
@@ -57,6 +70,22 @@ public class WechatOrders {
     private String contactsTelephone;
 
     private String scOrderNo;
+
+    public String getDepartmentName() {
+        return departmentName;
+    }
+
+    public void setDepartmentName(String departmentName) {
+        this.departmentName = departmentName;
+    }
+
+    public DeliveryType getDeliveryType() {
+        return deliveryType;
+    }
+
+    public void setDeliveryType(DeliveryType deliveryType) {
+        this.deliveryType = deliveryType;
+    }
 
     public String getScOrderNo() {
         return scOrderNo;

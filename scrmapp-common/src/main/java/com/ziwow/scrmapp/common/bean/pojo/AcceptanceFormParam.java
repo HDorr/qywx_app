@@ -23,6 +23,52 @@ public class AcceptanceFormParam implements java.io.Serializable {
 	private String service_time;		//预约时间
 	private String is_wxtd;
 
+	/**
+	 * 渠道区分 常规传4 ，原单原回传21
+	 */
+	private Integer from_type;
+
+	//服务商名称
+	private String fix_org_name;
+
+	//服务子类型1
+	private String kind_name;
+
+	//服务子类型2
+	private String kind_name2;
+
+	public String getKind_name() {
+		return kind_name;
+	}
+
+	public void setKind_name(String kind_name) {
+		this.kind_name = kind_name;
+	}
+
+	public String getKind_name2() {
+		return kind_name2;
+	}
+
+	public void setKind_name2(String kind_name2) {
+		this.kind_name2 = kind_name2;
+	}
+
+	public Integer getFrom_type() {
+		return from_type;
+	}
+
+	public void setFrom_type(Integer from_type) {
+		this.from_type = from_type;
+	}
+
+	public String getFix_org_name() {
+		return fix_org_name;
+	}
+
+	public void setFix_org_name(String fix_org_name) {
+		this.fix_org_name = fix_org_name;
+	}
+
 	public List<AcceptanceProductParam> getProducts() {
 		return products;
 	}
