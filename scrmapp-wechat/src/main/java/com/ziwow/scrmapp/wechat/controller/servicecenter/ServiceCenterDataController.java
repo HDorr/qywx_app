@@ -3,6 +3,10 @@ package com.ziwow.scrmapp.wechat.controller.servicecenter;
 import com.ziwow.scrmapp.common.exception.BizException;
 import com.ziwow.scrmapp.common.persistence.entity.Product;
 import com.ziwow.scrmapp.common.result.Result;
+import com.ziwow.scrmapp.common.utils.Transformer;
+import com.ziwow.scrmapp.wechat.params.address.AddressDeleteParam;
+import com.ziwow.scrmapp.wechat.params.address.AddressModifyParam;
+import com.ziwow.scrmapp.wechat.params.address.AddressSaveParam;
 import com.ziwow.scrmapp.wechat.params.common.CenterServiceParam;
 import com.ziwow.scrmapp.wechat.persistence.entity.WechatUser;
 import com.ziwow.scrmapp.wechat.persistence.entity.WechatUserAddress;
@@ -10,6 +14,8 @@ import com.ziwow.scrmapp.wechat.service.ProductService;
 import com.ziwow.scrmapp.wechat.service.WechatUserAddressService;
 import com.ziwow.scrmapp.wechat.service.WechatUserService;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,6 +36,8 @@ import static com.ziwow.scrmapp.common.result.ResultHelper.success;
 @RestController
 @RequestMapping("/service-center/data")
 public class ServiceCenterDataController {
+
+  private static Logger log = LoggerFactory.getLogger(ServiceCenterDataController.class);
 
   private final ProductService productService;
   private final WechatUserService wechatUserService;
@@ -93,7 +101,7 @@ public class ServiceCenterDataController {
   }
 
   /**
-   * 用户预约时查询地址列表
+   * 用户地址列表
    *
    * @return CenterServiceParam
    */
@@ -106,11 +114,72 @@ public class ServiceCenterDataController {
   }
 
   /**
+   * 用户保存地址
+   *
+   * @param param {@link AddressSaveParam}
+   * @return {@link Result}
+   */
+  @RequestMapping("/address/save")
+  public Result saveAddress(@RequestBody AddressSaveParam param) {
+    WechatUserAddress address = obtainWeChatUserAddress(param);
+    // 保存地址信息
+    boolean ret = wechatUserAddressService.saveAddress(address) > 0;
+    if (!ret) {
+      throw new BizException("地址保存失败");
+    }
+    // 异步保存地址信息到商城
+//    wechatUserAddressService.syncSaveAddressToMiniApp(address);
+    return success(address);
+  }
+
+  /**
+   * 用户修改地址
+   *
+   * @param param {@link AddressModifyParam}
+   * @return {@link Result}
+   */
+  @RequestMapping("/address/modify")
+  public Result modifyAddress(@RequestBody AddressModifyParam param) {
+    WechatUserAddress address = obtainWeChatUserAddress(param);
+    boolean ret = wechatUserAddressService.updateAddress(address) > 0;
+    if (!ret) {
+      throw new BizException("地址更新失败");
+    }
+    // 异步更新地址信息到商城
+//    wechatUserAddressService.syncUpdateAddressToMiniApp(address);
+    return success(address);
+  }
+
+  /**
+   * 用户删除地址
+   *
+   * @param param {@link AddressDeleteParam}
+   * @return {@link Result}
+   */
+  @RequestMapping("/address/delete")
+  public Result deleteAddress(@RequestBody AddressDeleteParam param) {
+    WechatUser wechatUser = obtainWeChatUser(param.getUnionId());
+    WechatUserAddress address = wechatUserAddressService.findAddress(param.getAddressId());
+    boolean ret =
+        wechatUserAddressService.deleteAddress(wechatUser.getUserId(), param.getAddressId()) > 0;
+    if (!ret) {
+      throw new BizException("地址删除失败");
+    }
+    String aId = address.getfAid();
+    if (StringUtils.isNotBlank(aId)) {
+      // 异步删除地址信息到商城
+//      wechatUserAddressService.syncDelAddressToMiniApp(aId);
+    }
+    return success(address);
+  }
+
+  /**
    * 产品列表
    *
    * <p>绑定的产品
    *
-   * @return Result
+   * @param param {@link CenterServiceParam}
+   * @return {@link Result}
    */
   @RequestMapping("/product/list")
   public Result listProduct(@RequestBody CenterServiceParam param) {
@@ -121,16 +190,30 @@ public class ServiceCenterDataController {
   }
 
   /**
+   * 封装地址参数
+   *
+   * @param param {@link CenterServiceParam}
+   * @return {@link WechatUserAddress}
+   */
+  private WechatUserAddress obtainWeChatUserAddress(CenterServiceParam param) {
+    WechatUser wechatUser = obtainWeChatUser(param.getUnionId());
+    WechatUserAddress address = Transformer.fromBean(param, WechatUserAddress.class);
+    address.setUserId(wechatUser.getUserId());
+    address.setContactsMobile(address.getContactsMobile().trim());
+    return address;
+  }
+
+  /**
    * 根据unionId获取微信用户
    *
-   * @param unionId String
-   * @return String
+   * @param unionId {@link String}
+   * @return {@link WechatUser}
    */
   private WechatUser obtainWeChatUser(String unionId) {
     // 根据unionId查询用户
     WechatUser wechatUser = wechatUserService.getUserByFansUnionId(unionId);
     if (wechatUser == null) {
-      throw new BizException("用户不存在");
+      throw new BizException("用户认证失败");
     }
     return wechatUser;
   }

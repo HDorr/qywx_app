@@ -48,6 +48,10 @@ public class AnsiConsoleAppender extends ConsoleAppender {
   }
 
   protected void subAppend(LoggingEvent event) {
+    if(event.getLevel().toInt() == Priority.DEBUG_INT){
+      super.subAppend(event);
+      return;
+    }
     this.qw.write(getColour(event.getLevel()));
     super.subAppend(event);
     this.qw.write(END_COLOUR);
