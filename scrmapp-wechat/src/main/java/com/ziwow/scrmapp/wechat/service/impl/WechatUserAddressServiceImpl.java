@@ -62,7 +62,7 @@ public class WechatUserAddressServiceImpl implements WechatUserAddressService {
     }
 
     @Override
-    public void saveAddress(WechatUserAddress wechatUserAddress) {
+    public int saveAddress(WechatUserAddress wechatUserAddress) {
         List<WechatUserAddress> userAddresList = findUserAddresList(wechatUserAddress.getUserId());
 
         //如果用户之前没有地址,强制设一个默认地址
@@ -77,7 +77,7 @@ public class WechatUserAddressServiceImpl implements WechatUserAddressService {
             wechatUserAddress.setIsDefault(2);
         }
 
-        userAddressMapper.saveAddress(wechatUserAddress);
+        return userAddressMapper.saveAddress(wechatUserAddress);
     }
 
     @Override

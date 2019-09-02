@@ -1,7 +1,6 @@
 package com.ziwow.scrmapp.common.exception;
 
 import com.ziwow.scrmapp.common.constants.Constant;
-import com.ziwow.scrmapp.common.response.ResponseObject;
 import org.apache.log4j.Logger;
 import org.springframework.web.servlet.HandlerExceptionResolver;
 import org.springframework.web.servlet.ModelAndView;
@@ -29,15 +28,7 @@ public class ExceptionResolver implements HandlerExceptionResolver {
             result.put("returnCode", Constant.FAIL);
             result.put("returnMsg", ex.getMessage());
             mv = new ModelAndView(new MappingJackson2JsonView(), result);
-//        } else if(ex instanceof BizException){
-//            BizException bizException = (BizException) ex;
-//            HashMap<String, Object> result = new HashMap<String, Object>();
-//            result.put("data",null);
-//            result.put("code",bizException.getErrorCode());
-//            result.put("moreInfo",)
-//            mv = new ModelAndView(new MappingJackson2JsonView(),);
-//        }
-            } else {
+        } else {
             LOG.error("unknow exception, url:" + url, ex);
             HashMap<String, Object> result = new HashMap<String, Object>();
             result.put("returnCode", Constant.FAIL);

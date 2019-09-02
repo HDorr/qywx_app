@@ -1,7 +1,6 @@
 package com.ziwow.scrmapp.wechat.service;
 
 import com.ziwow.scrmapp.wechat.persistence.entity.WechatUserAddress;
-import com.ziwow.scrmapp.common.bean.vo.AppointmentMsgVo;
 
 import java.sql.SQLDataException;
 import java.util.List;
@@ -18,7 +17,7 @@ public interface WechatUserAddressService {
 
     WechatUserAddress findAddress(Long addressId);
 
-    void saveAddress(WechatUserAddress wechatUserAddress);
+    int saveAddress(WechatUserAddress wechatUserAddress);
 
     int insertAndGetId(WechatUserAddress wechantUserAddress);
 
