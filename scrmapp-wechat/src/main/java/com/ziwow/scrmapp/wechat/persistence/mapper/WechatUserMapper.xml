@@ -68,7 +68,7 @@
 
   <select id="selectUserByFansUnionId" resultMap="wechatUserMap">
       SELECT
-           usr.userId
+           usr.*
       FROM
            t_wechat_fans fans,
            t_wechat_user usr
@@ -76,6 +76,7 @@
             fans.id = usr.wfId
         and fans.unionid = #{unionId}
         and fans.is_cancel = 0
+        and usr.status = 0
       limit 1
   </select>
 

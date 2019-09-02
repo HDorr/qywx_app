@@ -1,5 +1,6 @@
 package com.ziwow.scrmapp.wechat.params.order;
 
+import com.ziwow.scrmapp.common.enums.DeliveryType;
 import com.ziwow.scrmapp.wechat.params.common.CenterServiceParam;
 
 /**
@@ -49,6 +50,18 @@ public class OrderSaveParam extends CenterServiceParam {
 
   /** 产品列表pro1,pro2,.. */
   private String productIds;
+
+  /** 发货方式 */
+  private DeliveryType deliveryType;
+
+  /** 服务商名称 */
+  private String departmentName;
+
+  /** 服务子类型1 */
+  private String kindName;
+
+  /** 服务子类型2 */
+  private String kindName2;
 
   public String getContacts() {
     return contacts;
@@ -160,5 +173,37 @@ public class OrderSaveParam extends CenterServiceParam {
 
   public void setProductIds(String productIds) {
     this.productIds = productIds;
+  }
+
+  public DeliveryType getDeliveryType() {
+    return deliveryType;
+  }
+
+  public void setDeliveryType(DeliveryType deliveryType) {
+    this.deliveryType = deliveryType;
+  }
+
+  public String getDepartmentName() {
+    return departmentName;
+  }
+
+  public void setDepartmentName(String departmentName) {
+    this.departmentName = departmentName;
+  }
+
+  public String getKindName() {
+    return kindName;
+  }
+
+  public void setKindName(String kindName) {
+    this.kindName = kindName;
+  }
+
+  public String getKindName2() {
+    return kindName2;
+  }
+
+  public void setKindName2(String kindName2) {
+    this.kindName2 = kindName2;
   }
 }

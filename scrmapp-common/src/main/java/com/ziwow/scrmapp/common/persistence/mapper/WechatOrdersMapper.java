@@ -2,6 +2,7 @@ package com.ziwow.scrmapp.common.persistence.mapper;
 
 import com.ziwow.scrmapp.common.bean.pojo.WechatOrdersParam;
 import com.ziwow.scrmapp.common.bean.vo.*;
+import com.ziwow.scrmapp.common.pagehelper.Page;
 import com.ziwow.scrmapp.common.persistence.entity.WechatOrders;
 import org.apache.ibatis.annotations.Param;
 
@@ -24,6 +25,8 @@ public interface WechatOrdersMapper {
     WechatOrderVo getWechatOrdersVoByCode(@Param("ordersCode") String ordersCode);
 
     List<WechatOrdersVo> getOrdersByUserId(String userId);
+
+    List<WechatOrdersVo> pageOrdersByUserId(@Param("userId") String userId, @Param("page") Page page);
 
     WechatOrdersVo getByOrdersCode(@Param("ordersCode") String ordersCode);
 

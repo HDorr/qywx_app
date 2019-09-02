@@ -365,8 +365,7 @@
         where o.ordersCode = #{ordersCode}
     </select>
 
-
-    <select id="getOrdersByUserId" parameterType="java.lang.String" resultMap="orderMap">
+    <sql id="select_orders_by_userId_column">
         SELECT
             o.id,
             o.ordersCode AS ordersCode,
@@ -419,6 +418,15 @@
         and o.userId = #{userId}
         ORDER BY
 	    o.id DESC
+    </sql>
+
+    <select id="getOrdersByUserId" parameterType="java.lang.String" resultMap="orderMap">
+        <include refid="select_orders_by_userId_column"/>
+    </select>
+
+    <select id="pageOrdersByUserId" resultMap="orderMap">
+        <include refid="select_orders_by_userId_column"/>
+        limit #{page.offset}, #{page.limit}
     </select>
 
     <select id="getByOrdersCode" parameterType="java.lang.String" resultMap="orderMap">
