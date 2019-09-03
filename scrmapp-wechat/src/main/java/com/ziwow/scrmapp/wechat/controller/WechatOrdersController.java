@@ -1006,7 +1006,7 @@ public class WechatOrdersController {
      *
      * @return
      */
-    @RequestMapping(value = "/wechat/orders/appraisal/page")
+    @RequestMapping(value = "/filter/wechat/orders/appraisal/page")
     public ModelAndView toOrdersAppraisalPage(@RequestParam String ordersCode, @RequestParam Integer orderType, @RequestParam Integer maintType) {
         ModelAndView modelAndView = new ModelAndView("/reserveReview/jsp/appraise");
         int code = getTypeByOtherTypes(orderType, maintType);
