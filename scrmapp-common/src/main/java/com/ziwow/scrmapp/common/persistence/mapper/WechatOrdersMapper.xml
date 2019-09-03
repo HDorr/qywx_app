@@ -424,11 +424,6 @@
         <include refid="select_orders_by_userId_column"/>
     </select>
 
-    <select id="pageOrdersByUserId" resultMap="orderMap">
-        <include refid="select_orders_by_userId_column"/>
-        limit #{page.offset}, #{page.limit}
-    </select>
-
     <select id="getByOrdersCode" parameterType="java.lang.String" resultMap="orderMap">
         SELECT
             o.id AS id,
@@ -895,4 +890,22 @@
         update t_wechat_orders set status = #{status},updateTime = #{date}
         where id = #{ordersId}
     </update>
+
+    <select id="pageOrdersByUserId" resultMap="orderMap">
+        <include refid="select_orders_by_userId_column"/>
+        limit #{page.offset}, #{page.limit}
+    </select>
+
+    <select id="selectCountByUserId" resultType="java.lang.Long">
+        SELECT
+              count(1)
+        FROM
+             t_wechat_fans f,
+             t_wechat_user u,
+             t_wechat_orders o
+        WHERE
+                f.id = u.wfId
+          AND u.userId = o.userId
+          and o.userId = #{userId}
+    </select>
 </mapper>

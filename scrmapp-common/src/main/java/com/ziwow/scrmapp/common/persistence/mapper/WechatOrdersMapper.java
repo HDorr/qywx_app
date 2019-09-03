@@ -26,8 +26,6 @@ public interface WechatOrdersMapper {
 
     List<WechatOrdersVo> getOrdersByUserId(String userId);
 
-    List<WechatOrdersVo> pageOrdersByUserId(@Param("userId") String userId, @Param("page") Page page);
-
     WechatOrdersVo getByOrdersCode(@Param("ordersCode") String ordersCode);
 
     int updateStatus(@Param("ordersCode") String ordersCode, @Param("updateTime") Date updateTime, @Param("status") int status);
@@ -73,4 +71,8 @@ public interface WechatOrdersMapper {
     int updateOrderStatus(@Param("ordersId") Long ordersId, @Param("status") int status, @Param("date") Date date);
 
     List<WechatOrdersVo> getWechatOrdersByProductId(@Param("productId") Long productId);
+
+    List<WechatOrdersVo> pageOrdersByUserId(@Param("userId") String userId, @Param("page") Page page);
+
+    long selectCountByUserId(@Param("userId") String userId);
 }

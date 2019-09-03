@@ -2,6 +2,7 @@ package com.ziwow.scrmapp.wechat.service.impl;
 
 import com.alibaba.fastjson.JSON;
 import com.ziwow.scrmapp.common.constants.Constant;
+import com.ziwow.scrmapp.common.pagehelper.Page;
 import com.ziwow.scrmapp.tools.utils.HttpClientUtils;
 import com.ziwow.scrmapp.tools.utils.MD5;
 import com.ziwow.scrmapp.wechat.persistence.entity.WechatFans;
@@ -46,6 +47,16 @@ public class WechatUserAddressServiceImpl implements WechatUserAddressService {
 
     @Value("${miniapp.address.default}")
     private String syncAddressDefaultUrl;
+
+    @Override
+    public List<WechatUserAddress> pageUserAddress(String userId, Page page) {
+        return userAddressMapper.selectPageByUserId(userId, page);
+    }
+
+    @Override
+    public long getCountAddress(String userId) {
+        return userAddressMapper.selectCountByUserId(userId);
+    }
 
     @Override
     public List<WechatUserAddress> findUserAddresList(String userId) {
@@ -122,6 +133,24 @@ public class WechatUserAddressServiceImpl implements WechatUserAddressService {
     }
 
     @Override
+    public int deleteUserAddress(String userId, Long addressId) {
+        WechatUserAddress address = findAddress(addressId);
+
+        int count = userAddressMapper.deleteAddress(userId, addressId);
+        //如果删除的地址为默认地址，将该用户id最小的地址设为默认地址
+        if (count > 0 && 1 == address.getIsDefault()) {
+            List<WechatUserAddress> userAddressList = findUserAddresList(userId);
+            if (userAddressList != null && userAddressList.size() > 0) {
+                WechatUserAddress wechatUserAddress = userAddressList.get(userAddressList.size()-1);
+                wechatUserAddress.setIsDefault(1);
+                userAddressMapper.setDefault(userId, wechatUserAddress.getId());
+            }
+        }
+
+        return count;
+    }
+
+    @Override
     public void delAddressById(Long addressId) {
         userAddressMapper.delAddressById(addressId);
     }
@@ -176,6 +205,42 @@ public class WechatUserAddressServiceImpl implements WechatUserAddressService {
     }
 
     @Override
+    public void syncSaveAddressToQysc(WechatUserAddress wechatUserAddress) {
+        // 异步推送给小程序对接方
+        String userId = wechatUserAddress.getUserId();
+        WechatFans wechatFans = wechatFansMapper.getWechatFansByUserId(userId);
+        if (null == wechatFans || StringUtils.isBlank(wechatFans.getUnionId())) {
+            logger.error("保存地址信息同步到小程序失败,unionid不能为空!");
+            return;
+        }
+        Map<String, Object> params = new HashMap<String, Object>();
+        long timestamp = System.currentTimeMillis();
+        params.put("timestamp", timestamp);
+        params.put("signture", MD5.toMD5(Constant.AUTH_KEY + timestamp));
+        params.put("unionId", wechatFans.getUnionId());
+        params.put("id", wechatUserAddress.getId());
+        params.put("consignee", wechatUserAddress.getContacts());
+        params.put("phone", wechatUserAddress.getContactsMobile());
+        params.put("zoneId", wechatUserAddress.getAreaId());
+        params.put("street", wechatUserAddress.getStreetName());
+        params.put("isDefault", wechatUserAddress.getIsDefault() == 1);
+        String result = HttpClientUtils.postJson(syncAddressUrl, JSONObject.fromObject(params).toString());
+        if (StringUtils.isNotBlank(result)) {
+            JSONObject o1 = JSONObject.fromObject(result);
+            if (o1.containsKey("errorCode") && o1.getInt("errorCode") == 200) {
+                String fAid = o1.getString("data");
+                WechatUserAddress userAddress = new WechatUserAddress();
+                userAddress.setfAid(fAid);
+                userAddress.setId(wechatUserAddress.getId());
+                userAddressMapper.updateAddressSelective(userAddress);
+                logger.info("保存地址信息同步到小程序成功,aid:{}", fAid);
+            } else {
+                logger.error("保存地址信息同步到小程序失败,moreInfo:{}", o1.getString("moreInfo"));
+            }
+        }
+    }
+
+    @Override
     @Async
     public void syncUpdateAddressToMiniApp(WechatUserAddress wechatUserAddress) {
         // 异步推送给小程序对接方
@@ -209,6 +274,43 @@ public class WechatUserAddressServiceImpl implements WechatUserAddressService {
                 updateAddressSelective(userAddress);
             } else {
                 logger.info("修改地址信息同步到小程序失败,moreInfo:{}", o1.getString("moreInfo"));
+            }
+        }
+    }
+
+    @Override
+    public void syncUpdateAddressToQysc(WechatUserAddress wechatUserAddress) {
+        // 异步推送给小程序对接方
+        String userId = wechatUserAddress.getUserId();
+        WechatFans wechatFans = wechatFansMapper.getWechatFansByUserId(userId);
+        if (null == wechatFans || StringUtils.isBlank(wechatFans.getUnionId())) {
+            logger.error("保存地址信息同步到小程序失败,unionid不能为空!");
+            return;
+        }
+        Map<String, Object> params = new HashMap<String, Object>();
+        long timestamp = System.currentTimeMillis();
+        params.put("timestamp", timestamp);
+        params.put("signture", MD5.toMD5(Constant.AUTH_KEY + timestamp));
+        params.put("unionId", wechatFans.getUnionId());
+        params.put("aId", wechatUserAddress.getfAid());
+        params.put("consignee", wechatUserAddress.getContacts());
+        params.put("phone", wechatUserAddress.getContactsMobile());
+        params.put("zoneId", wechatUserAddress.getAreaId());
+        params.put("street", wechatUserAddress.getStreetName());
+        params.put("isDefault", wechatUserAddress.getIsDefault() == 1);
+        logger.info("修改地址同步到小程序请求参数:{}", JSON.toJSONString(params));
+        String result = HttpClientUtils.postJson(syncAddressUrl, JSONObject.fromObject(params).toString());
+        if (StringUtils.isNotBlank(result)) {
+            JSONObject o1 = JSONObject.fromObject(result);
+            if (o1.containsKey("errorCode") && o1.getInt("errorCode") == 200) {
+                String fAid = o1.getString("data");
+                logger.info("修改地址信息同步到小程序成功,aid:{}", fAid);
+                WechatUserAddress userAddress = new WechatUserAddress();
+                userAddress.setfAid(fAid);
+                userAddress.setId(wechatUserAddress.getId());
+                userAddressMapper.updateAddressSelective(userAddress);
+            } else {
+                logger.error("修改地址信息同步到小程序失败,moreInfo:{}", o1.getString("moreInfo"));
             }
         }
     }

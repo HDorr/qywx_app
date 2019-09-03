@@ -17,6 +17,7 @@ import com.ziwow.scrmapp.common.bean.vo.mall.MallOrderVo;
 import com.ziwow.scrmapp.common.bean.vo.mall.OrderItem;
 import com.ziwow.scrmapp.common.constants.Constant;
 import com.ziwow.scrmapp.common.constants.SystemConstants;
+import com.ziwow.scrmapp.common.pagehelper.Page;
 import com.ziwow.scrmapp.common.persistence.entity.*;
 import com.ziwow.scrmapp.common.persistence.mapper.*;
 import com.ziwow.scrmapp.common.result.BaseResult;
@@ -111,6 +112,16 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public List<Product> getProductsByUserId(String userId) {
         return productMapper.findByUserId(userId);
+    }
+
+    @Override
+    public List<Product> pageProductsByUserId(String userId, Page page) {
+        return productMapper.selectPageByUserId(userId, page);
+    }
+
+    @Override
+    public long getCountByUserId(String userId) {
+        return productMapper.selectCount(userId);
     }
 
     /**

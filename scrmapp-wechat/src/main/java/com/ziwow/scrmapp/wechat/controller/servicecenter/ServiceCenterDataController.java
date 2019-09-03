@@ -16,9 +16,14 @@ import com.ziwow.scrmapp.common.persistence.entity.WechatOrders;
 import com.ziwow.scrmapp.common.persistence.entity.WechatOrdersRecord;
 import com.ziwow.scrmapp.common.result.Result;
 import com.ziwow.scrmapp.common.utils.OrderUtils;
+import com.ziwow.scrmapp.common.utils.SignUtil;
 import com.ziwow.scrmapp.common.utils.Transformer;
 import com.ziwow.scrmapp.tools.queue.EngineerQueue;
+import com.ziwow.scrmapp.tools.utils.Base64;
+import com.ziwow.scrmapp.tools.utils.CookieUtil;
 import com.ziwow.scrmapp.tools.utils.DateUtil;
+import com.ziwow.scrmapp.wechat.constants.WeChatConstants;
+import com.ziwow.scrmapp.wechat.controller.base.BaseController;
 import com.ziwow.scrmapp.wechat.params.address.AddressDeleteParam;
 import com.ziwow.scrmapp.wechat.params.address.AddressModifyParam;
 import com.ziwow.scrmapp.wechat.params.address.AddressSaveParam;
@@ -36,8 +41,6 @@ import com.ziwow.scrmapp.wechat.service.WechatQyhUserService;
 import com.ziwow.scrmapp.wechat.service.WechatUserAddressService;
 import com.ziwow.scrmapp.wechat.service.WechatUserService;
 import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.transaction.annotation.Transactional;
@@ -45,6 +48,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -60,9 +67,7 @@ import static com.ziwow.scrmapp.common.result.ResultHelper.success;
  */
 @RestController
 @RequestMapping("/service-center/data")
-public class ServiceCenterDataController {
-
-  private static Logger log = LoggerFactory.getLogger(ServiceCenterDataController.class);
+public class ServiceCenterDataController extends BaseController {
 
   @Value("${order.detail.url}")
   private String orderDetailUrl;
@@ -104,7 +109,7 @@ public class ServiceCenterDataController {
   @Transactional(rollbackFor = Exception.class)
   @RequestMapping("/order/save")
   public Result saveWeChatOrder(@RequestBody OrderSaveParam param) {
-    WechatUser wechatUser = obtainWeChatUser(param.getUnionId());
+    WechatUser wechatUser = obtainWeChatUser(param);
     WechatOrdersParamExt wechatOrdersParamExt =
         Transformer.fromBean(param, WechatOrdersParamExt.class);
     // 设置订单发货类型
@@ -146,7 +151,7 @@ public class ServiceCenterDataController {
   }
 
   /**
-   * 单列表
+   * 工单列表
    *
    * <p>用户预约的工单进度查询
    *
@@ -156,10 +161,14 @@ public class ServiceCenterDataController {
    */
   @RequestMapping("/order/list")
   public Result listWeChatOrder(@RequestBody CenterServiceParam param, Page page) {
-    WechatUser wechatUser = obtainWeChatUser(param.getUnionId());
+    WechatUser wechatUser = obtainWeChatUser(param);
+    long count = wechatOrdersService.getCountByUserId(wechatUser.getUserId());
+    if (count == 0) {
+      return toEmptyPageMap();
+    }
     List<WechatOrdersVo> wechatOrders =
         wechatOrdersService.pageByUserId(wechatUser.getUserId(), page);
-    return success(wechatOrders);
+    return toPageMap(wechatOrders, count);
   }
 
   /**
@@ -173,7 +182,7 @@ public class ServiceCenterDataController {
   @Transactional(rollbackFor = Exception.class)
   @RequestMapping("/order/cancel")
   public Result removeWeChatOrder(@RequestBody OrderCancelParam param) {
-    WechatUser wechatUser = obtainWeChatUser(param.getUnionId());
+    WechatUser wechatUser = obtainWeChatUser(param);
     String userId = wechatUser.getUserId();
     String ordersCode = param.getOrdersCode();
     String contacts = param.getContacts();
@@ -219,7 +228,7 @@ public class ServiceCenterDataController {
   @Transactional(rollbackFor = Exception.class)
   @RequestMapping("/order/modify")
   public Result modifyWeChatOrder(@RequestBody OrderModifyParam param) {
-    WechatUser wechatUser = obtainWeChatUser(param.getUnionId());
+    WechatUser wechatUser = obtainWeChatUser(param);
     String userId = wechatUser.getUserId();
     String ordersCode = param.getOrdersCode();
     String contacts = param.getContacts();
@@ -316,11 +325,15 @@ public class ServiceCenterDataController {
    * @return CenterServiceParam
    */
   @RequestMapping("/address/list")
-  public Result listAddress(@RequestBody CenterServiceParam param) {
-    WechatUser wechatUser = obtainWeChatUser(param.getUnionId());
+  public Result listAddress(@RequestBody CenterServiceParam param, Page page) {
+    WechatUser wechatUser = obtainWeChatUser(param);
+    long count = wechatUserAddressService.getCountAddress(wechatUser.getUserId());
+    if (count == 0) {
+      return toEmptyPageMap();
+    }
     List<WechatUserAddress> addressList =
-        wechatUserAddressService.findUserAddresList(wechatUser.getUserId());
-    return success(addressList);
+        wechatUserAddressService.pageUserAddress(wechatUser.getUserId(), page);
+    return toPageMap(addressList, count);
   }
 
   /**
@@ -338,7 +351,7 @@ public class ServiceCenterDataController {
       throw new BizException("地址保存失败");
     }
     // 异步保存地址信息到商城
-    wechatUserAddressService.syncSaveAddressToMiniApp(address);
+    wechatUserAddressService.syncSaveAddressToQysc(address);
     return success(address);
   }
 
@@ -356,7 +369,7 @@ public class ServiceCenterDataController {
       throw new BizException("地址更新失败");
     }
     // 异步更新地址信息到商城
-    wechatUserAddressService.syncUpdateAddressToMiniApp(address);
+    wechatUserAddressService.syncUpdateAddressToQysc(address);
     return success(address);
   }
 
@@ -368,12 +381,12 @@ public class ServiceCenterDataController {
    */
   @RequestMapping("/address/delete")
   public Result deleteAddress(@RequestBody AddressDeleteParam param) {
-    WechatUser wechatUser = obtainWeChatUser(param.getUnionId());
-    WechatUserAddress address = wechatUserAddressService.findAddress(param.getAddressId());
+    WechatUser wechatUser = obtainWeChatUser(param);
+    WechatUserAddress address = wechatUserAddressService.findAddress(param.getId());
     boolean ret =
-        wechatUserAddressService.deleteAddress(wechatUser.getUserId(), param.getAddressId()) > 0;
+        wechatUserAddressService.deleteUserAddress(wechatUser.getUserId(), param.getId()) > 0;
     if (!ret) {
-      throw new BizException("地址删除失败");
+      throw new BizException("地址已删除");
     }
     String aId = address.getfAid();
     if (StringUtils.isNotBlank(aId)) {
@@ -389,14 +402,26 @@ public class ServiceCenterDataController {
    * <p>绑定的产品
    *
    * @param param {@link CenterServiceParam}
+   * @param page {@link Page}
    * @return {@link Result}
    */
   @RequestMapping("/product/list")
-  public Result listProduct(@RequestBody CenterServiceParam param) {
-    WechatUser wechatUser = obtainWeChatUser(param.getUnionId());
-    List<Product> products = productService.getProductsByUserId(wechatUser.getUserId());
+  public Result listProduct(
+      @RequestBody CenterServiceParam param,
+      Page page,
+      HttpServletRequest request,
+      HttpServletResponse response) {
+    WechatUser wechatUser = obtainWeChatUser(param);
+    String userId = wechatUser.getUserId();
+    long count = productService.getCountByUserId(userId);
+    if (count == 0) {
+      return toEmptyPageMap();
+    }
+    List<Product> products = productService.pageProductsByUserId(userId, page);
     sameCodeProduct(products);
-    return success(products);
+    // 写入用户的cookie
+    //    writeCookie(userId, request, response);
+    return toPageMap(products, count);
   }
 
   /**
@@ -524,7 +549,7 @@ public class ServiceCenterDataController {
    * @return {@link WechatUserAddress}
    */
   private WechatUserAddress obtainWeChatUserAddress(CenterServiceParam param) {
-    WechatUser wechatUser = obtainWeChatUser(param.getUnionId());
+    WechatUser wechatUser = obtainWeChatUser(param);
     WechatUserAddress address = Transformer.fromBean(param, WechatUserAddress.class);
     address.setUserId(wechatUser.getUserId());
     if (StringUtils.isNotBlank(address.getContactsMobile())) {
@@ -536,12 +561,17 @@ public class ServiceCenterDataController {
   /**
    * 根据unionId获取微信用户
    *
-   * @param unionId {@link String}
+   * @param param {@link CenterServiceParam}
    * @return {@link WechatUser}
    */
-  private WechatUser obtainWeChatUser(String unionId) {
+  private WechatUser obtainWeChatUser(CenterServiceParam param) {
+    boolean checkSignature =
+        SignUtil.checkSignature(param.getSignature(), param.getTimeStamp(), Constant.AUTH_KEY);
+    if (!checkSignature) {
+      throw new BizException("当前用户没有权限访问");
+    }
     // 根据unionId查询用户
-    WechatUser wechatUser = wechatUserService.getUserByFansUnionId(unionId);
+    WechatUser wechatUser = wechatUserService.getUserByFansUnionId(param.getUnionId());
     if (wechatUser == null) {
       throw new BizException("用户认证失败");
     }
@@ -570,6 +600,25 @@ public class ServiceCenterDataController {
       } else {
         map.put(key, 1);
       }
+    }
+  }
+
+  /**
+   * 写入cookie
+   *
+   * @param userId {@link String}
+   * @param request {@link HttpServletRequest}
+   * @param response {@link HttpServletResponse}
+   */
+  private void writeCookie(
+      String userId, HttpServletRequest request, HttpServletResponse response) {
+    String encode = Base64.encode(userId.getBytes());
+    try {
+      CookieUtil.writeCookie(
+          request, response, WeChatConstants.SCRMAPP_USER, encode, Integer.MAX_VALUE);
+    } catch (ServletException | IOException e) {
+      log.error("用户写入cookie失败：", e);
+      throw new BizException("用户写入cookie失败");
     }
   }
 }

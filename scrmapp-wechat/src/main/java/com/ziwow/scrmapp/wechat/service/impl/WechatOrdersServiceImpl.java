@@ -291,6 +291,12 @@ public class WechatOrdersServiceImpl implements WechatOrdersService {
     return new ArrayList<>(map.values());
   }
 
+
+    @Override
+    public long getCountByUserId(String userId) {
+        return wechatOrdersMapper.selectCountByUserId(userId);
+    }
+
   @Override
     public WechatOrdersVo getVoByOrdersCode(String ordersCode) {
         //订单详情

@@ -27,7 +27,7 @@ public class Page {
   }
 
   public long getLimit() {
-    return page * size;
+    return size;
   }
 
   public long getPage() {
@@ -35,7 +35,7 @@ public class Page {
   }
 
   public void setPage(long page) {
-    if (page < 0) {
+    if (page < 1) {
       throw new IllegalArgumentException("分页page错误");
     }
     this.page = page;
@@ -46,7 +46,7 @@ public class Page {
   }
 
   public void setSize(long size) {
-    if (size < 0) {
+    if (size < 1) {
       throw new IllegalArgumentException("分页size错误");
     }
     this.size = size;

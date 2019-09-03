@@ -38,8 +38,23 @@ public interface WechatOrdersService {
     WechatOrders saveOrdersMultiProduct(WechatOrders wechatOrders, String productIds);
 
     List<WechatOrdersVo> findByUserId(String userId);
-    // 预约单进度查询
+
+    /**
+     * 预约单进度查询
+     *
+     * @param userId {@link String}
+     * @param page {@link Page}
+     * @return {@link List}
+     */
     List<WechatOrdersVo> pageByUserId(String userId, Page page);
+
+    /**
+     * 预约单进度总数量
+     * @param userId {@link String}
+     * @return {@link Long}
+     */
+    long getCountByUserId(String userId);
+
     WechatOrdersVo getVoByOrdersCode(String ordersCode);
     void syncHistoryAppInfo(String mobilePhone, String userId);
     WechatOrdersParam getParamByOrdersCode(String ordersCode);
