@@ -51,7 +51,7 @@
                         <div class="pdtImg pull-left" style="background-image: url('{{order.imageUrl}}')"></div>
                         <div class="pdtText pull-left">
                             <p><img src="${f_ctxpath}/resources/src/images/icons/personInfo.png">{{order.userName}} , {{order.userMobile}},{{order.contactsTelephone}}</p>
-                            <p><img src="${f_ctxpath}/resources/src/images/icons/timer.png">{{order.orderTime}}</p>
+                            <p><img src="${f_ctxpath}/resources/src/images/icons/timer.png">{{order.orderTime?order.orderTime:"-"}}</p>
                             <p><img src="${f_ctxpath}/resources/src/images/icons/location.png">{{order.userAddress}}</p>
                         </div>
                     </div>

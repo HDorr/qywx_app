@@ -2,6 +2,7 @@ package com.ziwow.scrmapp.common.persistence.mapper;
 
 import java.util.List;
 
+import com.ziwow.scrmapp.common.pagehelper.Page;
 import org.apache.ibatis.annotations.Param;
 
 import com.ziwow.scrmapp.common.bean.vo.ProductFinishVo;
@@ -56,7 +57,7 @@ public interface ProductMapper {
 
     List<Product> getProductsByIds(List<Integer> list);
 
-    @Select("SELECT * FROM t_product WHERE modelName=#{modelName}")
+    @Select("SELECT * FROM t_product WHERE modelName=#{modelName} limit 1")
     Product getProductByModelName(@Param("modelName")String modelName);
 
     int countProductByUserIdWithoutStatus(@Param("userId") String userId);
@@ -79,7 +80,7 @@ public interface ProductMapper {
      * @param userId
      * @return
      */
-    @Select("SELECT * FROM t_product WHERE modelName=#{itemName} and userId = #{userId} order by id desc")
+    @Select("SELECT * FROM t_product WHERE modelName=#{itemName} and userId = #{userId}  and status = 1 order by id desc")
     List<Product> getProductByModelNameAndUserId(@Param("itemName") String itemName, @Param("userId") String userId);
 
     /**
@@ -105,4 +106,18 @@ public interface ProductMapper {
      * @return
      */
     Product getProductsByBarCode(@Param("barCode") String barCode);
+
+    /**
+     * 分页查询产品列表
+     * @param userId String
+     * @return List
+     */
+    List<Product> selectPageByUserId(@Param("userId") String userId, @Param("page") Page page);
+
+    /**
+     * 查询产品总数
+     * @param userId String
+     * @return long
+     */
+    long selectCount(@Param("userId") String userId);
 }

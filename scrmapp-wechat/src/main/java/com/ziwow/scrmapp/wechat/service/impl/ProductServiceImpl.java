@@ -17,6 +17,7 @@ import com.ziwow.scrmapp.common.bean.vo.mall.MallOrderVo;
 import com.ziwow.scrmapp.common.bean.vo.mall.OrderItem;
 import com.ziwow.scrmapp.common.constants.Constant;
 import com.ziwow.scrmapp.common.constants.SystemConstants;
+import com.ziwow.scrmapp.common.pagehelper.Page;
 import com.ziwow.scrmapp.common.persistence.entity.*;
 import com.ziwow.scrmapp.common.persistence.mapper.*;
 import com.ziwow.scrmapp.common.result.BaseResult;
@@ -111,6 +112,16 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public List<Product> getProductsByUserId(String userId) {
         return productMapper.findByUserId(userId);
+    }
+
+    @Override
+    public List<Product> pageProductsByUserId(String userId, Page page) {
+        return productMapper.selectPageByUserId(userId, page);
+    }
+
+    @Override
+    public long getCountByUserId(String userId) {
+        return productMapper.selectCount(userId);
     }
 
     /**
@@ -891,6 +902,25 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public Product getProductsByBarCode(String productBarCodeTwenty) {
         return productMapper.getProductsByBarCode(productBarCodeTwenty);
+    }
+
+    @Override
+    public List<com.ziwow.scrmapp.common.bean.vo.ProductVo> getProductByModelNames(List<String> productModelNames) {
+        List<com.ziwow.scrmapp.common.bean.vo.ProductVo> list = new ArrayList<>();
+        for (String modelName : productModelNames) {
+            final ProductVo productVo = this.queryProduct(modelName, null);
+            com.ziwow.scrmapp.common.bean.vo.ProductVo pv = new com.ziwow.scrmapp.common.bean.vo.ProductVo();
+            pv.setProductName(productVo.getProductName());
+            pv.setProductBarCode("");
+            pv.setModelName(productVo.getModelName());
+            pv.setO2o(1);
+            pv.setBuyChannel(16);
+            pv.setItemKind("1");
+            pv.setProductCode(productVo.getProductCode());
+            pv.setBuyTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+            list.add(pv);
+        }
+        return list;
     }
 
 }

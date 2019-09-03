@@ -11,6 +11,8 @@ import com.ziwow.scrmapp.common.bean.vo.csm.ProductItem;
 import com.ziwow.scrmapp.common.constants.Constant;
 import com.ziwow.scrmapp.common.constants.SystemConstants;
 import com.ziwow.scrmapp.common.exception.ParamException;
+import com.ziwow.scrmapp.common.page.PageHelper;
+import com.ziwow.scrmapp.common.pagehelper.Page;
 import com.ziwow.scrmapp.common.persistence.entity.*;
 import com.ziwow.scrmapp.common.persistence.mapper.OrdersProRelationsMapper;
 import com.ziwow.scrmapp.common.persistence.mapper.ProductMapper;
@@ -164,10 +166,19 @@ public class WechatOrdersServiceImpl implements WechatOrdersService {
         acceptanceFormParam.setCity_name(wechatOrdersParam.getCity());
         acceptanceFormParam.setCounty_name(wechatOrdersParam.getArea());
         acceptanceFormParam.setAppeal_kind_id(wechatOrdersParam.getOrderType());
+        acceptanceFormParam.setFrom_type(wechatOrdersParam.getDeliveryType().getCode());
+        acceptanceFormParam.setKind_name(wechatOrdersParam.getKindName());
+        acceptanceFormParam.setKind_name2(wechatOrdersParam.getKindName2());
         String orderTime = wechatOrdersParam.getOrderTime();
-        acceptanceFormParam.setAppeal_content(wechatOrdersParam.getDescription() + " 预约时间：" + orderTime);
-        Date date = DateUtil.StringToDate(orderTime, "yyyy-MM-dd HH");
-        acceptanceFormParam.setService_time(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(date));
+        if (StringUtils.isBlank(orderTime)){
+            acceptanceFormParam.setAppeal_content(wechatOrdersParam.getDescription());
+            acceptanceFormParam.setService_time("");
+        }else {
+            acceptanceFormParam.setAppeal_content(wechatOrdersParam.getDescription() + " 预约时间：" + orderTime);
+            Date date = DateUtil.StringToDate(orderTime, "yyyy-MM-dd HH");
+            acceptanceFormParam.setService_time(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(date));
+        }
+
         //产品信息
         List<ProductVo> prodLst = wechatOrdersParam.getProducts();
         List<AcceptanceProductParam> products = Lists.newArrayList();
@@ -194,6 +205,7 @@ public class WechatOrdersServiceImpl implements WechatOrdersService {
             products.add(productParam);
         }
         acceptanceFormParam.setProducts(products);
+        acceptanceFormParam.setFix_org_name(wechatOrdersParam.getDepartmentName() == null ? "": wechatOrdersParam.getDepartmentName());
         acceptanceFormParam.setIs_wxtd(UUID.randomUUID().toString());
         Result result = thirdPartyService.addCssAppeal(acceptanceFormParam);
         if (Constant.SUCCESS == result.getReturnCode()) {
@@ -257,7 +269,35 @@ public class WechatOrdersServiceImpl implements WechatOrdersService {
         return new ArrayList<WechatOrdersVo>(map.values());
     }
 
+  @Override
+  public List<WechatOrdersVo> pageByUserId(String userId, Page page) {
+    List<WechatOrdersVo> detailVo = wechatOrdersMapper.pageOrdersByUserId(userId, page);
+    if (detailVo.size() == 0) {
+      return new ArrayList<>();
+    }
+    Map<Long, WechatOrdersVo> map = new LinkedHashMap<>();
+    //遍历工单列表，保存至map
+    for (WechatOrdersVo vo : detailVo) {
+      map.put(vo.getId(), vo);
+      List<WechatOrdersRecordVo> wechatOrdersRecordList = wechatOrdersRecordMapper.findByOrdersId(vo.getId());
+      vo.setWechatOrdersRecordList(wechatOrdersRecordList);
+    }
+    //根据工单id查询产品列表
+    Long[] ordersIds = map.keySet().toArray(new Long[0]);
+    List<ProductVo> products = productMapper.selectByOrdersIds(ordersIds);
+    for (ProductVo pro : products) {
+      map.get(pro.getOrdersId()).getProducts().add(pro);
+    }
+    return new ArrayList<>(map.values());
+  }
+
+
     @Override
+    public long getCountByUserId(String userId) {
+        return wechatOrdersMapper.selectCountByUserId(userId);
+    }
+
+  @Override
     public WechatOrdersVo getVoByOrdersCode(String ordersCode) {
         //订单详情
         WechatOrdersVo wechatOrdersVo = wechatOrdersMapper.getByOrdersCode(ordersCode);
@@ -932,7 +972,12 @@ public class WechatOrdersServiceImpl implements WechatOrdersService {
         return url;
     }
 
-    //根据productId获取产品信息(批量)
+    /**
+     * 根据productId获取产品信息(批量)
+     * @param productIds
+     * @return
+     */
+    @Override
     public List<ProductVo> getProductInfoById(String productIds) {
         List<Integer> list = new ArrayList<Integer>();
 

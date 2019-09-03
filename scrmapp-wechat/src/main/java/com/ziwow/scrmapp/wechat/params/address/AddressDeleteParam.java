@@ -8,13 +8,14 @@ import com.ziwow.scrmapp.wechat.params.common.CenterServiceParam;
  */
 public class AddressDeleteParam extends CenterServiceParam {
 
-  private Long addressId;
+  /** 地址主键 */
+  private Long id;
 
-  public Long getAddressId() {
-    return addressId;
+  public Long getId() {
+    return id;
   }
 
-  public void setAddressId(Long addressId) {
-    this.addressId = addressId;
+  public void setId(Long id) {
+    this.id = id;
   }
 }
