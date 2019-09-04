@@ -5,6 +5,8 @@ import com.xxl.job.core.handler.annotation.JobHandler;
 import com.xxl.job.core.log.XxlJobLogger;
 import com.ziwow.scrmapp.wechat.persistence.entity.GrantEwCardRecord;
 import com.ziwow.scrmapp.wechat.service.GrantEwCardRecordService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -18,6 +20,8 @@ import java.util.List;
 @Component
 @JobHandler("GrantEwCardTask")
 public class GrantEwCardTask extends AbstractGrantEwCard{
+
+    private static final Logger LOG= LoggerFactory.getLogger(GrantEwCardTask.class);
 
     @Autowired
     private GrantEwCardRecordService grantEwCardRecordService;
@@ -37,7 +41,8 @@ public class GrantEwCardTask extends AbstractGrantEwCard{
                             grantEwCardRecordService.updateSendByPhone(record.getPhone(), true);
                         }
                     }else {
-                        XxlJobLogger.log("发放延保卡子任务停止");
+                        LOG.info("发放延保卡子任务被停止");
+                        XxlJobLogger.log("发放延保卡子任务被停止");
                         break;
                     }
                 }

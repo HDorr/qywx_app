@@ -545,7 +545,7 @@ public class WeChatMessageProcessingHandler {
             }
             replyMessage(inMessage, response, msgsb);
             return isPushToCallCenter;
-        }else if (content.contains("攻略")){
+        }else if (content.contains("攻略")||content.contains("延保卡")){
           return false;
         } else if("除菌去味一步到位".contains(content)||"除菌去味一喷到位".contains(content)||"卫宝".contains(content)){
             WechatRegister register = new WechatRegister();
