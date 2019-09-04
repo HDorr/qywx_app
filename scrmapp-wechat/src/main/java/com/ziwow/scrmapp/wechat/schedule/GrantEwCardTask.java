@@ -26,21 +26,38 @@ public class GrantEwCardTask extends AbstractGrantEwCard{
     @Autowired
     private GrantEwCardRecordService grantEwCardRecordService;
 
+    private volatile boolean flag = true;
+
     @Override
     public ReturnT<String> execute(String s) throws Exception {
-        List<GrantEwCardRecord> records = grantEwCardRecordService.selectRecord();
-        for (GrantEwCardRecord record : records) {
-            try{
-                final boolean flag = grantEwCard(record.getPhone(), record.getType());
-                if (flag){
-                    grantEwCardRecordService.updateSendByPhone(record.getPhone(),true);
-                    Thread.sleep(1);
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                List<GrantEwCardRecord> records = grantEwCardRecordService.selectRecord();
+                for (GrantEwCardRecord record : records) {
+                    if (flag){
+                        final boolean grant = grantEwCard(record.getPhone(), record.getType());
+                        if (grant) {
+                            grantEwCardRecordService.updateSendByPhone(record.getPhone(), true);
+                        }
+                    }else {
+                        LOG.info("发放延保卡子任务被停止");
+                        XxlJobLogger.log("发放延保卡子任务被停止");
+                        break;
+                    }
                 }
-            }catch (InterruptedException e){
-                LOG.info("定向发放延保卡任务停止");
-                XxlJobLogger.log("定向发放延保卡任务停止");
-               break;
             }
+        });
+
+        thread.start();
+
+        try {
+            synchronized (thread) {
+                thread.wait();
+            }
+        } catch (InterruptedException e) {
+            flag = false;
+            XxlJobLogger.log("发放延保卡主任务停止");
         }
         return ReturnT.SUCCESS;
     }
