@@ -280,6 +280,12 @@ public class WechatOrdersServiceImpl implements WechatOrdersService {
     for (WechatOrdersVo vo : detailVo) {
       map.put(vo.getId(), vo);
       List<WechatOrdersRecordVo> wechatOrdersRecordList = wechatOrdersRecordMapper.findByOrdersId(vo.getId());
+      Collections.sort(wechatOrdersRecordList,new Comparator<WechatOrdersRecordVo>() {
+          @Override
+          public int compare(WechatOrdersRecordVo o1, WechatOrdersRecordVo o2) {
+              return o2.getRecordTime().compareTo(o1.getRecordTime());
+          }
+      });
       vo.setWechatOrdersRecordList(wechatOrdersRecordList);
     }
     //根据工单id查询产品列表
