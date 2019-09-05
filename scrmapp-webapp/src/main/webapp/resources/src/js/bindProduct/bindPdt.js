@@ -32,11 +32,8 @@ var flags = {
         };
 
     if (model) {
-        // var data = {
-        //     modelName: model
-        // }
         var data = {
-            modelName: $("#modelNameInput").val()
+            modelName: model
         }
     } else {
         var data = {
