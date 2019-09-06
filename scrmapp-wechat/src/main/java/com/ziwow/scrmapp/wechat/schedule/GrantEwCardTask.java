@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * 发放延保卡任务
@@ -30,15 +31,20 @@ public class GrantEwCardTask extends AbstractGrantEwCard{
 
     @Override
     public ReturnT<String> execute(String s) throws Exception {
+        final Integer total = Integer.valueOf(s);
+
+        final AtomicInteger num = new AtomicInteger(0);
+
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
                 List<GrantEwCardRecord> records = grantEwCardRecordService.selectRecord();
                 for (GrantEwCardRecord record : records) {
-                    if (flag){
+                    if (flag && total>num.intValue()){
                         final boolean grant = grantEwCard(record.getPhone(), record.getType());
                         if (grant) {
                             grantEwCardRecordService.updateSendByPhone(record.getPhone(), true);
+                            XxlJobLogger.log("已发放",num.addAndGet(1),"张延保卡");
                         }
                     }else {
                         LOG.info("发放延保卡子任务被停止");
@@ -46,6 +52,7 @@ public class GrantEwCardTask extends AbstractGrantEwCard{
                         break;
                     }
                 }
+                flag = true;
             }
         });
 
