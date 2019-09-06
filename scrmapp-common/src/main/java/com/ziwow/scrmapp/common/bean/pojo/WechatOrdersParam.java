@@ -66,6 +66,11 @@ public class WechatOrdersParam {
     private List<ProductVo> products;
 
     /**
+     * 微信订单号
+     */
+    private String orderNo;
+
+    /**
      *  发货方式
      */
     private DeliveryType deliveryType;
@@ -86,6 +91,14 @@ public class WechatOrdersParam {
      * 服务子类型2
      */
     private String kindName2;
+
+    public String getOrderNo() {
+        return orderNo;
+    }
+
+    public void setOrderNo(String orderNo) {
+        this.orderNo = orderNo;
+    }
 
     public String getKindName() {
         return kindName;

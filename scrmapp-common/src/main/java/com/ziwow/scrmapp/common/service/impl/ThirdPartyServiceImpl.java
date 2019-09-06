@@ -50,7 +50,6 @@ import org.codehaus.xfire.service.binding.ObjectServiceFactory;
 import org.codehaus.xfire.transport.http.CommonsHttpMessageSender;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -171,7 +170,7 @@ public class ThirdPartyServiceImpl implements ThirdPartyService {
             org.springframework.http.HttpEntity<String> formEntity = new org.springframework.http.HttpEntity<String>(s1, headers);
 
             final String s = restTemplate.postForObject(registerEwCardUrl, formEntity , String.class);
-            LOG.info("第三方CSM系统注册延保卡信息,收到csm的数据:[{}]",s);
+            LOG.info("第三方CSM系统注册延保卡信息,卡号为:{},收到csm的数据:[{}]",CSMEwCardParam.getCardNo(),s);
             baseCardVo = JsonUtil.json2Object(s, BaseCardVo.class);
         } catch (IOException e) {
             throw new ThirdException("调用第三方CSM系统注册延保卡信息失败", "注册延保卡失败，请稍后再试",e);

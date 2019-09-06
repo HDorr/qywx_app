@@ -184,7 +184,7 @@ public class WechatOrdersServiceImpl implements WechatOrdersService {
             String itemKind = productVo.getItemKind();
             int fromChannel = productVo.getSaleType();
             String saleMarket = BuyChannel.getBuyChannel(productVo.getO2o(), productVo.getBuyChannel());
-            String netSaleNo = productVo.getShoppingOrder();
+            String netSaleNo = StringUtils.isBlank(orderTime) ? wechatOrdersParam.getOrderNo() : productVo.getShoppingOrder();
             String bigcName = productVo.getTypeName();
             String spec = productVo.getModelName();
             String barCode = productVo.getProductBarCode();
