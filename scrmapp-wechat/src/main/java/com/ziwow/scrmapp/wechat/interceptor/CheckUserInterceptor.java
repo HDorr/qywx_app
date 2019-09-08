@@ -95,25 +95,6 @@ public class CheckUserInterceptor implements HandlerInterceptor {
 
         WechatFansVo wechatFansVo = wechatFansService.getOAuthUserInfo(code, request, response);
 
-
-//        thirdPartyService.getCemProductInfo("104011-0003");
-//        productService.syncHistroyProductItemFromCemTemp("15207105539", "iqCjJfmk");
-//        wechatMediaService.downLoadMediaForCallCenter("QF2q18_9XhZFXSe7wacahl1pljPwZn-xwdDLimr1mqNAXrxpLJP5YkyE7Cx3zeDv");
-
-        /**
-         * fixme 测试数据
-         * Integer code   2
-         * String userId;   eYzE67dT
-         * String nickName;  黄晶晶。
-         * Integer gender;   1
-         */
-//        wechatFansVo=new WechatFansVo();
-//        wechatFansVo.setCode(2);
-//        wechatFansVo.setToken("AlEHYDMnIhvqOyG8n415BuUZgQzaj7Tw2rmObBVEnPY=");
-//        wechatFansVo.setUserId("eYzE67dT");
-//        wechatFansVo.setNickName("黄晶晶。");
-//        wechatFansVo.setGender(1);
-
         //会员标识
         Integer fanCode = wechatFansVo.getCode();
 
