@@ -82,69 +82,7 @@ public class OpenWeChatServlet extends HttpServlet {
 		InMessage oi = XmlUtils.xmlToObject(decryptMsg, InMessage.class);
 
 		String xml = "";
-		// 全网发布使用
-		if (oi.getToUserName().equals("gh_3c884a361561")) {
-			String event = oi.getEvent();
-			String content = oi.getContent();
-			TextOutMessage out = new TextOutMessage();
-			out.setToUserName(oi.getFromUserName());
-			out.setFromUserName(oi.getToUserName());
-			// 如果是event消息
-			if (StringUtils.isNotBlank(event)) {
-				out.setContent(event + "from_callback");
-				out.setCreateTime(new Date().getTime());
-			} else if (content.contains("QUERY_AUTH_CODE")) {
-				// dev
-				// String component_appid = "wxa00ce2e1e8a8196f";
-				// production
-				String component_appid = "wxcfdd10039499d368";
-				final String authorization_code = content.split(":")[1];
-				final String openid = oi.getFromUserName();
-				OpenAuthorizationWeixin oaw = openWeixinService.getAuthorizerWeixinApi(component_appid, authorization_code);
-				LOGGER.info("使用授权码" + authorization_code + "换取公众号的授权信息：" + JSONObject.fromObject(oaw));
-				final String authorize_accesstoken = oaw.getAuthorizer_access_token();
-				new Thread(new Runnable() {
-					@Override
-					public void run() {
-						try {
-							// Thread.sleep(1000);
-							String result = new WeiXinWerviceImpl().sendText(authorize_accesstoken, openid, authorization_code
-									+ "_from_api");
-							System.out.print("开始发送客服消息,结果为" + result);
-						} catch (Exception e) {
-							e.printStackTrace();
-						}
-					}
-				}).start();
-				out = null;
-			} else if (StringUtils.isNotBlank(content)) {
-				out.setContent(content + "_callback");
-				out.setCreateTime(new Date().getTime());
-			}
-			if (out != null) {
-				// 把发送发送对象转换为xml输出
-				// XStream xs = XStreamFactory.init(true);
-				XStream xs = XStreamAdaptor.createXstream();
-				xs.alias("xml", out.getClass());
-				xs.alias("item", Articles.class);
-				xml = xs.toXML(out);
-				String encryptXML = getEncryptMessage(xml);
-				LOGGER.info("OpenWX回复给微信的xml明文:" + xml);
-				// LOGGER.info("OpenWX回复给微信的xml密文:"+encryptXML);
-				response.getWriter().write(encryptXML);
-			} else {
-				LOGGER.info("OpenWX回复给微信的空串");
-				response.getWriter().write("");
-			}
-		} else {
-			// message(request, response);
-			// xml = weChat.processing(decryptMsg);
-			// String encryptXML = getEncryptMessage(xmlMsg);
-			weChatMessageProcessingHandler.manageMessage(decryptMsg, request, response);
-//			LOGGER.info("OpenWX回复给微信的xml明文:" + xml);
-			// LOGGER.info("OpenWX回复给微信的xml密文:"+encryptXML);
-			// response.getWriter().write(encryptXML);
-		}
+		weChatMessageProcessingHandler.manageMessage(decryptMsg, request, response);
 	}
 
 	/**
