@@ -2,6 +2,7 @@ package com.ziwow.scrmapp.wechat.service.impl;
 
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
@@ -22,6 +23,7 @@ import com.ziwow.scrmapp.tools.utils.HttpClientUtils;
 import com.ziwow.scrmapp.tools.utils.MD5;
 import com.ziwow.scrmapp.wechat.service.WechatOrdersRecordService;
 import com.ziwow.scrmapp.wechat.service.WechatOrdersService;
+import com.ziwow.scrmapp.wechat.vo.QtyUserVO;
 import com.ziwow.scrmapp.wechat.vo.WechatUserVo;
 import net.sf.json.JSONObject;
 import org.apache.commons.lang.StringUtils;
@@ -226,6 +228,17 @@ public class WechatUserServiceImpl implements WechatUserService {
                 logger.info("注册用户信息同步到小程序失败,moreInfo:{}", o1.getString("moreInfo"));
             }
         }
+    }
+
+  @Override
+  public String loadByUnionId(String userId) {
+      QtyUserVO qytUser = wechatUserMapper.getQtyUserByUserId(userId);
+      return qytUser.getUnionid();
+  }
+
+  @Override
+    public List<WechatUser> getUserByRegisterSrc(Integer src) {
+        return wechatUserMapper.getUserByRegisterSrc(src);
     }
 
     @Override

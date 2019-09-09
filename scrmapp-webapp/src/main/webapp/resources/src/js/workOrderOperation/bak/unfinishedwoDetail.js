@@ -344,8 +344,8 @@ function refuseOrder(el) {
         callback: function(fn, reason) {
             //判断textarea里的值是否为空
             var text = reason.trim();
-            if (!text) {
-                $.toptip("必须输入原因", 2000, 'error');
+            if (text == "请选择原因") {
+                $.toptip("必须选择原因", 2000, 'error');
                 return;
             }
             fn();

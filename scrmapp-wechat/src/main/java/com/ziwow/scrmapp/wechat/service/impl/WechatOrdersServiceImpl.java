@@ -114,6 +114,14 @@ public class WechatOrdersServiceImpl implements WechatOrdersService {
     @Autowired
     private WechatUserService wechatUserService;
 
+
+
+    @Override
+    public List<WechatOrdersVo> getWechatOrdersByProductId(Long productId) {
+        return wechatOrdersMapper.getWechatOrdersByProductId(productId);
+    }
+
+
     @Override
     public WechatOrders getWechatOrdersByCode(String ordersCode) {
         return wechatOrdersMapper.getWechatOrdersVoByCode(ordersCode);
@@ -156,10 +164,19 @@ public class WechatOrdersServiceImpl implements WechatOrdersService {
         acceptanceFormParam.setCity_name(wechatOrdersParam.getCity());
         acceptanceFormParam.setCounty_name(wechatOrdersParam.getArea());
         acceptanceFormParam.setAppeal_kind_id(wechatOrdersParam.getOrderType());
+        acceptanceFormParam.setFrom_type(wechatOrdersParam.getDeliveryType().getCode());
+        acceptanceFormParam.setKind_name(wechatOrdersParam.getKindName());
+        acceptanceFormParam.setKind_name2(wechatOrdersParam.getKindName2());
         String orderTime = wechatOrdersParam.getOrderTime();
-        acceptanceFormParam.setAppeal_content(wechatOrdersParam.getDescription() + " 预约时间：" + orderTime);
-        Date date = DateUtil.StringToDate(orderTime, "yyyy-MM-dd HH");
-        acceptanceFormParam.setService_time(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(date));
+        if (StringUtils.isBlank(orderTime)){
+            acceptanceFormParam.setAppeal_content(wechatOrdersParam.getDescription());
+            acceptanceFormParam.setService_time("");
+        }else {
+            acceptanceFormParam.setAppeal_content(wechatOrdersParam.getDescription() + " 预约时间：" + orderTime);
+            Date date = DateUtil.StringToDate(orderTime, "yyyy-MM-dd HH");
+            acceptanceFormParam.setService_time(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(date));
+        }
+
         //产品信息
         List<ProductVo> prodLst = wechatOrdersParam.getProducts();
         List<AcceptanceProductParam> products = Lists.newArrayList();
@@ -167,7 +184,7 @@ public class WechatOrdersServiceImpl implements WechatOrdersService {
             String itemKind = productVo.getItemKind();
             int fromChannel = productVo.getSaleType();
             String saleMarket = BuyChannel.getBuyChannel(productVo.getO2o(), productVo.getBuyChannel());
-            String netSaleNo = productVo.getShoppingOrder();
+            String netSaleNo = StringUtils.isBlank(orderTime) ? wechatOrdersParam.getOrderNo() : productVo.getShoppingOrder();
             String bigcName = productVo.getTypeName();
             String spec = productVo.getModelName();
             String barCode = productVo.getProductBarCode();
@@ -186,6 +203,7 @@ public class WechatOrdersServiceImpl implements WechatOrdersService {
             products.add(productParam);
         }
         acceptanceFormParam.setProducts(products);
+        acceptanceFormParam.setFix_org_name(wechatOrdersParam.getDepartmentName() == null ? "": wechatOrdersParam.getDepartmentName());
         acceptanceFormParam.setIs_wxtd(UUID.randomUUID().toString());
         Result result = thirdPartyService.addCssAppeal(acceptanceFormParam);
         if (Constant.SUCCESS == result.getReturnCode()) {
@@ -446,7 +464,7 @@ public class WechatOrdersServiceImpl implements WechatOrdersService {
         String title = "亲爱的" + nickName + "，您的预约已成功提交！";
         String subscribeResult = "已成功提交";
         String remark = "点击【我的预约】查看订单状态，希望这份健康呵护尽快抵达您家！";
-        wechatTemplateService.subscribeResultNoticeTemplate(openId, msgUrl, title, name, phone, address, serverType, subscribeResult, remark);
+        wechatTemplateService.subscribeResultNoticeTemplate(openId, getOrdersListPageOauthUrl(), title, name, phone, address, serverType, subscribeResult, remark);
     }
 
     @Override
@@ -492,7 +510,7 @@ public class WechatOrdersServiceImpl implements WechatOrdersService {
             String title = "亲爱的" + nickName + "，沁先生已成功派单，工程师会按时上门服务。";
             String remark = "点击【我的预约】了解详细状态，保持电话畅通，工程师会尽快与您联系。";
             String url = myOrderDetailUrl + "?userId=" + userId + "&ordersCode=" + orderCode;
-            wechatTemplateService.servicesToNoticeTemplate(openId, msgUrl, title, orderType, orderCode, orderTime, engineerName, mobilePhone, remark);
+            wechatTemplateService.servicesToNoticeTemplate(openId, getOrdersListPageOauthUrl(), title, orderType, orderCode, orderTime, engineerName, mobilePhone, remark);
         }
     }
 
@@ -574,11 +592,14 @@ public class WechatOrdersServiceImpl implements WechatOrdersService {
         QyhUser qyhUser = wechatQyhUserService.getQyhUser(wechatOrders.getQyhUserId());
         String qyhUserMobile = (null != qyhUser) ? qyhUser.getMobile() : "";
         try {
-            mobileService.sendContentByEmay(qyhUserMobile, engineerMsgContent, Constant.ENGINEER);
+            //短信开口关闭 2019年06月19日
+            //mobileService.sendContentByEmay(qyhUserMobile, engineerMsgContent, Constant.ENGINEER);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
+
+
 
     @Override
     public void sendEngineerMsgText(String engineerId, String engineerPhone, WechatOrders wechatOrders) {
@@ -771,7 +792,8 @@ public class WechatOrdersServiceImpl implements WechatOrdersService {
             String orderTime = DateUtil.DateToString(wechatOrders.getOrderTime(), DateUtil.YYYY_MM_DD_HH_MM_SS);
             String msgContent = "亲爱的用户，您预约的" + serviceType + "服务已成功派单。工程师上门服务时间:"
                     + orderTime + "。请保持电话畅通，届时工程师将与您联系沟通具体上门服务时间。";
-            mobileService.sendContentByEmay(mobilePhone, msgContent, Constant.CUSTOMER);
+            //短信开口关闭 2019年06月19日
+            //mobileService.sendContentByEmay(mobilePhone, msgContent, Constant.CUSTOMER);
         }
         // 派单给师傅后给用户发送模板消息
         String userId = wechatOrders.getUserId();
@@ -920,7 +942,12 @@ public class WechatOrdersServiceImpl implements WechatOrdersService {
         return url;
     }
 
-    //根据productId获取产品信息(批量)
+    /**
+     * 根据productId获取产品信息(批量)
+     * @param productIds
+     * @return
+     */
+    @Override
     public List<ProductVo> getProductInfoById(String productIds) {
         List<Integer> list = new ArrayList<Integer>();
 

@@ -14,6 +14,8 @@
     <link rel="stylesheet" href="${f_ctxpath}/resources/src/css/jqweui/weui.min.css">
     <link rel="stylesheet" href="${f_ctxpath}/resources/src/css/jqweui/jquery-weui.min.css">
     <link rel="stylesheet" href="${f_ctxpath}/resources/src/css/user_home/user_home.css${f_ver}">
+    <link rel="stylesheet" href="${f_ctxpath}/resources/src/css/user_home/user_home.css${f_ver}">
+    <script src="${f_ctxpath}/resources/thirdparty/jweixin/jweixin-1.4.0.js"></script>
 </head>
 <body>
 <div class="main_layer">
@@ -35,7 +37,7 @@
             </p>
             <p class="shadow"></p>
         </a>
-        <a href="${f_ctxpath}/scrmapp/consumer/wechatuser/address/index" class="weui-grid js_grid">
+        <a href="javascript:void(0);" onclick="gotoMiniAddress()" class="weui-grid js_grid">
             <div class="weui-grid__icon">
                 <img src="${f_ctxpath}/resources/images/home_menu/my_address_blue.png${f_ver}" alt="">
             </div>
@@ -59,6 +61,15 @@
             </div>
             <p class="weui-grid__label">
                 我的预约
+            </p>
+            <p class="shadow"></p>
+        </a>
+                <a href="javascript:void(0);" onclick="gotoMiniEwCard()" class="weui-grid js_grid">
+            <div class="weui-grid__icon">
+                <img src="${f_ctxpath}/resources/images/home_menu/ACPP.png${f_ver}" alt="">
+            </div>
+            <p class="weui-grid__label">
+                延保服务
             </p>
             <p class="shadow"></p>
         </a>
@@ -127,6 +138,14 @@
             onBridgeReady();
         }
     }
+    
+    function gotoMiniEwCard() {
+        wx.miniProgram.navigateTo({url:'/pages/guarantee_card'});
+    }
+
+  function gotoMiniAddress() {
+      wx.miniProgram.navigateTo({url:'/pages/address'});
+  }
   
 </script>
 </body>

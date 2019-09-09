@@ -13,6 +13,7 @@ public class TemplateData implements Serializable {
     private String url;
     private String topcolor;
     private TemplateDataItem data = new TemplateDataItem();
+    private Miniprogram miniprogram = new Miniprogram();
 
     private TemplateData(String touser, String template_id, String url, String topcolor) {
         this.touser = touser;
@@ -84,6 +85,10 @@ public class TemplateData implements Serializable {
     public TemplateData push(String key, String value) {
         this.data.addItem(key, value);
         return this;
+    }
+
+    public Miniprogram getMiniprogram(){
+        return miniprogram;
     }
 
 

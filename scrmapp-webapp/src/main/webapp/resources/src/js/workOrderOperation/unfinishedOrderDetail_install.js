@@ -173,7 +173,7 @@ var Product = {
             for(var i = 0; i<this.productImage.length;i++){
                 res.push(this.productImage[i])
             }
-            if(res.length >= 3){
+            if(res.length >= 6){
                 res.splice(2,res.length-2,src)
             }else{
                 res.push(src)

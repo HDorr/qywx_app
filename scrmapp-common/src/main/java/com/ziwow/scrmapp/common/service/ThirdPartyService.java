@@ -2,16 +2,8 @@ package com.ziwow.scrmapp.common.service;
 
 import java.util.List;
 
-import com.ziwow.scrmapp.common.bean.pojo.AcceptanceFormParam;
-import com.ziwow.scrmapp.common.bean.pojo.AppealInstallParam;
-import com.ziwow.scrmapp.common.bean.pojo.AppealMaintainParam;
-import com.ziwow.scrmapp.common.bean.pojo.AppealMaintenanceParam;
-import com.ziwow.scrmapp.common.bean.pojo.EvaluateParam;
-import com.ziwow.scrmapp.common.bean.pojo.ProductFilterGradeParam;
-import com.ziwow.scrmapp.common.bean.pojo.ProductParam;
-import com.ziwow.scrmapp.common.bean.vo.csm.ProductAppealVo;
-import com.ziwow.scrmapp.common.bean.vo.csm.ProductFilterGrade;
-import com.ziwow.scrmapp.common.bean.vo.csm.ProductItem;
+import com.ziwow.scrmapp.common.bean.pojo.*;
+import com.ziwow.scrmapp.common.bean.vo.csm.*;
 import com.ziwow.scrmapp.common.bean.vo.mall.MallOrderVo;
 import com.ziwow.scrmapp.common.result.Result;
 
@@ -21,7 +13,36 @@ public interface ThirdPartyService {
 	public void registerMember(String mobile, String password, String openId);
 	public List<MallOrderVo> queryOrders(String mobilePhone);
 	public String getProductImg(String spec);
+
 	// csm系统
+	/**
+	 * 根据卡号查询延保卡
+	 * @param cardNo
+	 * @return
+	 */
+	EwCardVo getEwCardListByNo(String cardNo);
+
+
+	/**
+	 * 注册延保卡
+	 * @param CSMEwCardParam
+	 */
+	BaseCardVo registerEwCard(CSMEwCardParam CSMEwCardParam);
+
+	/**
+	 * 根据手机号判断是否存在安装工单
+	 * @param phone
+	 * @return
+	 */
+	boolean existInstallList(String phone);
+
+	/**
+	 * 根据产品条码查询安装单的购买时间
+	 * @param productBarCode
+	 * @return
+	 */
+	String getPurchDate(String productBarCode);
+
 	public ProductItem getProductItem(ProductParam productParam);
 	public List<ProductItem> getProductList(String itemCodes);
 	public List<ProductFilterGrade> getItemFilterGrade(ProductFilterGradeParam productFilterGradeParam);
@@ -44,4 +65,7 @@ public interface ThirdPartyService {
 	Result getCemAssetsInfo(String phone);
 
 	Result getCemProductInfo(String productCode);
+
+
+
 }

@@ -18,6 +18,16 @@ public class QyhApiUser implements java.io.Serializable {
 	private String weixinid;			// 微信号
 	private String avatar;				// 头像url
 	private int status;					// 关注状态: 1=已关注，2=已冻结，4=未关注
+	private int enable =1; 				//可用状态:1=启用、0=禁用
+
+	public int getEnable() {
+		return enable;
+	}
+
+	public void setEnable(int enable) {
+		this.enable = enable;
+	}
+
 	public String getUserid() {
 		return userid;
 	}

@@ -36,7 +36,7 @@ function queryDetail(callback) {
 function renderDetail(data) {
     glData.orderType = data.orderType
     /* 标题 */
-    data.orderTimeArr = data.orderTime.split(" ")
+    data.orderTimeArr = data.orderTime?data.orderTime.split(" "):"";
     data = _normalizeDataByOrderType(data)
     var titleHtml = template('title_template', data)
     /* 受理进程 */

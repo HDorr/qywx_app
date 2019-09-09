@@ -27,7 +27,8 @@ var flags = {
             "o2o": 1,
             "saleTypeName": null,
             "smallcName":"",
-            "buyChannel": null
+            "buyChannel": null,
+            "buyTime": null
         };
 
     if (model) {
@@ -92,6 +93,7 @@ var flags = {
                 '                </li>'+
                 '<li class="pdtInfoForm"><span>购买日期:</span><span><input placeholder="请选择购买日期" type="text" id="datetime-picker"/></span></li>';
 
+
             //通过名字
         } else {
             var str = '<li class="pdtImg" style="background-image: url(\'' + data.productImage + '\');"></li>' +
@@ -126,9 +128,14 @@ var flags = {
             {
                 times: function() {
                     return [];
-                }
+                },
+                max: new Date(new Date().getTime() - (1000 * 60 * 60 * 24))
             }
-        )
+        );
+        if(data.buyTime!=""&&data.buyTime!=null){
+            $("#datetime-picker").val(data.buyTime);
+            $("#datetime-picker").attr('disabled','disabled');
+        }
 
         //初始化购买渠道selector
         renderSelectOpt(1)

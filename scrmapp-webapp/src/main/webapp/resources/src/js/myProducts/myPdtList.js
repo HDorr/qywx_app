@@ -12,6 +12,7 @@ var glData = {
 
 };
 
+
 (function($, window) {
     $.toast.prototype.defaults.duration = 800;
     ajaxGetList(renderFunc)
@@ -56,6 +57,16 @@ function goToPdtDetail(ele) {
     window.location.href = pageUrls.bindPdtDetail + "?productId=" + productId
 };
 
+//跳转至小程序延保详情页面
+function gotoMiniDetail(barCode) {
+    if (barCode){
+        wx.miniProgram.navigateTo({url:'/pages/ewCodeDetails?bar_code='+barCode});
+    }else {
+        $.alert("该机器没有条码,无法查看保修信息!");
+        return;
+    }
+}
+
 
 /*function setRemindFilter(ele) {
     var that = $(ele)
@@ -88,6 +99,7 @@ function goBindPdt() {
 
 
 
+
 function ajaxGetList(callback) {
     $.ajax({
         type: "GET",
@@ -113,11 +125,22 @@ function renderFunc(data) {
         var data = data.data;
         var strLi = "";
         var deleteIcon = glData.rootUrl + '/resources/src/images/icons/delete-grey.png';
+        var ewIcon = glData.rootUrl + '/resources/src/images/icons/ew.png';
         $.each(data, function(i, v) {
+            var str='';
             if (!v.filterRemind || v.filterRemind == 2) {
                 v.filterRemindName = "开启滤芯更换提醒"
             } else {
                 v.filterRemindName = "关闭滤芯更换提醒"
+            }
+
+            if (!$.isEmptyObject(v.productBarCode)) {
+                str='                    <div class="btnBox pull-right">' +
+                    '                        <button class="ew_btn" onclick="gotoMiniDetail('+v.productBarCode+')"> ' +
+                    '                           <div class="ewPdt_one" style="background-image: url(\'' + ewIcon + '\');"></div> ' +
+                '                               <div class="ewPdt_two">查询保修状态/延保</div></button>'+
+                '                           <button hidden="hidden" onclick="goToPdtDetail(this)" data-id=' + v.id + '>' + v.filterRemindName + '</button>' +
+                '                        </div>' ;
             }
             v.productImage = v.productImage || glData.rootUrl + "/resources/images/defaultPdtImg.jpg";
             strLi += ' <li data-id=' + v.id + '>' +
@@ -131,8 +154,9 @@ function renderFunc(data) {
                 '                </div>' +
                 '                <div class="operation">' +
                 '                    <i class="deletePdt" onclick="deletePdt(this)" style="background-image: url(\'' + deleteIcon + '\');" data-id=' + v.id + '></i>' +
+                 str+
                 '                    <div class="btnBox pull-right">' +
-                '                        <button onclick="gotoIndex()">+ 一键服务</button>' +
+                '                        <button onclick="gotoIndex()">+ 一键服务</button>'+
                 '                        <button hidden="hidden" onclick="goToPdtDetail(this)" data-id=' + v.id + '>' + v.filterRemindName + '</button>' +
                 '                    </div>' +
                 '                </div>' +

@@ -1,21 +1,27 @@
 package com.ziwow.scrmapp.wechat.controller;
 
 import com.alibaba.fastjson.JSON;
-import com.ziwow.scrmapp.wechat.enums.SmsMarketingEmus;
-import com.ziwow.scrmapp.wechat.enums.SmsMarketingEmus.SmsTypeEnum;
-import com.ziwow.scrmapp.wechat.schedule.SmsMarketingTask;
-import java.math.BigDecimal;
-import java.sql.SQLException;
-import java.util.Date;
-import java.util.List;
-
-import java.util.Map;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
+import com.alibaba.fastjson.JSONObject;
+import com.ziwow.scrmapp.common.bean.pojo.EvaluateParam;
+import com.ziwow.scrmapp.common.bean.pojo.MallOrdersForm;
+import com.ziwow.scrmapp.common.bean.pojo.WechatOrdersParam;
+import com.ziwow.scrmapp.common.bean.pojo.ext.WechatOrdersParamExt;
 import com.ziwow.scrmapp.common.bean.vo.*;
+import com.ziwow.scrmapp.common.constants.Constant;
+import com.ziwow.scrmapp.common.constants.SystemConstants;
 import com.ziwow.scrmapp.common.enums.AppraiseEnum;
+import com.ziwow.scrmapp.common.enums.DeliveryType;
 import com.ziwow.scrmapp.common.persistence.entity.*;
+import com.ziwow.scrmapp.common.result.BaseResult;
+import com.ziwow.scrmapp.common.result.Result;
+import com.ziwow.scrmapp.common.service.MobileService;
+import com.ziwow.scrmapp.common.utils.OrderUtils;
+import com.ziwow.scrmapp.tools.queue.EngineerQueue;
+import com.ziwow.scrmapp.tools.utils.*;
+import com.ziwow.scrmapp.wechat.constants.WeChatConstants;
+import com.ziwow.scrmapp.wechat.enums.SmsMarketingEmus.SmsTypeEnum;
+import com.ziwow.scrmapp.wechat.persistence.entity.WechatUser;
+import com.ziwow.scrmapp.wechat.schedule.SmsMarketingTask;
 import com.ziwow.scrmapp.wechat.service.*;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
@@ -23,35 +29,18 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.alibaba.fastjson.JSONObject;
-import com.ziwow.scrmapp.common.bean.pojo.EvaluateParam;
-import com.ziwow.scrmapp.common.bean.pojo.WechatOrdersParam;
-import com.ziwow.scrmapp.common.bean.pojo.ext.WechatOrdersParamExt;
-import com.ziwow.scrmapp.common.bean.vo.ProductVo;
-import com.ziwow.scrmapp.common.bean.vo.QyhUserMsgVo;
-import com.ziwow.scrmapp.common.bean.vo.QyhUserVo;
-import com.ziwow.scrmapp.common.bean.vo.WechatOrdersVo;
-import com.ziwow.scrmapp.common.constants.Constant;
-import com.ziwow.scrmapp.common.constants.SystemConstants;
-import com.ziwow.scrmapp.common.result.BaseResult;
-import com.ziwow.scrmapp.common.result.Result;
-import com.ziwow.scrmapp.common.service.MobileService;
-import com.ziwow.scrmapp.common.utils.OrderUtils;
-import com.ziwow.scrmapp.tools.queue.EngineerQueue;
-import com.ziwow.scrmapp.tools.utils.Base64;
-import com.ziwow.scrmapp.tools.utils.BeanUtils;
-import com.ziwow.scrmapp.tools.utils.CookieUtil;
-import com.ziwow.scrmapp.tools.utils.DateUtil;
-import com.ziwow.scrmapp.tools.utils.StringUtil;
-import com.ziwow.scrmapp.wechat.constants.WeChatConstants;
-import com.ziwow.scrmapp.wechat.persistence.entity.WechatUser;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.math.BigDecimal;
+import java.sql.SQLDataException;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by xiaohei on 2017/4/7.
@@ -92,6 +81,97 @@ public class WechatOrdersController {
     private WechatOrderServiceFeeService wechatOrderServiceFeeService;
     @Autowired
     private SmsMarketingService smsMarketingService;
+    @Autowired
+    private GrantPointService grantPointService;
+
+
+    /**
+     * 商城调用生成
+     *
+     * @param mallOrdersForm
+     * @return
+     */
+    @RequestMapping(value = "/wechat/qysc_save_order", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+    @ResponseBody
+    public Result qyscSaveOrder(HttpServletRequest request, HttpServletResponse response, @RequestBody MallOrdersForm mallOrdersForm) {
+        logger.info("收到商城原单原回受理单,[{}]", JSON.toJSONString(mallOrdersForm));
+        String userId = wechatUserService.getUserByUnionid(mallOrdersForm.getUnionId()).getUserId();
+        //保存工单号，以便于回滚
+        List<String> orderNos = new ArrayList<>();
+        Result result = new BaseResult();
+        for (WechatOrdersParamExt wechatOrdersParamExt : mallOrdersForm.getForms()) {
+            try {
+                wechatOrdersParamExt.setUserId(userId);
+                wechatOrdersParamExt.setDeliveryType(DeliveryType.DEALER);
+                wechatOrdersParamExt.setOrderNo(mallOrdersForm.getOrderNo());
+                //买的是滤芯
+                if (wechatOrdersParamExt.getFilter()) {
+                    List<ProductVo> list = productService.getProductByModelNames(wechatOrdersParamExt.getProductModelNames());
+                    wechatOrdersParamExt.setProducts(list);
+                }
+                StringBuilder pids = new StringBuilder();
+
+                for (ProductVo pv : wechatOrdersParamExt.getProducts()) {
+                    final List<Product> products = productService.getProductByModelNameAndUserId(pv.getModelName(), userId);
+                    //用户没有绑定则进行绑定
+                    if (products.isEmpty()) {
+                        Product product = new Product();
+                        product.setUserId(userId);
+                        product.setStatus(1);
+                        product.setCreateTime(new Date());
+                        product.setFilterRemind(SystemConstants.REMIND);
+                        product.setModelName(pv.getModelName());
+                        product.setProductCode(pv.getProductCode());
+                        product.setO2o(1);
+                        product.setBuyChannel(16);
+                        product.setItemKind("1");
+                        product.setProductName(pv.getProductName());
+                        product.setProductBarCode("");
+                        product.setBuyTime(new Date());
+                        //默认图片
+                        product.setProductImage("https://wx.qinyuan.cn/wx/resources/images/defaultPdtImg.jpg");
+                        boolean isFirst = productService.isFirstBindProduct(userId);
+                        final Long pid = productService.save(product);
+                        pids.append(pid).append(",");
+                        // 绑定产品成功后异步推送给小程序
+                        productService.syncProdBindToMiniApp(userId, product.getProductCode(), isFirst);
+                    } else {
+                        pids.append(products.get(0).getId()).append(",");
+                    }
+                }
+                wechatOrdersParamExt.setProductIds(pids.toString());
+                result = this.addWechatOrders(request, response, wechatOrdersParamExt);
+            } catch (Exception e) {
+                logger.error("【原单原回】-保存工单出现异常-unionId为:[{}],异常信息为[{}],",mallOrdersForm.getUnionId(), e);
+                result.setReturnCode(0);
+            }
+            if (result.getReturnCode() == 0) {
+                //取消预约
+                for (String orderNo : orderNos) {
+                    final Result cancelResult = wechatOrdersService.cancelOrders(orderNo);
+                    if (Constant.SUCCESS == cancelResult.getReturnCode()) {
+                        Date date = new Date();
+                        int count = wechatOrdersService.updateOrdersStatus(orderNo, userId, date, SystemConstants.CANCEL);
+                        if (count > 0){
+                            WechatOrdersRecord wechatOrdersRecord = new WechatOrdersRecord();
+                            wechatOrdersRecord.setOrderId(wechatOrdersService.getWechatOrdersByCode(orderNo).getId());
+                            wechatOrdersRecord.setRecordTime(date);
+                            wechatOrdersRecord.setRecordContent("系统取消预约");
+                            wechatOrdersRecordService.saveWechatOrdersRecord(wechatOrdersRecord);
+                            logger.info("【原单原回】-预约取消,userId = [{}] , ordersCode = [{}]", userId, orderNo);
+                            //推送更新到小程序
+                            wechatOrdersService.cancelMakeAppointment(orderNo);
+                        }
+                    }
+                }
+                return result;
+            }
+            orderNos.add((String) result.getData());
+        }
+        result.setReturnMsg("预约成功");
+        result.setReturnCode(mallOrdersForm.getForms().size() / orderNos.size());
+        return result;
+    }
 
 
     /**
@@ -111,8 +191,14 @@ public class WechatOrdersController {
         Result result = new BaseResult();
 
         try {
-            String encode = CookieUtil.readCookie(request, response, WeChatConstants.SCRMAPP_USER);
-            String userId = new String(Base64.decode(encode));
+            String userId = null;
+            if (org.apache.commons.lang3.StringUtils.isBlank(wechatOrdersParamExt.getUserId())) {
+                String encode = CookieUtil.readCookie(request, response, WeChatConstants.SCRMAPP_USER);
+                userId = new String(Base64.decode(encode));
+                wechatOrdersParamExt.setDeliveryType(DeliveryType.NORMAL);
+            } else {
+                userId = wechatOrdersParamExt.getUserId();
+            }
 
             //用户id不存在
             WechatUser wechatUser = wechatUserService.getUserByUserId(userId);
@@ -168,9 +254,9 @@ public class WechatOrdersController {
             }
             String ext = "";   //保持扩展信息
 
-            String scOrderNos="";
+            String scOrderNos = "";
             List<ServiceFeeProduct> serviceFeeProducts = wechatOrdersParamExt.getServiceFeeProducts();
-            if (serviceFeeProducts!=null && serviceFeeProducts.size()>0){
+            if (serviceFeeProducts != null && serviceFeeProducts.size() > 0) {
                 for (ServiceFeeProduct pf : serviceFeeProducts) {
                     if (pf != null) {
 
@@ -179,23 +265,23 @@ public class WechatOrdersController {
 
                         String tp = b.toString();
                         //由于产品型号不是唯一值，通过主键ID + 型号拼接
-                        ext =ext + " " + pf.getServiceFeeName() + " &金额:" + tp + " &关联订单号:" + scOrderNo;
-                        if (StringUtil.isBlank(scOrderNos)){
-                          scOrderNos=scOrderNo;
-                        }else {
-                          scOrderNos=scOrderNos+","+scOrderNo;
+                        ext = ext + " " + pf.getServiceFeeName() + " &金额:" + tp + " &关联订单号:" + scOrderNo;
+                        if (StringUtil.isBlank(scOrderNos)) {
+                            scOrderNos = scOrderNo;
+                        } else {
+                            scOrderNos = scOrderNos + "," + scOrderNo;
                         }
 
                     }
                 }
             }
 
-            logger.info("生成预约单带服务费产品id："+ JSON.toJSONString(serviceFeeProducts));
-            logger.info("生成预约单描述："+ext);
+            logger.info("生成预约单带服务费产品id：" + JSON.toJSONString(serviceFeeProducts));
+            logger.info("生成预约单描述：" + ext);
 
 
             if (StringUtils.isNotEmpty(ext)) {
-                wechatOrdersParamExt.setDescription(description + "\n" +  ext);   //关联到描述信息
+                wechatOrdersParamExt.setDescription(description + "\n" + ext);   //关联到描述信息
             }
 
 
@@ -227,6 +313,10 @@ public class WechatOrdersController {
             //来源是微信
             wechatOrders.setSource(SystemConstants.WEIXIN);
             wechatOrders.setScOrderNo(scOrderNos);
+            //发货类型
+            wechatOrders.setDeliveryType(wechatOrdersParamExt.getDeliveryType());
+            //服务网点
+            wechatOrders.setDepartmentName(wechatOrdersParamExt.getDepartmentName());
 
             //新增一单多产品接口
             wechatOrders = wechatOrdersService.saveOrdersMultiProduct(wechatOrders, wechatOrdersParamExt.getProductIds());
@@ -235,7 +325,7 @@ public class WechatOrdersController {
             if (id != null) {
 
                 //保存订单中的服务费信息
-                if (serviceFeeProducts!=null && serviceFeeProducts.size()>0){
+                if (serviceFeeProducts != null && serviceFeeProducts.size() > 0) {
                     for (ServiceFeeProduct pf : serviceFeeProducts) {
                         if (pf != null) {
                             WechatOrderServiceFee wechatOrderServiceFee = new WechatOrderServiceFee(pf, id);
@@ -251,7 +341,8 @@ public class WechatOrdersController {
                 String mobilePhone = wechatUser.getMobilePhone();
                 int originalType = SmsMarketingTask.convertOriginalType(SmsTypeEnum.TODAY.getCode(), orderType);
                 SmsMarketing smsMarketing = smsTemplateMap.get(originalType);
-                mobileService.sendContentByEmay(mobilePhone, smsMarketing.getSmsContent(), Constant.CUSTOMER);
+                //短信开口关闭 2019年06月19日
+                //mobileService.sendContentByEmay(mobilePhone, smsMarketing.getSmsContent(), Constant.CUSTOMER);
                 // 预约提交成功模板消息提醒
                 wechatOrdersService.sendAppointmentTemplateMsg(wechatOrders.getOrdersCode(), serverType);
                 WechatOrdersRecord wechatOrdersRecord = new WechatOrdersRecord();
@@ -262,15 +353,16 @@ public class WechatOrdersController {
 
                 result.setReturnCode(Constant.SUCCESS);
                 result.setReturnMsg("预约成功!");
+                result.setData(webAppealNo);
                 logger.info("生成受理单,userId = [{}] , ordersCode = [{}]", userId, webAppealNo);
 
                 // 向沁园小程序推送预约成功
                 String scOrderItemId = wechatOrdersParamExt.getScOrderItemId();
                 String serviceFeeIds = wechatOrdersParamExt.getServiceFeeIds();
-                if (StringUtil.isNotBlank(scOrderItemId) || StringUtil.isNotBlank(serviceFeeIds) ){
+                if (StringUtil.isNotBlank(scOrderItemId) || StringUtil.isNotBlank(serviceFeeIds)) {
                     wechatOrdersService
-                        .syncMakeAppointment(scOrderItemId, wechatOrders.getOrdersCode(),
-                            serviceFeeIds);
+                            .syncMakeAppointment(scOrderItemId, wechatOrders.getOrdersCode(),
+                                    serviceFeeIds);
 //                    if (!syncMakeAppointment){
 //                        /*调用沁园接口，取消预约*/
 //                        Result cancelResult = wechatOrdersService.cancelOrders(wechatOrders.getOrdersCode());
@@ -456,9 +548,8 @@ public class WechatOrdersController {
                 logger.info("重新生成受理单,userId = [{}] , ordersCode = [{}]", userId, newOrdersCode);
 
 
-
                 //推送更新到小程序
-                wechatOrdersService.updateMakeAppointment(ordersCode,newOrdersCode);
+                wechatOrdersService.updateMakeAppointment(ordersCode, newOrdersCode);
 //                if (!updateMakeAppointment){
 //                    /*调用沁园接口，取消预约*/
 //                    Result cancelResult = wechatOrdersService.cancelOrders(wechatOrders.getOrdersCode());
@@ -548,7 +639,8 @@ public class WechatOrdersController {
                     // 给用户发送发送短信提醒
                     String mobile = wechatUser.getMobilePhone();
                     String msgContent = "亲爱的用户，您预约的" + serverType + "服务已撤销。如须重新预约，您可进入“沁园”官方微信服务号进行操作。";
-                    mobileService.sendContentByEmay(mobile, msgContent, Constant.CUSTOMER);
+                    //短信开口关闭 2019年06月19日
+                    //mobileService.sendContentByEmay(mobile, msgContent, Constant.CUSTOMER);
                     // 给用户发送发送模板消息
                     wechatOrdersService.sendOrderCancelTemplateMsg(userId, serverType);
                     // 如果服务工程师接单了，用户侧取消需要给服务工程师发送取消通知
@@ -558,7 +650,8 @@ public class WechatOrdersController {
                         String engineerMsgContent = "请注意，" + contacts + "用户已取消" + serverType + "服务！您可进入“沁园”WX企业号查看该工单详情！";
                         QyhUser qyhUser = wechatQyhUserService.getQyhUser(engineerId);
                         String qyhUserMobile = (null != qyhUser) ? qyhUser.getMobile() : "";
-                        mobileService.sendContentByEmay(qyhUserMobile, engineerMsgContent, Constant.ENGINEER);
+                        //短信开口关闭 2019年06月19日
+                        //mobileService.sendContentByEmay(qyhUserMobile, engineerMsgContent, Constant.ENGINEER);
                         // 给工程师发送取消公告通知
                         String url = orderDetailUrl + "?userId=" + engineerId + "&ordersCode=" + ordersCode;
                         String content = "工单撤销通知！\n" +
@@ -804,7 +897,8 @@ public class WechatOrdersController {
                 String engineerMsgContent = "您服务的工单" + ordersCode + "，用户已经评价啦，谢谢提供服务！请登录“沁园服务之家”的售后服务个人中心，可以查看评分。";
                 QyhUser qyhUser = wechatQyhUserService.getQyhUser(wechatOrders.getQyhUserId());
                 String qyhUserMobile = (null != qyhUser) ? qyhUser.getMobile() : "";
-                mobileService.sendContentByEmay(qyhUserMobile, engineerMsgContent, Constant.ENGINEER);
+                //短信开口关闭 2019年06月19日
+                //mobileService.sendContentByEmay(qyhUserMobile, engineerMsgContent, Constant.ENGINEER);
             } else {
                 return invokeResult;
             }
@@ -819,9 +913,9 @@ public class WechatOrdersController {
         return result;
     }
 
-    private int inValidNotNUll(BigDecimal bigDecimal){
-        if(bigDecimal == null){
-            return  0;
+    private int inValidNotNUll(BigDecimal bigDecimal) {
+        if (bigDecimal == null) {
+            return 0;
         }
         return bigDecimal.intValue();
     }
@@ -976,7 +1070,7 @@ public class WechatOrdersController {
                 qyhUserAppraisalVo.setQyhUserId(wechatOrders.getQyhUserId());
                 qyhUserAppraisalVo.setUserId(userId);
                 qyhUserAppraisalVo.setIs_order(convertBoolean(wechatOrderAppraise.getOrder()));
-                if(SystemConstants.REPAIR_APPRAISE == covertStringToInt(wechatOrderAppraise.getAppraiseType())){
+                if (SystemConstants.REPAIR_APPRAISE == covertStringToInt(wechatOrderAppraise.getAppraiseType())) {
                     qyhUserAppraisalVo.setIs_repair(convertBoolean(wechatOrderAppraise.getRepair()));
                 }
 
@@ -985,6 +1079,9 @@ public class WechatOrdersController {
                 if (count > 0) {
                     //修改预约单状态为已评价
                     wechatOrdersService.updateOrdersStatus(ordersCode, userId, date, SystemConstants.APPRAISE);
+                    //发送评价积分
+                    grantPointService.grantOrderComment(userId, ordersCode, wechatOrders.getOrderType());
+
                 } else {
                     throw new SQLException("qyhUserAppraisalVo:" + JSONObject.toJSONString(qyhUserAppraisalVo));
                 }
@@ -1001,7 +1098,8 @@ public class WechatOrdersController {
                 String engineerMsgContent = "您服务的工单" + ordersCode + "，用户已经评价啦，谢谢提供服务！请登录“沁园服务之家”的售后服务个人中心，可以查看评分。";
                 QyhUser qyhUser = wechatQyhUserService.getQyhUser(wechatOrders.getQyhUserId());
                 String qyhUserMobile = (null != qyhUser) ? qyhUser.getMobile() : "";
-                mobileService.sendContentByEmay(qyhUserMobile, engineerMsgContent, Constant.ENGINEER);
+                //短信开口关闭 2019年06月19日
+                //mobileService.sendContentByEmay(qyhUserMobile, engineerMsgContent, Constant.ENGINEER);
             } else {
                 result.setReturnCode(Constant.FAIL);
                 result.setReturnMsg("用户评分失败!");
@@ -1014,8 +1112,8 @@ public class WechatOrdersController {
         return result;
     }
 
-    private Integer covertStringToInt(String str){
-        if(StringUtils.isNotEmpty(str)){
+    private Integer covertStringToInt(String str) {
+        if (StringUtils.isNotEmpty(str)) {
             return Integer.parseInt(str);
         }
         return 0;

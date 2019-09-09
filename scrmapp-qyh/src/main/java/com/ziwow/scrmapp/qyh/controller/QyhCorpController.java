@@ -2,10 +2,12 @@ package com.ziwow.scrmapp.qyh.controller;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.ziwow.scrmapp.tools.utils.Base64;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
@@ -119,6 +121,9 @@ public class QyhCorpController {
             if (null != position) {
                 qyhApiUser.setPosition(PositionType.getNameByCode(position));
             }
+            if(null != usable && usable == 3){
+                qyhApiUser.setEnable(0);
+            }
             qyhApiUser.setDepartment(Lists.newArrayList(Integer.valueOf(qyhDepartment.getId() + "")));
             qyhApiUser.setStatus(4);
             String jsonData = JSON.toJSONString(qyhApiUser);
@@ -137,6 +142,10 @@ public class QyhCorpController {
                     if (0 == errorCode) {
                         qyhUserService.deleteQyhUser(engineerId, corpId);
                     }
+                } else if (null != usable && usable == 3) {
+                //禁用企业号员工
+                errorCode = qyhUserService.updateQyhUser(qyhApiUser);
+                LOG.info("禁用企业号用户返回结果:{}",errorCode);
                 }
             } else {
                 if (null != usable && usable == 2) {
@@ -220,4 +229,5 @@ public class QyhCorpController {
             LOG.error("拉取历史服务工程师失败:", e);
         }
     }
+
 }

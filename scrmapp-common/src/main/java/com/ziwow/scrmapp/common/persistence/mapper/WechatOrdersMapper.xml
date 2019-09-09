@@ -170,6 +170,12 @@
             <if test="scOrderNo != null">
                 sc_order_no,
             </if>
+            <if test="deliveryType != null">
+                delivery_type,
+            </if>
+            <if test="departmentName != null">
+                department_name,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="ordersCode != null">
@@ -243,6 +249,12 @@
             </if>
             <if test="scOrderNo != null">
                 #{scOrderNo,jdbcType=VARCHAR},
+            </if>
+            <if test="deliveryType != null">
+                #{deliveryType},
+            </if>
+            <if test="departmentName != null">
+                #{departmentName},
             </if>
         </trim>
     </insert>
@@ -860,6 +872,10 @@
     </select>
     <select id="getDispatchOrderNumByDate" resultType="java.lang.Integer">
         select count(1) orderNum from t_wechat_orders where DATE_FORMAT(createTime,'%Y-%m-%d') = #{orderDate};
+    </select>
+
+    <select id="getWechatOrdersByProductId" resultType="com.ziwow.scrmapp.common.bean.vo.WechatOrdersVo">
+        select endTime,orderType,status from t_wechat_orders where productId=#{productId}
     </select>
 
     <update id="updateOrdersNoAndStatus">

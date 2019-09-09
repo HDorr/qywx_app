@@ -21,5 +21,12 @@ import org.apache.ibatis.annotations.Select;
 public interface WechatTemplateMapper {
 
 	@Select("SELECT tempalte_id FROM `t_wechat_tempalte_message` WHERE template_id_short=#{shorId}")
-	public String getTemplateID(@Param("shorId")String shorId);
+	 String getTemplateID(@Param("shorId")String shorId);
+
+
+  @Select("SELECT title FROM `t_wechat_tempalte_message` WHERE template_id_short=#{shorId}")
+   String getTemplateTitle(@Param("shorId")String shorId);
+
+  @Select("SELECT remark FROM `t_wechat_tempalte_message` WHERE template_id_short=#{shorId}")
+  String getTemplateRemark(@Param("shorId")String shorId);
 }

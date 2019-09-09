@@ -1,5 +1,7 @@
 package com.ziwow.scrmapp.common.persistence.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.ziwow.scrmapp.common.enums.Guarantee;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
@@ -64,6 +66,22 @@ public class Product {
     private Long scOrderPayAt;
 
     private Integer isAutoBind;
+
+
+
+    /**
+     * 延保状态
+     */
+    private Guarantee guarantee;
+
+
+    public Guarantee getGuarantee() {
+        return guarantee;
+    }
+
+    public void setGuarantee(Guarantee guarantee) {
+        this.guarantee = guarantee;
+    }
 
     public Long getScOrderPayAt() {
         return scOrderPayAt;

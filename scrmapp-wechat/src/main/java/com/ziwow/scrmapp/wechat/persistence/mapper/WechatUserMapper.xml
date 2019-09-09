@@ -24,7 +24,13 @@
         <result column="status" property="status"/>
         <result column="wfId" property="wfId"/>
         <result column="createDate" property="createDate"/>
+        <result column="register_src" property="registerSrc"/>
     </resultMap>
+
+    <resultMap id="qtyUserMap" type="com.ziwow.scrmapp.wechat.vo.QtyUserVO" extends="wechatUserMap">
+        <result column="unionid" property="unionid"/>
+    </resultMap>
+
 
     <select id="getUserByOpenId" resultMap="wechatUserMap">
 		SELECT u.* FROM t_wechat_user u ,t_wechat_fans wf WHERE
@@ -35,9 +41,18 @@
         SELECT u.* FROM t_wechat_user u ,t_wechat_fans wf WHERE
         u.wfid=wf.id and wf.unionid=#{unionId} and u.status=0 LIMIT 0,1
     </select>
+    <select id="getQtyUserByUserId" resultMap="qtyUserMap">
+        SELECT * FROM t_wechat_user u ,t_wechat_fans wf WHERE
+        u.wfid=wf.id and u.userId=#{userId} and u.status=0 LIMIT 0,1
+    </select>
 
     <select id="getUserByUserId" resultMap="wechatUserMap">
 		SELECT u.* FROM t_wechat_user u WHERE userId = #{userId} and u.status=0
+	</select>
+
+
+  <select id="getUserByRegisterSrc" resultMap="wechatUserMap">
+		SELECT u.* FROM t_wechat_user u WHERE register_src = #{src} and u.status=0
 	</select>
 
     <select id="getBaseUserInfoByUserId" resultType="com.ziwow.scrmapp.wechat.vo.WechatUserVo">
@@ -52,8 +67,8 @@
 	</select>
 
     <insert id="saveUser" parameterType="com.ziwow.scrmapp.wechat.persistence.entity.WechatUser">
-		insert into t_wechat_user(userId,password,seed,mobilePhone,provinceId,cityId,areaId,wfId,createDate,nickName,gender)
-		values(#{userId},#{password},#{seed},#{mobilePhone},#{provinceId},#{cityId},#{areaId},#{wfId},now(),#{nickName},#{gender})
+		insert into t_wechat_user(userId,password,seed,mobilePhone,provinceId,cityId,areaId,wfId,createDate,nickName,gender,register_src)
+		values(#{userId},#{password},#{seed},#{mobilePhone},#{provinceId},#{cityId},#{areaId},#{wfId},now(),#{nickName},#{gender},#{registerSrc})
 	</insert>
 
 

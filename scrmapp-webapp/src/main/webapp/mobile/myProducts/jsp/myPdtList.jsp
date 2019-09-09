@@ -31,7 +31,7 @@
         <script src="${f_ctxpath}/resources/src/js/flexible.js"></script>
         <script src="${f_ctxpath}/resources/thirdparty/jquery/dist/jquery.min.js"></script>
         <script src="${f_ctxpath}/resources/thirdparty/jqweui/jquery-weui.min.js"></script>
-        <script src="${f_ctxpath}/resources/thirdparty/jweixin/jweixin-1.0.0.js"></script>
+        <script src="https://res.wx.qq.com/open/js/jweixin-1.3.0.js"></script>
         <script src="${f_ctxpath}/resources/src/js/common.js"></script>
         <script src="${f_ctxpath}/resources/src/js/myProducts/myPdtList.js${f_ver}"></script>
     </body>

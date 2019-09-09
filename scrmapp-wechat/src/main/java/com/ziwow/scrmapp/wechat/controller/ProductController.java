@@ -1,41 +1,36 @@
 package com.ziwow.scrmapp.wechat.controller;
 
-import com.alibaba.druid.util.StringUtils;
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
+import com.ziwow.scrmapp.common.annotation.MiniAuthentication;
 import com.ziwow.scrmapp.common.constants.Constant;
 import com.ziwow.scrmapp.common.constants.SystemConstants;
-import com.ziwow.scrmapp.common.persistence.entity.ProductFilter;
 import com.ziwow.scrmapp.common.result.BaseResult;
 import com.ziwow.scrmapp.common.result.Result;
 import com.ziwow.scrmapp.common.service.MobileService;
+import com.ziwow.scrmapp.common.utils.EwCardUtil;
 import com.ziwow.scrmapp.tools.utils.Base64;
 import com.ziwow.scrmapp.tools.utils.CookieUtil;
 import com.ziwow.scrmapp.tools.utils.StringUtil;
-import com.ziwow.scrmapp.wechat.constants.WXPayConstant;
 import com.ziwow.scrmapp.wechat.constants.WeChatConstants;
 import com.ziwow.scrmapp.wechat.enums.BuyChannel;
 import com.ziwow.scrmapp.common.persistence.entity.Product;
 import com.ziwow.scrmapp.wechat.persistence.entity.*;
-import com.ziwow.scrmapp.wechat.service.ProductService;
-import com.ziwow.scrmapp.wechat.service.WXPayService;
-import com.ziwow.scrmapp.wechat.service.WechatFansService;
-import com.ziwow.scrmapp.wechat.service.WechatUserService;
+import com.ziwow.scrmapp.wechat.service.*;
 import com.ziwow.scrmapp.wechat.utils.BarCodeConvert;
 import com.ziwow.scrmapp.wechat.utils.JsonApache;
 import com.ziwow.scrmapp.wechat.utils.ProductServiceParamUtil;
 import com.ziwow.scrmapp.wechat.vo.EnumVo;
+import com.ziwow.scrmapp.wechat.vo.EwCardProductVo;
 import com.ziwow.scrmapp.wechat.vo.ProductVo;
 
-import java.math.BigDecimal;
 import java.util.*;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -69,10 +64,25 @@ public class ProductController {
     @Value("${scrmapp.protocol}")
     private String protocol;
 
+
+    /**
+     * 延保卡限制使用次数
+     */
+    @Value("${ewcard.limit.num}")
+    private Integer limitNum;
+
+    /**
+     * 延保卡限制使用年限
+     */
+    @Value("${ewcard.limit.year}")
+    private Integer limitYear;
+
     @Autowired
     private MobileService mobileService;
     @Autowired
     private WXPayService wxPayService;
+    @Autowired
+    private EwCardService ewCardService;
 
     /**
      * 展示产品系列列表
@@ -203,7 +213,6 @@ public class ProductController {
 
     /**
      * 绑定产品信息
-     *
      * @param request
      * @param response
      * @param product
@@ -223,6 +232,12 @@ public class ProductController {
                 result.setReturnMsg("用户无效，请退出重新操作！");
                 return result;
             }
+            if (productService.isOnlyBindProduct(userId,product.getProductBarCode())){
+                logger.error("绑定产品条码已存在");
+                result.setReturnCode(Constant.FAIL);
+                result.setReturnMsg("该产品已经绑定！");
+                return result;
+            }
             product.setUserId(userId);
             product.setStatus(1);
             product.setCreateTime(new Date());
@@ -236,7 +251,7 @@ public class ProductController {
 
             // 产品绑定后发送模板消息
             productService.productBindTemplateMsg(product);
-            String content = "亲爱的用户，恭喜您成功绑定产品。积分商城全新上线、微商城下单即可享受积分专属抵扣，积分也能当钱花！";
+            String content = "亲爱的用户，恭喜您成功绑定产品。积分商城全新上线、微商城下单即可享受积分专属抵扣，积分也能当钱花!";
             mobileService.sendContentByEmay(wechatUser.getMobilePhone(), content, Constant.CUSTOMER);
 
             result.setReturnCode(Constant.SUCCESS);
@@ -246,19 +261,13 @@ public class ProductController {
             result.setReturnMsg("产品绑定失败!");
             logger.error("产品绑定失败,原因[{}]", e);
         }
-
         return result;
     }
 
 
 
-
-
-
-
     /**
      * 查询用户绑定所有产品信息
-     *
      * @param request
      * @param response
      * @return
@@ -270,7 +279,6 @@ public class ProductController {
         try {
             String encode = CookieUtil.readCookie(request, response, WeChatConstants.SCRMAPP_USER);
             String userId = new String(Base64.decode(encode));
-
             //用户id不存在
             if (!wechatUserService.checkUser(userId)) {
                 logger.error("查询用户产品列表失败，cookie中userId错误");
@@ -279,6 +287,17 @@ public class ProductController {
                 return result;
             }
             List<Product> products = productService.getProductsByUserId(userId);
+            sameCodeProduct(products);
+            //添加商品的保修状态
+//            for (Product product : products) {
+//                //根据产品id获取质保详情
+//                if (product.getBuyTime() == null){
+//                    continue;
+//                }
+//                final EwCard ewCard = ewCardService.selectEwCardByBarCode(product.getProductBarCode());
+//                final Guarantee guarantee = EwCardUtil.getGuarantee(product.getBuyTime(),ewCard == null ? null : ewCard.getRepairTerm());
+//                product.setGuarantee(guarantee);
+//            }
             result.setReturnCode(Constant.SUCCESS);
             result.setData(products);
         } catch (Exception e) {
@@ -287,7 +306,145 @@ public class ProductController {
             logger.error("用户查询产品列表失败，原因[{}]", e);
         }
         return result;
+    }
 
+    /**
+     * 对于一个用户一种型号有多个产品的处理
+     * @param products
+     */
+    private void sameCodeProduct(List<Product> products) {
+        Map<String,Integer> map = new HashMap<>();
+
+        for (int i = 0; i < products.size(); i++) {
+            Product product = products.get(i);
+            String key = product.getProductName()+product.getProductCode();
+            if (map.get(key) != null){
+                map.put(key,map.get(key)+1);
+                if (map.get(key) == 2){
+                    products.get(i-1).setProductName(StringUtils.join(1,"-",products.get(i-1).getProductName()));
+                }
+                product.setProductName(StringUtils.join(map.get(key),"-",product.getProductName()));
+            }else {
+                map.put(key,1);
+            }
+        }
+    }
+
+    /**
+     * 对于一个用户一种型号有多个产品的处理
+     * @param products
+     */
+    private void sameCodeProductType(List<Product> products) {
+        Map<String,Integer> map = new HashMap<>();
+
+        for (int i = 0; i < products.size(); i++) {
+            Product product = products.get(i);
+            String key = product.getProductName()+product.getProductCode();
+            if (map.get(key) != null){
+                map.put(key,map.get(key)+1);
+                if (map.get(key) == 2){
+                    products.get(i-1).setProductName(StringUtils.join(1,"-",products.get(i-1).getModelName()));
+                }
+                product.setProductName(StringUtils.join(map.get(key),"-",product.getModelName()));
+            }else {
+                map.put(key,1);
+            }
+        }
+    }
+
+
+    /**
+     *  根据编号查询用户的产品,cardNo 所使用的延保卡号
+     * @return
+     */
+    @RequestMapping(value = "/product/card_no", method = RequestMethod.GET)
+    @ResponseBody
+    @MiniAuthentication
+    public Result queryUserProductByItem(@RequestParam("signture") String signture,
+                                         @RequestParam("time_stamp") String timeStamp,
+                                         @RequestParam("unionId") String unionId,
+                                         @RequestParam("card_no") String cardNo){
+        Result result = new BaseResult();
+        final WechatUser user = wechatUserService.getUserByUnionid(unionId);
+        final EwCard ewCard = ewCardService.selectEwCardByNo(cardNo);
+        //加载符合类型的产品
+        List<Product> products = productService.getProductByProductCodeAndUserId(ewCard.getEwCardItems(),user.getUserId());
+
+        sameCodeProductType(products);
+
+        List<Product> collect = new LinkedList<>();
+        //筛选有购买时间，有产品条码并且没有使用过延保卡的
+        for (Product product : products) {
+            final List<EwCard> ewCards = ewCardService.selectEwCardsByBarCode(product.getProductBarCode());
+            if (product.getBuyTime() != null && EwCardUtil.isCanUseCard(limitNum,limitYear,ewCards.size(),
+                    getEwCardYear(ewCards)) && StringUtils.isNotBlank(product.getProductBarCode())){
+                collect.add(product);
+            }
+        }
+
+        if (CollectionUtils.isEmpty(collect)){
+            result.setData("没有符合条件的产品!");
+            result.setReturnCode(Constant.FAIL);
+            return result;
+        }
+
+        List<EwCardProductVo> productVos = new ArrayList<>();
+
+        final WechatFans fans = wechatFansService.getWechatFansByUserId(user.getUserId());
+
+
+        //组装信息
+        packageEwCardProductVos(collect, productVos, ewCard, fans);
+
+        result.setData(productVos);
+        result.setReturnCode(Constant.SUCCESS);
+        return result;
+    }
+
+
+    /**
+     *
+     * @param ewCards
+     * @return
+     */
+    public int getEwCardYear(List<EwCard> ewCards) {
+        int sum = 0;
+        for (EwCard ewCard : ewCards) {
+            sum += (ewCard.getValidTime()/EwCardUtil.Dates.YEAR.getDay());
+        }
+        return sum;
+    }
+
+    /**
+     * 组装 使用延保卡加载产品列表 返回信息
+     * @param collect
+     * @param productVos
+     * @param ewCard
+     * @param fans
+     */
+    private void packageEwCardProductVos(List<Product> collect, List<EwCardProductVo> productVos, EwCard ewCard, WechatFans fans) {
+        Date startDate = null;
+        Date endDate = null;
+        for (Product product : collect) {
+            EwCardProductVo epv = new EwCardProductVo();
+            epv.setBarCode(product.getProductBarCode());
+            epv.setProductName(product.getProductName());
+            final EwCard ec = ewCardService.selectEwCardByBarCode(product.getProductBarCode());
+            if (ec == null){
+                //第一次使用延保卡
+                startDate = EwCardUtil.getNormalStartDate(product.getBuyTime());
+                endDate = EwCardUtil.getEndRepairTerm(product.getBuyTime(), ewCard.getValidTime());
+            } else {
+                //已经用过延保卡,最新延保卡的基础上添加天数
+                startDate = EwCardUtil.getExtStartDate(ec.getRepairTerm());
+                endDate = EwCardUtil.getEwEndRepairTerm(ec.getRepairTerm(),ewCard.getValidTime());
+            }
+            epv.setStartDate(startDate);
+            epv.setEndDate(endDate);
+            productVos.add(epv);
+            startDate = null;
+            endDate = null;
+        }
     }
 
 

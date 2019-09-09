@@ -1,15 +1,5 @@
 package com.ziwow.scrmapp.wechat.service.impl;
 
-import java.util.concurrent.TimeUnit;
-
-import javax.annotation.Resource;
-
-import org.apache.commons.lang.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
-
 import com.ziwow.scrmapp.common.redis.RedisService;
 import com.ziwow.scrmapp.wechat.constants.RedisKeyConstants;
 import com.ziwow.scrmapp.wechat.persistence.mapper.WechatTemplateMapper;
@@ -18,6 +8,18 @@ import com.ziwow.scrmapp.wechat.service.WeiXinService;
 import com.ziwow.scrmapp.wechat.weixin.TemplateData;
 import com.ziwow.scrmapp.wechat.weixin.TemplateSetting;
 import com.ziwow.scrmapp.wechat.weixin.WechatMsgAction;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
+import javax.annotation.Resource;
+import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.core.env.Environment;
+import org.springframework.stereotype.Service;
 
 /**
  * ClassName: WXTemplateServiceImpl <br/>
@@ -29,6 +31,7 @@ import com.ziwow.scrmapp.wechat.weixin.WechatMsgAction;
  * @since JDK 1.6
  */
 @Service
+@PropertySource("classpath:application.properties")
 public class WechatTemplateServiceImpl implements WechatTemplateService {
 	private Logger LOG = LoggerFactory.getLogger(WechatTemplateService.class);
 	
@@ -36,6 +39,9 @@ public class WechatTemplateServiceImpl implements WechatTemplateService {
 	private String appid;
 	@Value("${wechat.appSecret}")
 	private String secret;
+
+	@Value("${miniapp.appid}")
+	private String miniProgramAppId;
 	
 	@Value("${registerTemplate.id}")
 	private String registerTemplateId;
@@ -72,7 +78,22 @@ public class WechatTemplateServiceImpl implements WechatTemplateService {
 	
 	@Value("${changeAppointmentTemplate.id}")
 	private String changeAppointmentTemplateId;
-	
+
+	@Value("${orderSubmittedTemplate.id}")
+	private String orderSubmittedTemplateId;
+
+	@Value("${orderRefundTemplate.id}")
+	private String orderRefundTemplateId;
+
+	@Value("${pointChangeTemplate.id}")
+	private String pointChangeTemplateId;
+
+	@Value("${qyscRegisterTemplate.id}")
+	private String  qyscRegsiterTemplateId;
+
+	@Autowired
+	private Environment environment;
+
 	@Resource
 	private RedisService redisService;
 	
@@ -237,4 +258,32 @@ public class WechatTemplateServiceImpl implements WechatTemplateService {
 				qyhUserPhone, remark);
 		this.sendTemplateMsgByToken(weiXinService.getAccessToken(appid, secret), templateData);
 	}
+
+	private static final String KEY=".id";
+	@Override
+	public void sendTemplate(String openId, String url, List<String> params, String type,
+			boolean toMiniProgram, String title) {
+	  //根据类型获取模板id
+    String templateKey=type+KEY;
+		String templateShortId = environment.getProperty(templateKey);
+		String templateID = this.getTemplateID(templateShortId);
+		String remark = wechatTemplateMapper.getTemplateRemark(templateShortId);
+		String myTitle = StringUtils.isNotBlank(title)?title:wechatTemplateMapper.getTemplateTitle(templateShortId);
+		List<String> paramList=new ArrayList<>();
+		paramList.add(myTitle);
+		paramList.addAll(params);
+		paramList.add(remark);
+		//获取模板的内容
+		TemplateData templateData = TemplateSetting.generateTemplateData(openId,templateID
+				, url,paramList.toArray(new String[0]));
+		if(toMiniProgram){
+		  LOG.info("模板跳转方式设置为小程序,appid:{},path:{}",miniProgramAppId,url);
+			templateData.getMiniprogram().setAppid(miniProgramAppId);
+			templateData.getMiniprogram().setPagepath(url);
+		}
+		this.sendTemplateMsgByToken(weiXinService.getAccessToken(appid, secret), templateData);
+
+	}
+
+
 }

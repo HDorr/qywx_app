@@ -12,6 +12,7 @@ var IS_DEVENV = (location.origin === "http://localhost:8080") ||
 
 var pageUrls =  { //正式环境
     oneClickService: rootPath + "/scrmapp/consumer/product/index",
+    toMiniEwCardDetails:rootPath + "",
     scanToBindPdt: rootPath + "/scrmapp/consumer/product/bind/scan/page",
     noScanToBindPdt: rootPath + "/scrmapp/consumer/product/bind/noscan/page",
     bindPdtMain: rootPath + "/scrmapp/consumer/product/query/page",
@@ -481,6 +482,37 @@ function shieldShare() {
  *             如果textArea为true 则callback中传入的参数为（fncloseModal,textAreaText）
  */
 var confirmModal = {
+    htmlStrWithTextArea: '<div class="mainContainer">' +
+        '<div class="mcmheader">' +
+        '<i onclick="confirmModal.closeModal()">X</i>' +
+        '</div>' +
+        '<div class="mcmbody">' +
+        '<p class="mcmText">消息提示</p>' +
+        '<p class="tipText">tips</p>' +
+        '<div class="textAreaBox">' +
+        '<div style="border:1px solid #000">' +
+        '<select>' +
+        '<option value="请选择原因">请选择原因</option>'+
+        '<option value="消费者：改约，暂时不需要安装">消费者：改约，暂时不需要安装</option>'+
+        '<option value="消费者：自行安装，拒绝上门">消费者：自行安装，拒绝上门</option>'+
+        '<option value="消费者：装修，暂不安装">消费者：装修，暂不安装</option>'+
+        '<option value="消费者：退换货">消费者：退换货</option>'+
+        '<option value="消费者：不具备安装条件">消费者：不具备安装条件</option>'+
+        '<option value="重单：与消费者自行预约重复">重单：与消费者自行预约重复</option>'+
+        '<option value="物流：未到货无法安装">物流：未到货无法安装</option>'+
+        '<option value="联络失败：多次联系无法有效联系到用户">联络失败：多次联系无法有效联系到用户</option>'+
+        '<option value="派单信息与实际不符，请改派">派单信息与实际不符，请改派</option>'+
+        '<option value="其他">其他</option>'+
+        '</select>' +
+        '</div>' +
+        '</div>' +
+        '<div class="btnBox">' +
+        '<button class="cancel" onclick="confirmModal.closeModal()">取消</button>' +
+        '<button class="confirm" onclick="confirmModal.confirmClick()">确认</button>' +
+        '</div>' +
+        '</div>' +
+        '</div>',
+
     htmlStr: '<div class="mainContainer">' +
         '<div class="mcmheader">' +
         '<i onclick=confirmModal.closeModal()>X</i>' +
@@ -491,25 +523,6 @@ var confirmModal = {
         '<div class="btnBox">' +
         '<button class="cancel" onclick=confirmModal.closeModal()>取消</button>' +
         '<button class="confirm" onclick=confirmModal.confirmClick()>确认</button>' +
-        '</div>' +
-        '</div>' +
-        '</div>',
-
-    htmlStrWithTextArea: '<div class="mainContainer">' +
-        '<div class="mcmheader">' +
-        '<i onclick="confirmModal.closeModal()">X</i>' +
-        '</div>' +
-        '<div class="mcmbody">' +
-        '<p class="mcmText">消息提示</p>' +
-        '<p class="tipText">tips</p>' +
-        '<div class="textAreaBox">' +
-        '<div style="border:1px solid #000">' +
-        '<textarea placeholder="请输入原因,1-30个字(必填)" maxlength="30"></textarea>' +
-        '</div>' +
-        '</div>' +
-        '<div class="btnBox">' +
-        '<button class="cancel" onclick="confirmModal.closeModal()">取消</button>' +
-        '<button class="confirm" onclick="confirmModal.confirmClick()">确认</button>' +
         '</div>' +
         '</div>' +
         '</div>',
@@ -559,7 +572,7 @@ var confirmModal = {
     confirmClick: function() {
         if (confirmModal.renderObj.callback) {
             if (confirmModal.renderObj.textArea) {
-                var textAreaDom = confirmModal.dom.modal.querySelector("textarea")
+                var textAreaDom = confirmModal.dom.modal.querySelector("select")
                 var textStr = textAreaDom.value
                 confirmModal.renderObj.callback(confirmModal.closeModal, textStr)
             } else {

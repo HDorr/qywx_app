@@ -43,6 +43,7 @@ import javax.net.ssl.SSLException;
 import javax.net.ssl.SSLSession;
 import javax.net.ssl.SSLSocket;
 
+import com.ziwow.scrmapp.common.exception.ThirdException;
 import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.http.HttpEntity;
@@ -71,6 +72,7 @@ import org.slf4j.LoggerFactory;
 
 import com.ning.http.client.AsyncHttpClient;
 import com.ning.http.client.Response;
+import org.springframework.beans.factory.annotation.Value;
 
 /**
  * ClassName: HttpKitNew <br/>
@@ -82,11 +84,14 @@ import com.ning.http.client.Response;
  * @since JDK 1.6
  */
 public class HttpKit {
+
+
 	private static final String DEFAULT_CHARSET = "UTF-8";
 	private static  org.slf4j.Logger LOGGER = LoggerFactory.getLogger(HttpKit.class);
-	
-	private static int connTimeout = 20000;
-	private static int readTimeout = 60000;
+	@Value("${csm.connecttimeout}")
+	private static int connTimeout;
+	@Value("${csm.readtimeout}")
+	private static int readTimeout;
 	private static CloseableHttpClient httpclient = null;
 	static {
 		PoolingHttpClientConnectionManager cm = new PoolingHttpClientConnectionManager();
@@ -110,7 +115,9 @@ public class HttpKit {
      */
     public static String get(String url, Map<String, String> params, Map<String, String> headers) throws IOException, ExecutionException, InterruptedException {
     	LOGGER.info("新的get方法请求："+url);
-    	CloseableHttpClient client = HttpClients.createDefault(); 
+		System.out.println("connTimeout = " + connTimeout);
+		System.out.println("readTimeout = " + readTimeout);
+    	CloseableHttpClient client = HttpClients.createDefault();
     	try {
              if(params != null && !params.isEmpty()){
                  List<NameValuePair> pairs = new ArrayList<NameValuePair>(params.size());
@@ -142,15 +149,14 @@ public class HttpKit {
             	 response.close();
              }
          } catch (Exception e) {
-             e.printStackTrace();
+             throw new ThirdException("连接csm失败","系统繁忙，请稍后再试",e);
          } finally {
         	 try {
  				client.close();
  			} catch (IOException e) {
- 				e.printStackTrace();
+				 throw new ThirdException("连接csm失败","系统繁忙，请稍后再试",e);
  			}
          }
-         return null;
     }
 
     /**
@@ -410,8 +416,6 @@ public class HttpKit {
 	 * 上传网络媒体文件
 	 * 
 	 * @param url
-	 * @param params
-	 * @param file
 	 * @return
 	 * @throws IOException
 	 * @throws NoSuchAlgorithmException
@@ -690,8 +694,7 @@ public class HttpKit {
 				return result;
 			}
 		} catch (Exception e) {
-			LOGGER.error("httpPost URL [" + url + "] error, ", e);
-			return "";
+			throw new ThirdException("连接csm失败","系统繁忙，请稍后再试",e);
 		} finally {
 			httpPost.releaseConnection();
 			if (url.startsWith("https") && httpclient != null && httpclient instanceof CloseableHttpClient) {

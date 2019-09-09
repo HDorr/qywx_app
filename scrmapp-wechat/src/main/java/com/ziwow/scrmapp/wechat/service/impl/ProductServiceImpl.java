@@ -28,10 +28,7 @@ import com.ziwow.scrmapp.tools.utils.Base64;
 import com.ziwow.scrmapp.wechat.constants.WeChatConstants;
 import com.ziwow.scrmapp.wechat.enums.BuyChannel;
 import com.ziwow.scrmapp.wechat.enums.SaleType;
-import com.ziwow.scrmapp.wechat.persistence.entity.WechatArea;
-import com.ziwow.scrmapp.wechat.persistence.entity.WechatCity;
-import com.ziwow.scrmapp.wechat.persistence.entity.WechatFans;
-import com.ziwow.scrmapp.wechat.persistence.entity.WechatProvince;
+import com.ziwow.scrmapp.wechat.persistence.entity.*;
 import com.ziwow.scrmapp.wechat.persistence.mapper.ProductModelMapper;
 import com.ziwow.scrmapp.wechat.persistence.mapper.ProductSeriesMapper;
 import com.ziwow.scrmapp.wechat.persistence.mapper.ProductTypeMapper;
@@ -129,6 +126,7 @@ public class ProductServiceImpl implements ProductService {
         ProductVo product = null;
         /*调用沁园查询产品接口方法*/
         ProductItem productItem = thirdPartyService.getProductItem(new ProductParam(modelName, productBarCode));
+
         if (productItem != null) {
             product = new ProductVo();
             //实例化对象
@@ -140,6 +138,9 @@ public class ProductServiceImpl implements ProductService {
             product.setLevelName(productItem.getFilterGrade());
             product.setProductName(productItem.getItemName());
             product.setProductCode(productItem.getItemCode());
+            if(null!=productBarCode){
+                product.setBuyTime(thirdPartyService.getPurchDate(productBarCode));
+            }
             if (!StringUtils.isEmpty(productItem.getBarcode())) {
                 product.setProductBarCode(productItem.getBarcode());
                 product.setSaleType(productItem.getFromChannel());
@@ -343,7 +344,8 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public String queryProductImage(String modelName) {
-        String productImg = thirdPartyService.getProductImg(modelName);
+        //String productImg = thirdPartyService.getProductImg(modelName);
+        String productImg = "https://wx.qinyuan.cn/wx/resources/images/defaultPdtImg.jpg";
         if (!StringUtils.isEmpty(productImg)) {
             updateProductImage(modelName, productImg);
         }
@@ -859,6 +861,55 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public int updateByPrimaryKeySelective(Product record) {
         return productMapper.updateByPrimaryKeySelective(record);
+    }
+
+    @Override
+    public Product getProductsByBarCodeAndUserId(String userId, String barCode) {
+        return productMapper.getProductsByBarCodeAndUserId(userId,barCode);
+    }
+
+
+    @Override
+    public List<Product> getProductByModelNameAndUserId(String itemName, String userId) {
+        return productMapper.getProductByModelNameAndUserId(itemName,userId);
+    }
+
+    @Override
+    public List<Product> getProductByProductCodeAndUserId(List<EwCardItems> productCode, String userId) {
+        List<String> codes = new ArrayList<>(productCode.size());
+        for (EwCardItems ewCardItems : productCode) {
+            codes.add(ewCardItems.getItemCode());
+        }
+        return productMapper.getProductByProductCodeAndUserId(codes,userId);
+    }
+
+    @Override
+    public boolean isOnlyBindProduct(String userId, String productBarCode) {
+        return productMapper.countProductByUserIdAndproductBarCode(userId,productBarCode) == 1;
+    }
+
+    @Override
+    public Product getProductsByBarCode(String productBarCodeTwenty) {
+        return productMapper.getProductsByBarCode(productBarCodeTwenty);
+    }
+
+    @Override
+    public List<com.ziwow.scrmapp.common.bean.vo.ProductVo> getProductByModelNames(List<String> productModelNames) {
+        List<com.ziwow.scrmapp.common.bean.vo.ProductVo> list = new ArrayList<>();
+        for (String modelName : productModelNames) {
+            final ProductVo productVo = this.queryProduct(modelName, null);
+            com.ziwow.scrmapp.common.bean.vo.ProductVo pv = new com.ziwow.scrmapp.common.bean.vo.ProductVo();
+            pv.setProductName(productVo.getProductName());
+            pv.setProductBarCode("");
+            pv.setModelName(productVo.getModelName());
+            pv.setO2o(1);
+            pv.setBuyChannel(16);
+            pv.setItemKind("1");
+            pv.setProductCode(productVo.getProductCode());
+            pv.setBuyTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+            list.add(pv);
+        }
+        return list;
     }
 
 }

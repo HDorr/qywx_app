@@ -2,9 +2,9 @@ package com.ziwow.scrmapp.common.service.impl;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.TypeReference;
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import com.google.common.net.HttpHeaders;
 import com.sinocc.service.*;
 import com.ziwow.scrmapp.common.aop.LoginRequired;
 import com.ziwow.scrmapp.common.bean.pojo.*;
@@ -12,13 +12,12 @@ import com.ziwow.scrmapp.common.bean.vo.SecurityVo;
 import com.ziwow.scrmapp.common.bean.vo.cem.CemAssertInfo;
 import com.ziwow.scrmapp.common.bean.vo.cem.CemProductInfo;
 import com.ziwow.scrmapp.common.bean.vo.cem.CemResp;
-import com.ziwow.scrmapp.common.bean.vo.csm.AppealProduct;
-import com.ziwow.scrmapp.common.bean.vo.csm.ProductAppealVo;
-import com.ziwow.scrmapp.common.bean.vo.csm.ProductFilterGrade;
-import com.ziwow.scrmapp.common.bean.vo.csm.ProductItem;
+import com.ziwow.scrmapp.common.bean.vo.csm.*;
 import com.ziwow.scrmapp.common.bean.vo.mall.MallOrderVo;
 import com.ziwow.scrmapp.common.bean.vo.mall.OrderItem;
 import com.ziwow.scrmapp.common.constants.Constant;
+import com.ziwow.scrmapp.common.constants.ErrorCodeConstants;
+import com.ziwow.scrmapp.common.exception.ThirdException;
 import com.ziwow.scrmapp.common.persistence.entity.InstallPart;
 import com.ziwow.scrmapp.common.persistence.entity.RepairItem;
 import com.ziwow.scrmapp.common.persistence.entity.RepairPart;
@@ -28,9 +27,9 @@ import com.ziwow.scrmapp.common.service.ThirdPartyService;
 import com.ziwow.scrmapp.common.utils.HttpKit;
 import com.ziwow.scrmapp.common.utils.JsonUtil;
 import com.ziwow.scrmapp.common.utils.MD5;
-import java.io.Console;
 import java.io.IOException;
-import java.util.Date;
+import java.util.*;
+
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import net.sf.json.JsonConfig;
@@ -44,7 +43,6 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
-import org.bouncycastle.jce.provider.JDKMessageDigest;
 import org.codehaus.xfire.client.Client;
 import org.codehaus.xfire.client.XFireProxy;
 import org.codehaus.xfire.client.XFireProxyFactory;
@@ -53,17 +51,18 @@ import org.codehaus.xfire.transport.http.CommonsHttpMessageSender;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
+import javax.annotation.PostConstruct;
 import javax.xml.namespace.QName;
 import java.lang.reflect.Proxy;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 @Service
 public class ThirdPartyServiceImpl implements ThirdPartyService {
@@ -78,6 +77,27 @@ public class ThirdPartyServiceImpl implements ThirdPartyService {
     @Value("${mall.productimg.url}")
     private String mallProductImgUrl;
     // csm系统url
+    /**
+     * 查询延保卡url
+     */
+    @Value("${csm.queryewcard.url}")
+    private String queryEwCardUrl;
+    /**
+     * 注册延保卡
+     */
+    @Value("${csm.registerewcard.url}")
+    private String registerEwCardUrl;
+    /**
+     * 查询是否存在安装单
+     */
+    @Value("${csm.existinstalllisturl.url}")
+    private String existInstallListUrl;
+    /**
+     * 根据条码查询购买时间
+     */
+    @Value("${csm.purchdateurl.url}")
+    private String purchDateUrl;
+
     @Value("${csm.csswx.url}")
     private String cssWxUrl;
     @Value("${csm.cssappealWx.url}")
@@ -99,6 +119,103 @@ public class ThirdPartyServiceImpl implements ThirdPartyService {
     private String cemAssetsUrl;
     @Value("${cem.productInfo.url}")
     private String cemProductInfoUrl;
+    /**
+     * 读取超时时间
+     */
+    @Value("${csm.readtimeout}")
+    private int readTimeout;
+    /**
+     * 连接超时时间
+     */
+    @Value("${csm.connecttimeout}")
+    private int connectTimeout;
+
+    private RestTemplate restTemplate;
+
+    @PostConstruct
+    public void restTemplate(){
+        SimpleClientHttpRequestFactory requestFactory = new SimpleClientHttpRequestFactory();
+        requestFactory.setReadTimeout(readTimeout);
+        requestFactory.setConnectTimeout(connectTimeout);
+        restTemplate = new RestTemplate(requestFactory);
+    }
+
+    @Override
+    public EwCardVo getEwCardListByNo(String cardNo){
+        LOG.info("第三方CSM系统根据卡号查询延保卡,cardNo:[{}]", cardNo);
+        EwCardVo ewCardVo = null;
+        try {
+            final String s = restTemplate.postForObject(queryEwCardUrl, JsonUtil.object2Json(ImmutableMap.of("card_no",cardNo,"mobile","")), String.class);
+            LOG.info("第三方CSM系统根据卡号查询延保卡,收到csm的数据:[{}]",s);
+            ewCardVo = JsonUtil.json2Object(s, EwCardVo.class);
+        } catch (IOException e) {
+            throw new ThirdException("调用第三方CSM系统根据卡号查询延保卡失败","查询延保卡失败，请稍后再试",e);
+        } catch (Exception e) {
+            throw new ThirdException("调用第三方CSM系统根据卡号查询延保卡失败","查询延保卡失败，请稍后再试",e);
+        }
+        return ewCardVo;
+    }
+
+
+    @Override
+    public BaseCardVo registerEwCard(CSMEwCardParam CSMEwCardParam) {
+        LOG.info("第三方CSM系统注册延保卡信息,CSMEwCardParam:[{}]", CSMEwCardParam);
+        BaseCardVo baseCardVo = null;
+        try {
+            HttpHeaders headers = new HttpHeaders();
+            MediaType type = MediaType.parseMediaType("application/json; charset=UTF-8");
+            headers.setContentType(type);
+            headers.add("Accept", MediaType.APPLICATION_JSON.toString());
+            final String s1 = JsonUtil.object2Json(CSMEwCardParam);
+            org.springframework.http.HttpEntity<String> formEntity = new org.springframework.http.HttpEntity<String>(s1, headers);
+
+            final String s = restTemplate.postForObject(registerEwCardUrl, formEntity , String.class);
+            LOG.info("第三方CSM系统注册延保卡信息,卡号为:{},收到csm的数据:[{}]",CSMEwCardParam.getCardNo(),s);
+            baseCardVo = JsonUtil.json2Object(s, BaseCardVo.class);
+        } catch (IOException e) {
+            throw new ThirdException("调用第三方CSM系统注册延保卡信息失败", "注册延保卡失败，请稍后再试",e);
+        } catch (Exception e) {
+            throw new ThirdException("调用第三方CSM系统注册延保卡信息失败", "注册延保卡失败，请稍后再试",e);
+        }
+        return baseCardVo;
+    }
+
+    @Override
+    public boolean existInstallList(String mobile) {
+        LOG.info("第三方CSM系统是否存在安装单,productBarCode:[{}]", mobile);
+        ExistInstallVo existInstallVo = null;
+        try {
+            final String s = restTemplate.postForObject(existInstallListUrl, JsonUtil.object2Json(ImmutableMap.of("mobile",mobile)), String.class);
+            LOG.info("第三方CSM系统是否存在安装单,收到csm的数据:[{}]",s);
+            existInstallVo = JsonUtil.json2Object(s, ExistInstallVo.class);
+        } catch (IOException e) {
+            throw new ThirdException("调用第三方CSM系统是否存在安装单失败", "注册延保卡失败，请稍后再试",e);
+        } catch (Exception e) {
+            throw new ThirdException("调用第三方CSM系统是否存在安装单失败", "注册延保卡失败，请稍后再试",e);
+        }
+        return existInstallVo.getStatus().getCode().equals(ErrorCodeConstants.CODE_E0);
+    }
+
+    @Override
+    public String getPurchDate(String productBarCode) {
+        LOG.info("第三方CSM系统根据产品条码查询安装单时间,productBarCode:[{}]", productBarCode);
+        try {
+            final String s = restTemplate.postForObject(purchDateUrl, JsonUtil.object2Json(ImmutableMap.of("barcode",productBarCode)), String.class);
+            LOG.info("收到csm的数据:[{}]",s);
+            net.sf.json.JSONObject jsonObj = net.sf.json.JSONObject.fromObject(s);
+            final JSONObject status = jsonObj.getJSONObject("status");
+            final String code = status.getString("code");
+            if (ErrorCodeConstants.CODE_E0.equals(code)){
+                return JsonUtil.json2Object(s, PurchDateVo.class).getItems().getPurchDate();
+            }
+        } catch (IOException e) {
+            throw new ThirdException("调用第三方CSM系统根据产品条码查询安装单时间失败", "查询产品失败，请稍后再试",e);
+        } catch (Exception e) {
+            throw new ThirdException("调用第三方CSM系统根据产品条码查询安装单时间失败", "查询产品失败，请稍后再试",e);
+        }
+        return "";
+    }
+
 
     @Override
     public boolean registerCheck(String userName) {
@@ -110,9 +227,8 @@ public class ThirdPartyServiceImpl implements ThirdPartyService {
             LOG.info("获取第三方商城判断用户是否注册结果:[{}]", result);
             return Boolean.parseBoolean(result);
         } catch (Exception e) {
-            LOG.error("获取第三方商城判断用户注册接口失败:", e);
+            throw new ThirdException("调用第三方商城系统判断该用户是否注册参数失败" ,"系统繁忙，请稍后再试",e);
         }
-        return false;
     }
 
     @Override
@@ -128,7 +244,7 @@ public class ThirdPartyServiceImpl implements ThirdPartyService {
             String result = HttpKit.get(mallRegisterMemberUrl, params);
             LOG.info("微信端会员[{}],密码[{}],openId[{}]注册信息同步结果:[{}]", mobile, password, openId, result);
         } catch (Exception e) {
-            LOG.error("同步会员注册信息失败:", e);
+            throw new ThirdException("将注册信息同步到第三方商城系统参数失败", "系统繁忙，请稍后再试",e);
         }
     }
 
@@ -154,7 +270,7 @@ public class ThirdPartyServiceImpl implements ThirdPartyService {
                 }
             }
         } catch (Exception e) {
-            LOG.error("获取第三方商城判断用户注册接口失败:", e);
+            throw new ThirdException("获取第三方商城判断用户注册接口失败", "系统繁忙，请稍后再试",e);
         }
         return null;
     }
@@ -177,10 +293,11 @@ public class ThirdPartyServiceImpl implements ThirdPartyService {
                 }
             }
         } catch (Exception e) {
-            LOG.error("第三方商城系统根据产品型号获取产品图片接口失败:", e);
+            throw new ThirdException("第三方商城系统根据产品型号获取产品图片接口失败", "系统繁忙，请稍后再试",e);
         }
         return imgUrl;
     }
+
 
     /**
      * 获取csswx服务
@@ -233,6 +350,15 @@ public class ThirdPartyServiceImpl implements ThirdPartyService {
         return service;
     }
 
+
+    private Client getClient(XFireProxy proxy) {
+        Client client = proxy.getClient();
+        client.addOutHandler(new ClientAuthenticationHandler(authUserName, authPassword));
+        client.setTimeout(readTimeout);
+        client.setProperty(CommonsHttpMessageSender.HTTP_TIMEOUT, String.valueOf( connectTimeout ));
+        return client;
+    }
+
     /**
      * 根据产品条码或产品型号查询产品信息
      */
@@ -246,8 +372,7 @@ public class ThirdPartyServiceImpl implements ThirdPartyService {
             LOG.info("============开始调用csm系统的产品信息查询接口================");
             CssWxService service = this.getCssWxService();
             XFireProxy proxy = (XFireProxy) Proxy.getInvocationHandler(service);
-            client = proxy.getClient();
-            client.addOutHandler(new ClientAuthenticationHandler(authUserName, authPassword));
+            client = getClient(proxy);
             // 传条件 二选一不能都为空
             CssWxRequest req = new CssWxRequest();
             if (StringUtils.isNotEmpty(productParam.getItem_code())) {
@@ -284,7 +409,7 @@ public class ThirdPartyServiceImpl implements ThirdPartyService {
                 }
             }
         } catch (Exception e) {
-            LOG.error("根据产品条码或产品型号查询产品信息失败:", e);
+            throw new ThirdException("根据产品条码或产品型号查询产品信息失败", "查询产品失败，请稍后再试",e);
         } finally {
             client.close();
         }
@@ -304,8 +429,7 @@ public class ThirdPartyServiceImpl implements ThirdPartyService {
             LOG.info("============开始调用csm系统的批量获取产品信息查询接口================");
             CssWxService service = this.getCssWxService();
             XFireProxy proxy = (XFireProxy) Proxy.getInvocationHandler(service);
-            client = proxy.getClient();
-            client.addOutHandler(new ClientAuthenticationHandler(authUserName, authPassword));
+            client = getClient(proxy);
             // 传条件 二选一不能都为空
             CssWxRequest req = new CssWxRequest();
             req.setItem_Code(itemCodes);
@@ -337,7 +461,7 @@ public class ThirdPartyServiceImpl implements ThirdPartyService {
                 }
             }
         } catch (Exception e) {
-            LOG.error("批量获取产品信息接口失败:", e);
+            throw new ThirdException("批量获取产品信息接口失败", "系统繁忙，请稍后再试",e);
         } finally {
             client.close();
         }
@@ -358,8 +482,7 @@ public class ThirdPartyServiceImpl implements ThirdPartyService {
             LOG.info("============开始调用csm系统的根据产品获取滤芯接口================");
             CssWxService service = this.getCssWxService();
             XFireProxy proxy = (XFireProxy) Proxy.getInvocationHandler(service);
-            client = proxy.getClient();
-            client.addOutHandler(new ClientAuthenticationHandler(authUserName, authPassword));
+            client = getClient(proxy);
             // 传条件 二选一 不能都为空
             CssWxRequest req = new CssWxRequest();
             if (StringUtils.isNotEmpty(productFilterGradeParam.getItemCode())) {
@@ -396,7 +519,7 @@ public class ThirdPartyServiceImpl implements ThirdPartyService {
                 }
             }
         } catch (Exception e) {
-            LOG.error("根据产品获取滤芯信息失败:", e);
+            throw new ThirdException("根据产品获取滤芯信息失败", "取滤芯信息失败，请稍后再试",e);
         } finally {
             client.close();
         }
@@ -417,8 +540,7 @@ public class ThirdPartyServiceImpl implements ThirdPartyService {
             LOG.info("调用csm系统的预约生成受理单接口，参数为:[{}]", JSON.toJSONString(acceptanceFormParam));
             CssAppealWxService service = this.getCssAppealWxService();
             XFireProxy proxy = (XFireProxy) Proxy.getInvocationHandler(service);
-            client = proxy.getClient();
-            client.addOutHandler(new ClientAuthenticationHandler(authUserName, authPassword));
+            client = getClient(proxy);
             // 传条件 不能为空
             CssWxRequest req = new CssWxRequest();
             req.setFlag(1);//操作类型  1:新增  2:修改预约时间 3:取消预约
@@ -441,9 +563,7 @@ public class ThirdPartyServiceImpl implements ThirdPartyService {
                 }
             }
         } catch (Exception e) {
-            LOG.error("预约生成受理单号接口失败:", e);
-            rtnResult.setReturnCode(Constant.FAIL);
-            rtnResult.setReturnMsg(e.getMessage());
+            throw new ThirdException("预约生成受理单号接口失败", "预约生成受理单号失败，请稍后再试",e);
         } finally {
             client.close();
         }
@@ -463,8 +583,7 @@ public class ThirdPartyServiceImpl implements ThirdPartyService {
             LOG.info("============开始调用csm系统的变更预约时间接口================");
             CssAppealWxService service = this.getCssAppealWxService();
             XFireProxy proxy = (XFireProxy) Proxy.getInvocationHandler(service);
-            client = proxy.getClient();
-            client.addOutHandler(new ClientAuthenticationHandler(authUserName, authPassword));
+            client = getClient(proxy);
             JSONArray jsonArray = new JSONArray();
             Map<String, Object> map = new HashMap<String, Object>();
             map.put("no", webAppealNo);// CSM返回的单据号
@@ -491,9 +610,7 @@ public class ThirdPartyServiceImpl implements ThirdPartyService {
                 }
             }
         } catch (Exception e) {
-            LOG.error("变更预约时间接口失败:", e);
-            rtnResult.setReturnCode(Constant.FAIL);
-            rtnResult.setReturnMsg(e.getMessage());
+            throw new ThirdException("变更预约时间接口失败", "变更预约时间失败，请稍后再试",e);
         } finally {
             client.close();
         }
@@ -513,8 +630,7 @@ public class ThirdPartyServiceImpl implements ThirdPartyService {
             LOG.info("============开始调用csm系统的取消预约单接口================");
             CssAppealWxService service = this.getCssAppealWxService();
             XFireProxy proxy = (XFireProxy) Proxy.getInvocationHandler(service);
-            client = proxy.getClient();
-            client.addOutHandler(new ClientAuthenticationHandler(authUserName, authPassword));
+            client = getClient(proxy);
             JSONArray jsonArray = new JSONArray();
             Map<String, Object> map = new HashMap<String, Object>();
             map.put("no", webAppealNo);// CSM返回的单据号
@@ -539,9 +655,7 @@ public class ThirdPartyServiceImpl implements ThirdPartyService {
                 }
             }
         } catch (Exception e) {
-            LOG.error("取消预约单接口失败:", e);
-            rtnResult.setReturnCode(Constant.FAIL);
-            rtnResult.setReturnMsg(e.getMessage());
+            throw new ThirdException("取消预约单接口失败", "取消预约单失败，请稍后再试",e);
         } finally {
             client.close();
         }
@@ -561,8 +675,7 @@ public class ThirdPartyServiceImpl implements ThirdPartyService {
             LOG.info("============开始调用csm系统的师傅拒绝预约单接口================");
             CssWsRPService service = this.getCssWsRPService();
             XFireProxy proxy = (XFireProxy) Proxy.getInvocationHandler(service);
-            client = proxy.getClient();
-            client.addOutHandler(new ClientAuthenticationHandler(authUserName, authPassword));
+            client = getClient(proxy);
             JSONObject jsonObject = new JSONObject();
             jsonObject.put("appeal_no", webAppealNo);// 师傅拒绝工单单号
             jsonObject.put("reject_season", reject_season);// 师傅拒绝工单单号
@@ -585,14 +698,14 @@ public class ThirdPartyServiceImpl implements ThirdPartyService {
                 }
             }
         } catch (Exception e) {
-            LOG.error("师傅拒绝预约单接口失败:", e);
-            rtnResult.setReturnCode(Constant.FAIL);
-            rtnResult.setReturnMsg(e.getMessage());
+            throw new ThirdException("师傅拒绝预约单接口失败", "拒绝预约单失败，请稍后再试",e);
         } finally {
             client.close();
         }
         return rtnResult;
     }
+
+
 
     /**
      * 安装单同步接口
@@ -608,8 +721,7 @@ public class ThirdPartyServiceImpl implements ThirdPartyService {
         try {
             CssWsRPService service = this.getCssWsRPService();
             XFireProxy proxy = (XFireProxy) Proxy.getInvocationHandler(service);
-            client = proxy.getClient();
-            client.addOutHandler(new ClientAuthenticationHandler(authUserName, authPassword));
+            client = getClient(proxy);
             // One_V_Msg传安装单信息
             CssWxRequest req = new CssWxRequest();
             JsonConfig jsonConfig = new JsonConfig();
@@ -636,9 +748,7 @@ public class ThirdPartyServiceImpl implements ThirdPartyService {
                 }
             }
         } catch (Exception e) {
-            LOG.error("安装单同步接口失败:", e);
-            rtnResult.setReturnCode(Constant.FAIL);
-            rtnResult.setReturnMsg(e.getMessage());
+            throw new ThirdException("安装单同步接口失败", "系统繁忙，请稍后再试",e);
         } finally {
             client.close();
         }
@@ -658,9 +768,7 @@ public class ThirdPartyServiceImpl implements ThirdPartyService {
         LOG.info("调用csm保养单同步接口,参数为:[{}]", JSON.toJSON(appealMaintainParam));
         try {
             CssWsRPService service = this.getCssWsRPService();
-            XFireProxy proxy = (XFireProxy) Proxy.getInvocationHandler(service);
-            client = proxy.getClient();
-            client.addOutHandler(new ClientAuthenticationHandler(authUserName, authPassword));
+            client = getClient(client, service);
             // 传条件 不能为空
             CssWxRequest req = new CssWxRequest();
             req.setOne_V_Msg(JSONArray.fromObject(appealMaintainParam).toString());// 数据集
@@ -688,13 +796,17 @@ public class ThirdPartyServiceImpl implements ThirdPartyService {
                 }
             }
         } catch (Exception e) {
-            LOG.error("保养单同步接口失败:", e);
-            rtnResult.setReturnCode(Constant.FAIL);
-            rtnResult.setReturnMsg(e.getMessage());
+            throw new ThirdException("保养单同步接口失败", "系统繁忙，请稍后再试",e);
         } finally {
             client.close();
         }
         return rtnResult;
+    }
+
+    private Client getClient(Client client, CssWsRPService service) {
+        XFireProxy proxy = (XFireProxy) Proxy.getInvocationHandler(service);
+        client = getClient(proxy);
+        return client;
     }
 
     /**
@@ -712,8 +824,7 @@ public class ThirdPartyServiceImpl implements ThirdPartyService {
             LOG.info("============开始调用csm系统的维修单同步接口================");
             CssWsRPService service = this.getCssWsRPService();
             XFireProxy proxy = (XFireProxy) Proxy.getInvocationHandler(service);
-            client = proxy.getClient();
-            client.addOutHandler(new ClientAuthenticationHandler(authUserName, authPassword));
+            client = getClient(proxy);
             // 传条件 不能为空
             CssWxRequest req = new CssWxRequest();
             req.setOne_V_Msg(JSONArray.fromObject(appealMaintenanceParam).toString());// 数据集
@@ -738,9 +849,7 @@ public class ThirdPartyServiceImpl implements ThirdPartyService {
                 }
             }
         } catch (Exception e) {
-            LOG.error("维修单同步接口失败:", e);
-            rtnResult.setReturnCode(Constant.FAIL);
-            rtnResult.setReturnMsg(e.getMessage());
+            throw new ThirdException("维修单同步接口失败", "系统繁忙，请稍后再试",e);
         } finally {
             client.close();
         }
@@ -760,8 +869,7 @@ public class ThirdPartyServiceImpl implements ThirdPartyService {
             LOG.info("============开始调用csm系统的评价同步接口================");
             CssWsRPService service = this.getCssWsRPService();
             XFireProxy proxy = (XFireProxy) Proxy.getInvocationHandler(service);
-            client = proxy.getClient();
-            client.addOutHandler(new ClientAuthenticationHandler(authUserName, authPassword));
+            client = getClient(proxy);
             // 传条件 不能为空
             CssWxRequest req = new CssWxRequest();
             req.setOne_V_Msg(JSON.toJSONString(evaluateParam));// 数据集
@@ -781,9 +889,7 @@ public class ThirdPartyServiceImpl implements ThirdPartyService {
                 }
             }
         } catch (Exception e) {
-            LOG.error("评价同步接口失败:", e);
-            rtnResult.setReturnCode(Constant.FAIL);
-            rtnResult.setReturnMsg(e.getMessage());
+            throw new ThirdException("评价同步接口失败", "系统繁忙，请稍后再试",e);
         } finally {
             client.close();
         }
@@ -804,8 +910,7 @@ public class ThirdPartyServiceImpl implements ThirdPartyService {
             LOG.info("============开始调用csm系统的根据产品获取保养项接口================");
             CssWsRPService service = this.getCssWsRPService();
             XFireProxy proxy = (XFireProxy) Proxy.getInvocationHandler(service);
-            client = proxy.getClient();
-            client.addOutHandler(new ClientAuthenticationHandler(authUserName, authPassword));
+            client = getClient(proxy);
             // 传条件 二选一 不能都为空
             CssWxRequest req = new CssWxRequest();
             if (StringUtils.isNotEmpty(productFilterGradeParam.getItemCode())) {
@@ -844,7 +949,7 @@ public class ThirdPartyServiceImpl implements ThirdPartyService {
                 }
             }
         } catch (Exception e) {
-            LOG.error("根据产品获取保养项信息失败:", e);
+            throw new ThirdException("根据产品获取保养项信息失败", "系统繁忙，请稍后再试",e);
         } finally {
             client.close();
         }
@@ -864,8 +969,7 @@ public class ThirdPartyServiceImpl implements ThirdPartyService {
             LOG.info("============开始调用csm系统的用户历史受理信息查询接口================");
             CssWxService service = this.getCssWxService();
             XFireProxy proxy = (XFireProxy) Proxy.getInvocationHandler(service);
-            client = proxy.getClient();
-            client.addOutHandler(new ClientAuthenticationHandler(authUserName, authPassword));
+            client = getClient(proxy);
             //传条件
             CssWxRequest req = new CssWxRequest();
             req.setTel(mobilePhone);
@@ -950,7 +1054,7 @@ public class ThirdPartyServiceImpl implements ThirdPartyService {
                 }
             }
         } catch (Exception e) {
-            LOG.error("用户历史受理信息查询接口失败:", e);
+            throw new ThirdException("用户历史受理信息查询接口失败", "受理信息查询失败，请稍后再试",e);
         } finally {
             client.close();
         }
@@ -968,8 +1072,7 @@ public class ThirdPartyServiceImpl implements ThirdPartyService {
             LOG.info("============开始调用维修维修措施查询接口================");
             CssWxService service = this.getCssWxService();
             XFireProxy proxy = (XFireProxy) Proxy.getInvocationHandler(service);
-            client = proxy.getClient();
-            client.addOutHandler(new ClientAuthenticationHandler(authUserName, authPassword));
+            client = getClient(proxy);
             //传条件
             CssWxRequest req = new CssWxRequest();
             if (StringUtils.isEmpty(typeName)) {
@@ -1010,9 +1113,7 @@ public class ThirdPartyServiceImpl implements ThirdPartyService {
                 }
             }
         } catch (Exception e) {
-            LOG.error("维修措施查询接口失败:", e);
-            rtnResult.setReturnCode(Constant.FAIL);
-            rtnResult.setReturnMsg(e.getMessage());
+            throw new ThirdException("维修措施查询接口失败", "维修措施查询失败，请稍后再试",e);
         } finally {
             client.close();
         }
@@ -1030,8 +1131,7 @@ public class ThirdPartyServiceImpl implements ThirdPartyService {
             LOG.info("============开始调用安装配件查询接口================");
             CssWxService service = this.getCssWxService();
             XFireProxy proxy = (XFireProxy) Proxy.getInvocationHandler(service);
-            client = proxy.getClient();
-            client.addOutHandler(new ClientAuthenticationHandler(authUserName, authPassword));
+            client = getClient(proxy);
             //传条件
             CssWxRequest req = new CssWxRequest();
             req.setSpec(modelName);
@@ -1072,9 +1172,7 @@ public class ThirdPartyServiceImpl implements ThirdPartyService {
                 }
             }
         } catch (Exception e) {
-            LOG.error("安装配件查询接口口失败:", e);
-            rtnResult.setReturnCode(Constant.FAIL);
-            rtnResult.setReturnMsg(e.getMessage());
+            throw new ThirdException("安装配件查询接口失败", "安装配件查询失败，请稍后再试",e);
         } finally {
             client.close();
         }
@@ -1092,8 +1190,7 @@ public class ThirdPartyServiceImpl implements ThirdPartyService {
             LOG.info("============开始调用维修配件查询接口================");
             CssWxService service = this.getCssWxService();
             XFireProxy proxy = (XFireProxy) Proxy.getInvocationHandler(service);
-            client = proxy.getClient();
-            client.addOutHandler(new ClientAuthenticationHandler(authUserName, authPassword));
+            client = getClient(proxy);
             //传条件
             CssWxRequest req = new CssWxRequest();
             req.setSpec(modelName);
@@ -1133,9 +1230,7 @@ public class ThirdPartyServiceImpl implements ThirdPartyService {
                 }
             }
         } catch (Exception e) {
-            LOG.error("安装配件查询接口口失败:", e);
-            rtnResult.setReturnCode(Constant.FAIL);
-            rtnResult.setReturnMsg(e.getMessage());
+            throw new ThirdException("调用维修配件查询接口失败", "维修配件查询失败，请稍后再试",e);
         } finally {
             client.close();
         }
@@ -1211,7 +1306,7 @@ public class ThirdPartyServiceImpl implements ThirdPartyService {
             }
 
         } catch (Exception ex) {
-            ex.printStackTrace();
+            throw new ThirdException("调用防伪码查询接口失败", "系统繁忙，请稍后再试",ex);
         }
         return result;
     }
@@ -1237,7 +1332,7 @@ public class ThirdPartyServiceImpl implements ThirdPartyService {
         try {
             content = cemPost(baseUrl, params);
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new ThirdException("com.ziwow.scrmapp.common.service.impl.ThirdPartyServiceImpl.getCemAssetsInfo 方法调用失败", "系统繁忙，请稍后再试",e);
         }
         CemResp<CemAssertInfo> cemResp = JSON.parseObject(content, new TypeReference<CemResp<CemAssertInfo>>(){});
         if (cemResp!=null){
@@ -1270,7 +1365,7 @@ public class ThirdPartyServiceImpl implements ThirdPartyService {
         try {
             content = cemGet(url);
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new ThirdException("com.ziwow.scrmapp.common.service.impl.ThirdPartyServiceImpl.getCemProductInfo 方法调用失败", "系统繁忙，请稍后再试",e);
         }
         CemResp<CemProductInfo> cemResp = JSON.parseObject(content, new TypeReference<CemResp<CemProductInfo>>(){});
         if (cemResp!=null){
@@ -1315,6 +1410,6 @@ public class ThirdPartyServiceImpl implements ThirdPartyService {
         return result;
     }
 
-    private static String url = "http://122.227.252.12:802/QYFWService/QYWebService.asmx";//提供接口的地址
+    private static String url = "http://122.227.252.12:802/QYFWService0617/QYWebService.asmx";//提供接口的地址
     private static String soapaction = "http://tempuri.org/";   //域名，这是在server定义的
 }
