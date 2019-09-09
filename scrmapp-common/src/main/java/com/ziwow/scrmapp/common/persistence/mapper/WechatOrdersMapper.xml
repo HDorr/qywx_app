@@ -372,6 +372,7 @@
             o.ordersCode AS ordersCode,
             o.orderType,
             o.faultImage,
+            o.buyFilter,
             CASE o.orderType
         WHEN 1 THEN
             '安装单'
