@@ -373,6 +373,7 @@
             o.orderType,
             o.faultImage,
             o.buyFilter,
+            o.description,
             CASE o.orderType
         WHEN 1 THEN
             '安装单'
