@@ -559,6 +559,35 @@ public class WeChatMessageProcessingHandler {
                 wechatRegisterService.savePullNewRegisterByEngineer(register);
             }
             return  false;
+
+
+
+        } else if(content.contains("水质监测")){//水质检测
+            //根据openid查询手机号
+            WechatUser wechatUser = wechatUserService
+                    .getUserByOpenId(inMessage.getFromUserName());
+
+            //判断用户是否注册
+            WechatUser user = wechatUserService.getUserByOpenId(inMessage.getFromUserName());
+
+            if (user == null){
+              msgsb.append("您已报名成功！\n")
+                      .append("我们将会在10月7日公布入选名单,\n")
+                      .append("请您持续关注我们！");
+            }else {
+              //查看是否在中奖名单中
+              boolean isLucky = wechatUserService.findUserLuckyByPhone(wechatUser.getMobilePhone());
+              if (isLucky){
+                msgsb.append("恭喜您！\n")
+                        .append("您已获得免费检测机会！\n")
+                        .append("我们的工作人员将会主动联系您！");
+              }else {
+                msgsb.append("很抱歉！\n")
+                        .append("您已获得免费检测机会！\n")
+                        .append("请持续关注其他福利活动！");
+              }
+            }
+
         }else {
 
             if (content.equals("completechat")){
