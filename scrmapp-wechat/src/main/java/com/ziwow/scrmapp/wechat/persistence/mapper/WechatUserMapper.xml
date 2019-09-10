@@ -37,6 +37,13 @@
 		u.wfid=wf.id and wf.openid=#{openId} and u.status=0 LIMIT 0,1
 	</select>
 
+    <select id="getMemberUserByOpenId" resultType="int">
+		SELECT isMember
+    FROM  t_wechat_fans wf
+    WHERE wf.openid=#{openId}
+    LIMIT 0,1
+	  </select>
+
     <select id="getUserByUnionId" resultMap="wechatUserMap">
         SELECT u.* FROM t_wechat_user u ,t_wechat_fans wf WHERE
         u.wfid=wf.id and wf.unionid=#{unionId} and u.status=0 LIMIT 0,1
