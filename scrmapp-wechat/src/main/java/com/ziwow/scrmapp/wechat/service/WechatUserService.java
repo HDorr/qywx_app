@@ -15,6 +15,8 @@ import java.util.Date;
 import java.util.List;
 
 public interface WechatUserService {
+    public int getMemberUserByOpenId(String openId);
+
     public WechatUser getUserByOpenId(String openId);
 
     public WechatUser getUserByUnionid(String unionId);
@@ -64,4 +66,6 @@ public interface WechatUserService {
 
 
     List<WechatUser> getUserByRegisterSrc(Integer src);
+
+    boolean findUserLuckyByPhone(String mobilePhone);
 }

@@ -28,6 +28,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.AntPathMatcher;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -889,5 +890,31 @@ public class WechatUserController {
     public ModelAndView toMemberPage(HttpServletRequest request, HttpServletResponse response) {
         ModelAndView modelAndView = new ModelAndView("memberInfo/memberInfo");
         return modelAndView;
+    }
+
+    @ResponseBody
+    @RequestMapping("/member/{openId}")
+    public Result isMember(@PathVariable("openId") String openId) throws Exception {
+
+      Result result = new BaseResult();
+
+      if (!wechatFansService.findUserByOpenId(openId)){
+        result.setReturnMsg("该用户不存在！");
+        result.setData(false);
+        result.setReturnCode(1);
+        return result;
+      }
+
+      if (wechatUserService.getMemberUserByOpenId(openId) == 2) {
+        result.setReturnMsg("是会员！");
+        result.setData(true);
+        result.setReturnCode(1);
+        return result;
+      }
+
+      result.setReturnMsg("非会员！");
+      result.setData(false);
+      result.setReturnCode(1);
+      return result;
     }
 }

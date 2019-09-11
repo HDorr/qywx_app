@@ -37,6 +37,13 @@
 		u.wfid=wf.id and wf.openid=#{openId} and u.status=0 LIMIT 0,1
 	</select>
 
+    <select id="getMemberUserByOpenId" resultType="int">
+		SELECT isMember
+    FROM  t_wechat_fans wf
+    WHERE wf.openid=#{openId}
+    LIMIT 0,1
+	  </select>
+
     <select id="getUserByUnionId" resultMap="wechatUserMap">
         SELECT u.* FROM t_wechat_user u ,t_wechat_fans wf WHERE
         u.wfid=wf.id and wf.unionid=#{unionId} and u.status=0 LIMIT 0,1
@@ -66,6 +73,7 @@
 		SELECT * FROM t_wechat_user u WHERE u.mobilePhone=#{mobilePhone} and u.status=0 LIMIT 0,1
 	</select>
 
+
     <insert id="saveUser" parameterType="com.ziwow.scrmapp.wechat.persistence.entity.WechatUser">
 		insert into t_wechat_user(userId,password,seed,mobilePhone,provinceId,cityId,areaId,wfId,createDate,nickName,gender,register_src)
 		values(#{userId},#{password},#{seed},#{mobilePhone},#{provinceId},#{cityId},#{areaId},#{wfId},now(),#{nickName},#{gender},#{registerSrc})
@@ -88,4 +96,11 @@
         </trim>
         where wfId = #{wfId} and status = 0
     </insert>
+
+
+    <select id="findUserLuckyByPhone" resultType="int">
+        SELECT count(*)
+        FROM t_wechat_user_temp_1
+        WHERE mobile=#{mobilePhone};
+	</select>
 </mapper>
