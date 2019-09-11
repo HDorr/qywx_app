@@ -225,10 +225,6 @@ public class WechatUserController {
                            @RequestParam("mobile") String mobile,
                            @RequestParam("isMallMember") boolean isMallMember,
                            @RequestParam(required = false) Integer registerSrc,
-//                           @RequestParam(value = "password", required = false) String password,
-//                           @RequestParam("provinceId") String provinceId,
-//                           @RequestParam("cityId") String cityId,
-//                           @RequestParam("areaId") String areaId,
                            HttpServletRequest httpReq, HttpServletResponse httpRes) {
         Result result = new BaseResult();
         // 防止重复请求
@@ -247,16 +243,6 @@ public class WechatUserController {
             result.setReturnMsg("手机号不能为空");
             result.setReturnCode(Constant.FAIL);
             return result;
-        }
-        // 如果不是沁园商城的会员需要填写密码
-        if (!isMallMember) {
-            // 密码不能为空
-//            if (StringUtils.isEmpty(password)) {
-//                logger.info("注册用户[{}],手机[{}]密码不能为空", openId, mobile);
-//                result.setReturnMsg("密码不能为空");
-//                result.setReturnCode(Constant.FAIL);
-//                return result;
-//            }
         }
         WechatUser wechatUser = new WechatUser();
         try {
@@ -282,18 +268,10 @@ public class WechatUserController {
             String userId = UniqueIDBuilder.getUniqueIdValue();
             wechatUser.setUserId(userId);
             wechatUser.setMobilePhone(mobile.trim());
-//            if (StringUtils.isNotEmpty(password)) {
-//                String salt = SeedUtil.newSeed();
-//                wechatUser.setPassword(SeedUtil.encrypt(salt, password.trim()));
-//                wechatUser.setSeed(salt);
-//            }
             wechatUser.setNickName(wechatFans.getWfNickName());
             if (wechatFans.getGender() != null) {
                 wechatUser.setGender(wechatFans.getGender());
             }
-//            wechatUser.setProvinceId(provinceId);
-//            wechatUser.setCityId(cityId);
-//            wechatUser.setAreaId(areaId);
             wechatUser.setWfId(wechatFans.getId());
             wechatUser.setRegisterSrc(registerSrc!=null?registerSrc:0);
             // 注册为会员修改粉丝表isMember状态
