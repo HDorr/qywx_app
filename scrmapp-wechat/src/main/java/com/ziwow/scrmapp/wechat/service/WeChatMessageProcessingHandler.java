@@ -592,7 +592,7 @@ public class WeChatMessageProcessingHandler {
             int result = nowDate.compareTo(planDate);
 
             //若result<0说明未达到10月7日
-            if (result < 0) {
+            if (result > 0) {//todo: 临时测试 换成>
               msgsb.append("您已报名成功！\n")
                       .append("我们将会在10月7日公布入选名单,\n")
                       .append("请您持续关注我们！");
