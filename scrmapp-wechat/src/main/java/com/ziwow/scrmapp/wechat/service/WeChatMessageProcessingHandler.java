@@ -562,57 +562,44 @@ public class WeChatMessageProcessingHandler {
             return  false;
 
 
+        } else if (content.contains("水质监测")) {
+            //根据openid查询手机号
+            WechatUser wechatUser = wechatUserService
+                    .getUserByOpenId(inMessage.getFromUserName());
 
-        } else if(content.contains("水质监测")){
-          /**
-           * 判断是否注册,再判断日期
-           */
+            WechatUser user = wechatUserService.getUserByOpenId(inMessage.getFromUserName());
+            //判断用户是否注册
+            if (user == null) {
+                msgsb.append("您未注册，请先注册再回复！\n");
+            } else {
+                //初始化时间
+                String fomatData = "2019-10-07";
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                //解析date类
+                Date planDate = sdf.parse(fomatData);
+                Date nowDate = new Date();
 
-          //根据openid查询手机号
-          WechatUser wechatUser = wechatUserService
-                  .getUserByOpenId(inMessage.getFromUserName());
-
-          //判断用户是否注册
-          WechatUser user = wechatUserService.getUserByOpenId(inMessage.getFromUserName());
-
-          if (user == null) {
-            msgsb.append("您未注册，请先注册再回复！\n");
-          } else {
-
-            /**
-             * 判断时间
-             */
-            String fomatData = "2019-10-07";
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-            //解析date类
-            Date planDate = sdf.parse(fomatData);
-
-            Date nowDate = new Date();
-
-            int result = nowDate.compareTo(planDate);
-
-            //若result<0说明未达到10月7日
-            if (result > 0) {//todo: 临时测试 换成>
-              msgsb.append("您已报名成功！\n")
-                      .append("我们将会在10月7日公布入选名单,\n")
-                      .append("请您持续关注我们！");
-
-            } else {//达到10月7日
-
-              //查看是否在中奖名单中
-              boolean isLucky = wechatUserService.findUserLuckyByPhone(wechatUser.getMobilePhone());
-              if (isLucky) {
-                msgsb.append("恭喜您！\n")
-                        .append("您已获得免费检测机会！\n")
-                        .append("我们的工作人员将会主动联系您！");
-              } else {
-                msgsb.append("很抱歉！\n")
-                        .append("您未获得免费检测机会！\n")
-                        .append("请持续关注其他福利活动！");
-              }
+                //对比时间
+                int result = nowDate.compareTo(planDate);
+                //若result<0说明未达到10月7日
+                if (result > 0) {//todo: 临时测试 换成>
+                    msgsb.append("您已报名成功！\n")
+                            .append("我们将会在10月7日公布入选名单,\n")
+                            .append("请您持续关注我们！");
+                } else {
+                    //查看是否在中奖名单中
+                    boolean isLucky = wechatUserService.findUserLuckyByPhone(wechatUser.getMobilePhone());
+                    if (isLucky) {
+                        msgsb.append("恭喜您！\n")
+                                .append("您已获得免费检测机会！\n")
+                                .append("我们的工作人员将会主动联系您！");
+                    } else {
+                        msgsb.append("很抱歉！\n")
+                                .append("您未获得免费检测机会！\n")
+                                .append("请持续关注其他福利活动！");
+                    }
+                }
             }
-          }
-
         }else {
 
             if (content.equals("completechat")){
