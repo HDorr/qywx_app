@@ -607,13 +607,6 @@ public class WeChatMessageProcessingHandler {
             }
         }else {
 
-            if (content.equals("completechat")){
-                redisService.set(RedisKeyConstants.getScrmappWechatCustomermsg()+inMessage.getFromUserName(),false,60L);
-                inMessage.setMsgType("completechat");
-                pushMessageToCallCenter(inMessage);//推送消息到呼叫中心
-                return true;
-            }
-
             boolean isInChat=checkChatStatus(inMessage.getFromUserName());
             if (isInChat){
                 redisService.set(RedisKeyConstants.getScrmappWechatCustomermsg()+inMessage.getFromUserName(),true,1200L);
