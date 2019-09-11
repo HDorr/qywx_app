@@ -560,9 +560,6 @@ public class WeChatMessageProcessingHandler {
                 wechatRegisterService.savePullNewRegisterByEngineer(register);
             }
             return  false;
-
-
-
         } else if(content.contains("水质监测")){
           /**
            * 判断是否注册,再判断日期
@@ -582,13 +579,11 @@ public class WeChatMessageProcessingHandler {
             /**
              * 判断时间
              */
-            String fomatData = "2019-10-07";
+            String formatData = "2019-10-07";
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
             //解析date类
-            Date planDate = sdf.parse(fomatData);
-
+            Date planDate = sdf.parse(formatData);
             Date nowDate = new Date();
-
             int result = nowDate.compareTo(planDate);
 
             //若result<0说明未达到10月7日
@@ -614,13 +609,6 @@ public class WeChatMessageProcessingHandler {
           }
 
         }else {
-
-            if (content.equals("completechat")){
-                redisService.set(RedisKeyConstants.getScrmappWechatCustomermsg()+inMessage.getFromUserName(),false,60L);
-                inMessage.setMsgType("completechat");
-                pushMessageToCallCenter(inMessage);//推送消息到呼叫中心
-                return true;
-            }
 
             boolean isInChat=checkChatStatus(inMessage.getFromUserName());
             if (isInChat){
