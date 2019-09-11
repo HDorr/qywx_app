@@ -75,6 +75,9 @@ public class WeChatMessageProcessingHandler {
     @Autowired
     private ChannelService channelService;
 
+    @Value("${check.water.time}")
+    private String checkWaterTime;
+
     @Value("${miniapp.appid}")
     private String miniappAppid;
 
@@ -573,7 +576,7 @@ public class WeChatMessageProcessingHandler {
                 msgsb.append("您未注册，请先注册再回复！\n");
             } else {
                 //初始化时间
-                String fomatData = "2019-10-07";
+                String fomatData = checkWaterTime;
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
                 //解析date类
                 Date planDate = sdf.parse(fomatData);
@@ -583,9 +586,11 @@ public class WeChatMessageProcessingHandler {
                 int result = nowDate.compareTo(planDate);
                 //若result<0说明未达到10月7日
                 if (result > 0) {//todo: 临时测试 换成>
-                    msgsb.append("您已报名成功！\n")
-                            .append("我们将会在10月7日公布入选名单,\n")
-                            .append("请您持续关注我们！");
+                    msgsb.append("恭喜您已成功报名！\n")
+                            .append("请持续关注我们,\n")
+                            .append("实时查看您的状态！\n")
+                            .append("后续我们会在公布中奖名单后\n")
+                            .append("主动联系您！\n");
                 } else {
                     //查看是否在中奖名单中
                     boolean isLucky = wechatUserService.findUserLuckyByPhone(wechatUser.getMobilePhone());
