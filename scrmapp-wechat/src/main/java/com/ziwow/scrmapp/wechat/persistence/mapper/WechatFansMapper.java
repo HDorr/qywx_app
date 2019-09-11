@@ -32,5 +32,4 @@ public interface WechatFansMapper {
 
     List<TempWechatFans> selectTempWechatFansBtach1();
 
-    int findUserByOpenId(@Param("openId") String openId);
 }

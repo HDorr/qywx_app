@@ -27,5 +27,4 @@ public interface WechatFansService {
     public Integer loadWechatFansAndNotRegisterCount();
     public List<TempWechatFans> loadTempWechatFansBatch1();
 
-    boolean findUserByOpenId(String openId);
 }

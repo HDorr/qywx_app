@@ -895,21 +895,15 @@ public class WechatUserController {
     @ResponseBody
     @RequestMapping("/member/{openId}")
     public Result isMember(@PathVariable("openId") String openId) throws Exception {
-
       Result result = new BaseResult();
 
-      if (!wechatFansService.findUserByOpenId(openId)){
-        result.setReturnMsg("该用户不存在！");
-        result.setData(false);
-        result.setReturnCode(1);
-        return result;
-      }
-
-      if (wechatUserService.getMemberUserByOpenId(openId) == 2) {
-        result.setReturnMsg("是会员！");
-        result.setData(true);
-        result.setReturnCode(1);
-        return result;
+      if (wechatUserService.getUserByOpenId(openId) != null){
+        if (wechatUserService.getMemberUserByOpenId(openId) == 2) {
+          result.setReturnMsg("是会员！");
+          result.setData(true);
+          result.setReturnCode(1);
+          return result;
+        }
       }
 
       result.setReturnMsg("非会员！");

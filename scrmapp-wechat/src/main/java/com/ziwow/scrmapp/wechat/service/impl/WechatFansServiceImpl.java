@@ -322,8 +322,4 @@ public class WechatFansServiceImpl implements WechatFansService {
 		return wechatFansMapper.selectTempWechatFansBtach1();
 	}
 
-  @Override
-  public boolean findUserByOpenId(String openId) {
-    return wechatFansMapper.findUserByOpenId(openId)>0? true:false;
-  }
 }

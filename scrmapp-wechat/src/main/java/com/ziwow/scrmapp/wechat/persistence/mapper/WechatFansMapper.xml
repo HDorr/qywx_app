@@ -161,7 +161,4 @@
     WHERE  wu.wfId   is NULL   AND  wf.is_cancel =0
   </select>
 
-  <select id="findUserByOpenId" resultType="int">
-    select count(*) from t_wechat_fans where openid = #{openId};
-  </select>
 </mapper>
