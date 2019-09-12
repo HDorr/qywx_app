@@ -104,14 +104,15 @@ public class CheckUserInterceptor implements HandlerInterceptor {
         String requestURI = request.getRequestURI();
         int index = requestURI.indexOf("register");
 
-        if (0 == fanCode && !(StringUtils.isNotBlank(registerSrc) && registerSrc.equals("3"))) {
+        boolean isFromH5=(StringUtils.isNotBlank(registerSrc) && registerSrc.equals("3"));
+        if (0 == fanCode && !isFromH5) {
             //跳转到二维码页面
             modelAndView.setViewName("/register/scan_QR_code");
             modelAndView.addObject("url", requestURL);
         }
 
         //用户还未注册
-        else if (1 == fanCode) {
+        else if (1 == fanCode||(fanCode==0&&isFromH5)) {
             //直接从注册页面过来
             if (index != -1) {
                 //获得用户中心链接地址
