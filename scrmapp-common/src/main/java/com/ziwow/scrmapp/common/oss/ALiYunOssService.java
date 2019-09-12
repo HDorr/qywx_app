@@ -4,6 +4,7 @@ import com.aliyun.oss.OSSClient;
 import com.aliyun.oss.OSSException;
 import com.aliyun.oss.model.ObjectMetadata;
 import com.aliyun.oss.model.PutObjectRequest;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -34,6 +35,7 @@ public class ALiYunOssService {
     metadata = new ObjectMetadata();
     metadata.setContentType("multipart/form-data");
     metadata.setCacheControl("no-cache");
+    metadata.setContentType(getContentType(null));
   }
 
   /**
@@ -47,7 +49,7 @@ public class ALiYunOssService {
       ossClient = new OSSClient(endpoint, accessKeyId, accessKeySecret);
       PutObjectRequest request = new PutObjectRequest(bucketName, fileName, stream, metadata);
       ossClient.putObject(request);
-      return "http://" + bucketName + "." + endpoint + "/" + fileName;
+      return "https://" + bucketName + "." + endpoint + "/" + fileName;
     } catch (OSSException e) {
       throw new IllegalStateException("阿里云上传失败", e);
     } catch (Exception e) {
@@ -57,5 +59,50 @@ public class ALiYunOssService {
         ossClient.shutdown();
       }
     }
+  }
+
+  /**
+   * 获取contentType
+   *
+   * @param fileName {@link String}
+   * @return {@link String}
+   */
+  private static String getContentType(String fileName) {
+    if (StringUtils.isEmpty(fileName)) {
+      return "image/jpeg";
+    }
+    // 文件的后缀名
+    String fileExtension = fileName.substring(fileName.lastIndexOf("."));
+    if (".bmp".equalsIgnoreCase(fileExtension)) {
+      return "image/bmp";
+    }
+    if (".gif".equalsIgnoreCase(fileExtension)) {
+      return "image/gif";
+    }
+    if (".jpeg".equalsIgnoreCase(fileExtension)
+        || ".jpg".equalsIgnoreCase(fileExtension)
+        || ".png".equalsIgnoreCase(fileExtension)) {
+      return "image/jpeg";
+    }
+    if (".html".equalsIgnoreCase(fileExtension)) {
+      return "text/html";
+    }
+    if (".txt".equalsIgnoreCase(fileExtension)) {
+      return "text/plain";
+    }
+    if (".vsd".equalsIgnoreCase(fileExtension)) {
+      return "application/vnd.visio";
+    }
+    if (".ppt".equalsIgnoreCase(fileExtension) || "pptx".equalsIgnoreCase(fileExtension)) {
+      return "application/vnd.ms-powerpoint";
+    }
+    if (".doc".equalsIgnoreCase(fileExtension) || "docx".equalsIgnoreCase(fileExtension)) {
+      return "application/msword";
+    }
+    if (".xml".equalsIgnoreCase(fileExtension)) {
+      return "text/xml";
+    }
+    // 默认返回类型
+    return "image/jpeg";
   }
 }

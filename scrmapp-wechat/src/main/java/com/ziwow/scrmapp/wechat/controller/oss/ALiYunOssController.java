@@ -43,7 +43,8 @@ public class ALiYunOssController {
     }
     try {
       String fileUrl =
-          aLiYunOssService.uploadInputStream(file.getInputStream(), UUID.randomUUID().toString());
+          aLiYunOssService.uploadInputStream(
+              file.getInputStream(), UUID.randomUUID().toString() + ".jpg");
       return ResultHelper.success(fileUrl);
     } catch (IOException e) {
       throw new BizException("文件上传失败");
