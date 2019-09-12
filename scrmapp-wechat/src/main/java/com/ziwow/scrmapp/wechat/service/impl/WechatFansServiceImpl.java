@@ -184,7 +184,7 @@ public class WechatFansServiceImpl implements WechatFansService {
 				if(!isFromUserScope){
 					userInfo = weiXinService.getUserInfo(access_token, openId);
 				}else{
-					userInfo = weiXinService.getWebUserInfo(access_token, openId);
+					userInfo = weiXinService.getWebUserInfo(accessToken.getAccess_token(), openId);
 				}
 				if(null != userInfo) {
 					oauthUser = new OauthUser();
