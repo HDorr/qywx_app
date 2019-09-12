@@ -177,7 +177,15 @@ public class WechatFansServiceImpl implements WechatFansService {
 			if (accessToken != null) {
 				String access_token = weiXinService.getAccessToken(appId, appSecret);
 				openId = accessToken.getOpenid();
-				UserInfo userInfo = weiXinService.getUserInfo(access_token, openId);
+				//判断授权的scope
+				boolean isFromUserScope=StringUtils.isNotBlank(accessToken.getScope())&&accessToken.getScope().contains("snsapi_userinfo");
+				//如果是userINFO-新的接口获取用户信息
+				UserInfo userInfo;
+				if(!isFromUserScope){
+					userInfo = weiXinService.getUserInfo(access_token, openId);
+				}else{
+					userInfo = weiXinService.getWebUserInfo(access_token, openId);
+				}
 				if(null != userInfo) {
 					oauthUser = new OauthUser();
 					oauthUser.setCity(userInfo.getCity());
