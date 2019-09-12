@@ -972,7 +972,7 @@ public class WechatUserController {
 
 
   /**
-   *  临时复制,避免避免解密逻辑
+   *   fixme: 临时复制,避免避免解密逻辑
    */
   public Result register1(@RequestParam("openId") String openId,
                          @RequestParam("mobile") String mobile,

@@ -50,6 +50,8 @@ public class WechatFansServiceImpl implements WechatFansService {
 	@Resource
 	private WechatUserService wechatUserService;
 	@Resource
+	private WechatFansService wechatFansService;
+	@Resource
 	private OpenWeixinService openWeixinService;
 	@Override
 	public void saveWechatFans(WechatFans wechatFans) {
@@ -125,8 +127,14 @@ public class WechatFansServiceImpl implements WechatFansService {
 				LOG.info("不是粉丝，需要授权获取,获取粉丝信息:[{}]",JSON.toJSON(oauthUser));
 				if (null != oauthUser) {
 					WechatFans fans = this.getWechatFansInfo(oauthUser);
-					if(null != fans && StringUtils.isNotEmpty(fans.getOpenId())) {						
-						wechatFansMapper.updateWechatFans(fans);
+					if(null != fans && StringUtils.isNotEmpty(fans.getOpenId())) {
+            WechatFans wechatFans = wechatFansService.getWechatFansByOpenId(fans.getOpenId());
+            if (wechatFans != null){
+              wechatFansMapper.updateWechatFans(fans);
+            }else {
+              fans.setChannelId("777");
+              wechatFansService.saveWechatFans(fans);
+            }
 					}
 					// 获取授权openId
 					openId = oauthUser.getOpenid();

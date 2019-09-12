@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.ziwow.scrmapp.tools.utils.Base64;
 import net.sf.json.JSONObject;
+import org.apache.commons.lang.StringUtils;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -91,6 +92,8 @@ public class CheckUserInterceptor implements HandlerInterceptor {
 
         //获得微信客户端传回的code
         String code = request.getParameter("code");
+        String registerSrc = request.getParameter("registerSrc");
+
         logger.info("from url:" + requestURL + ",code : " + code == null ? "code is null " : code);
 
         WechatFansVo wechatFansVo = wechatFansService.getOAuthUserInfo(code, request, response);
@@ -101,7 +104,7 @@ public class CheckUserInterceptor implements HandlerInterceptor {
         String requestURI = request.getRequestURI();
         int index = requestURI.indexOf("register");
 
-        if (0 == fanCode) {
+        if (0 == fanCode && !(StringUtils.isNotBlank(registerSrc) && registerSrc.equals("3"))) {
             //跳转到二维码页面
             modelAndView.setViewName("/register/scan_QR_code");
             modelAndView.addObject("url", requestURL);
