@@ -930,6 +930,7 @@ public class WechatUserController {
     //注入属性
     fans.setOpenId(userMemberVO.getOpenID());
     fans.setUnionId(userMemberVO.getUnionID());
+    fans.setChannelId("777");
     try {
       if (wechatFansService.getWechatFansByOpenId(fans.getOpenId()) == null) {
         //插入fans表
