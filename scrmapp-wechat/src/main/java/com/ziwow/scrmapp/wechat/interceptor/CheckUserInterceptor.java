@@ -123,7 +123,11 @@ public class CheckUserInterceptor implements HandlerInterceptor {
                 //跳转到注册页面
                 modelAndView.setViewName("/register/register");
 
-                modelAndView.addObject("url", requestURL);
+                if(isFromH5){
+                    modelAndView.addObject("url", "http://qinyuan.mgcc.com.cn/apply/vision2/?zy_from=wechat");
+                }else{
+                    modelAndView.addObject("url", requestURL);
+                }
             }
             modelAndView.addObject("data", wechatFansVo);
 

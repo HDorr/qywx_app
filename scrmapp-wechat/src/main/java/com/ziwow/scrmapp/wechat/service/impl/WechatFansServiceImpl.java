@@ -126,13 +126,13 @@ public class WechatFansServiceImpl implements WechatFansService {
 				if (null != oauthUser) {
 					WechatFans fans = this.getWechatFansInfo(oauthUser);
 					if(null != fans && StringUtils.isNotEmpty(fans.getOpenId())) {
-            WechatFans wechatFans = getWechatFansByOpenId(fans.getOpenId());
-            if (wechatFans != null){
-              wechatFansMapper.updateWechatFans(fans);
-            }else {
-              fans.setChannelId("777");
-              saveWechatFans(fans);
-            }
+						WechatFans wechatFans = getWechatFansByOpenId(fans.getOpenId());
+						if (wechatFans != null){
+							wechatFansMapper.updateWechatFans(fans);
+						}else {
+							fans.setChannelId("777");
+							saveWechatFans(fans);
+						}
 					}
 					// 获取授权openId
 					openId = oauthUser.getOpenid();
