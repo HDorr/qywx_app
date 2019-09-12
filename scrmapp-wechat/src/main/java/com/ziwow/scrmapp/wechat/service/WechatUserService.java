@@ -15,7 +15,6 @@ import java.util.Date;
 import java.util.List;
 
 public interface WechatUserService {
-    public int getMemberUserByOpenId(String openId);
 
     public WechatUser getUserByOpenId(String openId);
 

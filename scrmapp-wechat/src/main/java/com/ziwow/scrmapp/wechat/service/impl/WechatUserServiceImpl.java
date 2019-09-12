@@ -61,11 +61,6 @@ public class WechatUserServiceImpl implements WechatUserService {
     private String syncUserUrl;
 
     @Override
-    public int getMemberUserByOpenId(String openId) {
-        return wechatUserMapper.getMemberUserByOpenId(openId);
-    }
-
-    @Override
     public WechatUser getUserByOpenId(String openId) {
         return wechatUserMapper.getUserByOpenId(openId);
     }

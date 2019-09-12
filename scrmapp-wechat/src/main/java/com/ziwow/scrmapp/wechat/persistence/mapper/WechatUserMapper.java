@@ -17,8 +17,6 @@ import com.ziwow.scrmapp.wechat.persistence.entity.WechatUser;
 public interface WechatUserMapper {
      WechatUser getUserByOpenId(@Param("openId") String openId);
 
-     int getMemberUserByOpenId(@Param("openId") String openId);
-
      WechatUser getUserByUnionId(@Param("unionId") String unionId);
 
      WechatUser getUserByMobilePhone(@Param("mobilePhone") String mobilePhone);
