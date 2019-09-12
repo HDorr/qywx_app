@@ -39,6 +39,7 @@ public class GrantEwCardTask extends AbstractGrantEwCard{
             @Override
             public void run() {
                 List<GrantEwCardRecord> records = grantEwCardRecordService.selectRecord();
+                XxlJobLogger.log("延保卡查询总数:{}",records.size());
                 for (GrantEwCardRecord record : records) {
                     if (flag && total>num.intValue()){
                         final boolean grant = grantEwCard(record.getPhone(), record.getType());
@@ -52,6 +53,10 @@ public class GrantEwCardTask extends AbstractGrantEwCard{
                         break;
                     }
                 }
+                synchronized (Thread.currentThread()){
+                    Thread.currentThread().notifyAll();
+                    XxlJobLogger.log("唤醒延保卡执行主线程");
+                }
                 flag = true;
             }
         });
@@ -61,6 +66,7 @@ public class GrantEwCardTask extends AbstractGrantEwCard{
         try {
             synchronized (thread) {
                 thread.wait();
+                XxlJobLogger.log("延保卡执行主线程被唤醒");
             }
         } catch (InterruptedException e) {
             flag = false;
