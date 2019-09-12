@@ -167,9 +167,7 @@ public class WeChatMessageProcessingHandler {
                                     fans.setChannelId(channelId);
                                 }
                             }
-                            //fixme 活动代码
-                            boolean isChannelSepcial=(StringUtils.isNotBlank(fans.getChannelId()))&&fans.getChannelId().equals("777");
-                            if(StringUtils.isBlank(fans.getUnionId())||isChannelSepcial) {
+                            if(StringUtils.isBlank(fans.getUnionId())) {
                                 UserInfo userInfo = wechatFansService.getUserInfoByOpenId(openId);
                                 if(null != userInfo) {
                                     fans.setUnionId(userInfo.getUnionid());
