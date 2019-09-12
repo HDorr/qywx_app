@@ -949,7 +949,7 @@ public class WechatUserController {
       Result register = register1(userMemberVO.getOpenID(),
               userMemberVO.getPhone(),
               false,
-              null,
+              3,
               null,
               null);
       if (register.getReturnMsg() == Constant.OK) {
