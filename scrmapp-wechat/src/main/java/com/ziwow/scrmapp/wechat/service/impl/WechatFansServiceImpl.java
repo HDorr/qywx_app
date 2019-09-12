@@ -50,8 +50,6 @@ public class WechatFansServiceImpl implements WechatFansService {
 	@Resource
 	private WechatUserService wechatUserService;
 	@Resource
-	private WechatFansService wechatFansService;
-	@Resource
 	private OpenWeixinService openWeixinService;
 	@Override
 	public void saveWechatFans(WechatFans wechatFans) {
@@ -128,12 +126,12 @@ public class WechatFansServiceImpl implements WechatFansService {
 				if (null != oauthUser) {
 					WechatFans fans = this.getWechatFansInfo(oauthUser);
 					if(null != fans && StringUtils.isNotEmpty(fans.getOpenId())) {
-            WechatFans wechatFans = wechatFansService.getWechatFansByOpenId(fans.getOpenId());
+            WechatFans wechatFans = getWechatFansByOpenId(fans.getOpenId());
             if (wechatFans != null){
               wechatFansMapper.updateWechatFans(fans);
             }else {
               fans.setChannelId("777");
-              wechatFansService.saveWechatFans(fans);
+              saveWechatFans(fans);
             }
 					}
 					// 获取授权openId
