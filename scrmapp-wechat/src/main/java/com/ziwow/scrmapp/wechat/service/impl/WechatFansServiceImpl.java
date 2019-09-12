@@ -130,7 +130,6 @@ public class WechatFansServiceImpl implements WechatFansService {
 						if (wechatFans != null){
 							wechatFansMapper.updateWechatFans(fans);
 						}else {
-							fans.setChannelId("777");
 							saveWechatFans(fans);
 						}
 					}
