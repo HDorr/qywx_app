@@ -87,7 +87,6 @@ public class GrantEwCardTask extends AbstractGrantEwCard{
             LOG.info("发放延保卡主任务停止");
             XxlJobLogger.log("发放延保卡主任务停止");
         }
-        service.shutdown();
         return ReturnT.SUCCESS;
     }
 
