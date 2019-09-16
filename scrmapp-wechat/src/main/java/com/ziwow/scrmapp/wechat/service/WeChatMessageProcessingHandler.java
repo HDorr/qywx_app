@@ -564,7 +564,7 @@ public class WeChatMessageProcessingHandler {
             }
             return  false;
 
-        } else if (content.contains("水质监测")) {
+        } else if (content.contains("水质检测")) {
             //初始化时间
             String fomatData = checkWaterTime;
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
