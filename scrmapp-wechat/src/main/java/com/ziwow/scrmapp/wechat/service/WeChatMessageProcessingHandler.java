@@ -49,6 +49,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.URLEncoder;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -72,6 +74,9 @@ public class WeChatMessageProcessingHandler {
 
     @Autowired
     private ChannelService channelService;
+
+    @Value("${check.water.time}")
+    private String checkWaterTime;
 
     @Value("${miniapp.appid}")
     private String miniappAppid;
@@ -400,8 +405,7 @@ public class WeChatMessageProcessingHandler {
         }
     }
 
-    private boolean dealWithText(final InMessage inMessage, HttpServletResponse response)
-        {
+    private boolean dealWithText(final InMessage inMessage, HttpServletResponse response) throws ParseException {
 
 
         String content = inMessage.getContent();
@@ -559,14 +563,45 @@ public class WeChatMessageProcessingHandler {
                 wechatRegisterService.savePullNewRegisterByEngineer(register);
             }
             return  false;
-        }else {
 
-            if (content.equals("completechat")){
-                redisService.set(RedisKeyConstants.getScrmappWechatCustomermsg()+inMessage.getFromUserName(),false,60L);
-                inMessage.setMsgType("completechat");
-                pushMessageToCallCenter(inMessage);//推送消息到呼叫中心
-                return true;
+        } else if (content.contains("水质监测")) {
+            //初始化时间
+            String fomatData = checkWaterTime;
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            //解析date类
+            Date planDate = sdf.parse(fomatData);
+            Date nowDate = new Date();
+
+            //对比时间
+          int result = nowDate.compareTo(planDate);
+          //若result<0说明未达到10月7日
+          if (result < 0) {
+            msgsb.append("恭喜您已成功报名！\n")
+                    .append("请持续关注我们,\n")
+                    .append("实时查看您的状态！\n")
+                    .append("后续我们会在公布中奖名单后\n")
+                        .append("主动联系您！\n");
+            } else {
+                //根据openid查询
+                WechatUser wechatUser = wechatUserService.getUserByOpenId(inMessage.getFromUserName());
+                //初始化判断变量,如果未查询到该用户则直接返回未中奖
+                boolean isLucky = false;
+                if (wechatUser != null){
+                    //查看是否在中奖名单中
+                    isLucky = wechatUserService.findUserLuckyByPhone(wechatUser.getMobilePhone());
+                }
+
+                if (isLucky) {
+                    msgsb.append("恭喜您！\n")
+                            .append("您已获得免费检测机会！\n")
+                            .append("我们的工作人员将会主动联系您！");
+                } else {
+                    msgsb.append("很抱歉！\n")
+                            .append("您未获得免费检测机会！\n")
+                            .append("请持续关注其他福利活动！");
+                }
             }
+        }else {
 
             boolean isInChat=checkChatStatus(inMessage.getFromUserName());
             if (isInChat){
