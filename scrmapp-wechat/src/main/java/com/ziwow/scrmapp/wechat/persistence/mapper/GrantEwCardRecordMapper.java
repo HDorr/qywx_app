@@ -99,6 +99,6 @@ public interface GrantEwCardRecordMapper {
      * @param phone
      * @return
      */
-    @Select("select id from t_grant_ew_card_record where  phone = #{phone} and send = true")
+    @Select("select id from t_grant_ew_card_record where  phone = #{phone} and send = true limit 1")
     Long selectReceiveRecordByPhone(@Param("phone") String phone);
 }
