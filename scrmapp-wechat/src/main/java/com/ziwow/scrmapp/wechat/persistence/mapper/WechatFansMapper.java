@@ -31,4 +31,5 @@ public interface WechatFansMapper {
     public Integer getWechatFansAndNotRegisterCount();
 
     List<TempWechatFans> selectTempWechatFansBtach1();
+
 }

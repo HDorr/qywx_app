@@ -54,6 +54,21 @@ public interface WeiXinService {
      */
     public UserInfo getUserInfo(String accessToken, String openid) throws Exception;
 
+
+
+    /**
+     * 获取授权类型为snsapi_userinfo用户信息
+     *
+     * @param @param  accessToken
+     * @param @param  openid
+     * @param @return 设定文件
+     * @return UserInfo    返回类型
+     * @Title: getUserInfo
+     * @version 1.0
+     * @author Hogen.hu
+     */
+    UserInfo getWebUserInfo(String accessToken, String openid) throws Exception;
+
     /**
      * jssdk
      *

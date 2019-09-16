@@ -26,4 +26,5 @@ public interface WechatFansService {
     public List<WechatFans> loadWechatFansAndNotRegisterByPage(int offset,int size);
     public Integer loadWechatFansAndNotRegisterCount();
     public List<TempWechatFans> loadTempWechatFansBatch1();
+
 }

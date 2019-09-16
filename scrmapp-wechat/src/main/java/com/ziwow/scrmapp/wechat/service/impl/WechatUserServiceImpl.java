@@ -241,6 +241,8 @@ public class WechatUserServiceImpl implements WechatUserService {
         return wechatUserMapper.getUserByRegisterSrc(src);
     }
 
+
+
     @Override
     public MallPcUser getMallPcUserByMobile(String mobile) {
         return mallPcUserMapper.getMallPcUserByMobile(mobile);
@@ -249,5 +251,10 @@ public class WechatUserServiceImpl implements WechatUserService {
     @Override
     public void saveMallPcUser(MallPcUser mallPcUser) {
         mallPcUserMapper.saveMallPcUser(mallPcUser);
+    }
+
+    @Override
+    public boolean findUserLuckyByPhone(String mobilePhone) {
+        return wechatUserMapper.findUserLuckyByPhone(mobilePhone)>0? true:false;
     }
 }

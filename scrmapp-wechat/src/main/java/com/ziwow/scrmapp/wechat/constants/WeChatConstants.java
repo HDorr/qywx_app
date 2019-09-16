@@ -10,6 +10,7 @@ package com.ziwow.scrmapp.wechat.constants;
 public class WeChatConstants {	
     public static final String BASE_ACCESSTOKEN_URL = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential";
     public static final String USER_INFO_URL = "https://api.weixin.qq.com/cgi-bin/user/info";
+    public static final String WEB_USER_INFO_URL = "https://api.weixin.qq.com/sns/userinfo";
     public static final String TICKET_URL = "https://api.weixin.qq.com/cgi-bin/ticket/getticket";
     //客服接口
     public static final String CUSTOM_SEND = "https://api.weixin.qq.com/cgi-bin/message/custom/send?access_token=";

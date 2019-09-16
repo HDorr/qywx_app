@@ -10,11 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.PostConstruct;
 import java.util.List;
-import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -33,32 +29,23 @@ public class GrantEwCardTask extends AbstractGrantEwCard{
 
     private volatile boolean flag = true;
 
-    private ThreadPoolExecutor service;
-
-    @PostConstruct
-    public void initThreadPool(){
-        service = new ThreadPoolExecutor(1,1,5, TimeUnit.SECONDS,new LinkedBlockingQueue<Runnable>(1), new ThreadPoolExecutor.CallerRunsPolicy());
-    }
-
     @Override
     public ReturnT<String> execute(String s) throws Exception {
         final Integer total = Integer.valueOf(s);
-        XxlJobLogger.log("参数为{}",total);
+
         final AtomicInteger num = new AtomicInteger(0);
-        XxlJobLogger.log("num:{}",num);
-        service.submit(new Runnable() {
+
+        Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
                 List<GrantEwCardRecord> records = grantEwCardRecordService.selectRecord();
-                XxlJobLogger.log("records.size:{}",records.size());
+                XxlJobLogger.log("延保卡查询总数:{}",records.size());
                 for (GrantEwCardRecord record : records) {
                     if (flag && total>num.intValue()){
                         final boolean grant = grantEwCard(record.getPhone(), record.getType());
-                        if (true) {
+                        if (grant) {
                             grantEwCardRecordService.updateSendByPhone(record.getPhone(), true);
-                            final int sendNum = num.addAndGet(1);
-                            LOG.info("已发放{}张延保卡",sendNum);
-                            XxlJobLogger.log("已发放{}张延保卡",sendNum);
+                            XxlJobLogger.log("已发放",num.addAndGet(1),"张延保卡");
                         }
                     }else {
                         LOG.info("发放延保卡子任务被停止");
@@ -66,25 +53,23 @@ public class GrantEwCardTask extends AbstractGrantEwCard{
                         break;
                     }
                 }
-                synchronized (num) {
-                    LOG.info("发放延保卡子任务被停止");
-                    XxlJobLogger.log("唤醒主线程堵塞");
-                    num.notifyAll();
+                synchronized (Thread.currentThread()){
+                    Thread.currentThread().notifyAll();
+                    XxlJobLogger.log("唤醒延保卡执行主线程");
                 }
                 flag = true;
             }
         });
 
+        thread.start();
 
         try {
-            synchronized (num) {
-                num.wait();
-                LOG.info("主线程堵塞被唤醒");
-                XxlJobLogger.log("主线程堵塞被唤醒");
+            synchronized (thread) {
+                thread.wait();
+                XxlJobLogger.log("延保卡执行主线程被唤醒");
             }
         } catch (InterruptedException e) {
             flag = false;
-            LOG.info("发放延保卡主任务停止");
             XxlJobLogger.log("发放延保卡主任务停止");
         }
         return ReturnT.SUCCESS;

@@ -32,4 +32,7 @@ public interface WechatUserMapper {
     WechatUserVo getBaseUserInfoByUserId(String userId);
 
     QtyUserVO getQtyUserByUserId(@Param("userId") String userId);
+
+
+   int findUserLuckyByPhone(String mobilePhone);
 }

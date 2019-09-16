@@ -101,6 +101,25 @@ public class WeiXinWerviceImpl implements WeiXinService {
     }
 
     @Override
+    public UserInfo getWebUserInfo(String accessToken, String openid) throws Exception {
+        Map<String, String> params = new HashMap<String, String>();
+        params.put("access_token", accessToken);
+        params.put("openid", openid);
+        params.put("lang", "zh_CN");
+        String jsonStr = HttpKit.get(WeChatConstants.WEB_USER_INFO_URL, params);
+        if (StringUtils.isNotEmpty(jsonStr)) {
+            LOG.info("getUserInfo jsonStr:" + jsonStr);
+            JSONObject obj = JSONObject.parseObject(jsonStr);
+            if (obj.get("errcode") != null) {
+                throw new Exception(obj.getString("errmsg"));
+            }
+            UserInfo user = JSONObject.toJavaObject(obj, UserInfo.class);
+            return user;
+        }
+        return null;
+    }
+
+    @Override
     public String getTicket(String accessToken, String type) throws Exception {
         String jsonStr = HttpKit.get(WeChatConstants.TICKET_URL.concat("?access_token=") + accessToken + "&type=" + type);
         if (StringUtils.isNotEmpty(jsonStr)) {
