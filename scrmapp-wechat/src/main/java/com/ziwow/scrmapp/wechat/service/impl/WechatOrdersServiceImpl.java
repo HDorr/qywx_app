@@ -516,8 +516,8 @@ public class WechatOrdersServiceImpl implements WechatOrdersService {
     String[] params = {name, phone, address, serverType, subscribeResult};
     //wechatTemplateService.subscribeResultNoticeTemplate(openId, getOrdersListPageOauthUrl(), title, name, phone, address, serverType, subscribeResult, remark);
     wechatTemplateService
-        .sendTemplate(openId, "pages/queryProgress？from=metinfo", Arrays.asList(params),
-            "reservationServiceRemindTemplate", true, title);
+        .sendTemplate(openId, "pages/queryProgress?from=metinfo", Arrays.asList(params),
+            "subscribeResultNoticeTemplate", true, title);
 
   }
 
@@ -533,7 +533,7 @@ public class WechatOrdersServiceImpl implements WechatOrdersService {
       String[] params = {serverType, time, time};
       // wechatTemplateService.serviceOrCancellationTemplate(openId, getOrdersListPageOauthUrl(), title, serverType, time, time, remark);
       wechatTemplateService
-          .sendTemplate(openId, "pages/queryProgress？from=metinfo", Arrays.asList(params),
+          .sendTemplate(openId, "pages/queryProgress?from=metinfo", Arrays.asList(params),
               "serviceOrCancellationTemplate", true, title);
     }
   }
@@ -548,7 +548,7 @@ public class WechatOrdersServiceImpl implements WechatOrdersService {
       //String remark = "欢迎点击【我的预约】对工程师的服务进行评价，它会成为下一个顾客的参考，也会帮助沁先生更好地为您服务！如已评价，可忽略该消息。";
       String[] params = {ordersCode,orderTime};
       wechatTemplateService
-          .sendTemplate(openId, "pages/queryProgress？from=metinfo", Arrays.asList(params),
+          .sendTemplate(openId, "pages/queryProgress?from=metinfo", Arrays.asList(params),
               "serviceEvaluationToRemindTemplate", true, title);
       //wechatTemplateService.serviceEvaluationToRemindTemplate(openId, getOrdersListPageOauthUrl(), title, ordersCode, orderTime, remark);
     }
@@ -575,7 +575,7 @@ public class WechatOrdersServiceImpl implements WechatOrdersService {
       //String remark = "点击【我的预约】了解详细状态，保持电话畅通，工程师会尽快与您联系。";
       String[] params = {orderType, orderCode, orderTime, engineerName};
       wechatTemplateService
-          .sendTemplate(openId, "pages/queryProgress？from=metinfo", Arrays.asList(params),
+          .sendTemplate(openId, "pages/queryProgress?from=metinfo", Arrays.asList(params),
               "servicesToNoticeTemplate", true, title);
       //String url = myOrderDetailUrl + "?userId=" + userId + "&ordersCode=" + orderCode;
       //wechatTemplateService.servicesToNoticeTemplate(openId, getOrdersListPageOauthUrl(), title, orderType, orderCode, orderTime, engineerName, mobilePhone, remark);
