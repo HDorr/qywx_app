@@ -75,6 +75,10 @@ public class WeChatMessageProcessingHandler {
     @Autowired
     private ChannelService channelService;
 
+
+    @Value("${app.v}")
+    private String appVersion;
+
     @Value("${check.water.time}")
     private String checkWaterTime;
 
@@ -550,7 +554,9 @@ public class WeChatMessageProcessingHandler {
             replyMessage(inMessage, response, msgsb);
             return isPushToCallCenter;
         }else if (content.contains("攻略")||content.contains("延保卡")){
-          return false;
+            return false;
+        }else if (content.equals("appV")){
+            msgsb.append("version:"+appVersion);
         } else if("除菌去味一步到位".contains(content)||"除菌去味一喷到位".contains(content)||"卫宝".contains(content)){
             WechatRegister register = new WechatRegister();
             register.setOpenId(inMessage.getFromUserName());
@@ -573,13 +579,13 @@ public class WeChatMessageProcessingHandler {
             Date nowDate = new Date();
 
             //对比时间
-          int result = nowDate.compareTo(planDate);
-          //若result<0说明未达到10月7日
-          if (result < 0) {
-            msgsb.append("恭喜您已成功报名！\n")
-                    .append("请持续关注我们,\n")
-                    .append("实时查看您的状态！\n")
-                    .append("后续我们会在公布中奖名单后\n")
+            int result = nowDate.compareTo(planDate);
+            //若result<0说明未达到10月7日
+            if (result < 0) {
+                msgsb.append("恭喜您已成功报名！\n")
+                        .append("请持续关注我们,\n")
+                        .append("实时查看您的状态！\n")
+                        .append("后续我们会在公布中奖名单后\n")
                         .append("主动联系您！\n");
             } else {
                 //根据openid查询
