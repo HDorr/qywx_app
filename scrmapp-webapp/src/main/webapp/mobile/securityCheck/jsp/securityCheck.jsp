@@ -25,7 +25,7 @@
                 <input class="searInput" type="text" id="code" placeholder="请输入防伪码" oninput="if(/\D/.test(this.value)){this.value=this.value.replace(/\D/g,'')}" onpaste="if(/\D/.test(this.value)){this.value=this.value.replace(/\D/g,'')}"  onchange="if(/\D/.test(this.value)){this.value=this.value.replace(/\D/g,'')}">
                 <span class="scanIcon" id="scanQrCode"></span>
             </div>
-            <p class="tipP">格式不符合要求,请重新输s入</p>
+            <p class="tipP">格式不符合要求,请重新输入</p>
         </div>
         <div class="checkArea">
             <button class="qy-btn-all" id="checkCode">立即查询</button>

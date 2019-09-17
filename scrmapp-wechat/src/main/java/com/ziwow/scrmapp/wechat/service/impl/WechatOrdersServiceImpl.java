@@ -181,10 +181,19 @@ public class WechatOrdersServiceImpl implements WechatOrdersService {
         List<ProductVo> prodLst = wechatOrdersParam.getProducts();
         List<AcceptanceProductParam> products = Lists.newArrayList();
         for (ProductVo productVo : prodLst) {
+            final String saleMarket;
+            final String netSaleNo;
+            if (StringUtils.isBlank(orderTime)){
+                //原单原回
+                saleMarket = "微信商城";
+                netSaleNo = wechatOrdersParam.getOrderNo();
+            }else {
+                saleMarket = BuyChannel.getBuyChannel(productVo.getO2o(), productVo.getBuyChannel());
+                netSaleNo = productVo.getShoppingOrder();
+            }
             String itemKind = productVo.getItemKind();
             int fromChannel = productVo.getSaleType();
-            String saleMarket = BuyChannel.getBuyChannel(productVo.getO2o(), productVo.getBuyChannel());
-            String netSaleNo = StringUtils.isBlank(orderTime) ? wechatOrdersParam.getOrderNo() : productVo.getShoppingOrder();
+
             String bigcName = productVo.getTypeName();
             String spec = productVo.getModelName();
             String barCode = productVo.getProductBarCode();
