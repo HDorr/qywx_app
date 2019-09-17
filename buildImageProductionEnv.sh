@@ -21,12 +21,9 @@ then
     mvn clean package -P$ENV
 
     # 3.构建镜像
-    cd ..
-    echo "===================>镜像构建-scrmPC-生产环境"
-    docker login 47.96.110.23:8081
-    docker build -t="47.96.110.23:8081/scrm/app:$TAG-$ENV" .
-    echo "===================>推送镜像"
-    docker push "47.96.110.23:8081/scrm/app:$TAG-$ENV"
+    cd ../scrmapp-webapp
+    echo "===================>镜像构建-scrm-生产环境"
+    mvn docker:build -DdockerImageTags=$TAG-$ENV
 fi
 
 
