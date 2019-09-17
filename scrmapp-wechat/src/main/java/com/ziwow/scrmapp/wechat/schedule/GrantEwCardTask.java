@@ -45,7 +45,7 @@ public class GrantEwCardTask extends AbstractGrantEwCard{
                         final boolean grant = grantEwCard(record.getPhone(), record.getType());
                         if (grant) {
                             grantEwCardRecordService.updateSendByPhone(record.getPhone(), true);
-                            XxlJobLogger.log("已发放",num.addAndGet(1),"张延保卡");
+                            XxlJobLogger.log("已发放{}张延保卡",num.addAndGet(1));
                         }
                     }else {
                         LOG.info("发放延保卡子任务被停止");
