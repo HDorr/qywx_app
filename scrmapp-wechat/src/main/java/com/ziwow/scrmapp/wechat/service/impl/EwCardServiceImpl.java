@@ -10,7 +10,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.Date;
+import java.util.List;
+import java.util.Set;
 
 /**
  * @author songkaiqi
@@ -30,7 +33,7 @@ public class EwCardServiceImpl implements EwCardService {
             EwCardItems ewCardItem = new EwCardItems();
             ewCardItem.setItemCode(itemCodes[i]);
             ewCardItem.setItemName(itemNames[i]);
-            ewCardMapper.addEwCardItems(ewCard.getId(),itemNames[i],itemCodes[i]);
+            ewCardMapper.addEwCardItems(ewCard.getId(), itemNames[i], itemCodes[i]);
         }
     }
 
@@ -46,7 +49,7 @@ public class EwCardServiceImpl implements EwCardService {
 
     @Override
     public List<EwCard> selectEwCardByItemName(String itemName, Long fansId) {
-        return ewCardMapper.selectEwCardByItemNameAndFansId(itemName,fansId);
+        return ewCardMapper.selectEwCardByItemNameAndFansId(itemName, fansId);
     }
 
     @Override
@@ -56,25 +59,25 @@ public class EwCardServiceImpl implements EwCardService {
 
     @Override
     public EwCard selectEwCardByBarCodeAndFansId(String barCode, Long fansId) {
-        return ewCardMapper.selectEwCardByBarCodeAndFansId(barCode,fansId);
+        return ewCardMapper.selectEwCardByBarCodeAndFansId(barCode, fansId);
     }
 
     @Override
     public void useEwCard(String cardNo, String productBarCode, Date purchDate, Date repairTerm, Boolean installList, EwCardStatus ewCardStatus) {
-        ewCardMapper.updateCard(cardNo,productBarCode,purchDate,repairTerm,installList,ewCardStatus);
+        ewCardMapper.updateCard(cardNo, productBarCode, purchDate, repairTerm, installList, ewCardStatus);
     }
 
     @Override
     public EwCard selectMyEwCardByNo(String cardNo, Long fansId) {
-        return ewCardMapper.selectEwCardByNoAndFansId(cardNo,fansId);
+        return ewCardMapper.selectEwCardByNoAndFansId(cardNo, fansId);
     }
 
     @Override
     public List<EwCard> selectEwCardByProductCode(String productCode, Long id) {
         final List<Long> cardIds = ewCardMapper.selectEwCardIdByCodeAndFansId(productCode, id);
-        if (CollectionUtils.isEmpty(cardIds)){
+        if (CollectionUtils.isEmpty(cardIds)) {
             return Collections.EMPTY_LIST;
-        }else {
+        } else {
             return ewCardMapper.selectEwCardByCardIds(cardIds);
         }
     }
@@ -96,12 +99,17 @@ public class EwCardServiceImpl implements EwCardService {
 
     @Override
     public List<EwCard> selectEwCardsByStatusAndInstall(EwCardStatus ewCardStatus, boolean installList) {
-        return ewCardMapper.selectEwCardsByStatusAndInstall(ewCardStatus,installList);
+        return ewCardMapper.selectEwCardsByStatusAndInstall(ewCardStatus, installList);
     }
 
     @Override
     public void updateCardStatus(String cardNo, EwCardStatus status) {
-        ewCardMapper.updateCardStatus(status,cardNo);
+        ewCardMapper.updateCardStatus(status, cardNo);
+    }
+
+    @Override
+    public Long loadByNo(String cardNo) {
+        return ewCardMapper.loadEwCardByNo(cardNo);
     }
 
 }
