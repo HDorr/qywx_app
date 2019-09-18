@@ -69,7 +69,7 @@
                     </div>
                     {{if faultImage}}
                     <div class="imgBox">
-                       <span class="pull-left">维修照片：</span>
+                       <span class="pull-left">备注照片：</span>
                        <div class="images">
                             {{each faultImage.split(',') as faultImage index}}
                             <img src="{{faultImage}}" onClick="previewImage(event)" alt="">
