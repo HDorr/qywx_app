@@ -14,4 +14,14 @@
     <select id="query" parameterType="java.lang.Long" resultMap="BaseResultMap">
         select * from t_channel where id = #{channelId} limit 0,1
     </select>
+
+
+
+    <select id="selectWelcomeTextByChannelId" resultType="string">
+        select welcome_text
+        from t_channel
+        where id = #{channelId} limit 0,1
+    </select>
+
+
 </mapper>

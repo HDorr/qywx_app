@@ -351,7 +351,18 @@ public class WeChatMessageProcessingHandler {
     }
 
     private void dealWithSubscribe(InMessage inMessage,HttpServletResponse response) {
+        //获取渠道号
+        String channelId = inMessage.getEventKey().split("_")[1];
+        //通过渠道号获取欢迎语
+        String welcomeText = channelService.selectWelcomeTextByChannelId(channelId);
+        //判断是否有欢迎语
         StringBuilder msgsb=new StringBuilder();
+
+        if (StringUtils.isNotBlank(welcomeText)){
+            msgsb.append(welcomeText);
+
+
+        }else {
         msgsb.append("Hi~欢迎进入沁园水健康守护基地\n")
             .append("\n")
             .append("点击<a href='http://www.qinyuan.cn' data-miniprogram-appid='")
@@ -359,11 +370,6 @@ public class WeChatMessageProcessingHandler {
             .append("' data-miniprogram-path='pages/pre_register?fromWechatService=1'>【会员注册】</a>")
             .append("畅享在线会员权益 尊享专属积分福利\n")
             .append("\n")
-//            .append("点击<a href='http://www.qinyuan.cn' data-miniprogram-appid='")
-//            .append(miniappAppid)
-//            .append("' data-miniprogram-path='pages/home?goto=bind_product'>【绑定产品】</a>\n")
-//            .append("填写产品信息，开启滤芯更换提醒，精准守护您和家人的净水健康\n")
-//            .append("\n")
             .append("点击<a href='http://www.qinyuanmall.com/mobile/product/filterIndex.jhtml' data-miniprogram-appid='")
             .append(miniappAppid)
             .append("' data-miniprogram-path='pages/home'>【要购买•微信商城】</a>\n")
@@ -375,8 +381,8 @@ public class WeChatMessageProcessingHandler {
             .append("24小时在线预约滤芯、安装、保养、维修等售后服务\n")
             .append("\n")
             .append("2019，沁园和您一起更净一步！");
-
         replyMessage(inMessage, response, msgsb);
+        }
     }
 
     private void replyMessage (InMessage inMessage, HttpServletResponse response,
