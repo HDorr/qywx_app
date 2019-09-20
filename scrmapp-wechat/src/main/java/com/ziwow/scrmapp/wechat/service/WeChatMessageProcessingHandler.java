@@ -351,17 +351,17 @@ public class WeChatMessageProcessingHandler {
     }
 
     private void dealWithSubscribe(InMessage inMessage,HttpServletResponse response) {
-        //获取渠道号
-        String channelId = inMessage.getEventKey().split("_")[1];
-        //通过渠道号获取欢迎语
-        String welcomeText = channelService.selectWelcomeTextByChannelId(channelId);
-        //判断是否有欢迎语
         StringBuilder msgsb=new StringBuilder();
 
-        if (StringUtils.isNotBlank(welcomeText)){
-            msgsb.append(welcomeText);
+        if (StringUtils.isNotEmpty(inMessage.getEventKey())) {
+            //获取渠道号
+            String channelId = inMessage.getEventKey().split("_")[1];
+            //通过渠道号获取欢迎语
+            String welcomeText = channelService.selectWelcomeTextByChannelId(channelId);
 
-
+            if (StringUtils.isNotBlank(welcomeText)){
+                msgsb.append(welcomeText);
+            }
         }else {
         msgsb.append("Hi~欢迎进入沁园水健康守护基地\n")
             .append("\n")
