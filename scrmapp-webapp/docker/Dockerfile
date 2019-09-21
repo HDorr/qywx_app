@@ -8,6 +8,7 @@ WORKDIR /root
 # 请根据所在地域替换探针的下载地址。
 RUN wget http://arms-apm-shanghai.oss-cn-shanghai.aliyuncs.com/ArmsAgent.zip -O ArmsAgent.zip
 RUN unzip ArmsAgent.zip -d /root/
+RUN rm -rf /root/ArmsAgent.zip
 # LicenseKey 在控制台应用监控接入页面查看。
 # AppName 为用户自定义 ARMS 监控应用名称，用户名暂不支持中文。
 # 若所有镜像都接入同一个应用监控任务，配置此处的 arms_licenseKey 和 arms_appName 即可。
