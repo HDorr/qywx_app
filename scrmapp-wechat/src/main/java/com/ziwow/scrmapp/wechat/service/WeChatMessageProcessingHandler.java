@@ -162,8 +162,11 @@ public class WeChatMessageProcessingHandler {
                         LOG.info("关注openId=[{}]", inMessage.getFromUserName());
                         String openId = inMessage.getFromUserName();
                         String wxToken = inMessage.getToUserName();
+                        //通过openid在fans表中查询
                         WechatFans fans = wechatFansService.getWechatFansByOpenId(openId);
+                        //若不为空
                         if (null != fans) {
+                            //判断是否携带渠道值
                             if (!StringUtils.isEmpty(inMessage.getEventKey())) {
                                 String channelId = inMessage.getEventKey().split("_")[1];
                                 Channel channel = channelService.query(Long.parseLong(channelId));
@@ -172,6 +175,7 @@ public class WeChatMessageProcessingHandler {
                                 }
                             }
                             if(StringUtils.isBlank(fans.getUnionId())) {
+                                //通过调用微信接口获取用户详情
                                 UserInfo userInfo = wechatFansService.getUserInfoByOpenId(openId);
                                 if(null != userInfo) {
                                     fans.setUnionId(userInfo.getUnionid());
@@ -183,9 +187,12 @@ public class WeChatMessageProcessingHandler {
                                 }
                             }
                             fans.setIsCancel(0);
+                            //修改fans表中相关数据
                             wechatFansService.updateWechatFans(fans);
                         } else {
+                            //为空则初始化对象
                             WechatFans wechatFans = new WechatFans();
+                            //查看是否携带渠道值,若携带则注入上创建的对象
                             if (!StringUtils.isEmpty(inMessage.getEventKey())) {
                                 String channelId = inMessage.getEventKey().split("_")[1];
                                 Channel channel = channelService.query(Long.parseLong(channelId));
@@ -193,8 +200,10 @@ public class WeChatMessageProcessingHandler {
                                     wechatFans.setChannelId(channelId);
                                 }
                             }
+                            //调用微信接口获取用户详情
                             UserInfo userInfo = wechatFansService.getUserInfoByOpenId(openId);
                             String unionId = StringUtils.EMPTY;
+                            //插入用户信息
                             if(null != userInfo) {
                                 unionId = userInfo.getUnionid();
                                 wechatFans.setUnionId(userInfo.getUnionid());
@@ -363,25 +372,25 @@ public class WeChatMessageProcessingHandler {
                 msgsb.append(welcomeText);
             }
         }else {
-        msgsb.append("Hi~欢迎进入沁园水健康守护基地\n")
-            .append("\n")
-            .append("点击<a href='http://www.qinyuan.cn' data-miniprogram-appid='")
-            .append(miniappAppid)
-            .append("' data-miniprogram-path='pages/pre_register?fromWechatService=1'>【会员注册】</a>")
-            .append("畅享在线会员权益 尊享专属积分福利\n")
-            .append("\n")
-            .append("点击<a href='http://www.qinyuanmall.com/mobile/product/filterIndex.jhtml' data-miniprogram-appid='")
-            .append(miniappAppid)
-            .append("' data-miniprogram-path='pages/home'>【要购买•微信商城】</a>\n")
-            .append("全场积分抵现享不停，积分多积多优惠\n")
-            .append("\n")
-            .append("点击<a href='")
-            .append(mineBaseUrl)
-            .append("/scrmapp/consumer/product/index'>【找售后•一键服务】</a>\n")
-            .append("24小时在线预约滤芯、安装、保养、维修等售后服务\n")
-            .append("\n")
-            .append("2019，沁园和您一起更净一步！");
-        replyMessage(inMessage, response, msgsb);
+            msgsb.append("Hi~欢迎进入沁园水健康守护基地\n")
+                .append("\n")
+                .append("点击<a href='http://www.qinyuan.cn' data-miniprogram-appid='")
+                .append(miniappAppid)
+                .append("' data-miniprogram-path='pages/pre_register?fromWechatService=1'>【会员注册】</a>")
+                .append("畅享在线会员权益 尊享专属积分福利\n")
+                .append("\n")
+                .append("点击<a href='http://www.qinyuanmall.com/mobile/product/filterIndex.jhtml' data-miniprogram-appid='")
+                .append(miniappAppid)
+                .append("' data-miniprogram-path='pages/home'>【要购买•微信商城】</a>\n")
+                .append("全场积分抵现享不停，积分多积多优惠\n")
+                .append("\n")
+                .append("点击<a href='")
+                .append(mineBaseUrl)
+                .append("/scrmapp/consumer/product/index'>【找售后•一键服务】</a>\n")
+                .append("24小时在线预约滤芯、安装、保养、维修等售后服务\n")
+                .append("\n")
+                .append("2019，沁园和您一起更净一步！");
+            replyMessage(inMessage, response, msgsb);
         }
     }
 
