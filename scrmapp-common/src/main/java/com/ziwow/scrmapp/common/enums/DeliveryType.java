@@ -8,7 +8,7 @@ package com.ziwow.scrmapp.common.enums;
 public enum  DeliveryType {
 
     NORMAL("普通受理单",4),
-    DEALER("带货上门",21),
+    YDYH("原单原回受理单",21),
 
     ;
     private String message;
