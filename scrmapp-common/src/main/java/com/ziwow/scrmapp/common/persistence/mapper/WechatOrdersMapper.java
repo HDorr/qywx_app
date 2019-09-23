@@ -70,4 +70,11 @@ public interface WechatOrdersMapper {
     int updateOrderStatus(@Param("ordersId") Long ordersId, @Param("status") int status, @Param("date") Date date);
 
     List<WechatOrdersVo> getWechatOrdersByProductId(@Param("productId") Long productId);
+
+    /**
+     * 判断是否是原单原回的订单
+     * @param orderCode
+     * @return
+     */
+    int isYDYHOrder(@Param("orderCode") String orderCode);
 }

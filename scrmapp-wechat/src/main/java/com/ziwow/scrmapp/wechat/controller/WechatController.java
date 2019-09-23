@@ -32,10 +32,12 @@ import com.ziwow.scrmapp.common.service.ThirdPartyService;
 import com.ziwow.scrmapp.common.utils.EwCardUtil;
 import com.ziwow.scrmapp.tools.thirdParty.SignUtil;
 import com.ziwow.scrmapp.tools.utils.DateUtil;
+import com.ziwow.scrmapp.tools.utils.MD5;
 import com.ziwow.scrmapp.tools.utils.StringUtil;
 import com.ziwow.scrmapp.tools.utils.UniqueIDBuilder;
 import com.ziwow.scrmapp.tools.weixin.Tools;
 import com.ziwow.scrmapp.tools.weixin.XmlUtils;
+import com.ziwow.scrmapp.wechat.constants.QYConstans;
 import com.ziwow.scrmapp.wechat.constants.WeChatConstants;
 import com.ziwow.scrmapp.wechat.enums.BuyChannel;
 import com.ziwow.scrmapp.wechat.persistence.entity.MallPcUser;
@@ -43,12 +45,21 @@ import com.ziwow.scrmapp.wechat.persistence.entity.WechatFans;
 import com.ziwow.scrmapp.wechat.persistence.entity.WechatUser;
 import com.ziwow.scrmapp.wechat.service.*;
 import com.ziwow.scrmapp.wechat.utils.BarCodeConvert;
+import com.ziwow.scrmapp.wechat.utils.SyncQYUtil;
 import com.ziwow.scrmapp.wechat.vo.MiniappSendSms;
 import com.ziwow.scrmapp.wechat.vo.WechatFansVo;
 import com.ziwow.scrmapp.wechat.vo.WechatJSSdkSignVO;
 import javax.servlet.ServletInputStream;
 import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
 import org.apache.commons.lang.StringUtils;
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -62,13 +73,11 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.io.IOException;
 import java.net.URLEncoder;
 import java.sql.SQLDataException;
 import java.text.MessageFormat;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author hogen
@@ -497,10 +506,36 @@ public class WechatController {
         result.setReturnCode(Constant.SUCCESS);
         try {
             wechatOrdersService.dispatchDot(dispatchDotParam);
-        } catch (SQLDataException e) {
+
+        } catch (Exception e) {
             logger.info("400派单给网点同步失败!", e);
             result.setReturnCode(Constant.FAIL);
             result.setReturnMsg("400派单给网点同步失败[" + e.getMessage() + "]");
+        }
+        // 派单成功自动同步至商城系统 && 订单是原单原回
+        if(result.getReturnCode() == 1 && wechatOrdersService.isYDYHOrder(dispatchDotParam.getAcceptNumber())){
+            Map<String,Object> params = new HashMap<>();
+            params.put("orderCode",dispatchDotParam.getAcceptNumber());
+            String res = new SyncQYUtil().getResult("QINYUAN",params,"POST",
+                    "http://localhost:8080/sellerpc/syncOrder/status");
+//            logger.info("开始调用沁园同步订单状态接口：url = [{}]，params = [ 时间戳={}，签名={}，订单号={}]", QYConstans.URL,
+//                    timeStamp,signature,dispatchDotParam.getAcceptNumber());
+//            String qyResult = "";
+//            try {
+//                final HttpResponse response = client.execute(httpPost);
+//                HttpEntity entity = response.getEntity();
+//                qyResult = EntityUtils.toString(entity, "UTF-8");
+//            } catch (IOException e) {
+//                logger.error("调用沁园同步订单状态接口失败，错误：[{}]", e);
+//            }
+//            logger.info("调用沁园同步订单状态接口成功，返回值为：[{}]", qyResult);
+            if(StringUtils.equals(res,"false")){
+                result.setReturnMsg("400派单给网点同步成功，但同步订单状态失败!");
+                result.setReturnCode(QYConstans.FAIL);
+                return result;
+            }
+            result.setReturnMsg("400派单给网点同步成功！同步订单状态成功!");
+            result.setReturnCode(QYConstans.SUCCESS);
         }
         return result;
     }
