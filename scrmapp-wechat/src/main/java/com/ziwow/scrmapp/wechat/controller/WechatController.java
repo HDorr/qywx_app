@@ -98,6 +98,8 @@ public class WechatController {
     private String mallAutoLoginUrl;
     @Value("${mgcc.myplan.url}")
     private String myPlanUrl;
+    @Value("${mall.syncOrderStatus.url}")
+    private String mallUrl;
     @Autowired
     private WechatUserService wechatUserService;
     @Autowired
@@ -519,8 +521,7 @@ public class WechatController {
             params.put("orderCode",dispatchDotParam.getAcceptNumber());
             Map res = null;
             try {
-                res = SyncQYUtil.getResult("QINYUAN",params,"POST",
-                        "http://localhost:8080/v2/syncOrder/status");
+                res = SyncQYUtil.getResult("QINYUAN",params,"POST", mallUrl);
             }catch (Exception e){
                 logger.error("400派单给网点同步成功，但同步订单状态失败！",e);
                 result.setReturnCode(Constant.FAIL);
