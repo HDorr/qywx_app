@@ -390,8 +390,8 @@ public class WeChatMessageProcessingHandler {
                 .append("24小时在线预约滤芯、安装、保养、维修等售后服务\n")
                 .append("\n")
                 .append("2019，沁园和您一起更净一步！");
-            replyMessage(inMessage, response, msgsb);
         }
+        replyMessage(inMessage, response, msgsb);
     }
 
     private void replyMessage (InMessage inMessage, HttpServletResponse response,
