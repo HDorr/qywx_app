@@ -889,6 +889,6 @@
     </update>
 
     <select id="isYDYHOrder" resultType="int">
-        select count(id) from t_wechat_orders where ordersCode = #{orderCode} and delivery_type = 'YDYH'
+        select id from t_wechat_orders where ordersCode = #{orderCode} and delivery_type = 'YDYH' limit 0,1
     </select>
 </mapper>
