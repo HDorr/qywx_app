@@ -25,6 +25,7 @@ import com.ziwow.scrmapp.common.enums.EwCardTypeEnum;
 import com.ziwow.scrmapp.common.exception.ParamException;
 import com.ziwow.scrmapp.common.persistence.entity.FilterLevel;
 import com.ziwow.scrmapp.common.persistence.entity.Product;
+import com.ziwow.scrmapp.common.persistence.entity.WechatOrders;
 import com.ziwow.scrmapp.common.result.BaseResult;
 import com.ziwow.scrmapp.common.result.Result;
 import com.ziwow.scrmapp.common.service.MobileService;
@@ -604,6 +605,18 @@ public class WechatController {
         result.setReturnCode(Constant.SUCCESS);
         try {
             wechatOrdersService.dispatchCompleteOrder(dispatchOrderParam);
+            if (wechatOrdersService.isYDYHOrder(dispatchOrderParam.getAcceptNumber())){
+                Map<String,Object> params = new HashMap<>();
+                params.put("acceptNo",dispatchOrderParam.getAcceptNumber());
+                params.put("finishNo",dispatchOrderParam.getFinishNumber());
+                Map result1 = SyncQYUtil.getResult("QINYUAN", params, "POST", mallUrl);
+                if ((Integer)result1.get("errorCode") != 200){
+                    logger.info("工单完工同步失败,受理单号：{},完工单号：{}",dispatchOrderParam.getAcceptNumber(),dispatchOrderParam.getFinishNumber());
+                    result.setReturnCode(Constant.FAIL);
+                    result.setReturnMsg("工单完工同步失败");
+                    return result;
+                }
+            }
         } catch (Exception e) {
             logger.error("工单完工同步失败:", e);
             result.setReturnCode(Constant.FAIL);
