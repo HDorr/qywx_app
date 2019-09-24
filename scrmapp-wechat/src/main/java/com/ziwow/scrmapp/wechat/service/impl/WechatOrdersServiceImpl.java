@@ -970,7 +970,7 @@ public class WechatOrdersServiceImpl implements WechatOrdersService {
 
     @Override
     public boolean isYDYHOrder(String orderCode){
-        return wechatOrdersMapper.isYDYHOrder(orderCode) > 0;
+        return wechatOrdersMapper.isYDYHOrder(orderCode) != null;
     }
 
 }

@@ -1,8 +1,12 @@
 package com.ziwow.scrmapp.wechat.utils;
 
+import com.alibaba.fastjson.JSON;
+import com.ziwow.scrmapp.common.utils.HttpClientUtil;
+import com.ziwow.scrmapp.tools.utils.HttpClientUtils;
 import com.ziwow.scrmapp.tools.utils.MD5;
 import com.ziwow.scrmapp.wechat.controller.WechatController;
 import net.sf.json.JSONObject;
+import org.apache.commons.lang.StringUtils;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -12,9 +16,13 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.client.SimpleClientHttpRequestFactory;
+import org.springframework.web.client.RestTemplate;
 
+import javax.annotation.PostConstruct;
 import java.io.IOException;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -24,25 +32,16 @@ import java.util.Map;
 public class SyncQYUtil {
     Logger logger = LoggerFactory.getLogger(SyncQYUtil.class);
 
-    public String getResult(String key, Map<String,Object> params,String method,String url){
+    public static Map getResult(String key, Map<String,Object> params,String method,String url){
         String timeStamp = String.valueOf(new Date().getTime());
-        String signature = MD5.toMD5(timeStamp + key);
+        String signature = MD5.toMD5(key + timeStamp);
         params.put("timeStamp",timeStamp);
         params.put("signature",signature);
-        JSONObject jsonBody =JSONObject.fromObject(params);
-        HttpClient client = new DefaultHttpClient();
-        HttpPost httpPost = new HttpPost(url); // 沁园的接口地址
-        HttpEntity reqEntity = new StringEntity(jsonBody.toString(),"UTF-8");
-        httpPost.setEntity(reqEntity);
-        httpPost.setHeader("Content-Type", "application/json;charset=UTF-8");
-        String qyResult = "";
-        try {
-            final HttpResponse response = client.execute(httpPost);
-            HttpEntity entity = response.getEntity();
-            qyResult = EntityUtils.toString(entity, "UTF-8");
-        } catch (IOException e) {
-            qyResult = "false";
+        Map result = new HashMap<>();
+        String res = HttpClientUtils.postJson(url, JSONObject.fromObject(params).toString());
+        if (StringUtils.isNotBlank(res)) {
+            result = JSON.parseObject(res);
         }
-        return qyResult;
+        return result;
     }
 }
