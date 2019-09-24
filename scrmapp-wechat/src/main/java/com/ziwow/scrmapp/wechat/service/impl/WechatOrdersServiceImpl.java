@@ -968,4 +968,9 @@ public class WechatOrdersServiceImpl implements WechatOrdersService {
         return productMapper.getProductInfoById(list);
     }
 
+    @Override
+    public boolean isYDYHOrder(String orderCode){
+        return wechatOrdersMapper.isYDYHOrder(orderCode)>0;
+    }
+
 }

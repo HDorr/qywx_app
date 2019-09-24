@@ -887,4 +887,8 @@
         update t_wechat_orders set status = #{status},updateTime = #{date}
         where id = #{ordersId}
     </update>
+
+    <select id="isYDYHOrder" resultType="int">
+        select count(id) from t_wechat_orders where ordersCode = #{orderCode} and delivery_type = 'YDYH'
+    </select>
 </mapper>
