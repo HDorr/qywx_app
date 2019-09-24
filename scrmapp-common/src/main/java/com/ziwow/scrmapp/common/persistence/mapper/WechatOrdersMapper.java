@@ -76,5 +76,5 @@ public interface WechatOrdersMapper {
      * @param orderCode
      * @return
      */
-    int isYDYHOrder(@Param("orderCode") String orderCode);
+    Integer isYDYHOrder(@Param("orderCode") String orderCode);
 }

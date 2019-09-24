@@ -66,6 +66,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -97,6 +98,8 @@ public class WechatController {
     private String mallAutoLoginUrl;
     @Value("${mgcc.myplan.url}")
     private String myPlanUrl;
+    @Value("${mall.syncOrderStatus.url}")
+    private String mallUrl;
     @Autowired
     private WechatUserService wechatUserService;
     @Autowired
@@ -516,26 +519,23 @@ public class WechatController {
         if(result.getReturnCode() == 1 && wechatOrdersService.isYDYHOrder(dispatchDotParam.getAcceptNumber())){
             Map<String,Object> params = new HashMap<>();
             params.put("orderCode",dispatchDotParam.getAcceptNumber());
-            String res = new SyncQYUtil().getResult("QINYUAN",params,"POST",
-                    "http://localhost:8080/sellerpc/syncOrder/status");
-//            logger.info("开始调用沁园同步订单状态接口：url = [{}]，params = [ 时间戳={}，签名={}，订单号={}]", QYConstans.URL,
-//                    timeStamp,signature,dispatchDotParam.getAcceptNumber());
-//            String qyResult = "";
-//            try {
-//                final HttpResponse response = client.execute(httpPost);
-//                HttpEntity entity = response.getEntity();
-//                qyResult = EntityUtils.toString(entity, "UTF-8");
-//            } catch (IOException e) {
-//                logger.error("调用沁园同步订单状态接口失败，错误：[{}]", e);
-//            }
-//            logger.info("调用沁园同步订单状态接口成功，返回值为：[{}]", qyResult);
-            if(StringUtils.equals(res,"false")){
-                result.setReturnMsg("400派单给网点同步成功，但同步订单状态失败!");
-                result.setReturnCode(QYConstans.FAIL);
+            Map res = null;
+            try {
+                res = SyncQYUtil.getResult("QINYUAN",params,"POST", mallUrl);
+            }catch (Exception e){
+                logger.error("400派单给网点同步成功，但同步订单状态失败！",e);
+                result.setReturnCode(Constant.FAIL);
+                result.setReturnMsg("400派单给网点同步成功，但同步订单状态失败！[" + e.getMessage() + "]");
                 return result;
             }
-            result.setReturnMsg("400派单给网点同步成功！同步订单状态成功!");
-            result.setReturnCode(QYConstans.SUCCESS);
+            if(!CollectionUtils.isEmpty(res) && (Integer) res.get("errorCode") == 200){
+                result.setReturnMsg("400派单给网点同步成功！同步订单状态成功!");
+                result.setReturnCode(QYConstans.SUCCESS);
+                return result;
+            }
+            result.setReturnMsg("400派单给网点同步成功，但同步订单状态失败!");
+            result.setReturnCode(QYConstans.FAIL);
+            return result;
         }
         return result;
     }
