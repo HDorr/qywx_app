@@ -64,7 +64,19 @@
         <script src="${f_ctxpath}/resources/thirdparty/jquery/dist/jquery.min.js"></script>
         <script src="${f_ctxpath}/resources/src/js/common.js"></script>
         <script type="text/javascript">
-            $(function(){ 
+            $(function(){
+                $('#install').on("click",function () {
+                  wx.miniProgram.navigateTo({url: "/pages/selectProduct?appointmentType=install"});
+                });
+                $('#clean').click(function () {
+                  wx.miniProgram.navigateTo({url: "/pages/selectProduct?appointmentType=clean"});
+                });
+                $('#filter').click(function () {
+                  wx.miniProgram.navigateTo({url: "/pages/selectProduct?appointmentType=filter"});
+                });
+                $('#maintain').click(function () {
+                  wx.miniProgram.navigateTo({url: "/pages/selectProduct?appointmentType=maintain"});
+                });
                 var securityCode = getUrlParam("securityCode");
                 var rootUrl = getRootPath();
                 var data = {
@@ -92,18 +104,7 @@
                     
                 });
 
-                $('#install').click(function () {
-                  wx.miniProgram.navigateTo({url: "/pages/selectProduct?appointmentType=install"});
-                });
-                $('#clean').click(function () {
-                  wx.miniProgram.navigateTo({url: "/pages/selectProduct?appointmentType=clean"});
-                });
-                $('#filter').click(function () {
-                  wx.miniProgram.navigateTo({url: "/pages/selectProduct?appointmentType=filter"});
-                });
-                $('#maintain').click(function () {
-                  wx.miniProgram.navigateTo({url: "/pages/selectProduct?appointmentType=maintain"});
-                });
+
 
 
                 // var checkBtn = document.getElementById('checkBtn')
