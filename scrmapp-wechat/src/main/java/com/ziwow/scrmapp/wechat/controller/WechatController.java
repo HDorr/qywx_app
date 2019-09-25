@@ -613,7 +613,7 @@ public class WechatController {
                 params.put("finishNo",dispatchOrderParam.getFinishNumber());
                 Map result1 = SyncQYUtil.getResult("QINYUAN", params, "POST", mallShareUrl);
                 if ((Integer)result1.get("errorCode") != 200){
-                    logger.info("工单完工同步失败,受理单号：{},完工单号：{}",dispatchOrderParam.getAcceptNumber(),dispatchOrderParam.getFinishNumber());
+                    logger.info("调用商城工单完工同步分润记录失败,受理单号：{},完工单号：{}",dispatchOrderParam.getAcceptNumber(),dispatchOrderParam.getFinishNumber());
                     result.setReturnCode(Constant.FAIL);
                     result.setReturnMsg("工单完工同步失败");
                     return result;
