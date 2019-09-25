@@ -22,7 +22,11 @@ import com.ziwow.scrmapp.tools.weixin.XmlUtils;
 import com.ziwow.scrmapp.tools.weixin.decode.AesException;
 import com.ziwow.scrmapp.tools.weixin.decode.WXBizMsgCrypt;
 import com.ziwow.scrmapp.wechat.constants.RedisKeyConstants;
-import com.ziwow.scrmapp.wechat.persistence.entity.*;
+import com.ziwow.scrmapp.wechat.persistence.entity.OpenWeixin;
+import com.ziwow.scrmapp.wechat.persistence.entity.WechatCustomerMsg;
+import com.ziwow.scrmapp.wechat.persistence.entity.WechatFans;
+import com.ziwow.scrmapp.wechat.persistence.entity.WechatRegister;
+import com.ziwow.scrmapp.wechat.persistence.entity.WechatUser;
 import com.ziwow.scrmapp.wechat.vo.Articles;
 import com.ziwow.scrmapp.wechat.vo.TextOutMessage;
 import com.ziwow.scrmapp.wechat.vo.UserInfo;
@@ -361,6 +365,7 @@ public class WeChatMessageProcessingHandler {
 
     private void dealWithSubscribe(InMessage inMessage,HttpServletResponse response) {
         StringBuilder msgsb=new StringBuilder();
+        int flag = 0;
 
         if (StringUtils.isNotEmpty(inMessage.getEventKey())) {
             //获取渠道号
@@ -370,8 +375,10 @@ public class WeChatMessageProcessingHandler {
 
             if (StringUtils.isNotBlank(welcomeText)){
                 msgsb.append(welcomeText);
+                flag = 1;
             }
-        }else {
+        }
+        if (flag == 0){
             msgsb.append("Hi~欢迎进入沁园水健康守护基地\n")
                 .append("\n")
                 .append("点击<a href='http://www.qinyuan.cn' data-miniprogram-appid='")
