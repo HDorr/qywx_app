@@ -101,6 +101,8 @@ public class WechatController {
     private String myPlanUrl;
     @Value("${mall.syncOrderStatus.url}")
     private String mallUrl;
+    @Value("${mall.syncShareRecord.url}")
+    private String mallShareUrl;
     @Autowired
     private WechatUserService wechatUserService;
     @Autowired
@@ -609,7 +611,7 @@ public class WechatController {
                 Map<String,Object> params = new HashMap<>();
                 params.put("acceptNo",dispatchOrderParam.getAcceptNumber());
                 params.put("finishNo",dispatchOrderParam.getFinishNumber());
-                Map result1 = SyncQYUtil.getResult("QINYUAN", params, "POST", mallUrl);
+                Map result1 = SyncQYUtil.getResult("QINYUAN", params, "POST", mallShareUrl);
                 if ((Integer)result1.get("errorCode") != 200){
                     logger.info("工单完工同步失败,受理单号：{},完工单号：{}",dispatchOrderParam.getAcceptNumber(),dispatchOrderParam.getFinishNumber());
                     result.setReturnCode(Constant.FAIL);
