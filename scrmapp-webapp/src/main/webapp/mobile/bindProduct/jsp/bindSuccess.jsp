@@ -62,6 +62,7 @@
 
         <script src="${f_ctxpath}/resources/src/js/flexible.js"></script>
         <script src="${f_ctxpath}/resources/thirdparty/jquery/dist/jquery.min.js"></script>
+        <script src="${f_ctxpath}/resources/thirdparty/jqweui/jquery-weui-1.js"></script>
         <script src="${f_ctxpath}/resources/src/js/common.js"></script>
         <script type="text/javascript">
             $(function(){
