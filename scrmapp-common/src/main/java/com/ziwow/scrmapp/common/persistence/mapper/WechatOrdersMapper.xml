@@ -875,7 +875,7 @@
     </select>
 
     <select id="getWechatOrdersByProductId" resultType="com.ziwow.scrmapp.common.bean.vo.WechatOrdersVo">
-        select endTime,orderType,status from t_wechat_orders where productId=#{productId}
+        select two.endTime,two.orderType,two.status from t_wechat_orders two left join t_orders_pro_relations topr on topr.orderId = two.id where two.productId=#{productId}
     </select>
 
     <update id="updateOrdersNoAndStatus">
