@@ -6,4 +6,5 @@ public interface ChannelService {
 
     Channel query(Long channelId);
 
+    String selectWelcomeTextByChannelId(String channelId);
 }

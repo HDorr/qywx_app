@@ -1,0 +1,1 @@
+ALTER TABLE t_channel ADD welcome_text text NULL;
