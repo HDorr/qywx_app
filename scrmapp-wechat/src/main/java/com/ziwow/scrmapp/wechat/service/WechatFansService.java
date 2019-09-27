@@ -2,6 +2,7 @@ package com.ziwow.scrmapp.wechat.service;
 
 import com.ziwow.scrmapp.wechat.persistence.entity.TempWechatFans;
 import com.ziwow.scrmapp.wechat.persistence.entity.WechatFans;
+import com.ziwow.scrmapp.wechat.vo.OauthUser;
 import com.ziwow.scrmapp.wechat.vo.UserInfo;
 import com.ziwow.scrmapp.wechat.vo.WechatFansVo;
 
@@ -26,5 +27,7 @@ public interface WechatFansService {
     public List<WechatFans> loadWechatFansAndNotRegisterByPage(int offset,int size);
     public Integer loadWechatFansAndNotRegisterCount();
     public List<TempWechatFans> loadTempWechatFansBatch1();
+
+    public OauthUser getOAuthUserInfo(String code);
 
 }

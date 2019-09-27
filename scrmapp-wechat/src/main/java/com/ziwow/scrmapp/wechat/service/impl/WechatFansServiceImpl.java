@@ -1,17 +1,5 @@
 package com.ziwow.scrmapp.wechat.service.impl;
 
-import com.ziwow.scrmapp.wechat.persistence.entity.TempWechatFans;
-import java.util.List;
-import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import org.apache.commons.lang.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
-
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.ziwow.scrmapp.common.utils.HttpKit;
@@ -19,6 +7,7 @@ import com.ziwow.scrmapp.tools.utils.CookieUtil;
 import com.ziwow.scrmapp.tools.utils.StringUtil;
 import com.ziwow.scrmapp.wechat.constants.WeChatConstants;
 import com.ziwow.scrmapp.wechat.persistence.entity.OpenAuthorizationWeixin;
+import com.ziwow.scrmapp.wechat.persistence.entity.TempWechatFans;
 import com.ziwow.scrmapp.wechat.persistence.entity.WechatFans;
 import com.ziwow.scrmapp.wechat.persistence.entity.WechatUser;
 import com.ziwow.scrmapp.wechat.persistence.mapper.WechatFansMapper;
@@ -31,6 +20,16 @@ import com.ziwow.scrmapp.wechat.vo.AccessToken;
 import com.ziwow.scrmapp.wechat.vo.OauthUser;
 import com.ziwow.scrmapp.wechat.vo.UserInfo;
 import com.ziwow.scrmapp.wechat.vo.WechatFansVo;
+import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
+
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 
 @Service
 public class WechatFansServiceImpl implements WechatFansService {
@@ -83,7 +82,7 @@ public class WechatFansServiceImpl implements WechatFansService {
 		return wechatFansMapper.getFans(unionId);
 	}
 
-	private AccessToken getTokenByCode(String code) {
+	public AccessToken getTokenByCode(String code) {
 		AccessToken accessToken = null;
 		OpenAuthorizationWeixin oaw = openWeixinService.getAuthorizerWeixinByAuthorizerAppid(appId);
 		if (oaw != null) {
@@ -168,7 +167,7 @@ public class WechatFansServiceImpl implements WechatFansService {
 		return null;
 	}
 
-	private OauthUser getOAuthUserInfo(String code) {
+	public OauthUser getOAuthUserInfo(String code) {
 		OauthUser oauthUser = null;
 		String openId = null;
 		try {
