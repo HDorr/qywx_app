@@ -510,19 +510,11 @@ public class WechatController {
             try {
                 res = SyncQYUtil.getResult("QINYUAN",params,"POST", mallUrl);
             }catch (Exception e){
-                logger.error("400派单给网点同步成功，但同步订单状态失败！",e);
-                result.setReturnCode(Constant.FAIL);
-                result.setReturnMsg("400派单给网点同步成功，但同步订单状态失败！[" + e.getMessage() + "]");
-                return result;
+                logger.error("同步订单状态失败:",e);
             }
-            if(!CollectionUtils.isEmpty(res) && (Integer) res.get("errorCode") == 200){
-                result.setReturnMsg("400派单给网点同步成功！同步订单状态成功!");
-                result.setReturnCode(QYConstans.SUCCESS);
-                return result;
+            if(!CollectionUtils.isEmpty(res) && (Integer) res.get("errorCode") != 200){
+                logger.error("同步订单状态失败: [{}]",res.get("moreInfo"));
             }
-            result.setReturnMsg("400派单给网点同步成功，但同步订单状态失败!");
-            result.setReturnCode(QYConstans.FAIL);
-            return result;
         }
         return result;
     }
