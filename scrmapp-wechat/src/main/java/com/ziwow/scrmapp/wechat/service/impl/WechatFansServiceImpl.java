@@ -82,7 +82,7 @@ public class WechatFansServiceImpl implements WechatFansService {
 		return wechatFansMapper.getFans(unionId);
 	}
 
-	public AccessToken getTokenByCode(String code) {
+	private AccessToken getTokenByCode(String code) {
 		AccessToken accessToken = null;
 		OpenAuthorizationWeixin oaw = openWeixinService.getAuthorizerWeixinByAuthorizerAppid(appId);
 		if (oaw != null) {
