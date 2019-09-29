@@ -425,6 +425,16 @@ public class ServiceCenterDataController extends BaseController {
   }
 
   /**
+   * 判断商城用户否关注了公众号
+   * @param param
+   * @return
+   */
+  @RequestMapping("/user/cancle")
+  public Result isCancle(@RequestBody CenterServiceParam param){
+    WechatUser wechatUser = obtainWeChatUser(param);
+    return success(wechatUser);
+  }
+  /**
    * 保存工单进度
    *
    * @param orderId {@link Long}
