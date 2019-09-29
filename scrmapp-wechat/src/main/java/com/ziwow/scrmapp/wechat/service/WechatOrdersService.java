@@ -73,4 +73,6 @@ public interface WechatOrdersService {
      * @return
      */
     List<WechatOrdersVo> getWechatOrdersByProductId(Long productId);
+
+    boolean isYDYHOrder(String orderCode);
 }

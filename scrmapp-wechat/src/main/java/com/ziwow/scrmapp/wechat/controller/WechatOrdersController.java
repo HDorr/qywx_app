@@ -99,10 +99,11 @@ public class WechatOrdersController {
         //保存工单号，以便于回滚
         List<String> orderNos = new ArrayList<>();
         Result result = new BaseResult();
+        StringBuffer retNo = new StringBuffer();
         for (WechatOrdersParamExt wechatOrdersParamExt : mallOrdersForm.getForms()) {
             try {
                 wechatOrdersParamExt.setUserId(userId);
-                wechatOrdersParamExt.setDeliveryType(DeliveryType.DEALER);
+                wechatOrdersParamExt.setDeliveryType(DeliveryType.YDYH);
                 wechatOrdersParamExt.setOrderNo(mallOrdersForm.getOrderNo());
                 //买的是滤芯
                 if (wechatOrdersParamExt.getFilter()) {
@@ -167,9 +168,11 @@ public class WechatOrdersController {
                 return result;
             }
             orderNos.add((String) result.getData());
+            retNo.append((String) result.getData()).append(",");
         }
         result.setReturnMsg("预约成功");
         result.setReturnCode(mallOrdersForm.getForms().size() / orderNos.size());
+        result.setReturnMsg(retNo.toString());
         return result;
     }
 
