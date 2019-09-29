@@ -104,7 +104,7 @@ public class CheckUserInterceptor implements HandlerInterceptor {
         String requestURI = request.getRequestURI();
         int index = requestURI.indexOf("register");
 
-        boolean isFromH5=(StringUtils.isNotBlank(registerSrc) && registerSrc.equals("3"));
+        boolean isFromH5=(StringUtils.isNotBlank(registerSrc) && (registerSrc.equals("3")||registerSrc.equals("4")));
         if (0 == fanCode && !isFromH5) {
             //跳转到二维码页面
             modelAndView.setViewName("/register/scan_QR_code");
