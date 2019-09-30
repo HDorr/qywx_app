@@ -558,7 +558,7 @@ public class WeChatMessageProcessingHandler {
               .append("\n")
               .append("其他咨询,请输入文字\"人工客服\"\n");
         }else if (content.contains("投诉")){
-          msgsb.append("您好,非常抱歉给您带来的不便！\n您可以直接输入投诉问题,我们会尽快给您受理的哦\n全国服务热线：400 111 1222\n在线工作时间：8:00AM-20:00PM");
+          msgsb.append("您好,非常抱歉给您带来的不便！\n您可以直接输入投诉问题,我们会尽快给您受理的哦\n全国服务热线：400 111 1222\n在线工作时间：8:00AM-22:00PM");
         }else if (content.contains("人工客服")){
             final boolean inWorkTime=CallCenterOssUtil.checkIsInCallCenterWorkingTime(Calendar.getInstance());
             boolean isPushToCallCenter=false;
@@ -571,7 +571,7 @@ public class WeChatMessageProcessingHandler {
                 pushMessageToCallCenter(inMessage);//推送消息到呼叫中心
                 isPushToCallCenter=true;
             } else {
-                msgsb.append("您好，非常抱歉给您带来不便，目前并非客服的工作时间，工作时间为：8:00AM-20:00PM");
+                msgsb.append("您好，非常抱歉给您带来不便，目前并非客服的工作时间，工作时间为：8:00AM-22:00PM");
             }
             replyMessage(inMessage, response, msgsb);
             return isPushToCallCenter;
