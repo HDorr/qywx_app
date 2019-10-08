@@ -1,21 +1,30 @@
 package com.ziwow.scrmapp.qyh.service.impl;
 
+import com.google.common.base.Function;
+import com.google.common.collect.Maps;
+import com.ziwow.scrmapp.common.bean.pojo.*;
+import com.ziwow.scrmapp.common.bean.vo.*;
+import com.ziwow.scrmapp.common.bean.vo.csm.ProductFilterGrade;
 import com.ziwow.scrmapp.common.constants.CancelConstant;
+import com.ziwow.scrmapp.common.constants.Constant;
+import com.ziwow.scrmapp.common.constants.SystemConstants;
+import com.ziwow.scrmapp.common.persistence.entity.*;
+import com.ziwow.scrmapp.common.persistence.mapper.*;
+import com.ziwow.scrmapp.common.result.BaseResult;
+import com.ziwow.scrmapp.common.result.ErrorCode;
+import com.ziwow.scrmapp.common.result.Result;
+import com.ziwow.scrmapp.common.service.MobileService;
+import com.ziwow.scrmapp.common.service.ThirdPartyService;
+import com.ziwow.scrmapp.common.utils.OrderUtils;
+import com.ziwow.scrmapp.common.utils.SyncQYUtil;
+import com.ziwow.scrmapp.qyh.service.QyhNoticeService;
+import com.ziwow.scrmapp.qyh.service.QyhOrdersService;
 import com.ziwow.scrmapp.qyh.service.QyhProductService;
+import com.ziwow.scrmapp.qyh.service.QyhUserService;
+import com.ziwow.scrmapp.tools.utils.Base64;
+import com.ziwow.scrmapp.tools.utils.DateUtil;
 import com.ziwow.scrmapp.tools.utils.HttpClientUtils;
 import com.ziwow.scrmapp.tools.utils.MD5;
-import java.math.BigDecimal;
-import java.text.DecimalFormat;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.regex.Pattern;
-
 import org.apache.commons.lang.StringUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -27,65 +36,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.google.common.base.Function;
-import com.google.common.collect.Maps;
-import com.ziwow.scrmapp.common.bean.pojo.AppealInstallParam;
-import com.ziwow.scrmapp.common.bean.pojo.AppealMaintainParam;
-import com.ziwow.scrmapp.common.bean.pojo.AppealMaintenanceParam;
-import com.ziwow.scrmapp.common.bean.pojo.CancelProductParam;
-import com.ziwow.scrmapp.common.bean.pojo.ProductFilterGradeParam;
-import com.ziwow.scrmapp.common.bean.vo.CompleteParam;
-import com.ziwow.scrmapp.common.bean.vo.ProductFinishVo;
-import com.ziwow.scrmapp.common.bean.vo.ProductVo;
-import com.ziwow.scrmapp.common.bean.vo.QyhUserOrdersVo;
-import com.ziwow.scrmapp.common.bean.vo.WechatOrdersRecordVo;
-import com.ziwow.scrmapp.common.bean.vo.WechatOrdersVo;
-import com.ziwow.scrmapp.common.bean.vo.csm.ProductFilterGrade;
-import com.ziwow.scrmapp.common.constants.Constant;
-import com.ziwow.scrmapp.common.constants.SystemConstants;
-import com.ziwow.scrmapp.common.persistence.entity.Filter;
-import com.ziwow.scrmapp.common.persistence.entity.FilterChangeRecord;
-import com.ziwow.scrmapp.common.persistence.entity.FilterChangeRemind;
-import com.ziwow.scrmapp.common.persistence.entity.InstallPart;
-import com.ziwow.scrmapp.common.persistence.entity.InstallPartRecord;
-import com.ziwow.scrmapp.common.persistence.entity.MaintainPrice;
-import com.ziwow.scrmapp.common.persistence.entity.MaintainRecord;
-import com.ziwow.scrmapp.common.persistence.entity.OrdersProRelations;
-import com.ziwow.scrmapp.common.persistence.entity.Product;
-import com.ziwow.scrmapp.common.persistence.entity.QyhUser;
-import com.ziwow.scrmapp.common.persistence.entity.RepairItem;
-import com.ziwow.scrmapp.common.persistence.entity.RepairItemRecord;
-import com.ziwow.scrmapp.common.persistence.entity.RepairPart;
-import com.ziwow.scrmapp.common.persistence.entity.RepairPartRecord;
-import com.ziwow.scrmapp.common.persistence.entity.WechatOrders;
-import com.ziwow.scrmapp.common.persistence.entity.WechatOrdersRecord;
-import com.ziwow.scrmapp.common.persistence.mapper.FilterChangeRecordMapper;
-import com.ziwow.scrmapp.common.persistence.mapper.FilterChangeRemindMapper;
-import com.ziwow.scrmapp.common.persistence.mapper.FilterMapper;
-import com.ziwow.scrmapp.common.persistence.mapper.InstallPartMapper;
-import com.ziwow.scrmapp.common.persistence.mapper.InstallPartRecordMapper;
-import com.ziwow.scrmapp.common.persistence.mapper.MaintainPriceMapper;
-import com.ziwow.scrmapp.common.persistence.mapper.MaintainRecordMapper;
-import com.ziwow.scrmapp.common.persistence.mapper.OrdersProRelationsMapper;
-import com.ziwow.scrmapp.common.persistence.mapper.ProductMapper;
-import com.ziwow.scrmapp.common.persistence.mapper.RepairItemMapper;
-import com.ziwow.scrmapp.common.persistence.mapper.RepairItemRecordMapper;
-import com.ziwow.scrmapp.common.persistence.mapper.RepairPartMapper;
-import com.ziwow.scrmapp.common.persistence.mapper.RepairPartRecordMapper;
-import com.ziwow.scrmapp.common.persistence.mapper.WechatOrdersMapper;
-import com.ziwow.scrmapp.common.persistence.mapper.WechatOrdersRecordMapper;
-import com.ziwow.scrmapp.common.result.BaseResult;
-import com.ziwow.scrmapp.common.result.ErrorCode;
-import com.ziwow.scrmapp.common.result.Result;
-import com.ziwow.scrmapp.common.service.MobileService;
-import com.ziwow.scrmapp.common.service.ThirdPartyService;
-import com.ziwow.scrmapp.common.utils.OrderUtils;
-import com.ziwow.scrmapp.qyh.service.QyhNoticeService;
-import com.ziwow.scrmapp.qyh.service.QyhOrdersService;
-import com.ziwow.scrmapp.qyh.service.QyhUserService;
-import com.ziwow.scrmapp.tools.utils.Base64;
-import com.ziwow.scrmapp.tools.utils.DateUtil;
-import org.springframework.web.servlet.ModelAndView;
+import java.math.BigDecimal;
+import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
+import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.regex.Pattern;
 
 /**
  * Created by xiaohei on 2017/4/21.
@@ -154,6 +110,9 @@ public class QyhOrdersServiceImpl implements QyhOrdersService {
 
     @Autowired
     private QyhNoticeService qyhNoticeService;
+
+    @Value("${mall.syncShareRecord.url}")
+    private String mallShareUrl;
 
     private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
@@ -360,9 +319,9 @@ public class QyhOrdersServiceImpl implements QyhOrdersService {
                 finishWechatOrders(productMap, completeParam, result.getData().toString());
                 //更新产品条码和图片
                 updateProductBarCode(productMap);
-            }catch (Exception e){
-                logger.error("师傅点击工单完工操作失败单号:",completeParam.getOrdersCode());
-                logger.error("师傅点击工单完工操作失败:",e);
+            } catch (Exception e) {
+                logger.error("师傅点击工单完工操作失败单号:", completeParam.getOrdersCode());
+                logger.error("师傅点击工单完工操作失败:", e);
             }
             logger.info("师傅点击工单[{}]完工操作成功!", completeParam.getOrdersCode());
         }
@@ -741,42 +700,54 @@ public class QyhOrdersServiceImpl implements QyhOrdersService {
 
     @Transactional
     public int finishWechatOrders(Map<Long, ProductVo> productMap, CompleteParam completeParam, String ordersNo) {
-      int count = 0;
+        int count = 0;
         try {
-          Iterator<ProductVo> iterator = productMap.values().iterator();
-          List<Long> productId = new ArrayList<Long>();
-          boolean flag = true;
-          while (iterator.hasNext()) {
-            ProductVo productVo = iterator.next();
-            if (Constant.NORMAL == productVo.getStatus()) {
-              flag = false;
-            } else if (Constant.COMPLETE == productVo.getStatus()) {
-              productId.add(productVo.getProductId());
+            Iterator<ProductVo> iterator = productMap.values().iterator();
+            List<Long> productId = new ArrayList<Long>();
+            boolean flag = true;
+            while (iterator.hasNext()) {
+                ProductVo productVo = iterator.next();
+                if (Constant.NORMAL == productVo.getStatus()) {
+                    flag = false;
+                } else if (Constant.COMPLETE == productVo.getStatus()) {
+                    productId.add(productVo.getProductId());
+                }
             }
-          }
 
-          if (productId.size() > 0) {
-            //更新工单与产品关联表status
-            ordersProRelationsMapper.updateStatus(productId, completeParam.getOrdersId(), completeParam.getQyhUserId());
-          }
-
-          if ((flag && productMap.size() > 0) || SystemConstants.INSTALL == completeParam.getOrderType()) {
-            Date date = new Date();
-            count = wechatOrdersMapper.updateOrdersNoAndStatus(completeParam.getOrdersCode(), ordersNo, date, SystemConstants.COMPLETE);
-            if (count > 0) {
-              WechatOrdersRecord wechatOrdersRecord = new WechatOrdersRecord();
-              wechatOrdersRecord.setRecordTime(date);
-              wechatOrdersRecord.setRecordContent("师傅点击完工!");
-              wechatOrdersRecord.setOrderId(completeParam.getOrdersId());
-              wechatOrdersRecordMapper.insert(wechatOrdersRecord);
+            if (productId.size() > 0) {
+                //更新工单与产品关联表status
+                ordersProRelationsMapper.updateStatus(productId, completeParam.getOrdersId(), completeParam.getQyhUserId());
             }
-          }
-        }catch (Exception e){
-          logger.error("师傅点击工单[{}]完工操作出现异常,原因:[{}]", completeParam.getOrdersCode(), e);
-          logger.error("师傅点击工单完工操作失败:",e);
-          throw new RuntimeException("工单提交失败!");
+
+            if ((flag && productMap.size() > 0) || SystemConstants.INSTALL == completeParam.getOrderType()) {
+                Date date = new Date();
+                count = wechatOrdersMapper.updateOrdersNoAndStatus(completeParam.getOrdersCode(), ordersNo, date, SystemConstants.COMPLETE);
+                //师傅完工同步商城分润记录完工信息
+                if (wechatOrdersMapper.isYDYHOrder(completeParam.getOrdersCode()) != null) {
+                    Map<String, Object> params = new HashMap<String, Object>();
+                    params.put("acceptNo", completeParam.getOrdersCode());
+                    params.put("finishNo", ordersNo);
+                    Map result1 = SyncQYUtil.getResult("QINYUAN", params, "POST", mallShareUrl);
+                    if ((Integer) result1.get("errorCode") != 200) {
+                        logger.info("调用商城工单完工同步分润记录成功,受理单号：{},完工单号：{}", completeParam.getOrdersCode(),ordersNo);
+                    }else {
+                        logger.error("调用商城工单完工同步分润记录失败,受理单号：{},完工单号：{}",completeParam.getOrdersCode(),ordersNo);
+                    }
+                }
+                if (count > 0) {
+                    WechatOrdersRecord wechatOrdersRecord = new WechatOrdersRecord();
+                    wechatOrdersRecord.setRecordTime(date);
+                    wechatOrdersRecord.setRecordContent("师傅点击完工!");
+                    wechatOrdersRecord.setOrderId(completeParam.getOrdersId());
+                    wechatOrdersRecordMapper.insert(wechatOrdersRecord);
+                }
+            }
+        } catch (Exception e) {
+            logger.error("师傅点击工单[{}]完工操作出现异常,原因:[{}]", completeParam.getOrdersCode(), e);
+            logger.error("师傅点击工单完工操作失败:", e);
+            throw new RuntimeException("工单提交失败!");
         }
-      return count;
+        return count;
     }
 
     @Override
@@ -1168,7 +1139,7 @@ public class QyhOrdersServiceImpl implements QyhOrdersService {
         params.put("timestamp", timestamp);
         params.put("signture", MD5.toMD5(Constant.AUTH_KEY + timestamp));
         String result = HttpClientUtils
-            .postJson(finishmakeAppointment, net.sf.json.JSONObject.fromObject(params).toString());
+                .postJson(finishmakeAppointment, net.sf.json.JSONObject.fromObject(params).toString());
         if (StringUtils.isNotBlank(result)) {
             net.sf.json.JSONObject o1 = net.sf.json.JSONObject.fromObject(result);
             if (o1.containsKey("errorCode") && o1.getInt("errorCode") == 200) {
@@ -1250,7 +1221,7 @@ public class QyhOrdersServiceImpl implements QyhOrdersService {
 
     @Transactional
     @Override
-    public int doCancel(Long ordersId, Long productId,String ordersCode) {
+    public int doCancel(Long ordersId, Long productId, String ordersCode) {
         if (ordersId == null || productId == null) {
             throw new RuntimeException("入参为空");
         }
@@ -1258,13 +1229,13 @@ public class QyhOrdersServiceImpl implements QyhOrdersService {
         qyhProductService.updateProductStatus(ordersId, productId);
         //获取当前工单产品所有状态
         List<Integer> allStatus = qyhProductService.getAllStatus(ordersId);
-        if(isAllCancel(allStatus)){
+        if (isAllCancel(allStatus)) {
             //工单产品全部取消,则改变工单状态为重新处理,工单状态为3代表重新处理,即拒绝工单
             wechatOrdersMapper.updateOrderStatus(ordersId, SystemConstants.REDEAL, new Date());
             return CancelConstant.CANCEL_REFUND;
         }
         //如果当前工单产品都为取消且有一个以上完工,则工单算作完工
-        if(isFinish(allStatus)){
+        if (isFinish(allStatus)) {
             wechatOrdersMapper.updateOrderStatus(ordersId, SystemConstants.COMPLETE, new Date());
             CompleteParam completeParam = getCompleteParamByOrdersCode(ordersCode);
             updateOrderRecord(completeParam);
@@ -1275,13 +1246,14 @@ public class QyhOrdersServiceImpl implements QyhOrdersService {
 
     /**
      * 工单产品是否全部取消
+     *
      * @param list
      * @return
      */
-    private boolean isAllCancel(List<Integer> list){
-        for (Integer status : list){
+    private boolean isAllCancel(List<Integer> list) {
+        for (Integer status : list) {
             //如果产品有状态不为"取消"
-            if(status != Constant.CANCEL){
+            if (status != Constant.CANCEL) {
                 return false;
             }
         }
@@ -1290,18 +1262,19 @@ public class QyhOrdersServiceImpl implements QyhOrdersService {
 
     /**
      * 工单是否算完工
+     *
      * @param productStatus
      * @return
      */
     @Override
-    public boolean isFinish(List<Integer> productStatus){
+    public boolean isFinish(List<Integer> productStatus) {
         boolean isFinish = false;
-        for (Integer status : productStatus){
-            if(status == Constant.COMPLETE){
+        for (Integer status : productStatus) {
+            if (status == Constant.COMPLETE) {
                 isFinish = true;
                 continue;
             }
-            if(!(status == Constant.CANCEL || status == Constant.COMPLETE)){
+            if (!(status == Constant.CANCEL || status == Constant.COMPLETE)) {
                 return false;
             }
         }
@@ -1310,6 +1283,7 @@ public class QyhOrdersServiceImpl implements QyhOrdersService {
 
     /**
      * 更新工单记录
+     *
      * @param completeParam
      */
     public void updateOrderRecord(CompleteParam completeParam) {

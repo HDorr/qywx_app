@@ -172,7 +172,7 @@ public class CallCenterOssUtil {
   /**
    * 呼叫中心结束工作时间(-1)
    */
-  private final static int CALL_CENTER_WORK_TIME_END=19;
+  private final static int CALL_CENTER_WORK_TIME_END=21;
 
   /***
    * 检查时间是否符合呼叫中心的工作时间

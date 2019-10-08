@@ -38,7 +38,7 @@ public class MiniAuthenticationAop {
         try {
             isLegal = SignUtil.checkSignature((String)args[0], (String)args[1], Constant.AUTH_KEY);
         } catch (Exception e) {
-            LOG.error("方法参数不正确,请检查是否含有signture和timeStamp参数,第一个参数必须为signture 第二个参数必须为timeStamp");
+            LOG.error("方法参数不正确，请检查是否含有signature和timeStamp参数，第一个参数必须为signature，第二个参数必须为timeStamp");
             e.printStackTrace();
             throw new RuntimeException();
         }

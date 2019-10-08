@@ -14,8 +14,12 @@ public class ChannelServiceImpl implements ChannelService {
 
     @Override
     public Channel query(Long channelId) {
-
         return channelMapper.query(channelId);
+    }
+
+    @Override
+    public String selectWelcomeTextByChannelId(String channelId) {
+        return channelMapper.selectWelcomeTextByChannelId(channelId);
     }
 
 }
