@@ -581,7 +581,7 @@ public class WeChatMessageProcessingHandler {
             msgsb.append("version:"+appVersion);
         }else if (content.equals("国庆大礼包")){
             msgsb.append("<a href='https://open.weixin.qq.com/connect/oauth2/authorize?appid="
-                    +miniappAppid
+                    +appid
                     +"&redirect_uri="
                     +mineBaseUrl
                     +"/checkUserRegister?H5Url=https://s.wcd.im/v/58j7kZsr/?slv=1&sid=8lbf&v=oosnVwmV0N2GxRcqi-ToAqSzWQrg&from=groupmessage&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect'>沁园国庆大礼包</a>");
