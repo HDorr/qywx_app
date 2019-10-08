@@ -11,6 +11,7 @@ import com.ziwow.scrmapp.common.bean.vo.csm.ProductItem;
 import com.ziwow.scrmapp.common.constants.Constant;
 import com.ziwow.scrmapp.common.constants.SystemConstants;
 import com.ziwow.scrmapp.common.exception.ParamException;
+import com.ziwow.scrmapp.common.pagehelper.Page;
 import com.ziwow.scrmapp.common.persistence.entity.*;
 import com.ziwow.scrmapp.common.persistence.mapper.OrdersProRelationsMapper;
 import com.ziwow.scrmapp.common.persistence.mapper.ProductMapper;
@@ -276,10 +277,45 @@ public class WechatOrdersServiceImpl implements WechatOrdersService {
         return new ArrayList<WechatOrdersVo>(map.values());
     }
 
-    @Override
-    public WechatOrdersVo getVoByOrdersCode(String ordersCode) {
-        //订单详情
-        WechatOrdersVo wechatOrdersVo = wechatOrdersMapper.getByOrdersCode(ordersCode);
+  @Override
+  public List<WechatOrdersVo> pageByUserId(String userId, Page page) {
+    List<WechatOrdersVo> detailVo = wechatOrdersMapper.pageOrdersByUserId(userId, page);
+    if (detailVo.size() == 0) {
+      return new ArrayList<>();
+    }
+    Map<Long, WechatOrdersVo> map = new LinkedHashMap<>();
+    //遍历工单列表，保存至map
+    for (WechatOrdersVo vo : detailVo) {
+      map.put(vo.getId(), vo);
+      List<WechatOrdersRecordVo> wechatOrdersRecordList = wechatOrdersRecordMapper
+          .findByOrdersId(vo.getId());
+      Collections.sort(wechatOrdersRecordList, new Comparator<WechatOrdersRecordVo>() {
+        @Override
+        public int compare(WechatOrdersRecordVo o1, WechatOrdersRecordVo o2) {
+          return o2.getRecordTime().compareTo(o1.getRecordTime());
+        }
+      });
+      vo.setWechatOrdersRecordList(wechatOrdersRecordList);
+    }
+    //根据工单id查询产品列表
+    Long[] ordersIds = map.keySet().toArray(new Long[0]);
+    List<ProductVo> products = productMapper.selectByOrdersIds(ordersIds);
+    for (ProductVo pro : products) {
+      map.get(pro.getOrdersId()).getProducts().add(pro);
+    }
+    return new ArrayList<>(map.values());
+  }
+
+
+  @Override
+  public long getCountByUserId(String userId) {
+    return wechatOrdersMapper.selectCountByUserId(userId);
+  }
+
+  @Override
+  public WechatOrdersVo getVoByOrdersCode(String ordersCode) {
+    //订单详情
+    WechatOrdersVo wechatOrdersVo = wechatOrdersMapper.getByOrdersCode(ordersCode);
 
         //查询受理记录
         List<WechatOrdersRecordVo> wechatOrdersRecordList = wechatOrdersRecordMapper.findByOrdersId(wechatOrdersVo.getId());
@@ -985,6 +1021,11 @@ public class WechatOrdersServiceImpl implements WechatOrdersService {
             list.add(Integer.parseInt(productId));
         }
         return productMapper.getProductInfoById(list);
+    }
+
+    @Override
+    public boolean isYDYHOrder(String orderCode){
+        return wechatOrdersMapper.isYDYHOrder(orderCode) != null;
     }
 
 }
