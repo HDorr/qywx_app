@@ -134,4 +134,12 @@ public interface EwCardMapper {
      * @return
      */
     List<EwCard> selectEwCardsByStatusAndInstall(@Param("ewCardStatus") EwCardStatus ewCardStatus, @Param("installList") boolean installList);
+
+    /**
+     * 根据cardNo查询对应id
+     * @param cardNo
+     * @return
+     */
+    @Select("select id from t_ew_card where card_no = #{cardNo}")
+    Long loadEwCardByNo(@Param("cardNo") String cardNo);
 }

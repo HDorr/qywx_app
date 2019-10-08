@@ -912,4 +912,8 @@
           AND u.userId = o.userId
           and o.userId = #{userId}
     </select>
+
+    <select id="isYDYHOrder" resultType="java.lang.Integer">
+        select id from t_wechat_orders where ordersCode = #{orderCode} and delivery_type = 'YDYH' limit 0,1
+    </select>
 </mapper>

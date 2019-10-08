@@ -125,8 +125,13 @@ public class WechatFansServiceImpl implements WechatFansService {
 				LOG.info("不是粉丝，需要授权获取,获取粉丝信息:[{}]",JSON.toJSON(oauthUser));
 				if (null != oauthUser) {
 					WechatFans fans = this.getWechatFansInfo(oauthUser);
-					if(null != fans && StringUtils.isNotEmpty(fans.getOpenId())) {						
-						wechatFansMapper.updateWechatFans(fans);
+					if(null != fans && StringUtils.isNotEmpty(fans.getOpenId())) {
+						WechatFans wechatFans = getWechatFansByOpenId(fans.getOpenId());
+						if (wechatFans != null){
+							wechatFansMapper.updateWechatFans(fans);
+						}else {
+							saveWechatFans(fans);
+						}
 					}
 					// 获取授权openId
 					openId = oauthUser.getOpenid();
@@ -171,7 +176,15 @@ public class WechatFansServiceImpl implements WechatFansService {
 			if (accessToken != null) {
 				String access_token = weiXinService.getAccessToken(appId, appSecret);
 				openId = accessToken.getOpenid();
-				UserInfo userInfo = weiXinService.getUserInfo(access_token, openId);
+				//判断授权的scope
+				boolean isFromUserScope=StringUtils.isNotBlank(accessToken.getScope())&&accessToken.getScope().contains("snsapi_userinfo");
+				//如果是userINFO-新的接口获取用户信息
+				UserInfo userInfo;
+				if(!isFromUserScope){
+					userInfo = weiXinService.getUserInfo(access_token, openId);
+				}else{
+					userInfo = weiXinService.getWebUserInfo(accessToken.getAccess_token(), openId);
+				}
 				if(null != userInfo) {
 					oauthUser = new OauthUser();
 					oauthUser.setCity(userInfo.getCity());
@@ -321,4 +334,5 @@ public class WechatFansServiceImpl implements WechatFansService {
 	public List<TempWechatFans> loadTempWechatFansBatch1() {
 		return wechatFansMapper.selectTempWechatFansBtach1();
 	}
+
 }

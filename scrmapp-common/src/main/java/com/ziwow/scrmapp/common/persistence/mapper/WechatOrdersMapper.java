@@ -72,6 +72,13 @@ public interface WechatOrdersMapper {
 
     List<WechatOrdersVo> getWechatOrdersByProductId(@Param("productId") Long productId);
 
+    /**
+     * 判断是否是原单原回的订单
+     * @param orderCode
+     * @return
+     */
+    Integer isYDYHOrder(@Param("orderCode") String orderCode);
+
     List<WechatOrdersVo> pageOrdersByUserId(@Param("userId") String userId, @Param("page") Page page);
 
     long selectCountByUserId(@Param("userId") String userId);

@@ -60,7 +60,7 @@ public interface GrantEwCardRecordMapper {
      * @param mask
      * @return
      */
-    @Select("select phone,type from t_grant_ew_card_record where mask = #{mask} and send = true and receive = false")
+    @Select("select phone,type from t_grant_ew_card_record where mask = #{mask} and send = true and receive = false limit 1")
     @Results({
             @Result(column = "phone", property = "phone"),
             @Result(column = "type", property = "type")
@@ -99,6 +99,6 @@ public interface GrantEwCardRecordMapper {
      * @param phone
      * @return
      */
-    @Select("select id from t_grant_ew_card_record where  phone = #{phone} and send = true")
+    @Select("select id from t_grant_ew_card_record where  phone = #{phone} and send = true limit 1")
     Long selectReceiveRecordByPhone(@Param("phone") String phone);
 }

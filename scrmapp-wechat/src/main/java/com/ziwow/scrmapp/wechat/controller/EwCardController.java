@@ -122,9 +122,17 @@ public class EwCardController {
                 return result;
             }
             cardNo = ewCardActivityService.selectCardNo(gwr.getType());
+
             if (StringUtils.isBlank(cardNo)){
                 result.setReturnCode(Constant.FAIL);
                 result.setReturnMsg("对不起，延保卡发放完毕");
+                return result;
+            }
+            //连续点击的情况
+            Long eid = ewCardService.loadByNo(cardNo);
+            if (eid != null){
+                result.setReturnCode(Constant.FAIL);
+                result.setReturnMsg("延保卡已领取");
                 return result;
             }
         }
@@ -217,6 +225,7 @@ public class EwCardController {
                                  @RequestBody EwCardParam ewCardParam){
         Result result = new BaseResult();
         final WechatUser wechatUser = wechatUserService.getUserByUnionid(unionId);
+
         //校验延保卡号And产品条码的正确性
         final EwCard ewCard = ewCardService.selectMyEwCardByNo(ewCardParam.getCardNo(),wechatUser.getWfId());
         if(ewCard == null){

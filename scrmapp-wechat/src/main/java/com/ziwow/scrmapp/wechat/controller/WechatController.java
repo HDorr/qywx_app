@@ -11,7 +11,6 @@ package com.ziwow.scrmapp.wechat.controller;
 import com.alibaba.fastjson.JSON;
 import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
-import com.sun.tools.jxc.apt.Const;
 import com.ziwow.scrmapp.common.annotation.MiniAuthentication;
 import com.ziwow.scrmapp.common.bean.pojo.AppraiseParam;
 import com.ziwow.scrmapp.common.bean.pojo.DispatchDotParam;
@@ -30,12 +29,12 @@ import com.ziwow.scrmapp.common.result.Result;
 import com.ziwow.scrmapp.common.service.MobileService;
 import com.ziwow.scrmapp.common.service.ThirdPartyService;
 import com.ziwow.scrmapp.common.utils.EwCardUtil;
+import com.ziwow.scrmapp.common.utils.SyncQYUtil;
 import com.ziwow.scrmapp.tools.thirdParty.SignUtil;
 import com.ziwow.scrmapp.tools.utils.DateUtil;
 import com.ziwow.scrmapp.tools.utils.StringUtil;
 import com.ziwow.scrmapp.tools.utils.UniqueIDBuilder;
-import com.ziwow.scrmapp.tools.weixin.Tools;
-import com.ziwow.scrmapp.tools.weixin.XmlUtils;
+import com.ziwow.scrmapp.wechat.constants.QYConstans;
 import com.ziwow.scrmapp.wechat.constants.WeChatConstants;
 import com.ziwow.scrmapp.wechat.enums.BuyChannel;
 import com.ziwow.scrmapp.wechat.persistence.entity.MallPcUser;
@@ -46,7 +45,6 @@ import com.ziwow.scrmapp.wechat.utils.BarCodeConvert;
 import com.ziwow.scrmapp.wechat.vo.MiniappSendSms;
 import com.ziwow.scrmapp.wechat.vo.WechatFansVo;
 import com.ziwow.scrmapp.wechat.vo.WechatJSSdkSignVO;
-import javax.servlet.ServletInputStream;
 import net.sf.json.JSONArray;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
@@ -55,6 +53,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -63,12 +62,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.net.URLEncoder;
-import java.sql.SQLDataException;
 import java.text.MessageFormat;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author hogen
@@ -88,6 +83,10 @@ public class WechatController {
     private String mallAutoLoginUrl;
     @Value("${mgcc.myplan.url}")
     private String myPlanUrl;
+    @Value("${mall.syncOrderStatus.url}")
+    private String mallUrl;
+    @Value("${mall.syncShareRecord.url}")
+    private String mallShareUrl;
     @Autowired
     private WechatUserService wechatUserService;
     @Autowired
@@ -149,7 +148,7 @@ public class WechatController {
         result.setReturnCode(Constant.SUCCESS);
         try {
             //发短信
-            final String msgContent = MessageFormat.format("您近期预约的服务已完成。恭喜您成为幸运用户，获赠限量免费的一年延保卡（价值{0}元），您的延保卡号为{1}。（点击券码可直接复制）！\n\n使用方式：关注沁园公众号-【我的沁园】-【个人中心】-【延保服务】-【领取卡券】，复制券码并绑定至您的机器，即可延长一年质保，绑定时请扫描机身条形码，即可识别机器！\n\n卡券码有效期7天，请尽快使用。", type.getPrice(), mask);
+            final String msgContent = MessageFormat.format("您近期预约的服务已完成。恭喜您成为幸运用户，获赠限量免费的一年延保卡（价值{0}元），您的延保卡号为{1}。（点击券码可直接复制）！\n\n使用方式：关注沁园公众号-【我的沁园】-【个人中心】-【延保服务】-【领取卡券】，复制券码并绑定至您的机器，即可延长一年质保，绑定时请扫描机身条形码，即可识别机器！\n\n如对操作有疑问，可点击公众号左下角小键盘符号，回复【延保卡】，查看绑定教程。卡券码有效期7天，请尽快使用。", type.getPrice(), mask);
             mobileService.sendContentByEmay(mobile,msgContent, Constant.MARKETING);
         } catch (Exception e) {
             logger.error("发送短信失败，手机号码为:{},错误信息为:{}",mobile,e);
@@ -497,10 +496,25 @@ public class WechatController {
         result.setReturnCode(Constant.SUCCESS);
         try {
             wechatOrdersService.dispatchDot(dispatchDotParam);
-        } catch (SQLDataException e) {
+
+        } catch (Exception e) {
             logger.info("400派单给网点同步失败!", e);
             result.setReturnCode(Constant.FAIL);
             result.setReturnMsg("400派单给网点同步失败[" + e.getMessage() + "]");
+        }
+        // 派单成功自动同步至商城系统 && 订单是原单原回
+        if(result.getReturnCode() == 1 && wechatOrdersService.isYDYHOrder(dispatchDotParam.getAcceptNumber())){
+            Map<String,Object> params = new HashMap<>();
+            params.put("orderCode",dispatchDotParam.getAcceptNumber());
+            Map res = null;
+            try {
+                res = SyncQYUtil.getResult("QINYUAN",params,"POST", mallUrl);
+            }catch (Exception e){
+                logger.error("同步订单状态失败:",e);
+            }
+            if(!CollectionUtils.isEmpty(res) && (Integer) res.get("errorCode") != 200){
+                logger.error("同步订单状态失败: [{}]",res.get("moreInfo"));
+            }
         }
         return result;
     }
@@ -569,6 +583,18 @@ public class WechatController {
         result.setReturnCode(Constant.SUCCESS);
         try {
             wechatOrdersService.dispatchCompleteOrder(dispatchOrderParam);
+            if (wechatOrdersService.isYDYHOrder(dispatchOrderParam.getAcceptNumber())){
+                Map<String,Object> params = new HashMap<>();
+                params.put("acceptNo",dispatchOrderParam.getAcceptNumber());
+                params.put("finishNo",dispatchOrderParam.getFinishNumber());
+                Map result1 = SyncQYUtil.getResult("QINYUAN", params, "POST", mallShareUrl);
+                if ((Integer)result1.get("errorCode") != 200){
+                    logger.info("调用商城工单完工同步分润记录失败,受理单号：{},完工单号：{}",dispatchOrderParam.getAcceptNumber(),dispatchOrderParam.getFinishNumber());
+                    result.setReturnCode(Constant.FAIL);
+                    result.setReturnMsg("工单完工同步失败");
+                    return result;
+                }
+            }
         } catch (Exception e) {
             logger.error("工单完工同步失败:", e);
             result.setReturnCode(Constant.FAIL);

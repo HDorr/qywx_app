@@ -22,7 +22,11 @@ import com.ziwow.scrmapp.tools.weixin.XmlUtils;
 import com.ziwow.scrmapp.tools.weixin.decode.AesException;
 import com.ziwow.scrmapp.tools.weixin.decode.WXBizMsgCrypt;
 import com.ziwow.scrmapp.wechat.constants.RedisKeyConstants;
-import com.ziwow.scrmapp.wechat.persistence.entity.*;
+import com.ziwow.scrmapp.wechat.persistence.entity.OpenWeixin;
+import com.ziwow.scrmapp.wechat.persistence.entity.WechatCustomerMsg;
+import com.ziwow.scrmapp.wechat.persistence.entity.WechatFans;
+import com.ziwow.scrmapp.wechat.persistence.entity.WechatRegister;
+import com.ziwow.scrmapp.wechat.persistence.entity.WechatUser;
 import com.ziwow.scrmapp.wechat.vo.Articles;
 import com.ziwow.scrmapp.wechat.vo.TextOutMessage;
 import com.ziwow.scrmapp.wechat.vo.UserInfo;
@@ -49,6 +53,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.URLEncoder;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -72,6 +78,13 @@ public class WeChatMessageProcessingHandler {
 
     @Autowired
     private ChannelService channelService;
+
+
+    @Value("${app.v}")
+    private String appVersion;
+
+    @Value("${check.water.time}")
+    private String checkWaterTime;
 
     @Value("${miniapp.appid}")
     private String miniappAppid;
@@ -153,8 +166,11 @@ public class WeChatMessageProcessingHandler {
                         LOG.info("关注openId=[{}]", inMessage.getFromUserName());
                         String openId = inMessage.getFromUserName();
                         String wxToken = inMessage.getToUserName();
+                        //通过openid在fans表中查询
                         WechatFans fans = wechatFansService.getWechatFansByOpenId(openId);
+                        //若不为空
                         if (null != fans) {
+                            //判断是否携带渠道值
                             if (!StringUtils.isEmpty(inMessage.getEventKey())) {
                                 String channelId = inMessage.getEventKey().split("_")[1];
                                 Channel channel = channelService.query(Long.parseLong(channelId));
@@ -163,6 +179,7 @@ public class WeChatMessageProcessingHandler {
                                 }
                             }
                             if(StringUtils.isBlank(fans.getUnionId())) {
+                                //通过调用微信接口获取用户详情
                                 UserInfo userInfo = wechatFansService.getUserInfoByOpenId(openId);
                                 if(null != userInfo) {
                                     fans.setUnionId(userInfo.getUnionid());
@@ -174,9 +191,12 @@ public class WeChatMessageProcessingHandler {
                                 }
                             }
                             fans.setIsCancel(0);
+                            //修改fans表中相关数据
                             wechatFansService.updateWechatFans(fans);
                         } else {
+                            //为空则初始化对象
                             WechatFans wechatFans = new WechatFans();
+                            //查看是否携带渠道值,若携带则注入上创建的对象
                             if (!StringUtils.isEmpty(inMessage.getEventKey())) {
                                 String channelId = inMessage.getEventKey().split("_")[1];
                                 Channel channel = channelService.query(Long.parseLong(channelId));
@@ -184,8 +204,10 @@ public class WeChatMessageProcessingHandler {
                                     wechatFans.setChannelId(channelId);
                                 }
                             }
+                            //调用微信接口获取用户详情
                             UserInfo userInfo = wechatFansService.getUserInfoByOpenId(openId);
                             String unionId = StringUtils.EMPTY;
+                            //插入用户信息
                             if(null != userInfo) {
                                 unionId = userInfo.getUnionid();
                                 wechatFans.setUnionId(userInfo.getUnionid());
@@ -343,30 +365,39 @@ public class WeChatMessageProcessingHandler {
 
     private void dealWithSubscribe(InMessage inMessage,HttpServletResponse response) {
         StringBuilder msgsb=new StringBuilder();
-        msgsb.append("Hi~欢迎进入沁园水健康守护基地\n")
-            .append("\n")
-            .append("点击<a href='http://www.qinyuan.cn' data-miniprogram-appid='")
-            .append(miniappAppid)
-            .append("' data-miniprogram-path='pages/pre_register?fromWechatService=1'>【会员注册】</a>")
-            .append("畅享在线会员权益 尊享专属积分福利\n")
-            .append("\n")
-//            .append("点击<a href='http://www.qinyuan.cn' data-miniprogram-appid='")
-//            .append(miniappAppid)
-//            .append("' data-miniprogram-path='pages/home?goto=bind_product'>【绑定产品】</a>\n")
-//            .append("填写产品信息，开启滤芯更换提醒，精准守护您和家人的净水健康\n")
-//            .append("\n")
-            .append("点击<a href='http://www.qinyuanmall.com/mobile/product/filterIndex.jhtml' data-miniprogram-appid='")
-            .append(miniappAppid)
-            .append("' data-miniprogram-path='pages/home'>【要购买•微信商城】</a>\n")
-            .append("全场积分抵现享不停，积分多积多优惠\n")
-            .append("\n")
-            .append("点击<a href='")
-            .append(mineBaseUrl)
-            .append("/scrmapp/consumer/product/index'>【找售后•一键服务】</a>\n")
-            .append("24小时在线预约滤芯、安装、保养、维修等售后服务\n")
-            .append("\n")
-            .append("2019，沁园和您一起更净一步！");
+        int flag = 0;
 
+        if (StringUtils.isNotEmpty(inMessage.getEventKey())) {
+            //获取渠道号
+            String channelId = inMessage.getEventKey().split("_")[1];
+            //通过渠道号获取欢迎语
+            String welcomeText = channelService.selectWelcomeTextByChannelId(channelId);
+
+            if (StringUtils.isNotBlank(welcomeText)){
+                msgsb.append(welcomeText);
+                flag = 1;
+            }
+        }
+        if (flag == 0){
+            msgsb.append("Hi~欢迎进入沁园水健康守护基地\n")
+                .append("\n")
+                .append("点击<a href='http://www.qinyuan.cn' data-miniprogram-appid='")
+                .append(miniappAppid)
+                .append("' data-miniprogram-path='pages/pre_register?fromWechatService=1'>【会员注册】</a>")
+                .append("畅享在线会员权益 尊享专属积分福利\n")
+                .append("\n")
+                .append("点击<a href='http://www.qinyuanmall.com/mobile/product/filterIndex.jhtml' data-miniprogram-appid='")
+                .append(miniappAppid)
+                .append("' data-miniprogram-path='pages/home'>【要购买•微信商城】</a>\n")
+                .append("全场积分抵现享不停，积分多积多优惠\n")
+                .append("\n")
+                .append("点击<a href='")
+                .append(mineBaseUrl)
+                .append("/scrmapp/consumer/product/index'>【找售后•一键服务】</a>\n")
+                .append("24小时在线预约滤芯、安装、保养、维修等售后服务\n")
+                .append("\n")
+                .append("2019，沁园和您一起更净一步！");
+        }
         replyMessage(inMessage, response, msgsb);
     }
 
@@ -400,8 +431,7 @@ public class WeChatMessageProcessingHandler {
         }
     }
 
-    private boolean dealWithText(final InMessage inMessage, HttpServletResponse response)
-        {
+    private boolean dealWithText(final InMessage inMessage, HttpServletResponse response) throws ParseException {
 
 
         String content = inMessage.getContent();
@@ -528,7 +558,7 @@ public class WeChatMessageProcessingHandler {
               .append("\n")
               .append("其他咨询,请输入文字\"人工客服\"\n");
         }else if (content.contains("投诉")){
-          msgsb.append("您好,非常抱歉给您带来的不便！\n您可以直接输入投诉问题,我们会尽快给您受理的哦\n全国服务热线：400 111 1222\n在线工作时间：8:00AM-20:00PM");
+          msgsb.append("您好,非常抱歉给您带来的不便！\n您可以直接输入投诉问题,我们会尽快给您受理的哦\n全国服务热线：400 111 1222\n在线工作时间：8:00AM-22:00PM");
         }else if (content.contains("人工客服")){
             final boolean inWorkTime=CallCenterOssUtil.checkIsInCallCenterWorkingTime(Calendar.getInstance());
             boolean isPushToCallCenter=false;
@@ -541,12 +571,16 @@ public class WeChatMessageProcessingHandler {
                 pushMessageToCallCenter(inMessage);//推送消息到呼叫中心
                 isPushToCallCenter=true;
             } else {
-                msgsb.append("您好，非常抱歉给您带来不便，目前并非客服的工作时间，工作时间为：8:00AM-20:00PM");
+                msgsb.append("您好，非常抱歉给您带来不便，目前并非客服的工作时间，工作时间为：8:00AM-22:00PM");
             }
             replyMessage(inMessage, response, msgsb);
             return isPushToCallCenter;
-        }else if (content.contains("攻略")){
-          return false;
+        }else if (content.contains("攻略")||content.contains("延保卡")){
+            return false;
+        }else if (content.equals("appV")){
+            msgsb.append("version:"+appVersion);
+        }else if (content.equals("国庆大礼包")){
+            msgsb.append("<a href='https://s.wcd.im/v/58j7kZsr/?slv=1&sid=8lbf&v=oosnVwmV0N2GxRcqi-ToAqSzWQrg&from=groupmessage'>沁园国庆大礼包</a>");
         } else if("除菌去味一步到位".contains(content)||"除菌去味一喷到位".contains(content)||"卫宝".contains(content)){
             WechatRegister register = new WechatRegister();
             register.setOpenId(inMessage.getFromUserName());
@@ -559,14 +593,45 @@ public class WeChatMessageProcessingHandler {
                 wechatRegisterService.savePullNewRegisterByEngineer(register);
             }
             return  false;
-        }else {
 
-            if (content.equals("completechat")){
-                redisService.set(RedisKeyConstants.getScrmappWechatCustomermsg()+inMessage.getFromUserName(),false,60L);
-                inMessage.setMsgType("completechat");
-                pushMessageToCallCenter(inMessage);//推送消息到呼叫中心
-                return true;
+        } else if (content.contains("水质检测")) {
+            //初始化时间
+            String fomatData = checkWaterTime;
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            //解析date类
+            Date planDate = sdf.parse(fomatData);
+            Date nowDate = new Date();
+
+            //对比时间
+            int result = nowDate.compareTo(planDate);
+            //若result<0说明未达到10月7日
+            if (result < 0) {
+                msgsb.append("恭喜您已成功报名！\n")
+                        .append("请持续关注我们,\n")
+                        .append("实时查看您的状态！\n")
+                        .append("后续我们会在公布中奖名单后\n")
+                        .append("主动联系您！\n");
+            } else {
+                //根据openid查询
+                WechatUser wechatUser = wechatUserService.getUserByOpenId(inMessage.getFromUserName());
+                //初始化判断变量,如果未查询到该用户则直接返回未中奖
+                boolean isLucky = false;
+                if (wechatUser != null){
+                    //查看是否在中奖名单中
+                    isLucky = wechatUserService.findUserLuckyByPhone(wechatUser.getMobilePhone());
+                }
+
+                if (isLucky) {
+                    msgsb.append("恭喜您！\n")
+                            .append("您已获得免费检测机会！\n")
+                            .append("我们的工作人员将会主动联系您！");
+                } else {
+                    msgsb.append("很抱歉！\n")
+                            .append("您未获得免费检测机会！\n")
+                            .append("请持续关注其他福利活动！");
+                }
             }
+        }else {
 
             boolean isInChat=checkChatStatus(inMessage.getFromUserName());
             if (isInChat){

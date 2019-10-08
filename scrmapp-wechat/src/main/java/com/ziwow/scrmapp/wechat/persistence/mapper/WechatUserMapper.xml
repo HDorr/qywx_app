@@ -102,4 +102,11 @@
         </trim>
         where wfId = #{wfId} and status = 0
     </insert>
+
+
+    <select id="findUserLuckyByPhone" resultType="int">
+        SELECT count(*)
+        FROM t_wechat_user_temp_1
+        WHERE mobile=#{mobilePhone};
+	</select>
 </mapper>

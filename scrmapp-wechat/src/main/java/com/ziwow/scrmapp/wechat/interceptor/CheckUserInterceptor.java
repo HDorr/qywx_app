@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.ziwow.scrmapp.tools.utils.Base64;
 import net.sf.json.JSONObject;
+import org.apache.commons.lang.StringUtils;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -91,28 +92,11 @@ public class CheckUserInterceptor implements HandlerInterceptor {
 
         //获得微信客户端传回的code
         String code = request.getParameter("code");
+        String registerSrc = request.getParameter("registerSrc");
+
         logger.info("from url:" + requestURL + ",code : " + code == null ? "code is null " : code);
 
         WechatFansVo wechatFansVo = wechatFansService.getOAuthUserInfo(code, request, response);
-
-
-//        thirdPartyService.getCemProductInfo("104011-0003");
-//        productService.syncHistroyProductItemFromCemTemp("15207105539", "iqCjJfmk");
-//        wechatMediaService.downLoadMediaForCallCenter("QF2q18_9XhZFXSe7wacahl1pljPwZn-xwdDLimr1mqNAXrxpLJP5YkyE7Cx3zeDv");
-
-        /**
-         * fixme 测试数据
-         * Integer code   2
-         * String userId;   eYzE67dT
-         * String nickName;  黄晶晶。
-         * Integer gender;   1
-         */
-//        wechatFansVo=new WechatFansVo();
-//        wechatFansVo.setCode(2);
-//        wechatFansVo.setToken("AlEHYDMnIhvqOyG8n415BuUZgQzaj7Tw2rmObBVEnPY=");
-//        wechatFansVo.setUserId("eYzE67dT");
-//        wechatFansVo.setNickName("黄晶晶。");
-//        wechatFansVo.setGender(1);
 
         //会员标识
         Integer fanCode = wechatFansVo.getCode();
@@ -120,14 +104,15 @@ public class CheckUserInterceptor implements HandlerInterceptor {
         String requestURI = request.getRequestURI();
         int index = requestURI.indexOf("register");
 
-        if (0 == fanCode) {
+        boolean isFromH5=(StringUtils.isNotBlank(registerSrc) && (registerSrc.equals("3")||registerSrc.equals("4")));
+        if (0 == fanCode && !isFromH5) {
             //跳转到二维码页面
             modelAndView.setViewName("/register/scan_QR_code");
             modelAndView.addObject("url", requestURL);
         }
 
         //用户还未注册
-        else if (1 == fanCode) {
+        else if (1 == fanCode||(fanCode==0&&isFromH5)) {
             //直接从注册页面过来
             if (index != -1) {
                 //获得用户中心链接地址
@@ -138,7 +123,11 @@ public class CheckUserInterceptor implements HandlerInterceptor {
                 //跳转到注册页面
                 modelAndView.setViewName("/register/register");
 
-                modelAndView.addObject("url", requestURL);
+                if(isFromH5){
+                    modelAndView.addObject("url", "http://qinyuan.mgcc.com.cn/apply/vision2/?zy_from=wechat");
+                }else{
+                    modelAndView.addObject("url", requestURL);
+                }
             }
             modelAndView.addObject("data", wechatFansVo);
 

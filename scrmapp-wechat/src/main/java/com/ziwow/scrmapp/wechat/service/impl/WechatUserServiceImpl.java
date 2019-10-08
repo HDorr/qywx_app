@@ -10,15 +10,18 @@ import javax.annotation.Resource;
 import com.ziwow.scrmapp.common.bean.pojo.EvaluateParam;
 import com.ziwow.scrmapp.common.constants.Constant;
 import com.ziwow.scrmapp.common.constants.SystemConstants;
+import com.ziwow.scrmapp.common.persistence.entity.QyhUser;
 import com.ziwow.scrmapp.common.persistence.entity.QyhUserAppraisal;
 import com.ziwow.scrmapp.common.persistence.entity.QyhUserAppraisalVo;
 import com.ziwow.scrmapp.common.persistence.entity.WechatOrdersRecord;
 import com.ziwow.scrmapp.common.persistence.mapper.QyhUserAppraisalMapper;
+import com.ziwow.scrmapp.common.persistence.mapper.QyhUserMapper;
 import com.ziwow.scrmapp.common.persistence.mapper.WechatOrdersRecordMapper;
 import com.ziwow.scrmapp.common.result.Result;
 import com.ziwow.scrmapp.common.service.ThirdPartyService;
 import com.ziwow.scrmapp.tools.utils.HttpClientUtils;
 import com.ziwow.scrmapp.tools.utils.MD5;
+import com.ziwow.scrmapp.wechat.service.WechatOrdersRecordService;
 import com.ziwow.scrmapp.wechat.service.WechatOrdersService;
 import com.ziwow.scrmapp.wechat.vo.QtyUserVO;
 import com.ziwow.scrmapp.wechat.vo.WechatUserVo;
@@ -29,6 +32,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -250,5 +254,10 @@ public class WechatUserServiceImpl implements WechatUserService {
     @Override
     public void saveMallPcUser(MallPcUser mallPcUser) {
         mallPcUserMapper.saveMallPcUser(mallPcUser);
+    }
+
+    @Override
+    public boolean findUserLuckyByPhone(String mobilePhone) {
+        return wechatUserMapper.findUserLuckyByPhone(mobilePhone)>0? true:false;
     }
 }

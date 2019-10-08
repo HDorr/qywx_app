@@ -156,6 +156,35 @@
                     <target>1.6</target>
                 </configuration>
             </plugin>
+
+             <!-- docker 插件-->
+             <plugin>
+                 <groupId>com.spotify</groupId>
+                 <artifactId>docker-maven-plugin</artifactId>
+                 <version>0.4.13</version>
+
+                 <executions>
+
+                 </executions>
+
+                 <configuration>
+                     <serverId>docker-harbor</serverId>
+                     <registryUrl>47.96.110.23:8081</registryUrl>
+
+                     <imageName>47.96.110.23:8081/scrm/app</imageName>
+                     <pushImage>true</pushImage>
+                     <dockerDirectory>./docker</dockerDirectory>
+                     <resources>
+                         <resource>
+                             <targetPath>/</targetPath>
+                             <directory>${project.build.directory}</directory>
+                             <include>${project.build.finalName}.war</include>
+                         </resource>
+                     </resources>
+
+                 </configuration>
+             </plugin>
+
         </plugins> 
     </build>
 

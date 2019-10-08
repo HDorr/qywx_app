@@ -11,9 +11,22 @@ import java.util.List;
  */
 public class MallOrdersForm {
 
+    /**
+     * 微信订单号
+     */
+    private String orderNo;
+
     private String unionId;
 
     private List<WechatOrdersParamExt> forms;
+
+    public String getOrderNo() {
+        return orderNo;
+    }
+
+    public void setOrderNo(String orderNo) {
+        this.orderNo = orderNo;
+    }
 
     public String getUnionId() {
         return unionId;

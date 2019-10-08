@@ -116,4 +116,10 @@ public interface EwCardService {
      * @param status
      */
     void updateCardStatus(String cardNo, EwCardStatus status);
+
+    /**
+     * 根据no加载
+     * @param cardNo
+     */
+    Long loadByNo(String cardNo);
 }
