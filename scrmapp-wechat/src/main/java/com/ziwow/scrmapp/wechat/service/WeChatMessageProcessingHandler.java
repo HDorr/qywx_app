@@ -580,7 +580,11 @@ public class WeChatMessageProcessingHandler {
         }else if (content.equals("appV")){
             msgsb.append("version:"+appVersion);
         }else if (content.equals("国庆大礼包")){
-            msgsb.append("<a href='https://s.wcd.im/v/58j7kZsr/?slv=1&sid=8lbf&v=oosnVwmV0N2GxRcqi-ToAqSzWQrg&from=groupmessage'>沁园国庆大礼包</a>");
+            msgsb.append("<a href='https://open.weixin.qq.com/connect/oauth2/authorize?appid="
+                    +miniappAppid
+                    +"&redirect_uri="
+                    +mineBaseUrl
+                    +"/checkUserRegister?H5Url=https://s.wcd.im/v/58j7kZsr/?slv=1&sid=8lbf&v=oosnVwmV0N2GxRcqi-ToAqSzWQrg&from=groupmessage&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect'>沁园国庆大礼包</a>");
         } else if("除菌去味一步到位".contains(content)||"除菌去味一喷到位".contains(content)||"卫宝".contains(content)){
             WechatRegister register = new WechatRegister();
             register.setOpenId(inMessage.getFromUserName());
