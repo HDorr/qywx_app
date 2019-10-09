@@ -575,7 +575,7 @@ public class WeChatMessageProcessingHandler {
             }
             replyMessage(inMessage, response, msgsb);
             return isPushToCallCenter;
-        }else if (content.contains("攻略")||content.contains("延保卡")){
+        }else if (content.contains("攻略")||content.contains("延保卡")||content.contains("家庭日")){
             return false;
         }else if (content.equals("appV")){
             msgsb.append("version:"+appVersion);
