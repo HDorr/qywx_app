@@ -575,12 +575,12 @@ public class WeChatMessageProcessingHandler {
             }
             replyMessage(inMessage, response, msgsb);
             return isPushToCallCenter;
-        }else if (content.contains("攻略")||content.contains("延保卡")){
+        }else if (content.contains("攻略")||content.contains("延保卡")||content.contains("家庭日")){
             return false;
         }else if (content.equals("appV")){
             msgsb.append("version:"+appVersion);
         }else if (content.equals("国庆大礼包")){
-            msgsb.append("<a href='https://s.wcd.im/v/58j7kZsr/?slv=1&sid=8lbf&v=oosnVwmV0N2GxRcqi-ToAqSzWQrg&from=groupmessage'>沁园国庆大礼包</a>");
+            msgsb.append("<a href='https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx66c97d1778ea9bd3&redirect_uri=http%3A%2F%2Fwx.qinyuan.cn%2Fwx%2FcheckUserRegister%3FH5Url%3Dhttps%3A%2F%2Fs.wcd.im%2Fv%2F58j7kZsr%2F%3Fslv%3D1%26sid%3D8lbf%26v%3DoosnVwmV0N2GxRcqi-ToAqSzWQrg%26from%3Dgroupmessage&response_type=code&scope=snsapi_userinfo&state=wx66c97d1778ea9bd3&component_appid=wxcfdd10039499d368#wechat_redirect'>沁园国庆大礼包</a>");
         } else if("除菌去味一步到位".contains(content)||"除菌去味一喷到位".contains(content)||"卫宝".contains(content)){
             WechatRegister register = new WechatRegister();
             register.setOpenId(inMessage.getFromUserName());
