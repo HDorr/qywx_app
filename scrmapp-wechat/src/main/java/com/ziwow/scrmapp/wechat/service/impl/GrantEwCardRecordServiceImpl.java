@@ -1,5 +1,6 @@
 package com.ziwow.scrmapp.wechat.service.impl;
 
+import com.ziwow.scrmapp.common.enums.EwCardSendTypeEnum;
 import com.ziwow.scrmapp.common.enums.EwCardTypeEnum;
 import com.ziwow.scrmapp.wechat.persistence.entity.GrantEwCardRecord;
 import com.ziwow.scrmapp.wechat.persistence.mapper.GrantEwCardRecordMapper;
@@ -20,8 +21,8 @@ public class GrantEwCardRecordServiceImpl implements GrantEwCardRecordService {
     private GrantEwCardRecordMapper grantEwCardRecordMapper;
 
     @Override
-    public List<GrantEwCardRecord> selectRecord() {
-        return grantEwCardRecordMapper.selectRecord();
+    public List<GrantEwCardRecord> selectRecord(EwCardSendTypeEnum sendType) {
+        return grantEwCardRecordMapper.selectRecord(sendType);
     }
 
     @Override

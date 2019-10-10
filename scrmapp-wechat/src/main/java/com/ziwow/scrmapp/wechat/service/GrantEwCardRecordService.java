@@ -1,5 +1,6 @@
 package com.ziwow.scrmapp.wechat.service;
 
+import com.ziwow.scrmapp.common.enums.EwCardSendTypeEnum;
 import com.ziwow.scrmapp.common.enums.EwCardTypeEnum;
 import com.ziwow.scrmapp.wechat.persistence.entity.GrantEwCardRecord;
 
@@ -16,7 +17,7 @@ public interface GrantEwCardRecordService {
      * 查询出没有发放的记录
      * @return
      */
-    List<GrantEwCardRecord> selectRecord();
+    List<GrantEwCardRecord> selectRecord(EwCardSendTypeEnum sendType);
 
 
     /**

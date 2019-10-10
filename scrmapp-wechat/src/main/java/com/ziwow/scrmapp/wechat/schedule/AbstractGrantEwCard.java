@@ -3,6 +3,7 @@ package com.ziwow.scrmapp.wechat.schedule;
 import com.xxl.job.core.handler.IJobHandler;
 import com.xxl.job.core.log.XxlJobLogger;
 import com.ziwow.scrmapp.common.constants.Constant;
+import com.ziwow.scrmapp.common.enums.EwCardSendTypeEnum;
 import com.ziwow.scrmapp.common.enums.EwCardTypeEnum;
 import com.ziwow.scrmapp.common.service.MobileService;
 import com.ziwow.scrmapp.common.utils.EwCardUtil;
@@ -38,28 +39,30 @@ public abstract class AbstractGrantEwCard extends IJobHandler {
     private WechatUserService wechatUserService;
 
     @Transactional(rollbackFor = Exception.class)
-    public boolean grantEwCard(String mobile, EwCardTypeEnum type){
+    public boolean grantEwCard(String mobile, EwCardTypeEnum type, String msg, EwCardSendTypeEnum sendType){
         String cardNo = ewCardActivityService.selectCardNo(type);
         if (cardNo == null){
             logger.error("延保卡资源不足,手机号码为{}",mobile);
             XxlJobLogger.log("延保卡资源不足,手机号码为{}",mobile);
             return false;
         }
-        if (grantEwCardRecordService.selectReceiveRecordByPhone(mobile)){
-            logger.error("该手机号已发放,手机号码为{}",mobile);
-            XxlJobLogger.log("该手机号已发放,手机号码为{}",mobile);
-            return false;
-        }
-        if (wechatUserService.getUserByMobilePhone(mobile) != null){
-            logger.error("该用户是微信会员，手机号码为:{}",mobile);
-            XxlJobLogger.log("该用户是微信会员，手机号码为:{}",mobile);
-            return false;
+        if(!sendType.equals(EwCardSendTypeEnum.GIFT)){
+            if (grantEwCardRecordService.selectReceiveRecordByPhone(mobile)){
+                logger.error("该手机号已发放,手机号码为{}",mobile);
+                XxlJobLogger.log("该手机号已发放,手机号码为{}",mobile);
+                return false;
+            }
+            if (wechatUserService.getUserByMobilePhone(mobile) != null){
+                logger.error("该用户是微信会员，手机号码为:{}",mobile);
+                XxlJobLogger.log("该用户是微信会员，手机号码为:{}",mobile);
+                return false;
+            }
         }
         final String mask = EwCardUtil.getMask();
         grantEwCardRecordService.addMaskByMobile(mask,mobile);
         try {
             //发短信
-            final String msgContent = MessageFormat.format("亲爱的沁粉，您的保修将于半月内过期。恭喜您成为幸运用户，获赠限量免费的一年延保卡（价值{0}元），您的延保卡号为{1}。（点击券码可直接复制）！\n\n使用方式：关注沁园公众号-【我的沁园】-【个人中心】-【延保服务】-【领取卡券】，复制券码并绑定至您的机器，即可延长一年质保，绑定时请扫描机身条形码，即可识别机器！\n\n如对操作有疑问，可点击公众号左下角小键盘符号，回复【延保卡】，查看绑定教程。卡券码有效期7天，请尽快使用。", type.getPrice(), mask);
+            final String msgContent = MessageFormat.format(msg, type.getPrice(), mask);
             mobileService.sendContentByEmay(mobile,msgContent, Constant.MARKETING);
         } catch (Exception e) {
             logger.error("发送短信失败，手机号码为:{},错误信息为:{}",mobile,e);
@@ -71,5 +74,4 @@ public abstract class AbstractGrantEwCard extends IJobHandler {
         XxlJobLogger.log("发送短信成功，手机号码为:{}",mobile);
         return true;
     }
-
 }

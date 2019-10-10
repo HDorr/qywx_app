@@ -1,5 +1,6 @@
 package com.ziwow.scrmapp.wechat.persistence.mapper;
 
+import com.ziwow.scrmapp.common.enums.EwCardSendTypeEnum;
 import com.ziwow.scrmapp.common.enums.EwCardTypeEnum;
 import com.ziwow.scrmapp.wechat.persistence.entity.GrantEwCardRecord;
 import org.apache.ibatis.annotations.*;
@@ -20,12 +21,12 @@ public interface GrantEwCardRecordMapper {
      *
      * @return
      */
-    @Select("select phone,type from t_grant_ew_card_record where send = false")
+    @Select("select phone,type from t_grant_ew_card_record where send = false and src_type = #{sendType} ")
     @Results({
             @Result(column = "phone", property = "phone"),
             @Result(column = "type", property = "type")
     })
-    List<GrantEwCardRecord> selectRecord();
+    List<GrantEwCardRecord> selectRecord(@Param("sendType") EwCardSendTypeEnum sendType);
 
     /**
      * 根据手机号码修改发送状态
