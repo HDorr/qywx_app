@@ -108,7 +108,7 @@ public class WeiXinWerviceImpl implements WeiXinService {
         params.put("lang", "zh_CN");
         String jsonStr = HttpKit.get(WeChatConstants.WEB_USER_INFO_URL, params);
         if (StringUtils.isNotEmpty(jsonStr)) {
-            LOG.info("getUserInfo jsonStr:" + jsonStr);
+            LOG.info("getWebUserInfo jsonStr:" + jsonStr);
             JSONObject obj = JSONObject.parseObject(jsonStr);
             if (obj.get("errcode") != null) {
                 throw new Exception(obj.getString("errmsg"));

@@ -2,6 +2,7 @@ package com.ziwow.scrmapp.wechat.controller;
 
 
 import com.ziwow.scrmapp.wechat.persistence.entity.WechatUser;
+import com.ziwow.scrmapp.wechat.service.WechatAESService;
 import com.ziwow.scrmapp.wechat.service.WechatFansService;
 import com.ziwow.scrmapp.wechat.service.WechatUserService;
 import com.ziwow.scrmapp.wechat.vo.OauthUser;
@@ -26,35 +27,27 @@ public class WeChatCheckUserRegisterController {
     @Autowired
     private WechatUserService wechatUserService;
 
+    private WechatAESService wechatAESService;
+    @Autowired
+    public void setWechatAESService(WechatAESService wechatAESService) {
+        this.wechatAESService = wechatAESService;
+    }
+
+
     private Logger log = LoggerFactory.getLogger(getClass());
 
     @RequestMapping(value = "/checkUserRegister", method = RequestMethod.GET)
-    public ModelAndView checkUserRegister(String H5Url, String code, HttpServletResponse response, HttpServletRequest request) {
+    public ModelAndView checkUserRegister(String H5Url, String code, HttpServletResponse response, HttpServletRequest request) throws Exception {
       ModelAndView modelAndView = new ModelAndView();
       String openid = null;
       log.info("==============code:{}",code);
-        log.info("==============h5:{}",H5Url);
+      log.info("==============h5:{}",H5Url);
 
       //包含未解密openid
       WechatFansVo wechatFansVo = wechatFansService.getOAuthUserInfo(code, request, response);
-      log.info("===============未解密openid:{}",wechatFansVo.getToken());
+      log.info("===============openid:{}",wechatAESService.Decrypt(wechatFansVo.getToken()));
 
-      //包含解密openid
-      OauthUser oauthUser = wechatFansService.getOAuthUserInfo(code);
-      log.info("==============解密openid:{}",oauthUser.getOpenid());
-
-      //获取解密后的openid
-      if (oauthUser != null){
-        openid = oauthUser.getOpenid();
-      }
-
-      WechatUser user1 = wechatUserService.getUserByOpenId(wechatFansVo.getToken());
-      log.info("==============未解密openid取到的用户user：{}",user1);
-
-      WechatUser user = wechatUserService.getUserByOpenId(openid);
-      log.info("===============已解密openid取到的用户user:{}",user);
-
-      if (user == null){
+      if (wechatFansVo.getCode() ==1){
         //跳转到注册页面
         modelAndView.setViewName("/register/register");
         modelAndView.addObject("url", H5Url);
