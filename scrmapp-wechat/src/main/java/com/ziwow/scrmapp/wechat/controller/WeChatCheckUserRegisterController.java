@@ -32,15 +32,16 @@ public class WeChatCheckUserRegisterController {
     public ModelAndView checkUserRegister(String H5Url, String code, HttpServletResponse response, HttpServletRequest request) {
       ModelAndView modelAndView = new ModelAndView();
       String openid = null;
-      log.info("==============code："+code);
+      log.info("==============code:{}",code);
+        log.info("==============h5:{}",H5Url);
 
       //包含未解密openid
       WechatFansVo wechatFansVo = wechatFansService.getOAuthUserInfo(code, request, response);
-      log.info("===============未解密openid："+wechatFansVo.getToken());
+      log.info("===============未解密openid:{}",wechatFansVo.getToken());
 
       //包含解密openid
       OauthUser oauthUser = wechatFansService.getOAuthUserInfo(code);
-      log.info("==============解密openid："+oauthUser.getOpenid());
+      log.info("==============解密openid:{}",oauthUser.getOpenid());
 
       //获取解密后的openid
       if (oauthUser != null){
@@ -48,10 +49,10 @@ public class WeChatCheckUserRegisterController {
       }
 
       WechatUser user1 = wechatUserService.getUserByOpenId(wechatFansVo.getToken());
-      log.info("==============未解密openid取到的用户user："+user1);
+      log.info("==============未解密openid取到的用户user：{}",user1);
 
       WechatUser user = wechatUserService.getUserByOpenId(openid);
-      log.info("===============已解密openid取到的用户user："+user);
+      log.info("===============已解密openid取到的用户user:{}",user);
 
       if (user == null){
         //跳转到注册页面
