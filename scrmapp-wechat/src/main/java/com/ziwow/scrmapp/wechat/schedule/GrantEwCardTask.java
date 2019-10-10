@@ -37,8 +37,8 @@ public class GrantEwCardTask extends AbstractGrantEwCard{
 
     @PostConstruct
     private void InitParams(){
-        params.put("直播",new EwCardSendType("亲爱的沁粉，恭喜您成为幸运用户，获得直播间福利。您已获赠限量免费的一年延保卡，您的延保卡号为{1}（点击券码可直接复制！）\n\n使用方式：关注沁园公众号-【我的沁园】-【个人中心】-【延保服务】-【领取卡券】，复制券码并绑定至您的机器，即可延长一年质保。绑定时请扫描机身条形码，即可识别机器！\n\n如对操作有疑问，可点击公众号左下角小键盘符号，回复【延保卡】，查看绑定教程。卡券码有效期7天，请尽快使用。"
-                , EwCardSendTypeEnum.LIVESTREMING));
+        params.put("赠送",new EwCardSendType("亲爱的沁粉，恭喜您成为幸运用户，获得直播间福利。您已获赠限量免费的一年延保卡，您的延保卡号为{1}（点击券码可直接复制！）\n\n使用方式：关注沁园公众号-【我的沁园】-【个人中心】-【延保服务】-【领取卡券】，复制券码并绑定至您的机器，即可延长一年质保。绑定时请扫描机身条形码，即可识别机器！\n\n如对操作有疑问，可点击公众号左下角小键盘符号，回复【延保卡】，查看绑定教程。卡券码有效期7天，请尽快使用。"
+                , EwCardSendTypeEnum.GIFT));
         params.put("普通",new EwCardSendType("亲爱的沁粉，您的保修将于半月内过期。恭喜您成为幸运用户，获赠限量免费的一年延保卡（价值{0}元），您的延保卡号为{1}。（点击券码可直接复制）！\n\n使用方式：关注沁园公众号-【我的沁园】-【个人中心】-【延保服务】-【领取卡券】，复制券码并绑定至您的机器，即可延长一年质保，绑定时请扫描机身条形码，即可识别机器！\n\n如对操作有疑问，可点击公众号左下角小键盘符号，回复【延保卡】，查看绑定教程。卡券码有效期7天，请尽快使用。"
                 , EwCardSendTypeEnum.SMS));
     }
@@ -57,7 +57,7 @@ public class GrantEwCardTask extends AbstractGrantEwCard{
                 XxlJobLogger.log("延保卡查询总数:{}",records.size());
                 for (GrantEwCardRecord record : records) {
                     if (flag && total>num.intValue()){
-                        final boolean grant = grantEwCard(record.getPhone(), record.getType(), ewCardSendType.getMsg());
+                        final boolean grant = grantEwCard(record.getPhone(), record.getType(), ewCardSendType.getMsg(),ewCardSendType.getType());
                         if (grant) {
                             grantEwCardRecordService.updateSendByPhone(record.getPhone(), true);
                             XxlJobLogger.log("已发放{}张延保卡",num.addAndGet(1));

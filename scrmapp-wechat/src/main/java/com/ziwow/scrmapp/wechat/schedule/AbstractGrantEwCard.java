@@ -3,6 +3,7 @@ package com.ziwow.scrmapp.wechat.schedule;
 import com.xxl.job.core.handler.IJobHandler;
 import com.xxl.job.core.log.XxlJobLogger;
 import com.ziwow.scrmapp.common.constants.Constant;
+import com.ziwow.scrmapp.common.enums.EwCardSendTypeEnum;
 import com.ziwow.scrmapp.common.enums.EwCardTypeEnum;
 import com.ziwow.scrmapp.common.service.MobileService;
 import com.ziwow.scrmapp.common.utils.EwCardUtil;
@@ -15,7 +16,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigDecimal;
 import java.text.MessageFormat;
 
 /**
@@ -39,22 +39,24 @@ public abstract class AbstractGrantEwCard extends IJobHandler {
     private WechatUserService wechatUserService;
 
     @Transactional(rollbackFor = Exception.class)
-    public boolean grantEwCard(String mobile, EwCardTypeEnum type, String msg){
+    public boolean grantEwCard(String mobile, EwCardTypeEnum type, String msg, EwCardSendTypeEnum sendType){
         String cardNo = ewCardActivityService.selectCardNo(type);
         if (cardNo == null){
             logger.error("延保卡资源不足,手机号码为{}",mobile);
             XxlJobLogger.log("延保卡资源不足,手机号码为{}",mobile);
             return false;
         }
-        if (grantEwCardRecordService.selectReceiveRecordByPhone(mobile)){
-            logger.error("该手机号已发放,手机号码为{}",mobile);
-            XxlJobLogger.log("该手机号已发放,手机号码为{}",mobile);
-            return false;
-        }
-        if (wechatUserService.getUserByMobilePhone(mobile) != null){
-            logger.error("该用户是微信会员，手机号码为:{}",mobile);
-            XxlJobLogger.log("该用户是微信会员，手机号码为:{}",mobile);
-            return false;
+        if(!sendType.equals(EwCardSendTypeEnum.GIFT)){
+            if (grantEwCardRecordService.selectReceiveRecordByPhone(mobile)){
+                logger.error("该手机号已发放,手机号码为{}",mobile);
+                XxlJobLogger.log("该手机号已发放,手机号码为{}",mobile);
+                return false;
+            }
+            if (wechatUserService.getUserByMobilePhone(mobile) != null){
+                logger.error("该用户是微信会员，手机号码为:{}",mobile);
+                XxlJobLogger.log("该用户是微信会员，手机号码为:{}",mobile);
+                return false;
+            }
         }
         final String mask = EwCardUtil.getMask();
         grantEwCardRecordService.addMaskByMobile(mask,mobile);

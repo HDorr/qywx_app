@@ -7,7 +7,7 @@ package com.ziwow.scrmapp.common.enums;
 public enum EwCardSendTypeEnum {
     SMS("普通"),
 
-    LIVESTREMING("直播");
+    GIFT("赠送");
 
     private String str;
 
