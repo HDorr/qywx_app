@@ -1,9 +1,11 @@
 package com.ziwow.scrmapp.advice;
 
 import com.ziwow.scrmapp.common.constants.Constant;
+import com.ziwow.scrmapp.common.exception.BizException;
 import com.ziwow.scrmapp.common.exception.ThirdException;
 import com.ziwow.scrmapp.common.result.BaseResult;
 import com.ziwow.scrmapp.common.result.Result;
+import com.ziwow.scrmapp.common.result.ResultHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -37,6 +39,11 @@ public class ApiControllerExceptionHandler {
         return result;
     }
 
-
+    @ExceptionHandler(BizException.class)
+    @ResponseBody
+    public Result handler(BizException e) {
+        logger.error("异常拦截器截取到业务异常", e);
+        return ResultHelper.error(null, e.getMessage());
+    }
 
 }

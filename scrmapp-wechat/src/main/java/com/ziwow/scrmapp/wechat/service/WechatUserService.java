@@ -66,5 +66,7 @@ public interface WechatUserService {
 
     List<WechatUser> getUserByRegisterSrc(Integer src);
 
+    WechatUser getUserByFansUnionId(String unionId);
+
     boolean findUserLuckyByPhone(String mobilePhone);
 }

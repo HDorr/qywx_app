@@ -72,5 +72,6 @@
     </bean>
 
 	<bean class="com.ziwow.scrmapp.common.exception.ExceptionResolver"/>
+
 	<bean class="com.ziwow.scrmapp.advice.ApiControllerExceptionHandler"/>
 </beans>

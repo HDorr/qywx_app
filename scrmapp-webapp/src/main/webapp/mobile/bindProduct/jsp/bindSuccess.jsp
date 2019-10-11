@@ -33,26 +33,26 @@
             </li>
 
             <li class="flex-item">
-                <a href="${installUrl}">
+                <a href="javascript:;" id="install">
                     <img src="${f_ctxpath}/resources/images/index/orderInstall.png">
                     <p>预约安装</p>
                 </a>
             </li>
             <li class="flex-item">
-                <a href="${cleanUrl}">
+                <a href="javascript:;" id="clean">
                     <img src="${f_ctxpath}/resources/images/index/orderClean.png">
                     <p>预约清洗</p>
                 </a>
             </li>
 
             <li class="flex-item">
-                <a href="${updateFilterUrl}">
+                <a href="javascript:;" id="filter">
                     <img src="${f_ctxpath}/resources/images/index/changeFilter.png">
                     <p>预约更换滤芯</p>
                 </a>
             </li>
             <li class="flex-item">
-                <a href="${maintainUrl}">
+                <a href="javascript:;" id="maintain">
                     <img src="${f_ctxpath}/resources/images/index/orderMantainance.png">
                     <p>预约维修</p>
                 </a>
@@ -62,9 +62,22 @@
 
         <script src="${f_ctxpath}/resources/src/js/flexible.js"></script>
         <script src="${f_ctxpath}/resources/thirdparty/jquery/dist/jquery.min.js"></script>
+        <script src="https://res.wx.qq.com/open/js/jweixin-1.3.0.js"></script>
         <script src="${f_ctxpath}/resources/src/js/common.js"></script>
         <script type="text/javascript">
-            $(function(){ 
+            $(function(){
+                $('#install').on("click",function () {
+                  wx.miniProgram.navigateTo({url: "/pages/selectProduct?appointmentType=install"});
+                });
+                $('#clean').click(function () {
+                  wx.miniProgram.navigateTo({url: "/pages/selectProduct?appointmentType=clean"});
+                });
+                $('#filter').click(function () {
+                  wx.miniProgram.navigateTo({url: "/pages/selectProduct?appointmentType=filter"});
+                });
+                $('#maintain').click(function () {
+                  wx.miniProgram.navigateTo({url: "/pages/selectProduct?appointmentType=maintain"});
+                });
                 var securityCode = getUrlParam("securityCode");
                 var rootUrl = getRootPath();
                 var data = {
@@ -91,6 +104,9 @@
                     })
                     
                 });
+
+
+
 
                 // var checkBtn = document.getElementById('checkBtn')
                 // checkBtn.onclick=function (){

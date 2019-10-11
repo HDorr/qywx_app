@@ -15,7 +15,7 @@ public class WechatOrdersRecordServiceImpl implements WechatOrdersRecordService 
 	
 	@Override
 	@Transactional
-	public void saveWechatOrdersRecord(WechatOrdersRecord wechatOrdersRecord) {
-		wechatOrdersRecordMapper.insert(wechatOrdersRecord);
+	public int saveWechatOrdersRecord(WechatOrdersRecord wechatOrdersRecord) {
+		return wechatOrdersRecordMapper.insert(wechatOrdersRecord);
 	}
 }

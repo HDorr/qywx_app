@@ -1,5 +1,6 @@
 package com.ziwow.scrmapp.wechat.service;
 
+import com.ziwow.scrmapp.common.pagehelper.Page;
 import com.ziwow.scrmapp.common.persistence.entity.FilterLevel;
 import com.ziwow.scrmapp.common.persistence.entity.Product;
 import com.ziwow.scrmapp.wechat.persistence.entity.EwCardItems;
@@ -29,6 +30,9 @@ public interface ProductService {
     List<WechatArea> getModelByTypeId(Long typeId);
 
     List<Product> getProductsByUserId(String userId);
+
+    List<Product> pageProductsByUserId(String userId, Page page);
+    long getCountByUserId(String userId);
 
     ProductVo queryProduct(String modelName, String productBarCode);
 
@@ -121,4 +125,5 @@ public interface ProductService {
      * @return
      */
     List<com.ziwow.scrmapp.common.bean.vo.ProductVo> getProductByModelNames(List<String> productModelNames);
+
 }

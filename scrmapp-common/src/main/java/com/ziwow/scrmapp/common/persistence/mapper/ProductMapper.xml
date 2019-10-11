@@ -554,4 +554,19 @@
         where orderId = #{ordersId,jdbcType=BIGINT}
     </select>
 
+    <select id="selectPageByUserId"  resultMap="BaseResultMap">
+        select
+               id,productName,productBarCode,modelName,levelName,productImage,productBarCodeTwenty,productCode,buyTime
+        from t_product
+        where status = 1 and userId = #{userId} order by productCode DESC,productName DESC
+        limit #{page.offset},#{page.limit}
+    </select>
+
+    <select id="selectCount" resultType="java.lang.Long">
+        select count(1)
+        from t_product
+        where status = 1 and userId = #{userId}
+    </select>
+
+
 </mapper>

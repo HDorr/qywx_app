@@ -11,6 +11,7 @@ import com.ziwow.scrmapp.common.bean.vo.csm.ProductItem;
 import com.ziwow.scrmapp.common.constants.Constant;
 import com.ziwow.scrmapp.common.constants.SystemConstants;
 import com.ziwow.scrmapp.common.exception.ParamException;
+import com.ziwow.scrmapp.common.pagehelper.Page;
 import com.ziwow.scrmapp.common.persistence.entity.*;
 import com.ziwow.scrmapp.common.persistence.mapper.OrdersProRelationsMapper;
 import com.ziwow.scrmapp.common.persistence.mapper.ProductMapper;
@@ -276,10 +277,45 @@ public class WechatOrdersServiceImpl implements WechatOrdersService {
         return new ArrayList<WechatOrdersVo>(map.values());
     }
 
-    @Override
-    public WechatOrdersVo getVoByOrdersCode(String ordersCode) {
-        //订单详情
-        WechatOrdersVo wechatOrdersVo = wechatOrdersMapper.getByOrdersCode(ordersCode);
+  @Override
+  public List<WechatOrdersVo> pageByUserId(String userId, Page page) {
+    List<WechatOrdersVo> detailVo = wechatOrdersMapper.pageOrdersByUserId(userId, page);
+    if (detailVo.size() == 0) {
+      return new ArrayList<>();
+    }
+    Map<Long, WechatOrdersVo> map = new LinkedHashMap<>();
+    //遍历工单列表，保存至map
+    for (WechatOrdersVo vo : detailVo) {
+      map.put(vo.getId(), vo);
+      List<WechatOrdersRecordVo> wechatOrdersRecordList = wechatOrdersRecordMapper
+          .findByOrdersId(vo.getId());
+      Collections.sort(wechatOrdersRecordList, new Comparator<WechatOrdersRecordVo>() {
+        @Override
+        public int compare(WechatOrdersRecordVo o1, WechatOrdersRecordVo o2) {
+          return o2.getRecordTime().compareTo(o1.getRecordTime());
+        }
+      });
+      vo.setWechatOrdersRecordList(wechatOrdersRecordList);
+    }
+    //根据工单id查询产品列表
+    Long[] ordersIds = map.keySet().toArray(new Long[0]);
+    List<ProductVo> products = productMapper.selectByOrdersIds(ordersIds);
+    for (ProductVo pro : products) {
+      map.get(pro.getOrdersId()).getProducts().add(pro);
+    }
+    return new ArrayList<>(map.values());
+  }
+
+
+  @Override
+  public long getCountByUserId(String userId) {
+    return wechatOrdersMapper.selectCountByUserId(userId);
+  }
+
+  @Override
+  public WechatOrdersVo getVoByOrdersCode(String ordersCode) {
+    //订单详情
+    WechatOrdersVo wechatOrdersVo = wechatOrdersMapper.getByOrdersCode(ordersCode);
 
         //查询受理记录
         List<WechatOrdersRecordVo> wechatOrdersRecordList = wechatOrdersRecordMapper.findByOrdersId(wechatOrdersVo.getId());
@@ -462,66 +498,85 @@ public class WechatOrdersServiceImpl implements WechatOrdersService {
         wechatTemplateService.reservationServiceRemind(openId, msgUrl, title, name, serverType, serverTime, remark);
     }
 
-    @Override
-    public void sendAppointmentTemplateMsg(String ordersCode, String serverType) {
-        AppointmentMsgVo appointmentMsgVo = wechatOrdersMapper.getAppointmentMsgVo(ordersCode);
-        String openId = appointmentMsgVo.getOpenId();
-        String nickName = appointmentMsgVo.getNickName();
-        String name = appointmentMsgVo.getContacts();
-        String phone = appointmentMsgVo.getMobilePhone();
-        String address = appointmentMsgVo.getMyAddress();
-        String title = "亲爱的" + nickName + "，您的预约已成功提交！";
-        String subscribeResult = "已成功提交";
-        String remark = "点击【我的预约】查看订单状态，希望这份健康呵护尽快抵达您家！";
-        wechatTemplateService.subscribeResultNoticeTemplate(openId, getOrdersListPageOauthUrl(), title, name, phone, address, serverType, subscribeResult, remark);
-    }
+  @Override
+  public void sendAppointmentTemplateMsg(String ordersCode, String serverType) {
+    AppointmentMsgVo appointmentMsgVo = wechatOrdersMapper.getAppointmentMsgVo(ordersCode);
+    String openId = appointmentMsgVo.getOpenId();
+    String nickName = appointmentMsgVo.getNickName();
+    String name = appointmentMsgVo.getContacts();
+    String phone = appointmentMsgVo.getMobilePhone();
+    String address = appointmentMsgVo.getMyAddress();
+    String title = "亲爱的" + nickName + "，您的预约已成功提交！";
+    String subscribeResult = "已成功提交";
+    //String remark = "点击【我的预约】查看订单状态，希望这份健康呵护尽快抵达您家！";
+    String[] params = {name, phone, address, serverType, subscribeResult};
+    //wechatTemplateService.subscribeResultNoticeTemplate(openId, getOrdersListPageOauthUrl(), title, name, phone, address, serverType, subscribeResult, remark);
+    wechatTemplateService
+        .sendTemplate(openId, "pages/queryProgress?from=metinfo", Arrays.asList(params),
+            "subscribeResultNoticeTemplate", true, title);
 
-    @Override
-    public void sendOrderCancelTemplateMsg(String userId, String serverType) {
-        WechatFans wechatFans = wechatFansService.getWechatFansByUserId(userId);
-        if (null != wechatFans) {
-            String openId = wechatFans.getOpenId();
-            String nickName = wechatFans.getWfNickName();
-            String title = "亲爱的" + nickName + "，您的撤销请求沁先生已经收到并已成功处理。";
-            String remark = "如需重新预约，点击【一键服务】进行操作即可，沁先生会继续派出工程师为您解决烦恼。";
-            String time = DateUtil.DateToString(new Date(), DateUtil.YYYY_MM_DD_HH_MM_SS);
-            wechatTemplateService.serviceOrCancellationTemplate(openId, getOrdersListPageOauthUrl(), title, serverType, time, time, remark);
-        }
-    }
+  }
 
-    @Override
-    public void sendOrderFinishTemplateMsg(String ordersCode, String userId, String orderTime) {
-        WechatFans wechatFans = wechatFansService.getWechatFansByUserId(userId);
-        if (null != wechatFans) {
-            String openId = wechatFans.getOpenId();
-            String nickName = wechatFans.getWfNickName();
-            String title = "亲爱的" + nickName + "，您的预约服务已完成！";
-            String remark = "欢迎点击【我的预约】对工程师的服务进行评价，它会成为下一个顾客的参考，也会帮助沁先生更好地为您服务！如已评价，可忽略该消息。";
-            wechatTemplateService.serviceEvaluationToRemindTemplate(openId, getOrdersListPageOauthUrl(), title, ordersCode, orderTime, remark);
-        }
+  @Override
+  public void sendOrderCancelTemplateMsg(String userId, String serverType) {
+    WechatFans wechatFans = wechatFansService.getWechatFansByUserId(userId);
+    if (null != wechatFans) {
+      String openId = wechatFans.getOpenId();
+      String nickName = wechatFans.getWfNickName();
+      String title = "亲爱的" + nickName + "，您的撤销请求沁先生已经收到并已成功处理。";
+      // String remark = "如需重新预约，点击【一键服务】进行操作即可，沁先生会继续派出工程师为您解决烦恼。";
+      String time = DateUtil.DateToString(new Date(), DateUtil.YYYY_MM_DD_HH_MM_SS);
+      String[] params = {serverType, time, time};
+      // wechatTemplateService.serviceOrCancellationTemplate(openId, getOrdersListPageOauthUrl(), title, serverType, time, time, remark);
+      wechatTemplateService
+          .sendTemplate(openId, "pages/queryProgress?from=metinfo", Arrays.asList(params),
+              "serviceOrCancellationTemplate", true, title);
     }
+  }
+
+  @Override
+  public void sendOrderFinishTemplateMsg(String ordersCode, String userId, String orderTime) {
+    WechatFans wechatFans = wechatFansService.getWechatFansByUserId(userId);
+    if (null != wechatFans) {
+      String openId = wechatFans.getOpenId();
+      String nickName = wechatFans.getWfNickName();
+      String title = "亲爱的" + nickName + "，您的预约服务已完成！";
+      //String remark = "欢迎点击【我的预约】对工程师的服务进行评价，它会成为下一个顾客的参考，也会帮助沁先生更好地为您服务！如已评价，可忽略该消息。";
+      String[] params = {ordersCode,orderTime};
+      wechatTemplateService
+          .sendTemplate(openId, "pages/queryProgress?from=metinfo", Arrays.asList(params),
+              "serviceEvaluationToRemindTemplate", true, title);
+      //wechatTemplateService.serviceEvaluationToRemindTemplate(openId, getOrdersListPageOauthUrl(), title, ordersCode, orderTime, remark);
+    }
+  }
 
     @Override
     public int dispatch(String ordersCode, String qyhUserId, Date updateTime, int status) {
         return wechatOrdersMapper.updateQyhUserIdAndStatus(ordersCode, qyhUserId, updateTime, status);
     }
 
-    @Override
-    public void sendDispatchMasterTemplateMsg(WechatOrders wechatOrders, String engineerName, String mobilePhone) {
-        String userId = wechatOrders.getUserId();
-        WechatFans wechatFans = wechatFansService.getWechatFansByUserId(userId);
-        if (null != wechatFans) {
-            String openId = wechatFans.getOpenId();
-            String nickName = wechatFans.getWfNickName();
-            String orderType = OrderUtils.getServiceTypeName(wechatOrders.getOrderType());
-            String orderCode = wechatOrders.getOrdersCode();
-            String orderTime = DateUtil.DateToString(wechatOrders.getOrderTime(), DateUtil.YYYY_MM_DD_HH_MM_SS);
-            String title = "亲爱的" + nickName + "，沁先生已成功派单，工程师会按时上门服务。";
-            String remark = "点击【我的预约】了解详细状态，保持电话畅通，工程师会尽快与您联系。";
-            String url = myOrderDetailUrl + "?userId=" + userId + "&ordersCode=" + orderCode;
-            wechatTemplateService.servicesToNoticeTemplate(openId, getOrdersListPageOauthUrl(), title, orderType, orderCode, orderTime, engineerName, mobilePhone, remark);
-        }
+  @Override
+  public void sendDispatchMasterTemplateMsg(WechatOrders wechatOrders, String engineerName,
+      String mobilePhone) {
+    String userId = wechatOrders.getUserId();
+    WechatFans wechatFans = wechatFansService.getWechatFansByUserId(userId);
+    if (null != wechatFans) {
+      String openId = wechatFans.getOpenId();
+      String nickName = wechatFans.getWfNickName();
+      String orderType = OrderUtils.getServiceTypeName(wechatOrders.getOrderType());
+      String orderCode = wechatOrders.getOrdersCode();
+      String orderTime = DateUtil
+          .DateToString(wechatOrders.getOrderTime(), DateUtil.YYYY_MM_DD_HH_MM_SS);
+      String title = "亲爱的" + nickName + "，沁先生已成功派单，工程师会按时上门服务。";
+      //String remark = "点击【我的预约】了解详细状态，保持电话畅通，工程师会尽快与您联系。";
+      String[] params = {orderType, orderCode, orderTime, engineerName};
+      wechatTemplateService
+          .sendTemplate(openId, "pages/queryProgress?from=metinfo", Arrays.asList(params),
+              "servicesToNoticeTemplate", true, title);
+      //String url = myOrderDetailUrl + "?userId=" + userId + "&ordersCode=" + orderCode;
+      //wechatTemplateService.servicesToNoticeTemplate(openId, getOrdersListPageOauthUrl(), title, orderType, orderCode, orderTime, engineerName, mobilePhone, remark);
     }
+  }
 
     /*@Override
     public void sendReOrderTimeTemplateMsg(WechatOrders wechatOrders) {

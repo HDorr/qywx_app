@@ -1,5 +1,6 @@
 package com.ziwow.scrmapp.wechat.persistence.mapper;
 
+import com.ziwow.scrmapp.common.pagehelper.Page;
 import com.ziwow.scrmapp.wechat.persistence.entity.WechatUserAddress;
 import com.ziwow.scrmapp.wechat.vo.AppointmentMsgVo;
 
@@ -11,6 +12,11 @@ import java.util.List;
  * Created by xiaohei on 2017/3/9.
  */
 public interface WechatUserAddressMapper {
+
+    List<WechatUserAddress> selectPageByUserId(@Param("userId") String userId, @Param("page") Page page);
+
+    long selectCountByUserId(@Param("userId") String userId);
+
     List<WechatUserAddress> findListByUserId(@Param("userId") String userId);
 
     WechatUserAddress findAddress(@Param("id") Long addressId);
@@ -30,5 +36,4 @@ public interface WechatUserAddressMapper {
     Integer setDefault(@Param("userId") String userId, @Param("id") Long addressId);
 
     Integer cancelDefault(@Param("userId") String userId);
-
 }

@@ -2,6 +2,7 @@ package com.ziwow.scrmapp.common.persistence.mapper;
 
 import java.util.List;
 
+import com.ziwow.scrmapp.common.pagehelper.Page;
 import org.apache.ibatis.annotations.Param;
 
 import com.ziwow.scrmapp.common.bean.vo.ProductFinishVo;
@@ -105,4 +106,18 @@ public interface ProductMapper {
      * @return
      */
     Product getProductsByBarCode(@Param("barCode") String barCode);
+
+    /**
+     * 分页查询产品列表
+     * @param userId String
+     * @return List
+     */
+    List<Product> selectPageByUserId(@Param("userId") String userId, @Param("page") Page page);
+
+    /**
+     * 查询产品总数
+     * @param userId String
+     * @return long
+     */
+    long selectCount(@Param("userId") String userId);
 }

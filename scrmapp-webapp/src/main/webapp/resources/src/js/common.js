@@ -23,7 +23,7 @@ var pageUrls =  { //正式环境
     securityCheck: rootPath + "/scrmapp/consumer/product/securityCheck/page",
     securityCheckRes: rootPath + "/scrmapp/consumer/product/securityCheck/result/page",
     reserveSuccess:rootPath + "/scrmapp/consumer/wechat/orders/service/add/success",
-    reviewPraide: rootPath + "/scrmapp/consumer/wechat/orders/appraisal/page",
+    reviewPraide: rootPath + "/scrmapp/consumer/filter/wechat/orders/appraisal/page",
     finishedWorkOrderList: rootPath + "/scrmapp/qyhuser/orders/finish/list/page",
     engineerPersonCenter: rootPath + "/scrmapp/qyhuser/index/page",
     unfinishedWorkOrderDetail: rootPath + "/scrmapp/qyhuser/orders/detail/page",

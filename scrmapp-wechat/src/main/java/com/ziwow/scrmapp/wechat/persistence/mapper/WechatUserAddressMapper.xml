@@ -38,6 +38,35 @@
 			twua.id ASC
     </select>
 
+    <select id="selectPageByUserId" resultMap="wechatUserAddressMap">
+        SELECT
+               twf.headimgurl,
+               twua.*
+        FROM
+             t_wechat_user_address twua
+                 LEFT JOIN t_wechat_user twu ON twu.userId = twua.userId
+                 LEFT JOIN t_wechat_fans twf ON twu.wfId = twf.id
+        WHERE
+                twua.userId = #{userId}
+          AND twua.type = 1
+        ORDER BY
+                 twua.isDefault ASC,
+                 twua.id Desc
+        limit #{page.offset},#{page.limit}
+    </select>
+
+    <select id="selectCountByUserId" resultType="java.lang.Long">
+        SELECT
+               count(1)
+        FROM
+             t_wechat_user_address twua
+                 LEFT JOIN t_wechat_user twu ON twu.userId = twua.userId
+                 LEFT JOIN t_wechat_fans twf ON twu.wfId = twf.id
+        WHERE
+                twua.userId = #{userId}
+          AND twua.type = 1
+    </select>
+
     <!-- 查询用户具体地址信息 -->
     <select id="findAddress" resultMap="wechatUserAddressMap">
       select id,userId,contacts,contactsMobile,provinceId,provinceName,cityId,cityName,areaId,areaName,streetName,isDefault,type,fixedTelephone,f_aid from t_wechat_user_address where id = #{id} and type = 1

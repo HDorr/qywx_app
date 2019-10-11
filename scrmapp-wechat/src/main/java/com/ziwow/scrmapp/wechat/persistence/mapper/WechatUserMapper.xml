@@ -66,8 +66,21 @@
 		SELECT * FROM t_wechat_user u WHERE u.mobilePhone=#{mobilePhone} and u.status=0 LIMIT 0,1
 	</select>
 
+  <select id="selectUserByFansUnionId" resultMap="wechatUserMap">
+      SELECT
+           usr.*
+      FROM
+           t_wechat_fans fans,
+           t_wechat_user usr
+      WHERE
+            fans.id = usr.wfId
+        and fans.unionid = #{unionId}
+        and fans.is_cancel = 0
+        and usr.status = 0
+      limit 1
+  </select>
 
-    <insert id="saveUser" parameterType="com.ziwow.scrmapp.wechat.persistence.entity.WechatUser">
+  <insert id="saveUser" parameterType="com.ziwow.scrmapp.wechat.persistence.entity.WechatUser">
 		insert into t_wechat_user(userId,password,seed,mobilePhone,provinceId,cityId,areaId,wfId,createDate,nickName,gender,register_src)
 		values(#{userId},#{password},#{seed},#{mobilePhone},#{provinceId},#{cityId},#{areaId},#{wfId},now(),#{nickName},#{gender},#{registerSrc})
 	</insert>

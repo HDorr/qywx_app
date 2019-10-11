@@ -33,6 +33,8 @@ public interface WechatUserMapper {
 
     QtyUserVO getQtyUserByUserId(@Param("userId") String userId);
 
+    WechatUser selectUserByFansUnionId(@Param("unionId") String unionId);
+
 
    int findUserLuckyByPhone(String mobilePhone);
 }
