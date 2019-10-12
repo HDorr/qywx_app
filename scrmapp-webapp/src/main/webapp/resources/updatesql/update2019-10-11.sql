@@ -1,0 +1,1 @@
+ALTER TABLE t_grant_ew_card_record MODIFY src_type enum('SMS', 'ORDER', 'GIFT') DEFAULT 'ORDER';

@@ -3,8 +3,14 @@ package com.ziwow.scrmapp.wechat.persistence.mapper;
 import com.ziwow.scrmapp.common.enums.EwCardSendTypeEnum;
 import com.ziwow.scrmapp.common.enums.EwCardTypeEnum;
 import com.ziwow.scrmapp.wechat.persistence.entity.GrantEwCardRecord;
-import org.apache.ibatis.annotations.*;
+import org.apache.ibatis.annotations.Insert;
+import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Result;
+import org.apache.ibatis.annotations.Results;
+import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -102,4 +108,18 @@ public interface GrantEwCardRecordMapper {
      */
     @Select("select id from t_grant_ew_card_record where  phone = #{phone} and send = true limit 1")
     Long selectReceiveRecordByPhone(@Param("phone") String phone);
+
+    /**
+     * 查询指定时间段发送延保卡的用户
+     * @param format
+     * @return
+     */
+    @Select("select phone,type,mask,src_type from t_grant_ew_card_record where date_format(send_time ,'%Y-%m-%d' ) = #{format} and send = true")
+    @Results({
+            @Result(column = "phone", property = "phone"),
+            @Result(column = "type", property = "type"),
+            @Result(column = "mask", property = "mask"),
+            @Result(column = "src_type", property = "srcType")
+    })
+    LinkedList<GrantEwCardRecord> selectRecordByDate(@Param("format") String format);//链表提高删除效率
 }
