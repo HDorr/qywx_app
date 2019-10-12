@@ -33,9 +33,10 @@ public interface GrantEwCardRecordMapper {
      *
      * @param phone
      * @param send
+     * @param sendType
      */
-    @Update("update t_grant_ew_card_record set send = #{send},send_time = now() where phone = #{phone}")
-    void updateSendByPhone(@Param("phone") String phone, @Param("send") boolean send);
+    @Update("update t_grant_ew_card_record set send = #{send},send_time = now() where phone = #{phone} and src_type = #{sendType}")
+    void updateSendByPhone(@Param("phone") String phone, @Param("send") boolean send,@Param("sendType") EwCardSendTypeEnum sendType);
 
 
     /**
@@ -52,9 +53,10 @@ public interface GrantEwCardRecordMapper {
      * 根据手机号增加掩码
      * @param mask
      * @param phone
+     * @param sendTypeEnum
      */
-    @Update("update t_grant_ew_card_record set mask = #{mask} where phone = #{phone}")
-    void addMaskByMobile(@Param("mask") String mask, @Param("phone") String phone);
+    @Update("update t_grant_ew_card_record set mask = #{mask} where phone = #{phone} and src_type = #{sendType}")
+    void addMaskByMobile(@Param("mask") String mask, @Param("phone") String phone,@Param("sendType")EwCardSendTypeEnum sendTypeEnum);
 
     /**
      * 根据掩码查询出对应的发放记录
@@ -102,4 +104,12 @@ public interface GrantEwCardRecordMapper {
      */
     @Select("select id from t_grant_ew_card_record where  phone = #{phone} and send = true limit 1")
     Long selectReceiveRecordByPhone(@Param("phone") String phone);
+
+    /**
+     *  根据掩码修改领取标识
+     * @param mask
+     * @param receive
+     */
+    @Update("update t_grant_ew_card_record set receive = #{receive} where mask = #{mask}")
+    void updateReceiveByMask(String mask, boolean receive);
 }

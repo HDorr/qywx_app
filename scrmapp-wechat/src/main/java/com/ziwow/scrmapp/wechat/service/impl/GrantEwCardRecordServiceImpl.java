@@ -26,8 +26,8 @@ public class GrantEwCardRecordServiceImpl implements GrantEwCardRecordService {
     }
 
     @Override
-    public void updateSendByPhone(String phone, boolean send) {
-        grantEwCardRecordMapper.updateSendByPhone(phone,send);
+    public void updateSendByPhone(String phone, boolean send,EwCardSendTypeEnum sendType) {
+        grantEwCardRecordMapper.updateSendByPhone(phone,send,sendType);
     }
 
 
@@ -37,8 +37,8 @@ public class GrantEwCardRecordServiceImpl implements GrantEwCardRecordService {
     }
 
     @Override
-    public void addMaskByMobile(String mask, String mobile) {
-        grantEwCardRecordMapper.addMaskByMobile(mask,mobile);
+    public void addMaskByMobile(String mask, String mobile,EwCardSendTypeEnum sendTypeEnum) {
+        grantEwCardRecordMapper.addMaskByMobile(mask,mobile,sendTypeEnum);
     }
 
     @Override
@@ -64,6 +64,11 @@ public class GrantEwCardRecordServiceImpl implements GrantEwCardRecordService {
     @Override
     public boolean selectReceiveRecordByPhone(String mobile) {
         return grantEwCardRecordMapper.selectReceiveRecordByPhone(mobile) == null ? false : true;
+    }
+
+    @Override
+    public void updateReceiveByMask(String mask, boolean receive) {
+        grantEwCardRecordMapper.updateReceiveByMask(mask,receive);
     }
 
 }
