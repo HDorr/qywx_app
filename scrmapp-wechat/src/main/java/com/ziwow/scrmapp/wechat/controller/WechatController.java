@@ -20,6 +20,7 @@ import com.ziwow.scrmapp.common.bean.vo.csm.ProductItem;
 import com.ziwow.scrmapp.common.bean.vo.mall.MallOrderVo;
 import com.ziwow.scrmapp.common.bean.vo.mall.OrderItem;
 import com.ziwow.scrmapp.common.constants.Constant;
+import com.ziwow.scrmapp.common.enums.EwCardSendTypeEnum;
 import com.ziwow.scrmapp.common.enums.EwCardTypeEnum;
 import com.ziwow.scrmapp.common.exception.ParamException;
 import com.ziwow.scrmapp.common.persistence.entity.FilterLevel;
@@ -156,7 +157,7 @@ public class WechatController {
             result.setReturnMsg("短信发送失败");
         }
         //增加发送时间,修改发送标识
-        grantEwCardRecordService.updateSendByPhone(mobile,true);
+        grantEwCardRecordService.updateSendByPhone(mobile,true, EwCardSendTypeEnum.ORDER);
         return result;
     }
 
