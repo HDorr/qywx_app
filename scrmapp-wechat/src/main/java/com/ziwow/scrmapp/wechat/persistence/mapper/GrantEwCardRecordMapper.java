@@ -109,12 +109,13 @@ public interface GrantEwCardRecordMapper {
     @Select("select id from t_grant_ew_card_record where  phone = #{phone} and send = true limit 1")
     Long selectReceiveRecordByPhone(@Param("phone") String phone);
 
+
     /**
      * 查询指定时间段发送延保卡的用户
      * @param format
      * @return
      */
-    @Select("select phone,type,mask,src_type from t_grant_ew_card_record where date_format(send_time ,'%Y-%m-%d' ) = #{format} and send = true")
+    @Select("select id,phone,type,mask,src_type from t_grant_ew_card_record where date_format(send_time ,'%Y-%m-%d' ) = #{format} and send = true and receive = false and send_message = false")
     @Results({
             @Result(column = "phone", property = "phone"),
             @Result(column = "type", property = "type"),
@@ -122,4 +123,12 @@ public interface GrantEwCardRecordMapper {
             @Result(column = "src_type", property = "srcType")
     })
     LinkedList<GrantEwCardRecord> selectRecordByDate(@Param("format") String format);//链表提高删除效率
+
+
+    /**
+     * 已经发送短信通知的用户进行标记
+     * @param id
+     */
+    @Update("update t_grant_ew_card_record set send_message = true where id = #{id}")
+    void updateMessageSend(String id);
 }

@@ -72,4 +72,9 @@ public class GrantEwCardRecordServiceImpl implements GrantEwCardRecordService {
         return grantEwCardRecordMapper.selectRecordByDate(format);
     }
 
+    @Override
+     public void updateMessageSend(String id) {
+         grantEwCardRecordMapper.updateMessageSend(id);
+    }
+
 }

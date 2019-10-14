@@ -89,4 +89,10 @@ public interface GrantEwCardRecordService {
      * @return
      */
     LinkedList<GrantEwCardRecord> selectRecordByDate(String format);
+
+    /**
+     * 修改标记该用户已经二次发送短信
+     * @param id
+     */
+    void updateMessageSend(String id);
 }

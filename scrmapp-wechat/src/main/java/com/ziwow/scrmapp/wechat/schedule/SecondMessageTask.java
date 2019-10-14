@@ -36,6 +36,8 @@ public class SecondMessageTask extends AbstractGrantEwCard{
   @Autowired
   private MobileService mobileService;
 
+  static SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+
   @Override
   public ReturnT<String> execute(String s) throws Exception {
     String str = "亲爱的沁粉，您还有一张价值{0}元的延保卡还未领取，号码为：{1}。该卡券两天后失效，请尽快使用。\n" +
@@ -46,7 +48,6 @@ public class SecondMessageTask extends AbstractGrantEwCard{
 
     //调整时间为五天前
     Date date = EwCardUtil.getNeedDate(new Date(), -5);
-    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
     String format = sdf.format(date);
 
     //第五天前发送延保卡的所有记录
@@ -62,7 +63,10 @@ public class SecondMessageTask extends AbstractGrantEwCard{
     }
 
     for (GrantEwCardRecord record : grantEwCardRecordList){
-      sendMessage(record,str);
+      boolean isSuccess = sendMessage(record, str);
+      if (isSuccess){
+        grantEwCardRecordService.updateMessageSend(record.getId());
+      }
     }
 
     return ReturnT.SUCCESS;
