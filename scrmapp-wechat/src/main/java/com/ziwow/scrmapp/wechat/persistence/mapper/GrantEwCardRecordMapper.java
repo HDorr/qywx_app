@@ -117,7 +117,7 @@ public interface GrantEwCardRecordMapper {
      * @param format
      * @return
      */
-    @Select("select id,phone,type,mask,src_type from t_grant_ew_card_record where date_format(send_time ,'%Y-%m-%d' ) = #{format} and send = true and receive = false and send_message = false")
+    @Select("select id,phone,type,mask,src_type from t_grant_ew_card_record where date_format(send_time ,'%Y-%m-%d' ) = #{format} and send = true and receive = false and message_again = false")
     @Results({
             @Result(column = "phone", property = "phone"),
             @Result(column = "type", property = "type"),
@@ -131,7 +131,7 @@ public interface GrantEwCardRecordMapper {
      * 已经发送短信通知的用户进行标记
      * @param id
      */
-    @Update("update t_grant_ew_card_record set send_message = true where id = #{id}")
+    @Update("update t_grant_ew_card_record set message_again = true where id = #{id}")
     void updateMessageSend(String id);
 
     /**

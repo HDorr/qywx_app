@@ -64,7 +64,7 @@
 	    select
 	    	id,productName,productBarCode,modelName,levelName,productImage,productBarCodeTwenty,productCode,buyTime
 	    from t_product
-	    where status = 1 and userId = #{userId} order by productCode DESC,productName DESC
+	    where status = 1 and userId = #{userId} order by createTime DESC ,productCode DESC,productName DESC
 	</select>
 
 
