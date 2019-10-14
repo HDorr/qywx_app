@@ -59,7 +59,7 @@ public abstract class AbstractGrantEwCard extends IJobHandler {
             }
         }
         final String mask = EwCardUtil.getMask();
-        grantEwCardRecordService.addMaskByMobile(mask,mobile);
+        grantEwCardRecordService.addMaskByMobile(mask,mobile,sendType);
         try {
             //发短信
             final String msgContent = MessageFormat.format(msg, type.getPrice(), mask);
@@ -70,7 +70,7 @@ public abstract class AbstractGrantEwCard extends IJobHandler {
             return false;
         }
         //增加发送时间
-        grantEwCardRecordService.updateSendByPhone(mobile,true);
+        grantEwCardRecordService.updateSendByPhone(mobile,true,sendType);
         XxlJobLogger.log("发送短信成功，手机号码为:{}",mobile);
         return true;
     }
