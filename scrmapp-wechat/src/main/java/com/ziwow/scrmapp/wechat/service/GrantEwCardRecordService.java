@@ -4,6 +4,7 @@ import com.ziwow.scrmapp.common.enums.EwCardSendTypeEnum;
 import com.ziwow.scrmapp.common.enums.EwCardTypeEnum;
 import com.ziwow.scrmapp.wechat.persistence.entity.GrantEwCardRecord;
 
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -83,6 +84,19 @@ public interface GrantEwCardRecordService {
      * @return
      */
     boolean selectReceiveRecordByPhone(String mobile);
+
+    /**
+     * 查询指定时间段发送延保卡的用户电话
+     * @param format
+     * @return
+     */
+    LinkedList<GrantEwCardRecord> selectRecordByDate(String format);
+
+    /**
+     * 修改标记该用户已经二次发送短信
+     * @param id
+     */
+    void updateMessageSend(String id);
 
     /**
      * 根据手机号修改领取记录

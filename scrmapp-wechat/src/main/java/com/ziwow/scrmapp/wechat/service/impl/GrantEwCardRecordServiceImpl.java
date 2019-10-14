@@ -8,6 +8,7 @@ import com.ziwow.scrmapp.wechat.service.GrantEwCardRecordService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -64,6 +65,16 @@ public class GrantEwCardRecordServiceImpl implements GrantEwCardRecordService {
     @Override
     public boolean selectReceiveRecordByPhone(String mobile) {
         return grantEwCardRecordMapper.selectReceiveRecordByPhone(mobile) == null ? false : true;
+    }
+
+    @Override
+    public LinkedList<GrantEwCardRecord> selectRecordByDate(String format) {
+        return grantEwCardRecordMapper.selectRecordByDate(format);
+    }
+
+    @Override
+     public void updateMessageSend(String id) {
+         grantEwCardRecordMapper.updateMessageSend(id);
     }
 
     @Override
