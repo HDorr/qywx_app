@@ -3,8 +3,14 @@ package com.ziwow.scrmapp.wechat.persistence.mapper;
 import com.ziwow.scrmapp.common.enums.EwCardSendTypeEnum;
 import com.ziwow.scrmapp.common.enums.EwCardTypeEnum;
 import com.ziwow.scrmapp.wechat.persistence.entity.GrantEwCardRecord;
-import org.apache.ibatis.annotations.*;
+import org.apache.ibatis.annotations.Insert;
+import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Result;
+import org.apache.ibatis.annotations.Results;
+import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -33,9 +39,10 @@ public interface GrantEwCardRecordMapper {
      *
      * @param phone
      * @param send
+     * @param sendType
      */
-    @Update("update t_grant_ew_card_record set send = #{send},send_time = now() where phone = #{phone}")
-    void updateSendByPhone(@Param("phone") String phone, @Param("send") boolean send);
+    @Update("update t_grant_ew_card_record set send = #{send},send_time = now() where phone = #{phone} and src_type = #{sendType}")
+    void updateSendByPhone(@Param("phone") String phone, @Param("send") boolean send,@Param("sendType") EwCardSendTypeEnum sendType);
 
 
     /**
@@ -52,9 +59,10 @@ public interface GrantEwCardRecordMapper {
      * 根据手机号增加掩码
      * @param mask
      * @param phone
+     * @param sendTypeEnum
      */
-    @Update("update t_grant_ew_card_record set mask = #{mask} where phone = #{phone}")
-    void addMaskByMobile(@Param("mask") String mask, @Param("phone") String phone);
+    @Update("update t_grant_ew_card_record set mask = #{mask} where phone = #{phone} and src_type = #{sendType}")
+    void addMaskByMobile(@Param("mask") String mask, @Param("phone") String phone,@Param("sendType")EwCardSendTypeEnum sendTypeEnum);
 
     /**
      * 根据掩码查询出对应的发放记录
@@ -102,4 +110,35 @@ public interface GrantEwCardRecordMapper {
      */
     @Select("select id from t_grant_ew_card_record where  phone = #{phone} and send = true limit 1")
     Long selectReceiveRecordByPhone(@Param("phone") String phone);
+
+
+    /**
+     * 查询指定时间段发送延保卡的用户
+     * @param format
+     * @return
+     */
+    @Select("select id,phone,type,mask,src_type from t_grant_ew_card_record where date_format(send_time ,'%Y-%m-%d' ) = #{format} and send = true and receive = false and message_again = false")
+    @Results({
+            @Result(column = "phone", property = "phone"),
+            @Result(column = "type", property = "type"),
+            @Result(column = "mask", property = "mask"),
+            @Result(column = "src_type", property = "srcType")
+    })
+    LinkedList<GrantEwCardRecord> selectRecordByDate(@Param("format") String format);//链表提高删除效率
+
+
+    /**
+     * 已经发送短信通知的用户进行标记
+     * @param id
+     */
+    @Update("update t_grant_ew_card_record set message_again = true where id = #{id}")
+    void updateMessageSend(String id);
+
+    /**
+     *  根据掩码修改领取标识
+     * @param mask
+     * @param receive
+     */
+    @Update("update t_grant_ew_card_record set receive = #{receive} where mask = #{mask}")
+    void updateReceiveByMask(String mask, boolean receive);
 }

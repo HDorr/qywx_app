@@ -170,7 +170,7 @@ public class EwCardController {
 
         //如果是活动送的卡
         if (isActivity){
-            grantEwCardRecordService.updateReceiveByPhone(gwr.getPhone(),true);
+            grantEwCardRecordService.updateReceiveByMask(gwr.getMask(),true);
             ewCardActivityService.addPhoneByCardNo(cardNo,gwr.getPhone());
         }
         result.setReturnMsg("查询成功");
