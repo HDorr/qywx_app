@@ -86,6 +86,13 @@ public class WechatController {
     private String mallUrl;
     @Value("${mall.syncShareRecord.url}")
     private String mallShareUrl;
+
+    @Value("${mall.syncRetreatOrder.url}")
+    private String syncRetreatOrderUrl;
+
+    @Value("${mall.syncRefuseOrder.url}")
+    private String syncRefuseOrderUrl;
+
     @Autowired
     private WechatUserService wechatUserService;
     @Autowired
@@ -663,7 +670,7 @@ public class WechatController {
         params.put("acceptNo", acceptNumber);
         params.put("remarks", remarks);
         logger.info("开始工单退单同步商城,受理单号：{},备注信息：{}", acceptNumber, remarks);
-        Map result1 = SyncQYUtil.getResult("QINYUAN", params, "POST", mallShareUrl);
+        Map result1 = SyncQYUtil.getResult("QINYUAN", params, "POST", syncRetreatOrderUrl);
         if ((Integer) result1.get("errorCode") != 200) {
             logger.error("工单退单同步商城失败,受理单号：{},备注信息：{}", acceptNumber, remarks);
             throw new RuntimeException("工单退单同步商城失败");
@@ -680,7 +687,7 @@ public class WechatController {
         params.put("acceptNo", acceptNumber);
         params.put("remarks", remarks);
         logger.info("开始工单拒单同步商城,受理单号：{},备注信息：{}", acceptNumber, remarks);
-        Map result1 = SyncQYUtil.getResult("QINYUAN", params, "POST", mallShareUrl);
+        Map result1 = SyncQYUtil.getResult("QINYUAN", params, "POST", syncRefuseOrderUrl);
         if ((Integer) result1.get("errorCode") != 200) {
             logger.error("工单拒单同步商城失败,受理单号：{},备注信息：{}", acceptNumber, remarks);
             throw new RuntimeException("工单拒单同步商城失败");
