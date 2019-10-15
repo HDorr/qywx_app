@@ -613,6 +613,7 @@ public class WechatController {
     @ResponseBody
     public Result retreatOrder(@RequestBody DispatchRetreatRefuseParam dispatchRetreatParam) {
         logger.info("同步退单接口,CSM推送数据dispatchRetreatParam:[{}]!", dispatchRetreatParam.toString());
+        checkSignature(dispatchRetreatParam);
         Result result = new BaseResult();
         result.setReturnMsg("工单退单同步成功!");
         result.setReturnCode(Constant.SUCCESS);
@@ -649,6 +650,7 @@ public class WechatController {
     @ResponseBody
     public Result refuseOrder(@RequestBody DispatchRetreatRefuseParam dispatchRetreatParam) {
         logger.info("同步拒单接口,CSM推送数据dispatchRetreatParam:[{}]!", dispatchRetreatParam.toString());
+        checkSignature(dispatchRetreatParam);
         Result result = new BaseResult();
         result.setReturnMsg("工单拒单同步成功!");
         result.setReturnCode(Constant.SUCCESS);
@@ -661,6 +663,17 @@ public class WechatController {
         }
         return result;
     }
+
+
+    private void checkSignature(DispatchRetreatRefuseParam param){
+        String signture = param.getSignture();
+        String timeStamp = param.getTimeStamp();
+        boolean isLegal = SignUtil.checkSignature(signture, timeStamp, Constant.AUTH_KEY);
+        if (!isLegal) {
+            throw new ParamException(Constant.ILLEGAL_REQUEST);
+        }
+    }
+
 
     /**
      * 同步商城退单记录
