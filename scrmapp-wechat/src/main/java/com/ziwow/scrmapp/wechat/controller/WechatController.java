@@ -622,6 +622,7 @@ public class WechatController {
                 try {
                     sendMallShare(dispatchRetreatParam.getAcceptNumber(), dispatchRetreatParam.getRemarks());
                 } catch (Exception e) {
+                    logger.error("工单退单同步失败，参数为：{},错误信息为{}",dispatchRetreatParam,e);
                     result.setReturnMsg("工单退单同步失败!");
                     result.setReturnCode(Constant.FAIL);
                     return result;
@@ -655,7 +656,16 @@ public class WechatController {
         result.setReturnMsg("工单拒单同步成功!");
         result.setReturnCode(Constant.SUCCESS);
         try {
-            sendMallRefuseOrder(dispatchRetreatParam.getAcceptNumber(),dispatchRetreatParam.getRemarks());
+            if (wechatOrdersService.isYDYHOrder(dispatchRetreatParam.getAcceptNumber())) {
+                try {
+                    sendMallRefuseOrder(dispatchRetreatParam.getAcceptNumber(),dispatchRetreatParam.getRemarks());
+                } catch (Exception e) {
+                    logger.error("工单拒单同步失败，参数为：{},错误信息为{}",dispatchRetreatParam,e);
+                    result.setReturnMsg("工单拒单同步失败!");
+                    result.setReturnCode(Constant.FAIL);
+                    return result;
+                }
+            }
         } catch (Exception e) {
             result.setReturnMsg("工单退单同步失败!");
             result.setReturnCode(Constant.FAIL);
