@@ -7,7 +7,10 @@ package com.ziwow.scrmapp.common.enums;
 public enum EwCardSendTypeEnum {
     SMS("普通"),
 
-    GIFT("赠送");
+    GIFT("赠送"),
+
+    ORDER("默认")
+    ;
 
     private String str;
 
