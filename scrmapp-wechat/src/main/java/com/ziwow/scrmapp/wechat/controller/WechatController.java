@@ -743,7 +743,8 @@ public class WechatController {
      * @return
      */
     private boolean isCompletion(String remarks) {
-        if (StringUtils.startsWith(remarks,"邮寄退单：") && StringUtils.contains(remarks,"+")){
+        //例如： 退单(邮寄退单：aaa+123)
+        if (StringUtils.startsWith(remarks,"退单(邮寄退单：") && StringUtils.contains(remarks,"+")){
             return true;
         }
         return false;
