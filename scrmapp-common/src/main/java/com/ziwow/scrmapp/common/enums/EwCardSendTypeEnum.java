@@ -9,8 +9,7 @@ public enum EwCardSendTypeEnum {
 
     GIFT("赠送"),
 
-    ORDER("默认")
-    ;
+    ORDER("默认");
 
     private String str;
 

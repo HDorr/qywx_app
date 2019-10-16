@@ -5,7 +5,10 @@ import com.ziwow.scrmapp.common.bean.pojo.CSMEwCardParam;
 import com.ziwow.scrmapp.common.bean.pojo.EwCardParam;
 import com.ziwow.scrmapp.common.bean.pojo.ProductParam;
 import com.ziwow.scrmapp.common.bean.vo.WechatOrdersVo;
-import com.ziwow.scrmapp.common.bean.vo.csm.*;
+import com.ziwow.scrmapp.common.bean.vo.csm.BaseCardVo;
+import com.ziwow.scrmapp.common.bean.vo.csm.EwCardItem;
+import com.ziwow.scrmapp.common.bean.vo.csm.EwCardVo;
+import com.ziwow.scrmapp.common.bean.vo.csm.ProductItem;
 import com.ziwow.scrmapp.common.constants.Constant;
 import com.ziwow.scrmapp.common.constants.ErrorCodeConstants;
 import com.ziwow.scrmapp.common.enums.EwCardStatus;
@@ -17,8 +20,18 @@ import com.ziwow.scrmapp.common.service.ThirdPartyService;
 import com.ziwow.scrmapp.common.utils.EwCardUtil;
 import com.ziwow.scrmapp.tools.utils.BeanUtils;
 import com.ziwow.scrmapp.tools.utils.DateUtil;
-import com.ziwow.scrmapp.wechat.persistence.entity.*;
-import com.ziwow.scrmapp.wechat.service.*;
+import com.ziwow.scrmapp.wechat.persistence.entity.EwCard;
+import com.ziwow.scrmapp.wechat.persistence.entity.GrantEwCardRecord;
+import com.ziwow.scrmapp.wechat.persistence.entity.WechatUser;
+import com.ziwow.scrmapp.wechat.persistence.entity.WechatUserAddress;
+import com.ziwow.scrmapp.wechat.service.EwCardActivityService;
+import com.ziwow.scrmapp.wechat.service.EwCardService;
+import com.ziwow.scrmapp.wechat.service.GrantEwCardRecordService;
+import com.ziwow.scrmapp.wechat.service.ProductService;
+import com.ziwow.scrmapp.wechat.service.WechatFansService;
+import com.ziwow.scrmapp.wechat.service.WechatOrdersService;
+import com.ziwow.scrmapp.wechat.service.WechatUserAddressService;
+import com.ziwow.scrmapp.wechat.service.WechatUserService;
 import com.ziwow.scrmapp.wechat.vo.EwCardDetails;
 import com.ziwow.scrmapp.wechat.vo.EwCardInfo;
 import com.ziwow.scrmapp.wechat.vo.EwCards;
@@ -30,7 +43,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -128,13 +145,7 @@ public class EwCardController {
                 result.setReturnMsg("对不起，延保卡发放完毕");
                 return result;
             }
-            //连续点击的情况
-            Long eid = ewCardService.loadByNo(cardNo);
-            if (eid != null){
-                result.setReturnCode(Constant.FAIL);
-                result.setReturnMsg("延保卡已领取");
-                return result;
-            }
+
         }
 
         ewCardVo = thirdPartyService.getEwCardListByNo(cardNo);

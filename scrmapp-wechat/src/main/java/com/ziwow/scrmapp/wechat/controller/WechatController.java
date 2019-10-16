@@ -32,6 +32,7 @@ import com.ziwow.scrmapp.tools.thirdParty.SignUtil;
 import com.ziwow.scrmapp.tools.utils.DateUtil;
 import com.ziwow.scrmapp.tools.utils.StringUtil;
 import com.ziwow.scrmapp.tools.utils.UniqueIDBuilder;
+import com.ziwow.scrmapp.wechat.constants.QYConstans;
 import com.ziwow.scrmapp.wechat.constants.WeChatConstants;
 import com.ziwow.scrmapp.wechat.enums.BuyChannel;
 import com.ziwow.scrmapp.wechat.persistence.entity.MallPcUser;
@@ -120,50 +121,50 @@ public class WechatController {
     @Autowired
     private GrantEwCardRecordService grantEwCardRecordService;
 
-    @RequestMapping(value = "grant_ew_card", method = RequestMethod.GET)
+    @RequestMapping(value = "grant_ew_card",method = RequestMethod.GET)
     @MiniAuthentication
     @ResponseBody
     @Transactional(rollbackFor = Exception.class)
     public Result grantEwCard(@RequestParam("signture") String signture,
-                              @RequestParam("timestamp") String timeStamp,
-                              @RequestParam("mobile") String mobile,
-                              @RequestParam("type") EwCardTypeEnum type) {
-        logger.info("CSM调用微信短信发放延保卡开始，手机号码为:{}，类型为:{}", mobile, type);
+                       @RequestParam("timestamp") String timeStamp,
+                       @RequestParam("mobile") String mobile,
+                       @RequestParam("type") EwCardTypeEnum type){
+        logger.info("CSM调用微信短信发放延保卡开始，手机号码为:{}，类型为:{}",mobile,type);
         String cardNo = ewCardActivityService.selectCardNo(type);
         Result result = new BaseResult();
-        if (cardNo == null) {
-            logger.error("延保卡资源不足，手机号码为:{}", mobile);
+        if (cardNo == null){
+            logger.error("延保卡资源不足，手机号码为:{}",mobile);
             result.setReturnMsg("延保卡资源不足");
             result.setReturnCode(Constant.FAIL);
             return result;
         }
-        if (grantEwCardRecordService.selectReceiveRecordByPhone(mobile)) {
-            logger.error("该手机号已发放，手机号码为:{}", mobile);
+        if (grantEwCardRecordService.selectReceiveRecordByPhone(mobile)){
+            logger.error("该手机号已发放，手机号码为:{}",mobile);
             result.setReturnMsg("该手机号已发放");
             result.setReturnCode(Constant.FAIL);
             return result;
         }
-        if (wechatUserService.getUserByMobilePhone(mobile) != null) {
-            logger.error("该用户是微信会员，手机号码为:{}", mobile);
+        if (wechatUserService.getUserByMobilePhone(mobile) != null){
+            logger.error("该用户是微信会员，手机号码为:{}",mobile);
             result.setReturnMsg("该用户是微信会员,不满足发放条件");
             result.setReturnCode(Constant.FAIL);
             return result;
         }
         final String mask = EwCardUtil.getMask();
-        grantEwCardRecordService.addEwCardRecord(mobile, mask, type, false);
+        grantEwCardRecordService.addEwCardRecord(mobile,mask,type,false);
         result.setReturnMsg("发送成功");
         result.setReturnCode(Constant.SUCCESS);
         try {
             //发短信
             final String msgContent = MessageFormat.format("您近期预约的服务已完成。恭喜您成为幸运用户，获赠限量免费的一年延保卡（价值{0}元），您的延保卡号为{1}。（点击券码可直接复制）！\n\n使用方式：关注沁园公众号-【我的沁园】-【个人中心】-【延保服务】-【领取卡券】，复制券码并绑定至您的机器，即可延长一年质保，绑定时请扫描机身条形码，即可识别机器！\n\n如对操作有疑问，可点击公众号左下角小键盘符号，回复【延保卡】，查看绑定教程。卡券码有效期7天，请尽快使用。", type.getPrice(), mask);
-            mobileService.sendContentByEmay(mobile, msgContent, Constant.MARKETING);
+            mobileService.sendContentByEmay(mobile,msgContent, Constant.MARKETING);
         } catch (Exception e) {
-            logger.error("发送短信失败，手机号码为:{},错误信息为:{}", mobile, e);
+            logger.error("发送短信失败，手机号码为:{},错误信息为:{}",mobile,e);
             result.setReturnCode(Constant.FAIL);
             result.setReturnMsg("短信发送失败");
         }
         //增加发送时间,修改发送标识
-        grantEwCardRecordService.updateSendByPhone(mobile, true, EwCardSendTypeEnum.ORDER);
+        grantEwCardRecordService.updateSendByPhone(mobile,true, EwCardSendTypeEnum.ORDER);
         return result;
     }
 
@@ -780,13 +781,13 @@ public class WechatController {
             return result;
         }
 
-        if (miniappSendSms.getType() == 3) {//绑定有礼
+        if (miniappSendSms.getType()==3){//绑定有礼
             String msgContent = "亲爱的会员，恭喜您已成功绑定产品，小沁送您用户尊享满200立减50元滤芯优惠券一张，可进入沁园WX号（qy_serve ），点击<我的沁园>进入<优惠券>即可查看，还有更多用户尊享服务一键预约快速达。即刻开启您的专享优惠通道吧~回复TD退订";
-            mobileService.sendContentByEmay(miniappSendSms.getPhone(), msgContent, Constant.BIND_GIFT);
-        } else if (miniappSendSms.getType() == 4) {//注册有礼
+            mobileService.sendContentByEmay(miniappSendSms.getPhone(),msgContent, Constant.BIND_GIFT );
+        }else if (miniappSendSms.getType()==4){//注册有礼
 //            String msgContent = "嗨，欢迎进入沁园水健康守护基地，恭喜您已完成会员注册。小沁送您会员尊享立减100元优惠券一张，购买微商城内任意净水器通用哦。进入沁园WX号（qy_serve ），点击<要购买-WX商城>进入<我的>即可查看。立即绑定产品，还有更多滤芯优惠券等着您！即刻开启您的专享优惠通道吧~回复TD退订";
             String msgContent = "嗨，欢迎进入沁园水健康守护基地，恭喜您已完成会员注册。小沁送您会员尊享立减100元优惠券一张，购买微商城内任意净水器通用哦。进入沁园WX号（qy_serve ），点击<我的沁园>进入<优惠券>即可查看。即刻开启您的专享优惠通道吧~回复TD退订";
-            mobileService.sendContentByEmay(miniappSendSms.getPhone(), msgContent, Constant.REGISTER_GIFT);
+            mobileService.sendContentByEmay(miniappSendSms.getPhone(), msgContent,Constant.REGISTER_GIFT);
         }
 
 
@@ -848,6 +849,7 @@ public class WechatController {
 
     @Value("${open.weixin.component_appid}")
     private String component_appid;
+
 
 
 }

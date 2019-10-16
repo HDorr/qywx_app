@@ -128,7 +128,7 @@ public class WechatFansServiceImpl implements WechatFansService {
 						WechatFans wechatFans = getWechatFansByOpenId(fans.getOpenId());
 						if (wechatFans != null){
 							wechatFansMapper.updateWechatFans(fans);
-						}else {
+						}else if(StringUtils.isNotBlank(fans.getUnionId())){
 							saveWechatFans(fans);
 						}
 					}

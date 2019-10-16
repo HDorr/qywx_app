@@ -1,5 +1,6 @@
 package com.ziwow.scrmapp.wechat.persistence.entity;
 
+import com.ziwow.scrmapp.common.enums.EwCardSendTypeEnum;
 import com.ziwow.scrmapp.common.enums.EwCardTypeEnum;
 
 import java.util.Date;
@@ -37,6 +38,12 @@ public class GrantEwCardRecord {
      * 发送时间
      */
     private Date sendTime;
+
+
+    /**
+     * 延保卡发放类型
+     */
+    private EwCardSendTypeEnum srcType;
 
 
     /**
@@ -99,5 +106,13 @@ public class GrantEwCardRecord {
 
     public void setSend(Boolean send) {
         this.send = send;
+    }
+
+    public EwCardSendTypeEnum getSrcType() {
+        return srcType;
+    }
+
+    public void setSrcType(EwCardSendTypeEnum srcType) {
+        this.srcType = srcType;
     }
 }
