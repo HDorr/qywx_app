@@ -3,6 +3,7 @@ package com.ziwow.scrmapp.common.utils;
 import com.ziwow.scrmapp.common.enums.Guarantee;
 import org.apache.commons.lang.RandomStringUtils;
 import org.apache.commons.lang.time.DateUtils;
+
 import java.util.Calendar;
 import java.util.Date;
 
@@ -192,6 +193,18 @@ public class EwCardUtil {
         }else {
             return true;
         }
+    }
+
+    /**
+     * 获取距离当前时间指定时间段的时间
+     * @param date
+     * @param muchDays
+     * @return
+     */
+    public static Date getNeedDate(Date date,int muchDays){
+        instance.setTime(date);
+        instance.add(Calendar.DATE,muchDays);
+        return instance.getTime();
     }
 
 
