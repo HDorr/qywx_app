@@ -45,6 +45,8 @@ import com.ziwow.scrmapp.wechat.vo.WechatFansVo;
 import com.ziwow.scrmapp.wechat.vo.WechatJSSdkSignVO;
 import net.sf.json.JSONArray;
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.time.DateFormatUtils;
+import org.apache.commons.lang3.time.DateUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,10 +63,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.net.URLEncoder;
 import java.text.MessageFormat;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author hogen
@@ -631,7 +630,7 @@ public class WechatController {
                 return result;
             }
             try {
-                sendMallRetreatOrder(dispatchRetreatParam.getAcceptNumber(),dispatchRetreatParam.getRemarks());
+                sendMallRetreatOrder(dispatchRetreatParam.getAcceptNumber(),dispatchRetreatParam.getRemarks(),dispatchRetreatParam.getManualDate());
             } catch (Exception e) {
                 result.setReturnMsg("工单退单同步失败!");
                 result.setReturnCode(Constant.FAIL);
@@ -659,7 +658,7 @@ public class WechatController {
         try {
             if (wechatOrdersService.isYDYHOrder(dispatchRetreatParam.getAcceptNumber())) {
                 try {
-                    sendMallRefuseOrder(dispatchRetreatParam.getAcceptNumber(),dispatchRetreatParam.getRemarks());
+                    sendMallRefuseOrder(dispatchRetreatParam.getAcceptNumber(),dispatchRetreatParam.getRemarks(),dispatchRetreatParam.getManualDate());
                 } catch (Exception e) {
                     logger.error("工单拒单同步失败，参数为：{},错误信息为{}",dispatchRetreatParam,e);
                     result.setReturnMsg("工单拒单同步失败!");
@@ -690,10 +689,11 @@ public class WechatController {
      * 同步商城退单记录
      * @param acceptNumber
      */
-    private void sendMallRetreatOrder(String acceptNumber,String remarks) {
-        Map<String, Object> params = new HashMap<>(2);
+    private void sendMallRetreatOrder(String acceptNumber, String remarks, Date manualDate) {
+        Map<String, Object> params = new HashMap<>(3);
         params.put("acceptNo", acceptNumber);
         params.put("remarks", remarks);
+        params.put("manualDate", DateFormatUtils.format(manualDate,"yyyy-MM-dd HH:mm:ss"));
         logger.info("开始工单退单同步商城,受理单号：{},备注信息：{}", acceptNumber, remarks);
         Map result1 = SyncQYUtil.getResult("QINYUAN", params, "POST", syncRetreatOrderUrl);
         if ((Integer) result1.get("errorCode") != 200) {
@@ -707,10 +707,11 @@ public class WechatController {
      * 同步商城拒单记录
      * @param acceptNumber
      */
-    private void sendMallRefuseOrder(String acceptNumber,String remarks) {
-        Map<String, Object> params = new HashMap<>(2);
+    private void sendMallRefuseOrder(String acceptNumber,String remarks,Date manualDate) {
+        Map<String, Object> params = new HashMap<>(3);
         params.put("acceptNo", acceptNumber);
         params.put("remarks", remarks);
+        params.put("manualDate", DateFormatUtils.format(manualDate,"yyyy-MM-dd HH:mm:ss"));
         logger.info("开始工单拒单同步商城,受理单号：{},备注信息：{}", acceptNumber, remarks);
         Map result1 = SyncQYUtil.getResult("QINYUAN", params, "POST", syncRefuseOrderUrl);
         if ((Integer) result1.get("errorCode") != 200) {

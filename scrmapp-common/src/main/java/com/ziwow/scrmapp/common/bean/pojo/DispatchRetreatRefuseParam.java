@@ -1,5 +1,9 @@
 package com.ziwow.scrmapp.common.bean.pojo;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
+import java.util.Date;
+
 /**
  *  csm退单同步参数
  * @author songkaiqi
@@ -19,7 +23,11 @@ public class DispatchRetreatRefuseParam {
      */
     private String remarks;
 
-
+    /**
+     * 申请时间
+     */
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private Date manualDate;
 
     public String getTimeStamp() {
         return timeStamp;
@@ -51,6 +59,14 @@ public class DispatchRetreatRefuseParam {
 
     public void setRemarks(String remarks) {
         this.remarks = remarks;
+    }
+
+    public Date getManualDate() {
+        return manualDate;
+    }
+
+    public void setManualDate(Date manualDate) {
+        this.manualDate = manualDate;
     }
 
     @Override
