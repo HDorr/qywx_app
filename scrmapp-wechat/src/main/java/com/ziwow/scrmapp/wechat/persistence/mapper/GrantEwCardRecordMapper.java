@@ -132,7 +132,7 @@ public interface GrantEwCardRecordMapper {
      * @param id
      */
     @Update("update t_grant_ew_card_record set message_again = true where id = #{id}")
-    void updateMessageSend(String id);
+    void updateMessageSend(@Param("id") String id);
 
     /**
      *  根据掩码修改领取标识
@@ -140,5 +140,5 @@ public interface GrantEwCardRecordMapper {
      * @param receive
      */
     @Update("update t_grant_ew_card_record set receive = #{receive} where mask = #{mask}")
-    void updateReceiveByMask(String mask, boolean receive);
+    void updateReceiveByMask(@Param("mask") String mask,@Param("receive") boolean receive);
 }
