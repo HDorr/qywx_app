@@ -12,10 +12,7 @@ import com.alibaba.fastjson.JSON;
 import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
 import com.ziwow.scrmapp.common.annotation.MiniAuthentication;
-import com.ziwow.scrmapp.common.bean.pojo.AppraiseParam;
-import com.ziwow.scrmapp.common.bean.pojo.DispatchDotParam;
-import com.ziwow.scrmapp.common.bean.pojo.DispatchMasterParam;
-import com.ziwow.scrmapp.common.bean.pojo.DispatchOrderParam;
+import com.ziwow.scrmapp.common.bean.pojo.*;
 import com.ziwow.scrmapp.common.bean.vo.csm.ProductItem;
 import com.ziwow.scrmapp.common.bean.vo.mall.MallOrderVo;
 import com.ziwow.scrmapp.common.bean.vo.mall.OrderItem;
@@ -48,6 +45,8 @@ import com.ziwow.scrmapp.wechat.vo.WechatFansVo;
 import com.ziwow.scrmapp.wechat.vo.WechatJSSdkSignVO;
 import net.sf.json.JSONArray;
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.time.DateFormatUtils;
+import org.apache.commons.lang3.time.DateUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -88,6 +87,13 @@ public class WechatController {
     private String mallUrl;
     @Value("${mall.syncShareRecord.url}")
     private String mallShareUrl;
+
+    @Value("${mall.syncRetreatOrder.url}")
+    private String syncRetreatOrderUrl;
+
+    @Value("${mall.syncRefuseOrder.url}")
+    private String syncRefuseOrderUrl;
+
     @Autowired
     private WechatUserService wechatUserService;
     @Autowired
@@ -149,7 +155,7 @@ public class WechatController {
         result.setReturnCode(Constant.SUCCESS);
         try {
             //发短信
-            final String msgContent = MessageFormat.format("您近期预约的服务已完成。恭喜您成为幸运用户，获赠限量免费的一年延保卡（价值{0}元），您的延保卡号为{1}。（点击券码可直接复制）！\n\n使用方式：关注沁园公众号-【我的沁园】-【个人中心】-【延保服务】-【领取卡券】，复制券码并绑定至您的机器，即可延长一年质保，绑定时请扫描机身条形码，即可识别机器！\n\n如对操作有疑问，可点击公众号左下角小键盘符号，回复【延保卡】，查看绑定教程。卡券码有效期7天，请尽快使用。", type.getPrice(), mask);
+            final String msgContent = MessageFormat.format("您近期预约的服务已完成。恭喜您成为幸运用户，获赠限量免费的一年延保卡（价值{0}元），您的延保卡号为{1}。（点击券码可直接复制）！\n\n使用方式：关注沁园公众号-【我的沁园】-【会员注册】-【延保服务】-【领取卡券】，复制券码并绑定至您的机器，即可延长一年质保，绑定时请扫描机身条形码，即可识别机器！\n\n如对操作有疑问，可点击公众号左下角小键盘符号，回复【延保卡】，查看绑定教程。卡券码有效期7天，请尽快使用。", type.getPrice(), mask);
             mobileService.sendContentByEmay(mobile,msgContent, Constant.MARKETING);
         } catch (Exception e) {
             logger.error("发送短信失败，手机号码为:{},错误信息为:{}",mobile,e);
@@ -504,17 +510,17 @@ public class WechatController {
             result.setReturnMsg("400派单给网点同步失败[" + e.getMessage() + "]");
         }
         // 派单成功自动同步至商城系统 && 订单是原单原回
-        if(result.getReturnCode() == 1 && wechatOrdersService.isYDYHOrder(dispatchDotParam.getAcceptNumber())){
-            Map<String,Object> params = new HashMap<>();
-            params.put("orderCode",dispatchDotParam.getAcceptNumber());
+        if (result.getReturnCode() == 1 && wechatOrdersService.isYDYHOrder(dispatchDotParam.getAcceptNumber())) {
+            Map<String, Object> params = new HashMap<>();
+            params.put("orderCode", dispatchDotParam.getAcceptNumber());
             Map res = null;
             try {
-                res = SyncQYUtil.getResult("QINYUAN",params,"POST", mallUrl);
-            }catch (Exception e){
-                logger.error("同步订单状态失败:",e);
+                res = SyncQYUtil.getResult("QINYUAN", params, "POST", mallUrl);
+            } catch (Exception e) {
+                logger.error("同步订单状态失败:", e);
             }
-            if(!CollectionUtils.isEmpty(res) && (Integer) res.get("errorCode") != 200){
-                logger.error("同步订单状态失败: [{}]",res.get("moreInfo"));
+            if (!CollectionUtils.isEmpty(res) && (Integer) res.get("errorCode") != 200) {
+                logger.error("同步订单状态失败: [{}]", res.get("moreInfo"));
             }
         }
         return result;
@@ -585,16 +591,7 @@ public class WechatController {
         try {
             wechatOrdersService.dispatchCompleteOrder(dispatchOrderParam);
             if (wechatOrdersService.isYDYHOrder(dispatchOrderParam.getAcceptNumber())){
-                Map<String,Object> params = new HashMap<>();
-                params.put("acceptNo",dispatchOrderParam.getAcceptNumber());
-                params.put("finishNo",dispatchOrderParam.getFinishNumber());
-                Map result1 = SyncQYUtil.getResult("QINYUAN", params, "POST", mallShareUrl);
-                if ((Integer)result1.get("errorCode") != 200){
-                    logger.info("调用商城工单完工同步分润记录失败,受理单号：{},完工单号：{}",dispatchOrderParam.getAcceptNumber(),dispatchOrderParam.getFinishNumber());
-                    result.setReturnCode(Constant.FAIL);
-                    result.setReturnMsg("工单完工同步失败");
-                    return result;
-                }
+                sendMallShare(dispatchOrderParam.getAcceptNumber(), dispatchOrderParam.getFinishNumber());
             }
         } catch (Exception e) {
             logger.error("工单完工同步失败:", e);
@@ -603,6 +600,155 @@ public class WechatController {
         }
         return result;
 
+    }
+
+
+    /**
+     * csm退单同步接口
+     *
+     * @param dispatchRetreatParam
+     * @return
+     */
+    @RequestMapping(value = "/syncRetreatOrder", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
+    @ResponseBody
+    public Result retreatOrder(@RequestBody DispatchRetreatRefuseParam dispatchRetreatParam) {
+        logger.info("同步退单接口,CSM推送数据dispatchRetreatParam:[{}]!", dispatchRetreatParam.toString());
+        checkSignature(dispatchRetreatParam);
+        Result result = new BaseResult();
+        result.setReturnMsg("工单退单同步成功!");
+        result.setReturnCode(Constant.SUCCESS);
+        if (wechatOrdersService.isYDYHOrder(dispatchRetreatParam.getAcceptNumber())){
+            if (isCompletion(dispatchRetreatParam.getRemarks())) {
+                try {
+                    sendMallShare(dispatchRetreatParam.getAcceptNumber(), dispatchRetreatParam.getRemarks());
+                } catch (Exception e) {
+                    logger.error("工单退单同步失败，参数为：{},错误信息为{}",dispatchRetreatParam,e);
+                    result.setReturnMsg("工单退单同步失败!");
+                    result.setReturnCode(Constant.FAIL);
+                    return result;
+                }
+                return result;
+            }
+            try {
+                sendMallRetreatOrder(dispatchRetreatParam.getAcceptNumber(),dispatchRetreatParam.getRemarks(),dispatchRetreatParam.getManualDate());
+            } catch (Exception e) {
+                result.setReturnMsg("工单退单同步失败!");
+                result.setReturnCode(Constant.FAIL);
+                return result;
+            }
+        }
+        return result;
+    }
+
+
+    /**
+     * csm拒单同步接口
+     *
+     * @param dispatchRetreatParam
+     * @return
+     */
+    @RequestMapping(value = "/syncRefuseOrder", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
+    @ResponseBody
+    public Result refuseOrder(@RequestBody DispatchRetreatRefuseParam dispatchRetreatParam) {
+        logger.info("同步拒单接口,CSM推送数据dispatchRetreatParam:[{}]!", dispatchRetreatParam.toString());
+        checkSignature(dispatchRetreatParam);
+        Result result = new BaseResult();
+        result.setReturnMsg("工单拒单同步成功!");
+        result.setReturnCode(Constant.SUCCESS);
+        try {
+            if (wechatOrdersService.isYDYHOrder(dispatchRetreatParam.getAcceptNumber())) {
+                try {
+                    sendMallRefuseOrder(dispatchRetreatParam.getAcceptNumber(),dispatchRetreatParam.getRemarks(),dispatchRetreatParam.getManualDate());
+                } catch (Exception e) {
+                    logger.error("工单拒单同步失败，参数为：{},错误信息为{}",dispatchRetreatParam,e);
+                    result.setReturnMsg("工单拒单同步失败!");
+                    result.setReturnCode(Constant.FAIL);
+                    return result;
+                }
+            }
+        } catch (Exception e) {
+            result.setReturnMsg("工单退单同步失败!");
+            result.setReturnCode(Constant.FAIL);
+            return result;
+        }
+        return result;
+    }
+
+
+    private void checkSignature(DispatchRetreatRefuseParam param){
+        String signture = param.getSignture();
+        String timeStamp = param.getTimeStamp();
+        boolean isLegal = SignUtil.checkSignature(signture, timeStamp, Constant.AUTH_KEY);
+        if (!isLegal) {
+            throw new ParamException(Constant.ILLEGAL_REQUEST);
+        }
+    }
+
+
+    /**
+     * 同步商城退单记录
+     * @param acceptNumber
+     */
+    private void sendMallRetreatOrder(String acceptNumber, String remarks, Date manualDate) {
+        Map<String, Object> params = new HashMap<>(3);
+        params.put("acceptNo", acceptNumber);
+        params.put("remarks", remarks);
+        params.put("manualDate", DateFormatUtils.format(manualDate,"yyyy-MM-dd HH:mm:ss"));
+        logger.info("开始工单退单同步商城,受理单号：{},备注信息：{}", acceptNumber, remarks);
+        Map result1 = SyncQYUtil.getResult("QINYUAN", params, "POST", syncRetreatOrderUrl);
+        if ((Integer) result1.get("errorCode") != 200) {
+            logger.error("工单退单同步商城失败,受理单号：{},备注信息：{}", acceptNumber, remarks);
+            throw new RuntimeException("工单退单同步商城失败");
+        }
+    }
+
+
+    /**
+     * 同步商城拒单记录
+     * @param acceptNumber
+     */
+    private void sendMallRefuseOrder(String acceptNumber,String remarks,Date manualDate) {
+        Map<String, Object> params = new HashMap<>(3);
+        params.put("acceptNo", acceptNumber);
+        params.put("remarks", remarks);
+        params.put("manualDate", DateFormatUtils.format(manualDate,"yyyy-MM-dd HH:mm:ss"));
+        logger.info("开始工单拒单同步商城,受理单号：{},备注信息：{}", acceptNumber, remarks);
+        Map result1 = SyncQYUtil.getResult("QINYUAN", params, "POST", syncRefuseOrderUrl);
+        if ((Integer) result1.get("errorCode") != 200) {
+            logger.error("工单拒单同步商城失败,受理单号：{},备注信息：{}", acceptNumber, remarks);
+            throw new RuntimeException("工单拒单同步商城失败");
+        }
+    }
+
+    /**
+     * 同步完工到商城分润记录
+     *
+     * @param acceptNum
+     * @param finishNum
+     */
+    private void sendMallShare(String acceptNum, String finishNum) {
+        Map<String, Object> params = new HashMap<>(2);
+        params.put("acceptNo", acceptNum);
+        params.put("finishNo", finishNum);
+        logger.info("开始调用商城工单完工同步分润记录,受理单号：{},完工单号：{}", acceptNum, finishNum);
+        Map result1 = SyncQYUtil.getResult("QINYUAN", params, "POST", mallShareUrl);
+        if ((Integer) result1.get("errorCode") != 200) {
+            logger.error("调用商城工单完工同步分润记录失败,受理单号：{},完工单号：{}", acceptNum, finishNum);
+            throw new RuntimeException("调用商城工单完工同步分润记录失败");
+        }
+    }
+
+    /**
+     * 符合完工备注条件
+     * @param remarks
+     * @return
+     */
+    private boolean isCompletion(String remarks) {
+        //例如： 退单(邮寄退单：aaa+123)
+        if (StringUtils.startsWith(remarks,"退单(邮寄退单：") && StringUtils.contains(remarks,"+")){
+            return true;
+        }
+        return false;
     }
 
     @RequestMapping(value = "/getQrTicket", method = RequestMethod.GET, produces = {"application/json;charset=UTF-8"})
@@ -629,11 +775,11 @@ public class WechatController {
         logger.info("调用发送短信,参数为:", miniappSendSms.toString());
         Result result = new BaseResult();
 
-        boolean isLegal = SignUtil.checkSignature(miniappSendSms.getSignture(),miniappSendSms.getTimestamp(), Constant.AUTH_KEY);
+        boolean isLegal = SignUtil.checkSignature(miniappSendSms.getSignture(), miniappSendSms.getTimestamp(), Constant.AUTH_KEY);
         if (!isLegal) {
             result.setReturnCode(Constant.FAIL);
             result.setReturnMsg(Constant.ILLEGAL_REQUEST);
-            logger.error("调用发送短信失败，校验数据非法,",miniappSendSms.toString());
+            logger.error("调用发送短信失败，校验数据非法,", miniappSendSms.toString());
             return result;
         }
 
