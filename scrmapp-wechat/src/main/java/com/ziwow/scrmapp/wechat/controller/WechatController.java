@@ -117,6 +117,9 @@ public class WechatController {
     @Autowired
     private EwCardActivityService ewCardActivityService;
 
+    @Value("${ewcard.grant.stop}")
+    private boolean stop;
+
     @Autowired
     private GrantEwCardRecordService grantEwCardRecordService;
 
@@ -131,6 +134,11 @@ public class WechatController {
         logger.info("CSM调用微信短信发放延保卡开始，手机号码为:{}，类型为:{}",mobile,type);
         String cardNo = ewCardActivityService.selectCardNo(type);
         Result result = new BaseResult();
+        if (stop){
+            result.setReturnMsg("延保卡已停止发放");
+            result.setReturnCode(Constant.FAIL);
+            return result;
+        }
         if (cardNo == null){
             logger.error("延保卡资源不足，手机号码为:{}",mobile);
             result.setReturnMsg("延保卡资源不足");
