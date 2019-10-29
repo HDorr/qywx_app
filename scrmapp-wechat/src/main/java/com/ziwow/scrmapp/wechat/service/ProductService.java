@@ -64,7 +64,7 @@ public interface ProductService {
 
     List<com.ziwow.scrmapp.common.bean.vo.ProductVo> findByOrderId(Long orderId);
 
-    void syncProdBindToMiniApp(String userId, String productCode, boolean isFirst);
+    void syncProdBindToMiniApp(String userId, String productCode, boolean isFirst,String productBarcode);
 
     void syncProdUnbindToMiniApp(String userId, String productCode);
 
