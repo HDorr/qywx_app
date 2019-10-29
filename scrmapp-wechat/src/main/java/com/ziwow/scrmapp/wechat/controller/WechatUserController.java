@@ -1,12 +1,14 @@
 package com.ziwow.scrmapp.wechat.controller;
 
 import com.alibaba.fastjson.JSON;
+import com.sun.corba.se.impl.orbutil.concurrent.SyncUtil;
 import com.ziwow.scrmapp.common.constants.Constant;
 import com.ziwow.scrmapp.common.redis.RedisService;
 import com.ziwow.scrmapp.common.result.BaseResult;
 import com.ziwow.scrmapp.common.result.Result;
 import com.ziwow.scrmapp.common.service.MobileService;
 import com.ziwow.scrmapp.common.service.ThirdPartyService;
+import com.ziwow.scrmapp.common.utils.SyncQYUtil;
 import com.ziwow.scrmapp.tools.thirdParty.SignUtil;
 import com.ziwow.scrmapp.tools.utils.*;
 import com.ziwow.scrmapp.wechat.constants.RedisKeyConstants;
@@ -22,11 +24,13 @@ import com.ziwow.scrmapp.wechat.vo.UserInfo;
 import com.ziwow.scrmapp.wechat.vo.UserMemberVO;
 import com.ziwow.scrmapp.wechat.vo.WechatFansVo;
 import com.ziwow.scrmapp.wechat.vo.WechatUserVo;
+import net.sf.json.JSONObject;
 import org.apache.commons.lang.ObjectUtils;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.AntPathMatcher;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -77,6 +81,9 @@ public class WechatUserController {
   SmsSendRecordService smsSendRecordService;
   @Resource
   HttpSession session;
+
+  @Value("${mall.selfInfoPoint.url}")
+  private String mallUrl;
 
   /**
    * 发送验证码
@@ -595,9 +602,10 @@ public class WechatUserController {
                                  @RequestParam(value = "monthlyIncome", required = false) Integer monthlyIncome) {
     Result result = new BaseResult();
     WechatUser wechatUser = null;
+    String userId = "";
     try {
       String encode = CookieUtil.readCookie(request, response, WeChatConstants.SCRMAPP_USER);
-      String userId = new String(Base64.decode(encode));
+      userId = new String(Base64.decode(encode));
 
       wechatUser = wechatUserService.getUserByUserId(userId);
       //数据库中未查到数据
@@ -684,6 +692,21 @@ public class WechatUserController {
       result.setReturnCode(Constant.SUCCESS);
       result.setReturnMsg("修改成功！");
       logger.info("WechatUser数据更新成功,userId = [{}]", wechatUser.getUserId());
+
+      // 用户信息完善时调用商城接口赠送积分
+      if(maritalStatus != null && maritalStatus != 0 && educationLevel != null && educationLevel != 0
+              && occupation != null && occupation != 0 && monthlyIncome != null && monthlyIncome != 0){
+        logger.info("用户信息已完善，开始调用商城接口发送积分，userId=[{}]",userId);
+        Map<String,Object> params = new HashMap<>();
+        params.put("unionId",wechatFansService.getWechatFansByUserId(userId).getUnionId());
+        Map res = null;
+        try {
+          res = SyncQYUtil.getResult("ZIWOW",params,"POST",mallUrl);
+        } catch (Exception e) {
+          logger.error("调用完善信息赠送积分接口失败", e);
+        }
+        logger.info("返回的code=[{}],moreInfo=[{}]",(Integer)res.get("errorCode"),res.get("moreInfo"));
+      }
     } else {
       result.setReturnCode(Constant.FAIL);
       result.setReturnMsg("更新失败!");
