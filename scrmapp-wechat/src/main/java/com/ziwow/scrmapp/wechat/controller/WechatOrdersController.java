@@ -1163,6 +1163,9 @@ public class WechatOrdersController {
             orderType = SystemConstants.MAINTAIN;
         } else if (SystemConstants.FILTER_APPRAISE == orderType || SystemConstants.CLEAN_APPRAISE == orderType) {
             orderType = SystemConstants.REPAIR;
+        } else {
+            // csm推送的保养单mainType都是0，这里无法区分，只能写死
+            orderType = SystemConstants.REPAIR;
         }
         evaluateParam.setNumber_type(orderType);
         evaluateParam.setEvaluate_note(appraise.getContent());
@@ -1195,7 +1198,7 @@ public class WechatOrdersController {
 
     //0 和 1 布尔值转换
     private Boolean convertBoolean(String number) {
-        return "1".equals(number) ? true : false;
+        return "1".equals(number);
     }
 
 }

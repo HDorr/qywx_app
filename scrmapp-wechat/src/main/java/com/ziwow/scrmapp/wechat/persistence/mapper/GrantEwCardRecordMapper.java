@@ -69,10 +69,11 @@ public interface GrantEwCardRecordMapper {
      * @param mask
      * @return
      */
-    @Select("select phone,type from t_grant_ew_card_record where mask = #{mask} and send = true and receive = false limit 1")
+    @Select("select phone,type,mask from t_grant_ew_card_record where mask = #{mask} and send = true and receive = false limit 1")
     @Results({
             @Result(column = "phone", property = "phone"),
-            @Result(column = "type", property = "type")
+            @Result(column = "type", property = "type"),
+            @Result(column = "mask", property = "mask")
     })
     GrantEwCardRecord selectRecordByMask(@Param("mask") String mask);
 
@@ -132,7 +133,7 @@ public interface GrantEwCardRecordMapper {
      * @param id
      */
     @Update("update t_grant_ew_card_record set message_again = true where id = #{id}")
-    void updateMessageSend(String id);
+    void updateMessageSend(@Param("id") String id);
 
     /**
      *  根据掩码修改领取标识
@@ -140,5 +141,5 @@ public interface GrantEwCardRecordMapper {
      * @param receive
      */
     @Update("update t_grant_ew_card_record set receive = #{receive} where mask = #{mask}")
-    void updateReceiveByMask(String mask, boolean receive);
+    void updateReceiveByMask(@Param("mask") String mask,@Param("receive") boolean receive);
 }
