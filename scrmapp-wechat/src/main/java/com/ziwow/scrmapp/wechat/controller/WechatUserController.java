@@ -701,7 +701,14 @@ public class WechatUserController {
         params.put("unionId",wechatFansService.getWechatFansByUserId(userId).getUnionId());
         Map res = null;
         try {
-          res = SyncQYUtil.getResult("ZIWOW",params,"POST",mallUrl);
+          String timeStamp = String.valueOf(System.currentTimeMillis());
+          String signature = com.ziwow.scrmapp.common.utils.MD5.toMD5("ZIWOW" + timeStamp);
+          params.put("timestamp",timeStamp);
+          params.put("signture",signature);
+          String str = com.ziwow.scrmapp.common.utils.HttpClientUtils.postJson(mallUrl, JSONObject.fromObject(params).toString());
+          if (StringUtils.isNotBlank(str)) {
+            res = JSON.parseObject(str);
+          }
         } catch (Exception e) {
           logger.error("调用完善信息赠送积分接口失败", e);
         }
