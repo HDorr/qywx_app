@@ -346,7 +346,7 @@ public class WechatOrdersController {
                 //短信开口关闭 2019年06月19日
                 //mobileService.sendContentByEmay(mobilePhone, smsMarketing.getSmsContent(), Constant.CUSTOMER);
                 // 预约提交成功模板消息提醒
-                if (!"工厂发货".equals(wechatOrdersParamExt.getKindName2())) {
+                if (DeliveryType.NORMAL.equals(wechatOrdersParamExt.getDeliveryType())) {
                     wechatOrdersService.sendAppointmentTemplateMsg(wechatOrders.getOrdersCode(), serverType);
                 }
                 WechatOrdersRecord wechatOrdersRecord = new WechatOrdersRecord();
