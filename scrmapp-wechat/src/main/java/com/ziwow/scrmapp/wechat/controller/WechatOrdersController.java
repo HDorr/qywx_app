@@ -346,7 +346,9 @@ public class WechatOrdersController {
                 //短信开口关闭 2019年06月19日
                 //mobileService.sendContentByEmay(mobilePhone, smsMarketing.getSmsContent(), Constant.CUSTOMER);
                 // 预约提交成功模板消息提醒
-                wechatOrdersService.sendAppointmentTemplateMsg(wechatOrders.getOrdersCode(), serverType);
+                if (!"工厂发货".equals(wechatOrdersParamExt.getKindName2())) {
+                    wechatOrdersService.sendAppointmentTemplateMsg(wechatOrders.getOrdersCode(), serverType);
+                }
                 WechatOrdersRecord wechatOrdersRecord = new WechatOrdersRecord();
                 wechatOrdersRecord.setOrderId(wechatOrders.getId());
                 wechatOrdersRecord.setRecordTime(date);
@@ -361,11 +363,11 @@ public class WechatOrdersController {
                 // 向沁园小程序推送预约成功
                 String scOrderItemId = wechatOrdersParamExt.getScOrderItemId();
                 String serviceFeeIds = wechatOrdersParamExt.getServiceFeeIds();
-                if (!"工厂发货".equals(wechatOrdersParamExt.getKindName2())) {
-                    if ((StringUtil.isNotBlank(scOrderItemId) || StringUtil.isNotBlank(serviceFeeIds))) {
-                        wechatOrdersService
-                                .syncMakeAppointment(scOrderItemId, wechatOrders.getOrdersCode(),
-                                        serviceFeeIds);
+
+                if ((StringUtil.isNotBlank(scOrderItemId) || StringUtil.isNotBlank(serviceFeeIds))) {
+                    wechatOrdersService
+                            .syncMakeAppointment(scOrderItemId, wechatOrders.getOrdersCode(),
+                                    serviceFeeIds);
 //                    if (!syncMakeAppointment){
 //                        /*调用沁园接口，取消预约*/
 //                        Result cancelResult = wechatOrdersService.cancelOrders(wechatOrders.getOrdersCode());
@@ -384,8 +386,8 @@ public class WechatOrdersController {
 //                        }
 //                    }
 
-                    }
                 }
+
 
             } else {
                 throw new SQLException("wechatOrders:" + JSONObject.toJSONString(wechatOrders));
