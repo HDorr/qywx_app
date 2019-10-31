@@ -174,7 +174,7 @@ public class WechatOrdersController {
                 wechatOrdersParamExt.setProductIds(pids.toString());
                 result = this.addWechatOrders(request, response, wechatOrdersParamExt);
             } catch (Exception e) {
-                logger.error("【原单原回】-保存工单出现异常-unionId为:[{}],异常信息为[{}],",mallOrdersForm.getUnionId(), e);
+                logger.error("【原单原回】-保存工单出现异常-unionId为:[{}],异常信息为[{}],", mallOrdersForm.getUnionId(), e);
                 result.setReturnCode(0);
             }
             if (result.getReturnCode() == 0) {
@@ -184,7 +184,7 @@ public class WechatOrdersController {
                     if (Constant.SUCCESS == cancelResult.getReturnCode()) {
                         Date date = new Date();
                         int count = wechatOrdersService.updateOrdersStatus(orderNo, userId, date, SystemConstants.CANCEL);
-                        if (count > 0){
+                        if (count > 0) {
                             WechatOrdersRecord wechatOrdersRecord = new WechatOrdersRecord();
                             wechatOrdersRecord.setOrderId(wechatOrdersService.getWechatOrdersByCode(orderNo).getId());
                             wechatOrdersRecord.setRecordTime(date);
@@ -378,7 +378,9 @@ public class WechatOrdersController {
                 //短信开口关闭 2019年06月19日
                 //mobileService.sendContentByEmay(mobilePhone, smsMarketing.getSmsContent(), Constant.CUSTOMER);
                 // 预约提交成功模板消息提醒
-                wechatOrdersService.sendAppointmentTemplateMsg(wechatOrders.getOrdersCode(), serverType);
+                if (DeliveryType.NORMAL.equals(wechatOrdersParamExt.getDeliveryType())) {
+                    wechatOrdersService.sendAppointmentTemplateMsg(wechatOrders.getOrdersCode(), serverType);
+                }
                 WechatOrdersRecord wechatOrdersRecord = new WechatOrdersRecord();
                 wechatOrdersRecord.setOrderId(wechatOrders.getId());
                 wechatOrdersRecord.setRecordTime(date);
@@ -393,7 +395,8 @@ public class WechatOrdersController {
                 // 向沁园小程序推送预约成功
                 String scOrderItemId = wechatOrdersParamExt.getScOrderItemId();
                 String serviceFeeIds = wechatOrdersParamExt.getServiceFeeIds();
-                if (StringUtil.isNotBlank(scOrderItemId) || StringUtil.isNotBlank(serviceFeeIds)) {
+
+                if ((StringUtil.isNotBlank(scOrderItemId) || StringUtil.isNotBlank(serviceFeeIds))) {
                     wechatOrdersService
                             .syncMakeAppointment(scOrderItemId, wechatOrders.getOrdersCode(),
                                     serviceFeeIds);
@@ -416,6 +419,8 @@ public class WechatOrdersController {
 //                    }
 
                 }
+
+
             } else {
                 throw new SQLException("wechatOrders:" + JSONObject.toJSONString(wechatOrders));
             }
