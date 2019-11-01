@@ -18,18 +18,36 @@ import com.ziwow.scrmapp.common.bean.vo.mall.OrderItem;
 import com.ziwow.scrmapp.common.constants.Constant;
 import com.ziwow.scrmapp.common.constants.SystemConstants;
 import com.ziwow.scrmapp.common.pagehelper.Page;
-import com.ziwow.scrmapp.common.persistence.entity.*;
-import com.ziwow.scrmapp.common.persistence.mapper.*;
+import com.ziwow.scrmapp.common.persistence.entity.Filter;
+import com.ziwow.scrmapp.common.persistence.entity.FilterChangeRemind;
+import com.ziwow.scrmapp.common.persistence.entity.FilterLevel;
+import com.ziwow.scrmapp.common.persistence.entity.LevelFilterRelations;
+import com.ziwow.scrmapp.common.persistence.entity.Product;
+import com.ziwow.scrmapp.common.persistence.mapper.FilterChangeRemindMapper;
+import com.ziwow.scrmapp.common.persistence.mapper.FilterLevelMapper;
+import com.ziwow.scrmapp.common.persistence.mapper.FilterMapper;
+import com.ziwow.scrmapp.common.persistence.mapper.LevelFilterRelationsMapper;
+import com.ziwow.scrmapp.common.persistence.mapper.ProductMapper;
 import com.ziwow.scrmapp.common.result.BaseResult;
 import com.ziwow.scrmapp.common.result.Result;
 import com.ziwow.scrmapp.common.service.ThirdPartyService;
 import com.ziwow.scrmapp.common.utils.HttpKit;
-import com.ziwow.scrmapp.tools.utils.*;
 import com.ziwow.scrmapp.tools.utils.Base64;
+import com.ziwow.scrmapp.tools.utils.BeanUtils;
+import com.ziwow.scrmapp.tools.utils.CookieUtil;
+import com.ziwow.scrmapp.tools.utils.DateUtil;
+import com.ziwow.scrmapp.tools.utils.HttpClientUtils;
+import com.ziwow.scrmapp.tools.utils.IPUtil;
+import com.ziwow.scrmapp.tools.utils.MD5;
+import com.ziwow.scrmapp.tools.utils.StringUtil;
 import com.ziwow.scrmapp.wechat.constants.WeChatConstants;
 import com.ziwow.scrmapp.wechat.enums.BuyChannel;
 import com.ziwow.scrmapp.wechat.enums.SaleType;
-import com.ziwow.scrmapp.wechat.persistence.entity.*;
+import com.ziwow.scrmapp.wechat.persistence.entity.EwCardItems;
+import com.ziwow.scrmapp.wechat.persistence.entity.WechatArea;
+import com.ziwow.scrmapp.wechat.persistence.entity.WechatCity;
+import com.ziwow.scrmapp.wechat.persistence.entity.WechatFans;
+import com.ziwow.scrmapp.wechat.persistence.entity.WechatProvince;
 import com.ziwow.scrmapp.wechat.persistence.mapper.ProductModelMapper;
 import com.ziwow.scrmapp.wechat.persistence.mapper.ProductSeriesMapper;
 import com.ziwow.scrmapp.wechat.persistence.mapper.ProductTypeMapper;
@@ -57,7 +75,11 @@ import javax.servlet.http.HttpServletResponse;
 import java.math.BigDecimal;
 import java.sql.SQLDataException;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by xiaohei on 2017/4/5.
@@ -548,7 +570,7 @@ public class ProductServiceImpl implements ProductService {
                 batchSave(prodLst, filterLevels);
                 // 绑定产品成功后异步推送给小程序
                 for (int i = 0; i < prodLst.size(); i++) {
-                    syncProdBindToMiniApp(userId, prodLst.get(i).getProductCode(),i==0);
+                    syncProdBindToMiniApp(userId, prodLst.get(i).getProductCode(),i==0,prodLst.get(i).getProductBarCode());
                 }
             }
         } catch (Exception e) {
@@ -747,7 +769,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Async
     @Override
-    public void syncProdBindToMiniApp(String userId, String productCode, boolean isFirst) {
+    public void syncProdBindToMiniApp(String userId, String productCode, boolean isFirst, String productBarcode) {
         // 异步推送给小程序对接方
         WechatFans wechatFans = wechatFansMapper.getWechatFansByUserId(userId);
         String unionId = wechatFans.getUnionId();
@@ -761,6 +783,7 @@ public class ProductServiceImpl implements ProductService {
         params.put("signture", MD5.toMD5(Constant.AUTH_KEY + timestamp));
         params.put("unionId", wechatFans.getUnionId());
         params.put("productCode", productCode);
+        params.put("productBarcode", productBarcode);
         params.put("isFirst",isFirst);
         LOG.info("绑定产品信息同步到小程序请求参数:{}", JSON.toJSONString(params));
         String result = HttpClientUtils.postJson(syncProdBindUrl, net.sf.json.JSONObject.fromObject(params).toString());

@@ -6,36 +6,67 @@ import com.ziwow.scrmapp.common.bean.pojo.EvaluateParam;
 import com.ziwow.scrmapp.common.bean.pojo.MallOrdersForm;
 import com.ziwow.scrmapp.common.bean.pojo.WechatOrdersParam;
 import com.ziwow.scrmapp.common.bean.pojo.ext.WechatOrdersParamExt;
-import com.ziwow.scrmapp.common.bean.vo.*;
+import com.ziwow.scrmapp.common.bean.vo.ProductVo;
+import com.ziwow.scrmapp.common.bean.vo.QyhUserMsgVo;
+import com.ziwow.scrmapp.common.bean.vo.QyhUserVo;
+import com.ziwow.scrmapp.common.bean.vo.WechatOrderVo;
+import com.ziwow.scrmapp.common.bean.vo.WechatOrdersVo;
 import com.ziwow.scrmapp.common.constants.Constant;
 import com.ziwow.scrmapp.common.constants.SystemConstants;
 import com.ziwow.scrmapp.common.enums.AppraiseEnum;
 import com.ziwow.scrmapp.common.enums.DeliveryType;
-import com.ziwow.scrmapp.common.persistence.entity.*;
+import com.ziwow.scrmapp.common.persistence.entity.Product;
+import com.ziwow.scrmapp.common.persistence.entity.QyhUser;
+import com.ziwow.scrmapp.common.persistence.entity.QyhUserAppraisal;
+import com.ziwow.scrmapp.common.persistence.entity.QyhUserAppraisalVo;
+import com.ziwow.scrmapp.common.persistence.entity.ServiceFeeProduct;
+import com.ziwow.scrmapp.common.persistence.entity.SmsMarketing;
+import com.ziwow.scrmapp.common.persistence.entity.WechatOrderAppraise;
+import com.ziwow.scrmapp.common.persistence.entity.WechatOrderServiceFee;
+import com.ziwow.scrmapp.common.persistence.entity.WechatOrders;
+import com.ziwow.scrmapp.common.persistence.entity.WechatOrdersRecord;
 import com.ziwow.scrmapp.common.result.BaseResult;
 import com.ziwow.scrmapp.common.result.Result;
 import com.ziwow.scrmapp.common.service.MobileService;
 import com.ziwow.scrmapp.common.utils.OrderUtils;
 import com.ziwow.scrmapp.tools.queue.EngineerQueue;
-import com.ziwow.scrmapp.tools.utils.*;
+import com.ziwow.scrmapp.tools.utils.Base64;
+import com.ziwow.scrmapp.tools.utils.BeanUtils;
+import com.ziwow.scrmapp.tools.utils.CookieUtil;
+import com.ziwow.scrmapp.tools.utils.DateUtil;
+import com.ziwow.scrmapp.tools.utils.StringUtil;
 import com.ziwow.scrmapp.wechat.constants.WeChatConstants;
 import com.ziwow.scrmapp.wechat.enums.SmsMarketingEmus.SmsTypeEnum;
 import com.ziwow.scrmapp.wechat.persistence.entity.WechatUser;
 import com.ziwow.scrmapp.wechat.schedule.SmsMarketingTask;
-import com.ziwow.scrmapp.wechat.service.*;
+import com.ziwow.scrmapp.wechat.service.FailRecordService;
+import com.ziwow.scrmapp.wechat.service.GrantPointService;
+import com.ziwow.scrmapp.wechat.service.OrdersProRelationsService;
+import com.ziwow.scrmapp.wechat.service.ProductService;
+import com.ziwow.scrmapp.wechat.service.SmsMarketingService;
+import com.ziwow.scrmapp.wechat.service.WXPayService;
+import com.ziwow.scrmapp.wechat.service.WechatFansService;
+import com.ziwow.scrmapp.wechat.service.WechatOrderServiceFeeService;
+import com.ziwow.scrmapp.wechat.service.WechatOrdersRecordService;
+import com.ziwow.scrmapp.wechat.service.WechatOrdersService;
+import com.ziwow.scrmapp.wechat.service.WechatQyhUserService;
+import com.ziwow.scrmapp.wechat.service.WechatUserService;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.math.BigDecimal;
-import java.sql.SQLDataException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -135,7 +166,7 @@ public class WechatOrdersController {
                         final Long pid = productService.save(product);
                         pids.append(pid).append(",");
                         // 绑定产品成功后异步推送给小程序
-                        productService.syncProdBindToMiniApp(userId, product.getProductCode(), isFirst);
+                        productService.syncProdBindToMiniApp(userId, product.getProductCode(), isFirst,product.getProductBarCode());
                     } else {
                         pids.append(products.get(0).getId()).append(",");
                     }
@@ -143,7 +174,7 @@ public class WechatOrdersController {
                 wechatOrdersParamExt.setProductIds(pids.toString());
                 result = this.addWechatOrders(request, response, wechatOrdersParamExt);
             } catch (Exception e) {
-                logger.error("【原单原回】-保存工单出现异常-unionId为:[{}],异常信息为[{}],",mallOrdersForm.getUnionId(), e);
+                logger.error("【原单原回】-保存工单出现异常-unionId为:[{}],异常信息为[{}],", mallOrdersForm.getUnionId(), e);
                 result.setReturnCode(0);
             }
             if (result.getReturnCode() == 0) {
@@ -153,7 +184,7 @@ public class WechatOrdersController {
                     if (Constant.SUCCESS == cancelResult.getReturnCode()) {
                         Date date = new Date();
                         int count = wechatOrdersService.updateOrdersStatus(orderNo, userId, date, SystemConstants.CANCEL);
-                        if (count > 0){
+                        if (count > 0) {
                             WechatOrdersRecord wechatOrdersRecord = new WechatOrdersRecord();
                             wechatOrdersRecord.setOrderId(wechatOrdersService.getWechatOrdersByCode(orderNo).getId());
                             wechatOrdersRecord.setRecordTime(date);
@@ -347,7 +378,9 @@ public class WechatOrdersController {
                 //短信开口关闭 2019年06月19日
                 //mobileService.sendContentByEmay(mobilePhone, smsMarketing.getSmsContent(), Constant.CUSTOMER);
                 // 预约提交成功模板消息提醒
-                wechatOrdersService.sendAppointmentTemplateMsg(wechatOrders.getOrdersCode(), serverType);
+                if (DeliveryType.NORMAL.equals(wechatOrdersParamExt.getDeliveryType())) {
+                    wechatOrdersService.sendAppointmentTemplateMsg(wechatOrders.getOrdersCode(), serverType);
+                }
                 WechatOrdersRecord wechatOrdersRecord = new WechatOrdersRecord();
                 wechatOrdersRecord.setOrderId(wechatOrders.getId());
                 wechatOrdersRecord.setRecordTime(date);
@@ -362,7 +395,8 @@ public class WechatOrdersController {
                 // 向沁园小程序推送预约成功
                 String scOrderItemId = wechatOrdersParamExt.getScOrderItemId();
                 String serviceFeeIds = wechatOrdersParamExt.getServiceFeeIds();
-                if (StringUtil.isNotBlank(scOrderItemId) || StringUtil.isNotBlank(serviceFeeIds)) {
+
+                if ((StringUtil.isNotBlank(scOrderItemId) || StringUtil.isNotBlank(serviceFeeIds))) {
                     wechatOrdersService
                             .syncMakeAppointment(scOrderItemId, wechatOrders.getOrdersCode(),
                                     serviceFeeIds);
@@ -385,6 +419,8 @@ public class WechatOrdersController {
 //                    }
 
                 }
+
+
             } else {
                 throw new SQLException("wechatOrders:" + JSONObject.toJSONString(wechatOrders));
             }

@@ -3,6 +3,7 @@ package com.ziwow.scrmapp.wechat.controller;
 import com.ziwow.scrmapp.common.annotation.MiniAuthentication;
 import com.ziwow.scrmapp.common.constants.Constant;
 import com.ziwow.scrmapp.common.constants.SystemConstants;
+import com.ziwow.scrmapp.common.persistence.entity.Product;
 import com.ziwow.scrmapp.common.result.BaseResult;
 import com.ziwow.scrmapp.common.result.Result;
 import com.ziwow.scrmapp.common.service.MobileService;
@@ -12,18 +13,23 @@ import com.ziwow.scrmapp.tools.utils.CookieUtil;
 import com.ziwow.scrmapp.tools.utils.StringUtil;
 import com.ziwow.scrmapp.wechat.constants.WeChatConstants;
 import com.ziwow.scrmapp.wechat.enums.BuyChannel;
-import com.ziwow.scrmapp.common.persistence.entity.Product;
-import com.ziwow.scrmapp.wechat.persistence.entity.*;
-import com.ziwow.scrmapp.wechat.service.*;
+import com.ziwow.scrmapp.wechat.persistence.entity.EwCard;
+import com.ziwow.scrmapp.wechat.persistence.entity.WechatArea;
+import com.ziwow.scrmapp.wechat.persistence.entity.WechatCity;
+import com.ziwow.scrmapp.wechat.persistence.entity.WechatFans;
+import com.ziwow.scrmapp.wechat.persistence.entity.WechatProvince;
+import com.ziwow.scrmapp.wechat.persistence.entity.WechatUser;
+import com.ziwow.scrmapp.wechat.service.EwCardService;
+import com.ziwow.scrmapp.wechat.service.ProductService;
+import com.ziwow.scrmapp.wechat.service.WXPayService;
+import com.ziwow.scrmapp.wechat.service.WechatFansService;
+import com.ziwow.scrmapp.wechat.service.WechatUserService;
 import com.ziwow.scrmapp.wechat.utils.BarCodeConvert;
 import com.ziwow.scrmapp.wechat.utils.JsonApache;
 import com.ziwow.scrmapp.wechat.utils.ProductServiceParamUtil;
 import com.ziwow.scrmapp.wechat.vo.EnumVo;
 import com.ziwow.scrmapp.wechat.vo.EwCardProductVo;
 import com.ziwow.scrmapp.wechat.vo.ProductVo;
-
-import java.util.*;
-
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,13 +37,24 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.CollectionUtils;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by xiaohei on 2017/4/5.
@@ -247,7 +264,7 @@ public class ProductController {
 
             productService.save(product);
             // 绑定产品成功后异步推送给小程序
-            productService.syncProdBindToMiniApp(userId, product.getProductCode(),isFirst);
+            productService.syncProdBindToMiniApp(userId, product.getProductCode(),isFirst,product.getProductBarCode());
 
             // 产品绑定后发送模板消息
             productService.productBindTemplateMsg(product);
