@@ -602,11 +602,12 @@ var confirmModal = {
             confirmModal.renderObj[key] = obj[key];
         };
         var needTextArea = confirmModal.renderObj.textArea;
-
-        if (!document.querySelector("#mobileConfirmModal")) {
+        var a = !document.querySelector("#mobileConfirmModal")
+        if (a) {
             var myElement = document.createElement("div");
             myElement.setAttribute("id", "mobileConfirmModal");
             if (needTextArea) {
+                console.log("1")
                 if (confirmModal.renderObj.orderType === 1){ //安装单
                     myElement.innerHTML = confirmModal.htmlStrWithTextArea1;
                 }else if (confirmModal.renderObj.orderType === 2) { //维修单
@@ -614,6 +615,7 @@ var confirmModal = {
                 }else if (confirmModal.renderObj.orderType === 3) { //保养单
                     myElement.innerHTML = confirmModal.htmlStrWithTextArea3;
                 }
+                console.log("2")
             } else {
                 myElement.innerHTML = confirmModal.htmlStr;
             }
@@ -630,6 +632,8 @@ var confirmModal = {
 
     closeModal: function() {
         confirmModal.dom.modal.classList.remove("show")
+        var confirmDiv = document.querySelector("#mobileConfirmModal")
+        document.querySelector("body").removeChild(confirmDiv)
     },
 
     confirmClick: function() {
@@ -644,6 +648,8 @@ var confirmModal = {
         } else {
             return;
         }
+        var confirmDiv = document.querySelector("#mobileConfirmModal")
+        document.querySelector("body").removeChild(confirmDiv)
     }
 }
 
