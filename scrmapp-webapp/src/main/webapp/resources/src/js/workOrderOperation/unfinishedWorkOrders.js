@@ -65,6 +65,7 @@ function refuseOrder(el) {
         text: "确认拒绝工单吗？",
         tip: "请先联系您所在的服务网点<br/>服务网点电话 : 021-61522809",
         textArea: true,
+        orderType: that.data("ordertype"),
         callback: function(fn, reason) {
             //判断textarea里的值是否为空
             var text = reason.trim();
