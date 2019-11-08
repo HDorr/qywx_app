@@ -502,7 +502,6 @@ var confirmModal = {
         '<option value="退换货，暂不安装">退换货，暂不安装</option>'+
         '<option value="无法联系到用户（3次以上）">无法联系到用户（3次以上）</option>'+
         '<option value="派错单">派错单</option>'+
-        '<option value="其他">其他</option>'+
         '</select>' +
         '</div>' +
         '</div>' +
@@ -530,7 +529,6 @@ var confirmModal = {
         '<option value="机器恢复正常">机器恢复正常</option>'+
         '<option value="无法联系到用户（3次以上）">无法联系到用户（3次以上）</option>'+
         '<option value="派错单">派错单</option>'+
-        '<option value="其他">其他</option>'+
         '</select>' +
         '</div>' +
         '</div>' +
@@ -558,7 +556,6 @@ var confirmModal = {
         '<option value="邮寄滤芯">邮寄滤芯</option>'+
         '<option value="无法联系到用户（3次以上）">无法联系到用户（3次以上）</option>'+
         '<option value="派错单">派错单</option>'+
-        '<option value="其他">其他</option>'+
         '</select>' +
         '</div>' +
         '</div>' +
