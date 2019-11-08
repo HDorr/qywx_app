@@ -32,7 +32,6 @@ import com.ziwow.scrmapp.tools.thirdParty.SignUtil;
 import com.ziwow.scrmapp.tools.utils.DateUtil;
 import com.ziwow.scrmapp.tools.utils.StringUtil;
 import com.ziwow.scrmapp.tools.utils.UniqueIDBuilder;
-import com.ziwow.scrmapp.wechat.constants.QYConstans;
 import com.ziwow.scrmapp.wechat.constants.WeChatConstants;
 import com.ziwow.scrmapp.wechat.enums.BuyChannel;
 import com.ziwow.scrmapp.wechat.persistence.entity.MallPcUser;
@@ -46,7 +45,6 @@ import com.ziwow.scrmapp.wechat.vo.WechatJSSdkSignVO;
 import net.sf.json.JSONArray;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang3.time.DateFormatUtils;
-import org.apache.commons.lang3.time.DateUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -123,55 +121,55 @@ public class WechatController {
     @Autowired
     private GrantEwCardRecordService grantEwCardRecordService;
 
-    @RequestMapping(value = "grant_ew_card",method = RequestMethod.GET)
+    @RequestMapping(value = "grant_ew_card", method = RequestMethod.GET)
     @MiniAuthentication
     @ResponseBody
     @Transactional(rollbackFor = Exception.class)
     public Result grantEwCard(@RequestParam("signture") String signture,
-                       @RequestParam("timestamp") String timeStamp,
-                       @RequestParam("mobile") String mobile,
-                       @RequestParam("type") EwCardTypeEnum type){
-        logger.info("CSM调用微信短信发放延保卡开始，手机号码为:{}，类型为:{}",mobile,type);
+                              @RequestParam("timestamp") String timeStamp,
+                              @RequestParam("mobile") String mobile,
+                              @RequestParam("type") EwCardTypeEnum type) {
+        logger.info("CSM调用微信短信发放延保卡开始，手机号码为:{}，类型为:{}", mobile, type);
         String cardNo = ewCardActivityService.selectCardNo(type);
         Result result = new BaseResult();
-        if (stop){
+        if (stop) {
             result.setReturnMsg("延保卡已停止发放");
             result.setReturnCode(Constant.FAIL);
             return result;
         }
-        if (cardNo == null){
-            logger.error("延保卡资源不足，手机号码为:{}",mobile);
+        if (cardNo == null) {
+            logger.error("延保卡资源不足，手机号码为:{}", mobile);
             result.setReturnMsg("延保卡资源不足");
             result.setReturnCode(Constant.FAIL);
             return result;
         }
-        if (grantEwCardRecordService.selectReceiveRecordByPhone(mobile)){
-            logger.error("该手机号已发放，手机号码为:{}",mobile);
+        if (grantEwCardRecordService.selectReceiveRecordByPhone(mobile)) {
+            logger.error("该手机号已发放，手机号码为:{}", mobile);
             result.setReturnMsg("该手机号已发放");
             result.setReturnCode(Constant.FAIL);
             return result;
         }
-        if (wechatUserService.getUserByMobilePhone(mobile) != null){
-            logger.error("该用户是微信会员，手机号码为:{}",mobile);
+        if (wechatUserService.getUserByMobilePhone(mobile) != null) {
+            logger.error("该用户是微信会员，手机号码为:{}", mobile);
             result.setReturnMsg("该用户是微信会员,不满足发放条件");
             result.setReturnCode(Constant.FAIL);
             return result;
         }
         final String mask = EwCardUtil.getMask();
-        grantEwCardRecordService.addEwCardRecord(mobile,mask,type,false);
+        grantEwCardRecordService.addEwCardRecord(mobile, mask, type, false);
         result.setReturnMsg("发送成功");
         result.setReturnCode(Constant.SUCCESS);
         try {
             //发短信
             final String msgContent = MessageFormat.format("您近期预约的服务已完成。恭喜您成为幸运用户，获赠限量免费的一年延保卡（价值{0}元），您的延保卡号为{1}。（点击券码可直接复制）！\n\n使用方式：关注沁园公众号-【我的沁园】-【会员注册】-【延保服务】-【领取卡券】，复制券码并绑定至您的机器，即可延长一年质保，绑定时请扫描机身条形码，即可识别机器！\n\n如对操作有疑问，可点击公众号左下角小键盘符号，回复【延保卡】，查看绑定教程。卡券码有效期7天，请尽快使用。", type.getPrice(), mask);
-            mobileService.sendContentByEmay(mobile,msgContent, Constant.MARKETING);
+            mobileService.sendContentByEmay(mobile, msgContent, Constant.MARKETING);
         } catch (Exception e) {
-            logger.error("发送短信失败，手机号码为:{},错误信息为:{}",mobile,e);
+            logger.error("发送短信失败，手机号码为:{},错误信息为:{}", mobile, e);
             result.setReturnCode(Constant.FAIL);
             result.setReturnMsg("短信发送失败");
         }
         //增加发送时间,修改发送标识
-        grantEwCardRecordService.updateSendByPhone(mobile,true, EwCardSendTypeEnum.ORDER);
+        grantEwCardRecordService.updateSendByPhone(mobile, true, EwCardSendTypeEnum.ORDER);
         return result;
     }
 
@@ -518,9 +516,11 @@ public class WechatController {
             result.setReturnMsg("400派单给网点同步失败[" + e.getMessage() + "]");
         }
         // 派单成功自动同步至商城系统 && 订单是原单原回
-        if (result.getReturnCode() == 1 && wechatOrdersService.isYDYHOrder(dispatchDotParam.getAcceptNumber())) {
+        if (result.getReturnCode() == 1) {
             Map<String, Object> params = new HashMap<>();
             params.put("orderCode", dispatchDotParam.getAcceptNumber());
+            params.put("netSaleNo", dispatchDotParam.getNetSaleNo());
+            params.put("ordersType", dispatchDotParam.getOrdersType());
             Map res = null;
             try {
                 res = SyncQYUtil.getResult("QINYUAN", params, "POST", mallUrl);
@@ -598,9 +598,7 @@ public class WechatController {
         result.setReturnCode(Constant.SUCCESS);
         try {
             wechatOrdersService.dispatchCompleteOrder(dispatchOrderParam);
-            if (wechatOrdersService.isYDYHOrder(dispatchOrderParam.getAcceptNumber())){
-                sendMallShare(dispatchOrderParam.getAcceptNumber(), dispatchOrderParam.getFinishNumber());
-            }
+            sendMallShare(dispatchOrderParam.getAcceptNumber(), dispatchOrderParam.getFinishNumber());
         } catch (Exception e) {
             logger.error("工单完工同步失败:", e);
             result.setReturnCode(Constant.FAIL);
@@ -625,26 +623,26 @@ public class WechatController {
         Result result = new BaseResult();
         result.setReturnMsg("工单退单同步成功!");
         result.setReturnCode(Constant.SUCCESS);
-        if (wechatOrdersService.isYDYHOrder(dispatchRetreatParam.getAcceptNumber())){
-            if (isCompletion(dispatchRetreatParam.getRemarks())) {
-                try {
-                    sendMallShare(dispatchRetreatParam.getAcceptNumber(), dispatchRetreatParam.getRemarks());
-                } catch (Exception e) {
-                    logger.error("工单退单同步失败，参数为：{},错误信息为{}",dispatchRetreatParam,e);
-                    result.setReturnMsg("工单退单同步失败!");
-                    result.setReturnCode(Constant.FAIL);
-                    return result;
-                }
-                return result;
-            }
+
+        if (isCompletion(dispatchRetreatParam.getRemarks())) {
             try {
-                sendMallRetreatOrder(dispatchRetreatParam.getAcceptNumber(),dispatchRetreatParam.getRemarks(),dispatchRetreatParam.getManualDate());
+                sendMallShare(dispatchRetreatParam.getAcceptNumber(), dispatchRetreatParam.getRemarks());
             } catch (Exception e) {
+                logger.error("工单退单同步失败，参数为：{},错误信息为{}", dispatchRetreatParam, e);
                 result.setReturnMsg("工单退单同步失败!");
                 result.setReturnCode(Constant.FAIL);
                 return result;
             }
+            return result;
         }
+        try {
+            sendMallRetreatOrder(dispatchRetreatParam.getAcceptNumber(), dispatchRetreatParam.getRemarks(), dispatchRetreatParam.getManualDate());
+        } catch (Exception e) {
+            result.setReturnMsg("工单退单同步失败!");
+            result.setReturnCode(Constant.FAIL);
+            return result;
+        }
+
         return result;
     }
 
@@ -664,16 +662,16 @@ public class WechatController {
         result.setReturnMsg("工单拒单同步成功!");
         result.setReturnCode(Constant.SUCCESS);
         try {
-            if (wechatOrdersService.isYDYHOrder(dispatchRetreatParam.getAcceptNumber())) {
-                try {
-                    sendMallRefuseOrder(dispatchRetreatParam.getAcceptNumber(),dispatchRetreatParam.getRemarks(),dispatchRetreatParam.getManualDate());
-                } catch (Exception e) {
-                    logger.error("工单拒单同步失败，参数为：{},错误信息为{}",dispatchRetreatParam,e);
-                    result.setReturnMsg("工单拒单同步失败!");
-                    result.setReturnCode(Constant.FAIL);
-                    return result;
-                }
+
+            try {
+                sendMallRefuseOrder(dispatchRetreatParam.getAcceptNumber(), dispatchRetreatParam.getRemarks(), dispatchRetreatParam.getManualDate());
+            } catch (Exception e) {
+                logger.error("工单拒单同步失败，参数为：{},错误信息为{}", dispatchRetreatParam, e);
+                result.setReturnMsg("工单拒单同步失败!");
+                result.setReturnCode(Constant.FAIL);
+                return result;
             }
+
         } catch (Exception e) {
             result.setReturnMsg("工单退单同步失败!");
             result.setReturnCode(Constant.FAIL);
@@ -683,7 +681,7 @@ public class WechatController {
     }
 
 
-    private void checkSignature(DispatchRetreatRefuseParam param){
+    private void checkSignature(DispatchRetreatRefuseParam param) {
         String signture = param.getSignture();
         String timeStamp = param.getTimeStamp();
         boolean isLegal = SignUtil.checkSignature(signture, timeStamp, Constant.AUTH_KEY);
@@ -695,13 +693,14 @@ public class WechatController {
 
     /**
      * 同步商城退单记录
+     *
      * @param acceptNumber
      */
     private void sendMallRetreatOrder(String acceptNumber, String remarks, Date manualDate) {
         Map<String, Object> params = new HashMap<>(3);
         params.put("acceptNo", acceptNumber);
         params.put("remarks", remarks);
-        params.put("manualDate", DateFormatUtils.format(manualDate,"yyyy-MM-dd HH:mm:ss"));
+        params.put("manualDate", DateFormatUtils.format(manualDate, "yyyy-MM-dd HH:mm:ss"));
         logger.info("开始工单退单同步商城,受理单号：{},备注信息：{}", acceptNumber, remarks);
         Map result1 = SyncQYUtil.getResult("QINYUAN", params, "POST", syncRetreatOrderUrl);
         if ((Integer) result1.get("errorCode") != 200) {
@@ -713,13 +712,14 @@ public class WechatController {
 
     /**
      * 同步商城拒单记录
+     *
      * @param acceptNumber
      */
-    private void sendMallRefuseOrder(String acceptNumber,String remarks,Date manualDate) {
+    private void sendMallRefuseOrder(String acceptNumber, String remarks, Date manualDate) {
         Map<String, Object> params = new HashMap<>(3);
         params.put("acceptNo", acceptNumber);
         params.put("remarks", remarks);
-        params.put("manualDate", DateFormatUtils.format(manualDate,"yyyy-MM-dd HH:mm:ss"));
+        params.put("manualDate", DateFormatUtils.format(manualDate, "yyyy-MM-dd HH:mm:ss"));
         logger.info("开始工单拒单同步商城,受理单号：{},备注信息：{}", acceptNumber, remarks);
         Map result1 = SyncQYUtil.getResult("QINYUAN", params, "POST", syncRefuseOrderUrl);
         if ((Integer) result1.get("errorCode") != 200) {
@@ -748,12 +748,13 @@ public class WechatController {
 
     /**
      * 符合完工备注条件
+     *
      * @param remarks
      * @return
      */
     private boolean isCompletion(String remarks) {
         //例如： 退单(邮寄退单：aaa+123)
-        if (StringUtils.contains(remarks,"退单邮寄")){
+        if (StringUtils.contains(remarks, "退单邮寄")) {
             return true;
         }
         return false;
@@ -791,13 +792,13 @@ public class WechatController {
             return result;
         }
 
-        if (miniappSendSms.getType()==3){//绑定有礼
+        if (miniappSendSms.getType() == 3) {//绑定有礼
             String msgContent = "亲爱的会员，恭喜您已成功绑定产品，小沁送您用户尊享满200立减50元滤芯优惠券一张，可进入沁园WX号（qy_serve ），点击<我的沁园>进入<优惠券>即可查看，还有更多用户尊享服务一键预约快速达。即刻开启您的专享优惠通道吧~回复TD退订";
-            mobileService.sendContentByEmay(miniappSendSms.getPhone(),msgContent, Constant.BIND_GIFT );
-        }else if (miniappSendSms.getType()==4){//注册有礼
+            mobileService.sendContentByEmay(miniappSendSms.getPhone(), msgContent, Constant.BIND_GIFT);
+        } else if (miniappSendSms.getType() == 4) {//注册有礼
 //            String msgContent = "嗨，欢迎进入沁园水健康守护基地，恭喜您已完成会员注册。小沁送您会员尊享立减100元优惠券一张，购买微商城内任意净水器通用哦。进入沁园WX号（qy_serve ），点击<要购买-WX商城>进入<我的>即可查看。立即绑定产品，还有更多滤芯优惠券等着您！即刻开启您的专享优惠通道吧~回复TD退订";
             String msgContent = "嗨，欢迎进入沁园水健康守护基地，恭喜您已完成会员注册。小沁送您会员尊享立减100元优惠券一张，购买微商城内任意净水器通用哦。进入沁园WX号（qy_serve ），点击<我的沁园>进入<优惠券>即可查看。即刻开启您的专享优惠通道吧~回复TD退订";
-            mobileService.sendContentByEmay(miniappSendSms.getPhone(), msgContent,Constant.REGISTER_GIFT);
+            mobileService.sendContentByEmay(miniappSendSms.getPhone(), msgContent, Constant.REGISTER_GIFT);
         }
 
 
@@ -859,7 +860,6 @@ public class WechatController {
 
     @Value("${open.weixin.component_appid}")
     private String component_appid;
-
 
 
 }
