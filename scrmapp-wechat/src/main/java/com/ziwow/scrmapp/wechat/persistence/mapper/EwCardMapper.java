@@ -142,4 +142,10 @@ public interface EwCardMapper {
      */
     @Select("select id from t_ew_card where card_no = #{cardNo}")
     Long loadEwCardByNo(@Param("cardNo") String cardNo);
+
+    /**
+     * 保存全参数的延保卡
+     * @param ewCard
+     */
+    void saveCompleteEwCard(@Param("ewCard") EwCard ewCard);
 }

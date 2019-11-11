@@ -112,4 +112,9 @@ public class EwCardServiceImpl implements EwCardService {
         return ewCardMapper.loadEwCardByNo(cardNo);
     }
 
+    @Override
+    public void saveEwCard(EwCard ewCard) {
+        ewCardMapper.saveCompleteEwCard(ewCard);
+    }
+
 }

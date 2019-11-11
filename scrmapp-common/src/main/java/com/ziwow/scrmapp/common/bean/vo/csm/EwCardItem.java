@@ -1,10 +1,10 @@
 package com.ziwow.scrmapp.common.bean.vo.csm;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.apache.commons.lang.builder.EqualsBuilder;
+import org.apache.commons.lang.builder.HashCodeBuilder;
 
-import java.util.Date;
 
 /**
  * 延保卡详情
@@ -129,5 +129,25 @@ public class EwCardItem {
 
     public void setRepairTerm(String repairTerm) {
         this.repairTerm = repairTerm;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+
+        if (!(o instanceof EwCardItem)) return false;
+
+        EwCardItem cardItem = (EwCardItem) o;
+
+        return new EqualsBuilder()
+                .append(cardNo, cardItem.cardNo)
+                .isEquals();
+    }
+
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder(17, 37)
+                .append(cardNo)
+                .toHashCode();
     }
 }

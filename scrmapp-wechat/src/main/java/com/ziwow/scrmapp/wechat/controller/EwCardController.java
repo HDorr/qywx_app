@@ -30,6 +30,7 @@ import com.ziwow.scrmapp.wechat.vo.EwCardInfo;
 import com.ziwow.scrmapp.wechat.vo.EwCards;
 import com.ziwow.scrmapp.wechat.vo.ServiceRecord;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.time.DateUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -140,7 +141,7 @@ public class EwCardController {
         }
 
         ewCardVo = thirdPartyService.getEwCardListByNo(cardNo);
-        if (ErrorCodeConstants.CODE_E094.equals(ewCardVo.getStatus().getCode()) || ErrorCodeConstants.CODE_E092.equals(ewCardVo.getStatus().getCode()) || "已注册".equals(ewCardVo.getItems().getCardStat())) {
+        if (ErrorCodeConstants.CODE_E094.equals(ewCardVo.getStatus().getCode()) || ErrorCodeConstants.CODE_E092.equals(ewCardVo.getStatus().getCode()) || "已注册".equals(ewCardVo.getItems().get(0).getCardStat())) {
             logger.error("csm查询延保卡失败,{}", cardNo);
             result.setReturnMsg("查询延保卡失败，请检查卡号或稍后再试！");
             result.setData("no");
@@ -149,7 +150,7 @@ public class EwCardController {
         }
         //查询到结果
         ewCard = new EwCard();
-        final EwCardItem items = ewCardVo.getItems();
+        final EwCardItem items = ewCardVo.getItems().get(0);
         BeanUtils.copyProperties(items, ewCard);
         ewCard.setRepairTerm(ewCard.getRepairTerm());
         //根据unionId查询出fans
@@ -157,7 +158,7 @@ public class EwCardController {
         ewCard.setFansId(user.getWfId());
         ewCard.setCardStatus(EwCardStatus.NOT_USE);
         ewCard.setCardNo(cardNo);
-        ewCardService.addEwCard(ewCard, ewCardVo.getItems().getItemNames(), ewCardVo.getItems().getItemCodes());
+        ewCardService.addEwCard(ewCard, ewCardVo.getItems().get(0).getItemNames(), ewCardVo.getItems().get(0).getItemCodes());
 
         //如果是活动送的卡
         if (isActivity) {
@@ -211,11 +212,11 @@ public class EwCardController {
         final EwCardVo ewCardVo = thirdPartyService.getBindPhoneAndCardByBarcode(barcode);
         final WechatUser user = wechatUserService.getUserByUnionid(unionId);
         Result result = new BaseResult();
-        if (user.getMobilePhone().equals(ewCardVo.getMobile())){
+        if (user.getMobilePhone().equals(ewCardVo.getMobile())) {
             result.setReturnMsg("查询成功");
             result.setReturnCode(Constant.SUCCESS);
             result.setData("ok");
-        }else {
+        } else {
             result.setReturnMsg("手机号不一致");
             result.setReturnCode(Constant.FAIL);
             result.setData(ewCardVo.getMobile());
@@ -223,9 +224,63 @@ public class EwCardController {
         return result;
     }
 
+    /**
+     * 根据条码查询 同步csm中的延保信息
+     *
+     * @return
+     */
+    @RequestMapping(value = "qysc/card_by_barcode", method = RequestMethod.GET)
+    @MiniAuthentication
+    public Result qyscMobileByBarcode(@RequestParam("signture") String signture,
+                                      @RequestParam("time_stamp") String timeStamp,
+                                      @RequestParam("unionId") String unionId,
+                                      @RequestParam("barcode") String barcode) {
+
+        final EwCardVo ewCardVo = thirdPartyService.getBindPhoneAndCardByBarcode(barcode);
+        final List<EwCard> ewCards = ewCardService.selectEwCardsByBarCode(barcode);
+        List<EwCardItem> ewCardItemList = new ArrayList<>();
+        for (EwCard ewCard : ewCards) {
+            EwCardItem ewCardItem = new EwCardItem();
+            ewCardItem.setCardNo(ewCard.getCardNo());
+            ewCardItemList.add(ewCardItem);
+        }
+
+        final List<EwCardItem> items = ewCardVo.getItems();
+        final WechatUser user = wechatUserService.getUserByUnionid(unionId);
+        Result result = new BaseResult();
+        for (EwCardItem item : items) {
+            if (!ewCardItemList.contains(item)) {
+                //csm中存在。微信不存在，保存到数据库
+                try {
+                    EwCard ewCard = new EwCard();
+                    ewCard.setCardStatus(EwCardStatus.ENTERED_INTO_FORCE);
+                    ewCard.setInstallList(true);
+                    ewCard.setCardNo(item.getCardNo());
+                    ewCard.setProductBarCodeTwenty(barcode);
+                    ewCard.setFansId(user.getWfId());
+                    ewCard.setValidTime(item.getValidTime());
+                    ewCard.setRepairTerm(DateUtils.parseDate(item.getRepairTerm(), "yyyy-MM-dd HH:mm:ss"));
+                    ewCard.setPurchDate(DateUtils.parseDate(item.getPurchDate(), "yyyy-MM-dd HH:mm:ss"));
+                    ewCardService.saveEwCard(ewCard);
+                } catch (Exception e) {
+                    logger.error("csm同步微信延保卡保存失败：[{e}]", e);
+                    result.setReturnMsg("同步失败");
+                    result.setReturnCode(Constant.FAIL);
+                    result.setData("no");
+                }
+            }
+        }
+
+        result.setReturnMsg("同步成功");
+        result.setReturnCode(Constant.SUCCESS);
+        result.setData("ok");
+        return result;
+    }
+
 
     /**
      * 根据产品编码查询用户的延保卡
+     *
      * @param productCode
      * @return
      */

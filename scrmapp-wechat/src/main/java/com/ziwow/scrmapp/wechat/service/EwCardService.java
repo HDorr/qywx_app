@@ -122,4 +122,10 @@ public interface EwCardService {
      * @param cardNo
      */
     Long loadByNo(String cardNo);
+
+    /**
+     * 保存延保信息（完整）
+     * @param ewCard
+     */
+    void saveEwCard(EwCard ewCard);
 }
