@@ -43,6 +43,15 @@ public interface ThirdPartyService {
 	 */
 	String getPurchDate(String productBarCode);
 
+	/**
+	 * 根据条码查询用户绑定手机号和延保信息
+	 * @param barcode
+	 * @return
+	 */
+	EwCardVo getBindPhoneAndCardByBarcode(String barcode);
+
+
+
 	public ProductItem getProductItem(ProductParam productParam);
 	public List<ProductItem> getProductList(String itemCodes);
 	public List<ProductFilterGrade> getItemFilterGrade(ProductFilterGradeParam productFilterGradeParam);

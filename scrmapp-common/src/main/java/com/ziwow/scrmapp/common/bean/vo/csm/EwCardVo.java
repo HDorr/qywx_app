@@ -15,6 +15,16 @@ public class EwCardVo extends BaseCardVo {
      */
     private EwCardItem items;
 
+    private String mobile;
+
+    public String getMobile() {
+        return mobile;
+    }
+
+    public void setMobile(String mobile) {
+        this.mobile = mobile;
+    }
+
     public EwCardItem getItems() {
         return items;
     }

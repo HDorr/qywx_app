@@ -15,10 +15,26 @@ public class EwCardParam {
     @JsonProperty("card_no")
     private String cardNo;
 
+    /**
+     * 产品条码
+     */
     @JsonProperty("bar_code")
     private String barCode;
 
+    /**
+     * 用户手机号
+     */
+    @JsonProperty("mobile")
+    private String mobile;
 
+
+    public String getMobile() {
+        return mobile;
+    }
+
+    public void setMobile(String mobile) {
+        this.mobile = mobile;
+    }
 
     public String getCardNo() {
         return cardNo;
