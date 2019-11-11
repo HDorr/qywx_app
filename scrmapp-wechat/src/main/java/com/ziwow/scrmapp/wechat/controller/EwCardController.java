@@ -270,7 +270,6 @@ public class EwCardController {
                 }
             }
         }
-
         result.setReturnMsg("同步成功");
         result.setReturnCode(Constant.SUCCESS);
         result.setData("ok");

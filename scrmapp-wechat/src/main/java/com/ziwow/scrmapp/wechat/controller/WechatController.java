@@ -17,11 +17,15 @@ import com.ziwow.scrmapp.common.bean.vo.csm.ProductItem;
 import com.ziwow.scrmapp.common.bean.vo.mall.MallOrderVo;
 import com.ziwow.scrmapp.common.bean.vo.mall.OrderItem;
 import com.ziwow.scrmapp.common.constants.Constant;
+import com.ziwow.scrmapp.common.constants.SystemConstants;
 import com.ziwow.scrmapp.common.enums.EwCardSendTypeEnum;
 import com.ziwow.scrmapp.common.enums.EwCardTypeEnum;
 import com.ziwow.scrmapp.common.exception.ParamException;
 import com.ziwow.scrmapp.common.persistence.entity.FilterLevel;
 import com.ziwow.scrmapp.common.persistence.entity.Product;
+import com.ziwow.scrmapp.common.persistence.entity.WechatOrdersRecord;
+import com.ziwow.scrmapp.common.persistence.mapper.WechatOrdersMapper;
+import com.ziwow.scrmapp.common.persistence.mapper.WechatOrdersRecordMapper;
 import com.ziwow.scrmapp.common.result.BaseResult;
 import com.ziwow.scrmapp.common.result.Result;
 import com.ziwow.scrmapp.common.service.MobileService;
@@ -122,6 +126,12 @@ public class WechatController {
 
     @Autowired
     private GrantEwCardRecordService grantEwCardRecordService;
+
+    @Autowired
+    private WechatOrdersMapper wechatOrdersMapper;
+
+    @Autowired
+    private WechatOrdersRecordMapper wechatOrdersRecordMapper;
 
     @RequestMapping(value = "grant_ew_card",method = RequestMethod.GET)
     @MiniAuthentication
@@ -738,6 +748,19 @@ public class WechatController {
         Map<String, Object> params = new HashMap<>(2);
         params.put("acceptNo", acceptNum);
         params.put("finishNo", finishNum);
+
+        //完工处理
+        final Date finDate = new Date();
+        final int i = wechatOrdersMapper.updateOrdersNoAndStatus(acceptNum, finishNum, finDate, SystemConstants.COMPLETE);
+        if (i > 0){
+            //增加操作记录
+            WechatOrdersRecord wechatOrdersRecord = new WechatOrdersRecord();
+            wechatOrdersRecord.setRecordTime(finDate);
+            wechatOrdersRecord.setRecordContent("系统同步完工!");
+            wechatOrdersRecord.setOrderId(wechatOrdersMapper.getIdByCode(acceptNum));
+            wechatOrdersRecordMapper.insert(wechatOrdersRecord);
+        }
+
         logger.info("开始调用商城工单完工同步分润记录,受理单号：{},完工单号：{}", acceptNum, finishNum);
         Map result1 = SyncQYUtil.getResult("QINYUAN", params, "POST", mallShareUrl);
         if ((Integer) result1.get("errorCode") != 200) {
