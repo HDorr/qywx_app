@@ -36,7 +36,7 @@
 	</insert>
 
 	<select id="selectEwCardByNo" resultMap="ewCardMap">
-		select ec.*,eci.id eid,eci.item_name,eci.item_code from t_ew_card ec left join t_ew_card_items eci on eci.ew_card_id=ec.id where ec.card_no=#{cardNo}
+		select ec.*,eci.id eid,eci.item_name,eci.item_code from t_ew_card ec left join t_ew_card_items eci on eci.ew_card_id=ec.id where ec.card_no=#{cardNo} limit 1
 	</select>
 
 	<select id="selectEwCardByFansId" resultMap="ewCardMap">
@@ -60,7 +60,7 @@
 	</select>
 
 	<select id="selectEwCardByBarCodeAndFansId" resultMap="ewCardMap">
-		select ec.*,eci.id eid,eci.item_name,eci.item_code from t_ew_card ec left join t_ew_card_items eci on eci.ew_card_id=ec.id where ec.fans_id=#{fansId} and ec.product_bar_code_twenty=#{barCode} and ec.card_status != "NOT_USE" order by ec.repair_term desc limit 1
+		select ec.*,eci.id eid,eci.item_name,eci.item_code from t_ew_card ec left join t_ew_card_items eci on eci.ew_card_id=ec.id where ec.fans_id=#{fansId} and ec.product_bar_code_twenty=#{barCode} and ec.card_status != "NOT_USE" order by ec.repair_term desc
 	</select>
 
 
