@@ -42,6 +42,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 
 /**
@@ -193,7 +194,7 @@ public class EwCardController {
                                     @RequestParam("unionId") String unionId) {
         Result result = new BaseResult();
         final WechatUser user = wechatUserService.getUserByUnionid(unionId);
-        List<EwCard> ewCards = ewCardService.selectEwCardByFansId(user.getWfId());
+        Set<EwCard> ewCards = ewCardService.selectEwCardByFansId(user.getWfId());
         return getSearchResult(result, ewCards, user.getUserId(), user.getWfId());
     }
 
@@ -291,7 +292,7 @@ public class EwCardController {
                                       @RequestParam("unionId") String unionId) {
         Result result = new BaseResult();
         final WechatUser user = wechatUserService.getUserByUnionid(unionId);
-        List<EwCard> ewCards = ewCardService.selectEwCardByProductCode(productCode, user.getWfId());
+        Set<EwCard> ewCards = ewCardService.selectEwCardByProductCode(productCode, user.getWfId());
         return getSearchResult(result, ewCards, user.getUserId(), user.getWfId());
     }
 
@@ -643,7 +644,7 @@ public class EwCardController {
      * @param userId
      * @return
      */
-    private Result getSearchResult(Result result, List<EwCard> ewCards, String userId, Long fansId) {
+    private Result getSearchResult(Result result, Set<EwCard> ewCards, String userId, Long fansId) {
         List<EwCardInfo> ewCardInfos = new ArrayList<>();
 
         //组装 EwCardInfo

@@ -37,7 +37,7 @@ public interface EwCardService {
      * @param fansId
      * @return
      */
-    List<EwCard> selectEwCardByFansId(Long fansId);
+    Set<EwCard> selectEwCardByFansId(Long fansId);
 
     /**
      * 根据类型查询延保卡信息
@@ -79,7 +79,7 @@ public interface EwCardService {
      * @param id
      * @return
      */
-    List<EwCard> selectEwCardByProductCode(String productCode, Long id);
+    Set<EwCard> selectEwCardByProductCode(String productCode, Long id);
 
     /**
      * 根据产品条码判断该产品是否使用过延保卡
