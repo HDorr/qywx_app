@@ -230,12 +230,7 @@ public class EwCardController {
      *
      * @return
      */
-    @RequestMapping(value = "qysc/card_by_barcode", method = RequestMethod.GET)
-    @MiniAuthentication
-    public Result qyscMobileByBarcode(@RequestParam("signture") String signture,
-                                      @RequestParam("time_stamp") String timeStamp,
-                                      @RequestParam("unionId") String unionId,
-                                      @RequestParam("barcode") String barcode) {
+    private void qyscMobileByBarcode( String barcode ,Long fansId) {
 
         final EwCardVo ewCardVo = thirdPartyService.getBindPhoneAndCardByBarcode(barcode);
         final List<EwCard> ewCards = ewCardService.selectEwCardsByBarCode(barcode);
@@ -247,8 +242,7 @@ public class EwCardController {
         }
 
         final List<EwCardItem> items = ewCardVo.getItems();
-        final WechatUser user = wechatUserService.getUserByUnionid(unionId);
-        Result result = new BaseResult();
+
         for (EwCardItem item : items) {
             if (!ewCardItemList.contains(item)) {
                 //csm中存在。微信不存在，保存到数据库
@@ -258,23 +252,17 @@ public class EwCardController {
                     ewCard.setInstallList(true);
                     ewCard.setCardNo(item.getCardNo());
                     ewCard.setProductBarCodeTwenty(barcode);
-                    ewCard.setFansId(user.getWfId());
+                    ewCard.setFansId(fansId);
                     ewCard.setValidTime(item.getValidTime());
                     ewCard.setRepairTerm(DateUtils.parseDate(item.getRepairTerm(), "yyyy-MM-dd HH:mm:ss"));
                     ewCard.setPurchDate(DateUtils.parseDate(item.getPurchDate(), "yyyy-MM-dd HH:mm:ss"));
                     ewCardService.saveEwCard(ewCard);
                 } catch (Exception e) {
-                    logger.error("csm同步微信延保卡保存失败：[{e}]", e);
-                    result.setReturnMsg("同步失败");
-                    result.setReturnCode(Constant.FAIL);
-                    result.setData("no");
+                    logger.error("csm同步微信延保卡保存失败：[{e}],产品条码为：[{}]", e ,barcode);
                 }
             }
         }
-        result.setReturnMsg("同步成功");
-        result.setReturnCode(Constant.SUCCESS);
-        result.setData("ok");
-        return result;
+
     }
 
 
@@ -409,6 +397,9 @@ public class EwCardController {
                                      @RequestParam("unionId") String unionId) {
         Result result = new BaseResult();
         final WechatUser wechatUser = wechatUserService.getUserByUnionid(unionId);
+        //同步csm延保信息
+        qyscMobileByBarcode(barCode,wechatUser.getWfId());
+
         final EwCard ewCard = ewCardService.selectEwCardByBarCode(barCode);
         Product product = productService.getProductsByBarCodeAndUserId(wechatUser.getUserId(), barCode);
         EwCardDetails ewCardDetails = new EwCardDetails();
