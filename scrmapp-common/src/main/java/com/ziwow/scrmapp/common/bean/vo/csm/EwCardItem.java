@@ -56,6 +56,9 @@ public class EwCardItem {
     @JsonProperty("repair_term")
     private String repairTerm;
 
+
+    private String mobile;
+
     /**
      * 获取拆分后的结果
      * @return
@@ -129,6 +132,14 @@ public class EwCardItem {
 
     public void setRepairTerm(String repairTerm) {
         this.repairTerm = repairTerm;
+    }
+
+    public String getMobile() {
+        return mobile;
+    }
+
+    public void setMobile(String mobile) {
+        this.mobile = mobile;
     }
 
     @Override

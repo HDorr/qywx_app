@@ -141,13 +141,13 @@ public class ThirdPartyServiceImpl implements ThirdPartyService {
     }
 
     @Override
-    public EwCardVo getEwCardListByNo(String cardNo){
+    public QueryNoEwCardVo getEwCardListByNo(String cardNo){
         LOG.info("第三方CSM系统根据卡号查询延保卡,cardNo:[{}]", cardNo);
-        EwCardVo ewCardVo = null;
+        QueryNoEwCardVo ewCardVo = null;
         try {
             final String s = restTemplate.postForObject(queryEwCardUrl, JsonUtil.object2Json(ImmutableMap.of("card_no",cardNo,"mobile","","barcode","")), String.class);
             LOG.info("第三方CSM系统根据卡号查询延保卡,收到csm的数据:[{}]",s);
-            ewCardVo = JsonUtil.json2Object(s, EwCardVo.class);
+            ewCardVo = JsonUtil.json2Object(s, QueryNoEwCardVo.class);
         } catch (IOException e) {
             throw new ThirdException("调用第三方CSM系统根据卡号查询延保卡失败","查询延保卡失败，请稍后再试",e);
         } catch (Exception e) {
@@ -157,13 +157,13 @@ public class ThirdPartyServiceImpl implements ThirdPartyService {
     }
 
     @Override
-    public EwCardVo getBindPhoneAndCardByBarcode(String barcode){
+    public QueryBarCodeEwCardVo getBindPhoneAndCardByBarcode(String barcode){
         LOG.info("第三方CSM系统根据条码查询对应延保卡和手机号,barcode:[{}]", barcode);
-        EwCardVo ewCardVo = null;
+        QueryBarCodeEwCardVo ewCardVo = null;
         try {
             final String s = restTemplate.postForObject(queryEwCardUrl, JsonUtil.object2Json(ImmutableMap.of("card_no","","mobile","","barcode",barcode)), String.class);
             LOG.info("第三方CSM系统根据条码查询延保卡,收到csm的数据:[{}]",s);
-            ewCardVo = JsonUtil.json2Object(s, EwCardVo.class);
+            ewCardVo = JsonUtil.json2Object(s, QueryBarCodeEwCardVo.class);
         } catch (IOException e) {
             throw new ThirdException("调用第三方CSM系统根据卡号查询延保卡失败","查询延保卡失败，请稍后再试",e);
         } catch (Exception e) {

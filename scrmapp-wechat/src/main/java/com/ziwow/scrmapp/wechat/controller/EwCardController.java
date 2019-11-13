@@ -5,10 +5,7 @@ import com.ziwow.scrmapp.common.bean.pojo.CSMEwCardParam;
 import com.ziwow.scrmapp.common.bean.pojo.EwCardParam;
 import com.ziwow.scrmapp.common.bean.pojo.ProductParam;
 import com.ziwow.scrmapp.common.bean.vo.WechatOrdersVo;
-import com.ziwow.scrmapp.common.bean.vo.csm.BaseCardVo;
-import com.ziwow.scrmapp.common.bean.vo.csm.EwCardItem;
-import com.ziwow.scrmapp.common.bean.vo.csm.EwCardVo;
-import com.ziwow.scrmapp.common.bean.vo.csm.ProductItem;
+import com.ziwow.scrmapp.common.bean.vo.csm.*;
 import com.ziwow.scrmapp.common.constants.Constant;
 import com.ziwow.scrmapp.common.constants.ErrorCodeConstants;
 import com.ziwow.scrmapp.common.enums.EwCardStatus;
@@ -111,7 +108,7 @@ public class EwCardController {
                                 @RequestParam("unionId") String unionId,
                                 @RequestParam("card_no") String cardNo) {
         Result result = new BaseResult();
-        EwCardVo ewCardVo = null;
+        QueryNoEwCardVo ewCardVo = null;
         EwCard ewCard = null;
         //先去本地系统查询
         ewCard = ewCardService.selectEwCardByNo(cardNo);
@@ -138,11 +135,10 @@ public class EwCardController {
                 result.setReturnMsg("对不起，延保卡发放完毕");
                 return result;
             }
-
         }
 
         ewCardVo = thirdPartyService.getEwCardListByNo(cardNo);
-        if (ErrorCodeConstants.CODE_E094.equals(ewCardVo.getStatus().getCode()) || ErrorCodeConstants.CODE_E092.equals(ewCardVo.getStatus().getCode()) || "已注册".equals(ewCardVo.getItems().get(0).getCardStat())) {
+        if (ErrorCodeConstants.CODE_E094.equals(ewCardVo.getStatus().getCode()) || ErrorCodeConstants.CODE_E092.equals(ewCardVo.getStatus().getCode()) || "已注册".equals(ewCardVo.getItems().getCardStat())) {
             logger.error("csm查询延保卡失败,{}", cardNo);
             result.setReturnMsg("查询延保卡失败，请检查卡号或稍后再试！");
             result.setData("no");
@@ -151,7 +147,7 @@ public class EwCardController {
         }
         //查询到结果
         ewCard = new EwCard();
-        final EwCardItem items = ewCardVo.getItems().get(0);
+        final EwCardItem items = ewCardVo.getItems();
         BeanUtils.copyProperties(items, ewCard);
         ewCard.setRepairTerm(ewCard.getRepairTerm());
         //根据unionId查询出fans
@@ -159,7 +155,7 @@ public class EwCardController {
         ewCard.setFansId(user.getWfId());
         ewCard.setCardStatus(EwCardStatus.NOT_USE);
         ewCard.setCardNo(cardNo);
-        ewCardService.addEwCard(ewCard, ewCardVo.getItems().get(0).getItemNames(), ewCardVo.getItems().get(0).getItemCodes());
+        ewCardService.addEwCard(ewCard, ewCardVo.getItems().getItemNames(), ewCardVo.getItems().getItemCodes());
 
         //如果是活动送的卡
         if (isActivity) {
@@ -199,7 +195,7 @@ public class EwCardController {
     }
 
     /**
-     * 查询用户的延保卡
+     * 校验wx手机号与csm是否一致
      *
      * @return
      */
@@ -210,17 +206,18 @@ public class EwCardController {
                                        @RequestParam("unionId") String unionId,
                                        @RequestParam("barcode") String barcode) {
 
-        final EwCardVo ewCardVo = thirdPartyService.getBindPhoneAndCardByBarcode(barcode);
+        final QueryBarCodeEwCardVo ewCardVo = thirdPartyService.getBindPhoneAndCardByBarcode(barcode);
         final WechatUser user = wechatUserService.getUserByUnionid(unionId);
         Result result = new BaseResult();
-        if (user.getMobilePhone().equals(ewCardVo.getMobile())) {
+        final String mobile = ewCardVo.getItems().get(0).getMobile();
+        if (user.getMobilePhone().equals(mobile)) {
             result.setReturnMsg("查询成功");
             result.setReturnCode(Constant.SUCCESS);
             result.setData("ok");
         } else {
             result.setReturnMsg("手机号不一致");
             result.setReturnCode(Constant.FAIL);
-            result.setData(ewCardVo.getMobile());
+            result.setData(mobile);
         }
         return result;
     }
@@ -232,7 +229,7 @@ public class EwCardController {
      */
     private void qyscMobileByBarcode( String barcode ,Long fansId) {
 
-        final EwCardVo ewCardVo = thirdPartyService.getBindPhoneAndCardByBarcode(barcode);
+        final QueryBarCodeEwCardVo ewCardVo = thirdPartyService.getBindPhoneAndCardByBarcode(barcode);
         final List<EwCard> ewCards = ewCardService.selectEwCardsByBarCode(barcode);
         List<EwCardItem> ewCardItemList = new ArrayList<>();
         for (EwCard ewCard : ewCards) {

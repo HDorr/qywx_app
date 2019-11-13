@@ -20,7 +20,7 @@ public interface ThirdPartyService {
 	 * @param cardNo
 	 * @return
 	 */
-	EwCardVo getEwCardListByNo(String cardNo);
+	QueryNoEwCardVo getEwCardListByNo(String cardNo);
 
 
 	/**
@@ -48,7 +48,7 @@ public interface ThirdPartyService {
 	 * @param barcode
 	 * @return
 	 */
-	EwCardVo getBindPhoneAndCardByBarcode(String barcode);
+	QueryBarCodeEwCardVo getBindPhoneAndCardByBarcode(String barcode);
 
 
 

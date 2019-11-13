@@ -1,31 +1,19 @@
 package com.ziwow.scrmapp.common.bean.vo.csm;
 
 
-import java.util.List;
-
 /**
- * csm 延保卡
+ * csm 根据卡号查询延保卡
  * @author songkaiqi
  * @since 2019/06/09/下午2:16
  */
-public class EwCardVo extends BaseCardVo {
+public class QueryNoEwCardVo extends BaseCardVo {
 
     private Status status;
 
     /**
      * 延保卡详细
      */
-    private List<EwCardItem> items;
-
-    private String mobile;
-
-    public String getMobile() {
-        return mobile;
-    }
-
-    public void setMobile(String mobile) {
-        this.mobile = mobile;
-    }
+    private EwCardItem items;
 
 
     @Override
@@ -38,11 +26,11 @@ public class EwCardVo extends BaseCardVo {
         this.status = status;
     }
 
-    public List<EwCardItem> getItems() {
+    public EwCardItem getItems() {
         return items;
     }
 
-    public void setItems(List<EwCardItem> items) {
+    public void setItems(EwCardItem items) {
         this.items = items;
     }
 }
