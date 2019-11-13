@@ -1118,8 +1118,21 @@ public class WechatOrdersController {
                 if (count > 0) {
                     //修改预约单状态为已评价
                     wechatOrdersService.updateOrdersStatus(ordersCode, userId, date, SystemConstants.APPRAISE);
+                    // 区分滤芯和清洗
+                    Integer orderType;
+                    switch (wechatOrdersService.getParamByOrdersCode(ordersCode).getMaintType()){
+                        case 2:
+                            orderType = 3; // 滤芯
+                            break;
+                        case 1:
+                            orderType = 4; // 清洗
+                            break;
+                        default:
+                            orderType = wechatOrders.getOrderType();
+                            break;
+                    }
                     //发送评价积分
-                    grantPointService.grantOrderComment(userId, ordersCode, wechatOrders.getOrderType());
+                    grantPointService.grantOrderComment(userId, ordersCode, orderType);
 
                 } else {
                     throw new SQLException("qyhUserAppraisalVo:" + JSONObject.toJSONString(qyhUserAppraisalVo));

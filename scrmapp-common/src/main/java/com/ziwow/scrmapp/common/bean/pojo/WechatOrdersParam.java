@@ -49,7 +49,7 @@ public class WechatOrdersParam {
 
     private Integer orderType;
 
-    private int maintType;
+    private int maintType; // 工单为保养单时，区分滤芯和清洗（1：清洗；2：滤芯）
 
     private int buyFilter;
 

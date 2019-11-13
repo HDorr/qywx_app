@@ -157,4 +157,11 @@ public interface QyhOrdersService {
     int doCancel(Long ordersId, Long productId,String ordersCode);
 
     boolean isFinish(List<Integer> productStatus);
+
+    /**
+     * 判断工单是否正常完工，即状态为已完成，不包括取消
+     * @param productStatus
+     * @return
+     */
+    boolean isNormaFinish(List<Integer> productStatus);
 }

@@ -33,7 +33,7 @@ public class GrantPointController {
   @ResponseBody
   public Result install(@RequestBody PointForm form){
     try {
-      grantPointService.grantOrderInstallPoint(form.getUserId(),form.getOrdersCode());
+      grantPointService.grantOrderInstallPoint(form.getUserId(),form.getOrdersCode(),form.getOrderType());
     }catch (Exception e){
       logger.error("积分发放失败 原因",e);
     }
@@ -43,7 +43,29 @@ public class GrantPointController {
   @ResponseBody
   public Result filter(@RequestBody PointForm form){
     try {
-      grantPointService.grantOrderFilterPoint(form.getUserId(),form.getOrdersCode());
+      grantPointService.grantOrderFilterPoint(form.getUserId(),form.getOrdersCode(),form.getOrderType());
+    }catch (Exception e){
+      logger.error("积分发放失败 原因",e);
+    }
+    return BaseResult.Success(true);
+  }
+
+  @RequestMapping(value = "/wash",method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+  @ResponseBody
+  public Result wash(@RequestBody PointForm form){
+    try {
+      grantPointService.grantFinishWash(form.getUserId(),form.getOrdersCode(),form.getOrderType());
+    }catch (Exception e){
+      logger.error("积分发放失败 原因",e);
+    }
+    return BaseResult.Success(true);
+  }
+
+  @RequestMapping(value = "/repair",method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+  @ResponseBody
+  public Result repair(@RequestBody PointForm form){
+    try {
+      grantPointService.grantFinishRepair(form.getUserId(),form.getOrdersCode(),form.getOrderType());
     }catch (Exception e){
       logger.error("积分发放失败 原因",e);
     }

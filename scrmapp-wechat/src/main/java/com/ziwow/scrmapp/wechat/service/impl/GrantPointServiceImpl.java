@@ -36,6 +36,12 @@ public class GrantPointServiceImpl implements GrantPointService {
   private String orderFilterUrl;
   @Value("${miniapp.point.orderComment}")
   private String orderCommentUrl;
+  // 预约维修单
+  @Value("${miniapp.point.orderRepair}")
+  private String orderRepairUrl;
+  // 预约清洗
+  @Value("${miniapp.point.orderWash}")
+  private String orderWashUrl;
 
 
   /**
@@ -45,9 +51,9 @@ public class GrantPointServiceImpl implements GrantPointService {
    */
   @Async
   @Override
-  public void grantOrderInstallPoint(String userId, String orderCode) {
+  public void grantOrderInstallPoint(String userId, String orderCode,Integer orderType) {
     //调用商城发积分接口
-    awardPoint(orderInstallUrl,userId,orderCode,null);
+    awardPoint(orderInstallUrl,userId,orderCode,orderType);
 
   }
 
@@ -58,8 +64,8 @@ public class GrantPointServiceImpl implements GrantPointService {
    */
   @Async
   @Override
-  public void grantOrderFilterPoint(String userId, String orderCode) {
-    awardPoint(orderFilterUrl,userId,orderCode,null);
+  public void grantOrderFilterPoint(String userId, String orderCode,Integer orderType) {
+    awardPoint(orderFilterUrl,userId,orderCode,orderType);
   }
 
   /**
@@ -72,6 +78,20 @@ public class GrantPointServiceImpl implements GrantPointService {
   public void grantOrderComment(String userId, String orderCode,Integer orderType) {
     awardPoint(orderCommentUrl,userId,orderCode,orderType);
   }
+
+  @Async
+  @Override
+  public void grantFinishRepair(String userId, String orderCode,Integer orderType) {
+    awardPoint(orderRepairUrl,userId,orderCode,orderType);
+  }
+
+  @Async
+  @Override
+  public void grantFinishWash(String userId, String orderCode,Integer orderType) {
+    awardPoint(orderWashUrl,userId,orderCode,orderType);
+  }
+
+
   /**
    * 根据 userId查询unionId
    */

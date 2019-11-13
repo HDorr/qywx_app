@@ -1281,6 +1281,18 @@ public class QyhOrdersServiceImpl implements QyhOrdersService {
         return isFinish;
     }
 
+    @Override
+    public boolean isNormaFinish(List<Integer> productStatus) {
+        boolean isFinish = true;
+        for (Integer status : productStatus) {
+            if (status != Constant.COMPLETE) {
+                isFinish = false;
+                break;
+            }
+        }
+        return isFinish;
+    }
+
     /**
      * 更新工单记录
      *

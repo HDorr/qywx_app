@@ -524,7 +524,8 @@
             o.province,
             o.city,
             o.area,
-            o.address
+            o.address,
+            o.maintType
         FROM
             t_wechat_orders o
         WHERE

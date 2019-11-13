@@ -455,7 +455,7 @@ public class QyhUserController {
             // 发送模板消息
             sendTemplate(completeParam);
             //调用服务号发积分方法,
-            grantPoint(ordersCode, PointConstant.INSTALL,null);
+            grantPoint(ordersCode, PointConstant.INSTALL,1);
 
 
         } catch (RuntimeException ex) {
@@ -515,6 +515,11 @@ public class QyhUserController {
             //如果产品状态全部为取消或完工,则工单算作完工状态,发送短信和消息模板
             if (qyhOrdersService.isFinish(qyhProductService.getAllStatus(completeParam.getOrdersId()))) {
                 sendTemplate(completeParam);
+                // 产品状态全部为已完工时，才能发放积分
+                if(qyhOrdersService.isNormaFinish(qyhProductService.getAllStatus(completeParam.getOrdersId()))){
+                    logger.info("维修单正常完工发送积分！ordersCode = [{}]",ordersCode);
+                    grantPoint(ordersCode,PointConstant.REPAIR,2);
+                }
             }
 
         } catch (RuntimeException ex) {
@@ -575,7 +580,9 @@ public class QyhUserController {
                 sendTemplate(completeParam);
             }
             qyhOrdersService.finishMakeAppointment(completeParam.getOrdersCode());
-            grantPoint(ordersCode, PointConstant.FILTER,null);
+            Integer orderType = wechatOrdersMapper.getParamByOrdersCode(ordersCode).getMaintType() == 1
+                    ? 4 : 3 ;
+            grantPoint(ordersCode, PointConstant.FILTER,orderType);
         } catch (RuntimeException ex) {
             logger.error("师傅点击工单[{}]完工操作出现异常,原因:[{}]", ordersCode, ex);
             result.setReturnCode(Constant.FAIL);
