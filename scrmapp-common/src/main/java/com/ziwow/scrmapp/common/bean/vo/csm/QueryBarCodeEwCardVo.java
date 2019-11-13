@@ -8,7 +8,7 @@ import java.util.List;
  * @author songkaiqi
  * @since 2019/06/09/下午2:16
  */
-public class QueryBarCodeEwCardVo extends BaseCardVo {
+public class QueryBarCodeEwCardVo {
 
     private Status status;
 
@@ -18,12 +18,20 @@ public class QueryBarCodeEwCardVo extends BaseCardVo {
     private List<EwCardItem> items;
 
 
-    @Override
+    private String mobile;
+
+    public String getMobile() {
+        return mobile;
+    }
+
+    public void setMobile(String mobile) {
+        this.mobile = mobile;
+    }
+
     public Status getStatus() {
         return status;
     }
 
-    @Override
     public void setStatus(Status status) {
         this.status = status;
     }

@@ -163,7 +163,15 @@ public class ThirdPartyServiceImpl implements ThirdPartyService {
         try {
             final String s = restTemplate.postForObject(queryEwCardUrl, JsonUtil.object2Json(ImmutableMap.of("card_no","","mobile","","barcode",barcode)), String.class);
             LOG.info("第三方CSM系统根据条码查询延保卡,收到csm的数据:[{}]",s);
-            ewCardVo = JsonUtil.json2Object(s, QueryBarCodeEwCardVo.class);
+            final String trim = s.trim();
+            final String remove = StringUtils.remove(trim, "\\");
+            System.out.println("remove = " + remove);
+            final StringBuilder stringBuilder = new StringBuilder(remove);
+            final int i = remove.indexOf("\"items\":")+8;
+            stringBuilder.replace(i,i+1,"");
+            final int j = remove.indexOf("]");
+            stringBuilder.replace(j,j+1,"");
+            ewCardVo = JsonUtil.json2Object(stringBuilder.toString(), QueryBarCodeEwCardVo.class);
         } catch (IOException e) {
             throw new ThirdException("调用第三方CSM系统根据卡号查询延保卡失败","查询延保卡失败，请稍后再试",e);
         } catch (Exception e) {

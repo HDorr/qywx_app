@@ -147,5 +147,5 @@ public interface EwCardMapper {
      * 保存全参数的延保卡
      * @param ewCard
      */
-    void saveCompleteEwCard(@Param("ewCard") EwCard ewCard);
+    void saveCompleteEwCard(EwCard ewCard);
 }

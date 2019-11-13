@@ -209,7 +209,11 @@ public class EwCardController {
         final QueryBarCodeEwCardVo ewCardVo = thirdPartyService.getBindPhoneAndCardByBarcode(barcode);
         final WechatUser user = wechatUserService.getUserByUnionid(unionId);
         Result result = new BaseResult();
-        final String mobile = ewCardVo.getItems().get(0).getMobile();
+        String mobile;
+        mobile = ewCardVo.getMobile();
+        if (StringUtils.isBlank(mobile)){
+            mobile = ewCardVo.getItems().get(0).getMobile();
+        }
         if (user.getMobilePhone().equals(mobile)) {
             result.setReturnMsg("查询成功");
             result.setReturnCode(Constant.SUCCESS);

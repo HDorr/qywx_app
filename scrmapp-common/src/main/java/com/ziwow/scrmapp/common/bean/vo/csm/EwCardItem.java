@@ -59,6 +59,10 @@ public class EwCardItem {
 
     private String mobile;
 
+    @JsonProperty("enduser_name")
+    private String enduserName;
+
+
     /**
      * 获取拆分后的结果
      * @return
@@ -76,6 +80,13 @@ public class EwCardItem {
     }
 
 
+    public String getEnduserName() {
+        return enduserName;
+    }
+
+    public void setEnduserName(String enduserName) {
+        this.enduserName = enduserName;
+    }
 
     public String getItemCode() {
         return itemCode;
