@@ -243,6 +243,9 @@ public class EwCardController {
         }
 
         final List<EwCardItem> items = ewCardVo.getItems();
+        if (CollectionUtils.isEmpty(items)){
+            return;
+        }
 
         for (EwCardItem item : items) {
             if (!ewCardItemList.contains(item)) {
