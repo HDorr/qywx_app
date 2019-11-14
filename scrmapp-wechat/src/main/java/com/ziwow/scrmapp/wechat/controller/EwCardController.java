@@ -236,6 +236,9 @@ public class EwCardController {
         final QueryBarCodeEwCardVo ewCardVo = thirdPartyService.getBindPhoneAndCardByBarcode(barcode);
         final List<EwCard> ewCards = ewCardService.selectEwCardsByBarCode(barcode);
         List<EwCardItem> ewCardItemList = new ArrayList<>();
+
+
+
         for (EwCard ewCard : ewCards) {
             EwCardItem ewCardItem = new EwCardItem();
             ewCardItem.setCardNo(ewCard.getCardNo());
@@ -247,6 +250,10 @@ public class EwCardController {
             return;
         }
 
+
+
+        //记录延保卡用了几年
+        int i = 0;
         for (EwCardItem item : items) {
             if (!ewCardItemList.contains(item)) {
                 //csm中存在。微信不存在，保存到数据库
@@ -258,9 +265,12 @@ public class EwCardController {
                     ewCard.setProductBarCodeTwenty(barcode);
                     ewCard.setFansId(fansId);
                     ewCard.setValidTime(item.getValidTime());
-                    ewCard.setRepairTerm(DateUtils.parseDate(item.getRepairTerm(), "yyyy-MM-dd HH:mm:ss"));
+                    Date repairTerm = DateUtils.parseDate(item.getRepairTerm(), "yyyy-MM-dd HH:mm:ss");
+                    final Date date = DateUtils.addYears(repairTerm, -i);
+                    ewCard.setRepairTerm(date);
                     ewCard.setPurchDate(DateUtils.parseDate(item.getPurchDate(), "yyyy-MM-dd HH:mm:ss"));
                     ewCardService.saveEwCard(ewCard);
+                    i += ewCard.getValidTime()/365;
                 } catch (Exception e) {
                     logger.error("csm同步微信延保卡保存失败：[{e}],产品条码为：[{}]", e ,barcode);
                 }
@@ -402,7 +412,11 @@ public class EwCardController {
         Result result = new BaseResult();
         final WechatUser wechatUser = wechatUserService.getUserByUnionid(unionId);
         //同步csm延保信息
-        qyscMobileByBarcode(barCode,wechatUser.getWfId());
+        try {
+            qyscMobileByBarcode(barCode,wechatUser.getWfId());
+        } catch (Exception e) {
+            logger.error("同步csm延保信息失败。错误信息为[{}],产品条码为：[{}]",e,barCode);
+        }
 
         final EwCard ewCard = ewCardService.selectEwCardByBarCode(barCode);
         Product product = productService.getProductsByBarCodeAndUserId(wechatUser.getUserId(), barCode);
