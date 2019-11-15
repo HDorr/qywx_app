@@ -82,4 +82,9 @@ public class GrantEwCardRecordServiceImpl implements GrantEwCardRecordService {
         grantEwCardRecordMapper.updateReceiveByMask(mask,receive);
     }
 
+    @Override
+    public void updateSendNoTimeByPhone(String mobile, boolean send, EwCardSendTypeEnum sendType) {
+        grantEwCardRecordMapper.updateSendNoTimeByPhone(mobile,send,sendType);
+    }
+
 }

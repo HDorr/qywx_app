@@ -46,6 +46,17 @@ public interface GrantEwCardRecordMapper {
 
 
     /**
+     * 根据手机号码修改发送状态(不包括发送时间。)
+     *
+     * @param phone
+     * @param send
+     * @param sendType
+     */
+    @Update("update t_grant_ew_card_record set send = #{send} where phone = #{phone} and src_type = #{sendType}")
+    void updateSendNoTimeByPhone(@Param("phone") String phone, @Param("send") boolean send,@Param("sendType") EwCardSendTypeEnum sendType);
+
+
+    /**
      * 增加掩码发放记录
      * @param mobile
      * @param mask
@@ -142,4 +153,6 @@ public interface GrantEwCardRecordMapper {
      */
     @Update("update t_grant_ew_card_record set receive = #{receive} where mask = #{mask}")
     void updateReceiveByMask(@Param("mask") String mask,@Param("receive") boolean receive);
+
+
 }

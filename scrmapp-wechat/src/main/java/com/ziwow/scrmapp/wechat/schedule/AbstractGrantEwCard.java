@@ -50,6 +50,8 @@ public abstract class AbstractGrantEwCard extends IJobHandler {
             if (grantEwCardRecordService.selectReceiveRecordByPhone(mobile)){
                 logger.error("该手机号已发放,手机号码为{}",mobile);
                 XxlJobLogger.log("该手机号已发放,手机号码为{}",mobile);
+                //修改发送标识，但是不加发送时间(用以区分)
+                grantEwCardRecordService.updateSendNoTimeByPhone(mobile,true,sendType);
                 return false;
             }
             if (wechatUserService.getUserByMobilePhone(mobile) != null){
