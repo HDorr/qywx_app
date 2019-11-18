@@ -141,19 +141,55 @@ public class ThirdPartyServiceImpl implements ThirdPartyService {
     }
 
     @Override
-    public EwCardVo getEwCardListByNo(String cardNo){
+    public QueryNoEwCardVo getEwCardListByNo(String cardNo){
         LOG.info("第三方CSM系统根据卡号查询延保卡,cardNo:[{}]", cardNo);
-        EwCardVo ewCardVo = null;
+        QueryNoEwCardVo ewCardVo = null;
         try {
-            final String s = restTemplate.postForObject(queryEwCardUrl, JsonUtil.object2Json(ImmutableMap.of("card_no",cardNo,"mobile","")), String.class);
+            final String s = restTemplate.postForObject(queryEwCardUrl, JsonUtil.object2Json(ImmutableMap.of("card_no",cardNo,"mobile","","barcode","")), String.class);
             LOG.info("第三方CSM系统根据卡号查询延保卡,收到csm的数据:[{}]",s);
-            ewCardVo = JsonUtil.json2Object(s, EwCardVo.class);
+            ewCardVo = JsonUtil.json2Object(s, QueryNoEwCardVo.class);
         } catch (IOException e) {
             throw new ThirdException("调用第三方CSM系统根据卡号查询延保卡失败","查询延保卡失败，请稍后再试",e);
         } catch (Exception e) {
             throw new ThirdException("调用第三方CSM系统根据卡号查询延保卡失败","查询延保卡失败，请稍后再试",e);
         }
         return ewCardVo;
+    }
+
+    @Override
+    public QueryBarCodeEwCardVo getBindPhoneAndCardByBarcode(String barcode){
+        LOG.info("第三方CSM系统根据条码查询对应延保卡和手机号,barcode:[{}]", barcode);
+        QueryBarCodeEwCardVo ewCardVo = null;
+        try {
+            String s = restTemplate.postForObject(queryEwCardUrl, JsonUtil.object2Json(ImmutableMap.of("card_no","","mobile","","barcode",barcode)), String.class);
+            LOG.info("第三方CSM系统根据条码查询延保卡,收到csm的数据:[{}]",s);
+            if (s.contains("[")){
+                s = getStringBuilder(s).toString();
+            }
+            ewCardVo = JsonUtil.json2Object(s, QueryBarCodeEwCardVo.class);
+        } catch (IOException e) {
+            throw new ThirdException("调用第三方CSM系统根据卡号查询延保卡失败","查询延保卡失败，请稍后再试",e);
+        } catch (Exception e) {
+            throw new ThirdException("调用第三方CSM系统根据卡号查询延保卡失败","查询延保卡失败，请稍后再试",e);
+        }
+        return ewCardVo;
+    }
+
+    /**
+     * 处理带  items:"[]”  去掉 "
+     * @param s
+     * @return
+     */
+    private StringBuilder getStringBuilder(String s) {
+        final String trim = s.trim();
+        final String remove = StringUtils.remove(trim, "\\");
+        System.out.println("remove = " + remove);
+        final StringBuilder stringBuilder = new StringBuilder(remove);
+        final int i = remove.indexOf("\"items\":")+8;
+        stringBuilder.replace(i,i+1,"");
+        final int j = remove.indexOf("]");
+        stringBuilder.replace(j,j+1,"");
+        return stringBuilder;
     }
 
 

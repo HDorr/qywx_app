@@ -104,4 +104,19 @@ public interface GrantEwCardRecordService {
      * @param receive
      */
     void updateReceiveByMask(String phone, boolean receive);
+
+    /**
+     * 根据手机号修改发送状态
+     * @param mobile
+     * @param send
+     * @param sendType
+     */
+    void updateSendNoTimeByPhone(String mobile, boolean send, EwCardSendTypeEnum sendType);
+
+    /**
+     * 判断手机号是否是完工送过的
+     * @param mobile
+     * @return
+     */
+    boolean isGrantCard(String mobile);
 }

@@ -3,9 +3,10 @@ package com.ziwow.scrmapp.wechat.persistence.entity;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.ziwow.scrmapp.common.enums.EwCardStatus;
 import com.ziwow.scrmapp.common.enums.Guarantee;
+import org.apache.commons.lang.builder.EqualsBuilder;
+import org.apache.commons.lang.builder.HashCodeBuilder;
 
 import java.util.Date;
 import java.util.List;
@@ -17,6 +18,7 @@ import java.util.List;
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class EwCard {
+
 
 
     /**
@@ -175,5 +177,28 @@ public class EwCard {
 
     public void setEwCardItems(List<EwCardItems> ewCardItems) {
         this.ewCardItems = ewCardItems;
+    }
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+
+        if (!(o instanceof EwCard)) return false;
+
+        EwCard ewCard = (EwCard) o;
+
+        return new EqualsBuilder()
+                .append(fansId, ewCard.fansId)
+                .append(cardNo, ewCard.cardNo)
+                .isEquals();
+    }
+
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder(17, 37)
+                .append(fansId)
+                .append(cardNo)
+                .toHashCode();
     }
 }
