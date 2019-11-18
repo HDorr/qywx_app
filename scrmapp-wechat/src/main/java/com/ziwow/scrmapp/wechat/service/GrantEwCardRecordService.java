@@ -112,4 +112,11 @@ public interface GrantEwCardRecordService {
      * @param sendType
      */
     void updateSendNoTimeByPhone(String mobile, boolean send, EwCardSendTypeEnum sendType);
+
+    /**
+     * 判断手机号是否是完工送过的
+     * @param mobile
+     * @return
+     */
+    boolean isGrantCard(String mobile);
 }

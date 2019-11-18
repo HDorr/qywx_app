@@ -87,4 +87,9 @@ public class GrantEwCardRecordServiceImpl implements GrantEwCardRecordService {
         grantEwCardRecordMapper.updateSendNoTimeByPhone(mobile,send,sendType);
     }
 
+    @Override
+    public boolean isGrantCard(String mobile) {
+        return grantEwCardRecordMapper.selectOrderRecordByPhone(mobile) == null ? false : true;
+    }
+
 }

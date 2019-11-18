@@ -155,4 +155,11 @@ public interface GrantEwCardRecordMapper {
     void updateReceiveByMask(@Param("mask") String mask,@Param("receive") boolean receive);
 
 
+    /**
+     * 判断手机号是否是完工送过的
+     * @param mobile
+     * @return
+     */
+    @Select("select id from t_grant_ew_card_record where  phone = #{phone} and send = true and src_type = 'ORDER' limit 1")
+    Long selectOrderRecordByPhone(@Param("phone") String mobile);
 }

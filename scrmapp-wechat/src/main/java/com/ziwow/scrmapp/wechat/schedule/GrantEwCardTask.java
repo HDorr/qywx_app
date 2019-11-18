@@ -6,6 +6,7 @@ import com.xxl.job.core.log.XxlJobLogger;
 import com.ziwow.scrmapp.common.enums.EwCardSendTypeEnum;
 import com.ziwow.scrmapp.wechat.persistence.entity.EwCardSendType;
 import com.ziwow.scrmapp.wechat.persistence.entity.GrantEwCardRecord;
+import com.ziwow.scrmapp.wechat.service.ConfigService;
 import com.ziwow.scrmapp.wechat.service.GrantEwCardRecordService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,9 +32,14 @@ public class GrantEwCardTask extends AbstractGrantEwCard{
     @Autowired
     private GrantEwCardRecordService grantEwCardRecordService;
 
+    @Autowired
+    private ConfigService configService;
+
     private volatile boolean flag = true;
 
     private HashMap<String, EwCardSendType> params = new HashMap<>();
+
+
 
     @PostConstruct
     private void InitParams(){
@@ -50,6 +56,8 @@ public class GrantEwCardTask extends AbstractGrantEwCard{
         final EwCardSendType ewCardSendType = params.get(str[1]);
         final AtomicInteger num = new AtomicInteger(0);
 
+        final List<String> filterPhones = (List)configService.getConfig("grant_filter_list").get("phone");
+
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
@@ -57,7 +65,7 @@ public class GrantEwCardTask extends AbstractGrantEwCard{
                 XxlJobLogger.log("延保卡查询总数:{}",records.size());
                 for (GrantEwCardRecord record : records) {
                     if (flag && total>num.intValue()){
-                        final boolean grant = grantEwCard(record.getPhone(), record.getType(), ewCardSendType.getMsg(),ewCardSendType.getType());
+                        final boolean grant = grantEwCard(record.getPhone(), record.getType(), ewCardSendType.getMsg(),ewCardSendType.getType(),filterPhones);
                         if (grant) {
                             grantEwCardRecordService.updateSendByPhone(record.getPhone(), true,ewCardSendType.getType());
                             XxlJobLogger.log("已发放{}张延保卡",num.addAndGet(1));
