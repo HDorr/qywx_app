@@ -148,7 +148,7 @@ public class WechatController {
             return result;
         }
         final List<String> filterPhones = (List)configService.getConfig("grant_filter_list").get("phone");
-        if (phones.contains(mobile) && grantEwCardRecordService.selectReceiveRecordByPhone(mobile)) {
+        if (filterPhones.contains(mobile) && grantEwCardRecordService.selectReceiveRecordByPhone(mobile)) {
             logger.error("该手机号已发放，手机号码为:{}", mobile);
             result.setReturnMsg("该手机号已发放");
             result.setReturnCode(Constant.FAIL);
