@@ -52,7 +52,7 @@ public interface GrantEwCardRecordMapper {
      * @param send
      * @param sendType
      */
-    @Update("update t_grant_ew_card_record set send = #{send} where phone = #{phone} and src_type = #{sendType}")
+    @Update("update t_grant_ew_card_record set send = #{send} where phone = #{phone} and src_type = #{sendType} and send = 0")
     void updateSendNoTimeByPhone(@Param("phone") String phone, @Param("send") boolean send,@Param("sendType") EwCardSendTypeEnum sendType);
 
 
