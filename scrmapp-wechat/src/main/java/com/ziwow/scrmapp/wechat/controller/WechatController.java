@@ -119,6 +119,10 @@ public class WechatController {
     private boolean stop;
 
     @Autowired
+    private ConfigService configService;
+
+
+    @Autowired
     private GrantEwCardRecordService grantEwCardRecordService;
 
     @RequestMapping(value = "grant_ew_card", method = RequestMethod.GET)
@@ -143,7 +147,8 @@ public class WechatController {
             result.setReturnCode(Constant.FAIL);
             return result;
         }
-        if (grantEwCardRecordService.selectReceiveRecordByPhone(mobile)) {
+        final List<String> filterPhones = (List)configService.getConfig("grant_filter_list").get("phone");
+        if (phones.contains(mobile) && grantEwCardRecordService.selectReceiveRecordByPhone(mobile)) {
             logger.error("该手机号已发放，手机号码为:{}", mobile);
             result.setReturnMsg("该手机号已发放");
             result.setReturnCode(Constant.FAIL);

@@ -32,9 +32,6 @@ public class GrantEwCardTask extends AbstractGrantEwCard{
     @Autowired
     private GrantEwCardRecordService grantEwCardRecordService;
 
-    @Autowired
-    private ConfigService configService;
-
     private volatile boolean flag = true;
 
     private HashMap<String, EwCardSendType> params = new HashMap<>();
@@ -56,8 +53,6 @@ public class GrantEwCardTask extends AbstractGrantEwCard{
         final EwCardSendType ewCardSendType = params.get(str[1]);
         final AtomicInteger num = new AtomicInteger(0);
 
-        final List<String> filterPhones = (List)configService.getConfig("grant_filter_list").get("phone");
-
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
@@ -65,7 +60,7 @@ public class GrantEwCardTask extends AbstractGrantEwCard{
                 XxlJobLogger.log("延保卡查询总数:{}",records.size());
                 for (GrantEwCardRecord record : records) {
                     if (flag && total>num.intValue()){
-                        final boolean grant = grantEwCard(record.getPhone(), record.getType(), ewCardSendType.getMsg(),ewCardSendType.getType(),filterPhones);
+                        final boolean grant = grantEwCard(record.getPhone(), record.getType(), ewCardSendType.getMsg(),ewCardSendType.getType());
                         if (grant) {
                             grantEwCardRecordService.updateSendByPhone(record.getPhone(), true,ewCardSendType.getType());
                             XxlJobLogger.log("已发放{}张延保卡",num.addAndGet(1));

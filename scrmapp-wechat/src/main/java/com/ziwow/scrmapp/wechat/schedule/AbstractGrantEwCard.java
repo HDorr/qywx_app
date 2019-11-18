@@ -40,7 +40,7 @@ public abstract class AbstractGrantEwCard extends IJobHandler {
     private WechatUserService wechatUserService;
 
     @Transactional(rollbackFor = Exception.class)
-    public boolean grantEwCard(String mobile, EwCardTypeEnum type, String msg, EwCardSendTypeEnum sendType, List<String> phones){
+    public boolean grantEwCard(String mobile, EwCardTypeEnum type, String msg, EwCardSendTypeEnum sendType){
         String cardNo = ewCardActivityService.selectCardNo(type);
         if (cardNo == null){
             logger.error("延保卡资源不足,手机号码为{}",mobile);
@@ -61,7 +61,7 @@ public abstract class AbstractGrantEwCard extends IJobHandler {
                 return false;
             }
         }else {
-            if (phones.contains(mobile) && grantEwCardRecordService.isGrantCard(mobile)){
+            if (grantEwCardRecordService.isGrantCard(mobile)){
                 logger.error("赠送延保卡，该用户已经完工发放过，手机号码为:{}",mobile);
                 System.out.println("赠送延保卡，该用户已经完工发放过，手机号码为 = " + mobile);
                 XxlJobLogger.log("赠送延保卡，该用户已经完工发放过:{}",mobile);
