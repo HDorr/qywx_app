@@ -494,6 +494,7 @@ var confirmModal = {
         '<div style="border:1px solid #000">' +
         '<select>' +
         '<option value="请选择原因">请选择原因</option>'+
+        '<option value="客户放弃安装">客户放弃安装</option>'+
         '<option value="装修或未入住">装修或未入住</option>'+
         '<option value="促销提前购买">促销提前购买</option>'+
         '<option value="客户自装">客户自装</option>'+
@@ -502,7 +503,6 @@ var confirmModal = {
         '<option value="退换货，暂不安装">退换货，暂不安装</option>'+
         '<option value="无法联系到用户（3次以上）">无法联系到用户（3次以上）</option>'+
         '<option value="派错单">派错单</option>'+
-        '<option value="其他">其他</option>'+
         '</select>' +
         '</div>' +
         '</div>' +
@@ -524,13 +524,13 @@ var confirmModal = {
         '<div style="border:1px solid #000">' +
         '<select>' +
         '<option value="请选择原因">请选择原因</option>'+
+        '<option value="客户放弃维修">客户放弃维修</option>'+
         '<option value="退换货，不维修">退换货，不维修</option>'+
         '<option value="重复预约（重单）">重复预约（重单）</option>'+
         '<option value="客户自行维修">客户自行维修</option>'+
         '<option value="机器恢复正常">机器恢复正常</option>'+
         '<option value="无法联系到用户（3次以上）">无法联系到用户（3次以上）</option>'+
         '<option value="派错单">派错单</option>'+
-        '<option value="其他">其他</option>'+
         '</select>' +
         '</div>' +
         '</div>' +
@@ -552,13 +552,13 @@ var confirmModal = {
         '<div style="border:1px solid #000">' +
         '<select>' +
         '<option value="请选择原因">请选择原因</option>'+
+        '<option value="客户放弃保养">客户放弃保养</option>'+
         '<option value="退换货，不保养">退换货，不保养</option>'+
         '<option value="重复预约（重单）">重复预约（重单）</option>'+
         '<option value="客户自行保养">客户自行保养</option>'+
         '<option value="邮寄滤芯">邮寄滤芯</option>'+
         '<option value="无法联系到用户（3次以上）">无法联系到用户（3次以上）</option>'+
         '<option value="派错单">派错单</option>'+
-        '<option value="其他">其他</option>'+
         '</select>' +
         '</div>' +
         '</div>' +
