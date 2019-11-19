@@ -20,7 +20,7 @@ public interface ThirdPartyService {
 	 * @param cardNo
 	 * @return
 	 */
-	EwCardVo getEwCardListByNo(String cardNo);
+	QueryNoEwCardVo getEwCardListByNo(String cardNo);
 
 
 	/**
@@ -42,6 +42,15 @@ public interface ThirdPartyService {
 	 * @return
 	 */
 	String getPurchDate(String productBarCode);
+
+	/**
+	 * 根据条码查询用户绑定手机号和延保信息
+	 * @param barcode
+	 * @return
+	 */
+	QueryBarCodeEwCardVo getBindPhoneAndCardByBarcode(String barcode);
+
+
 
 	public ProductItem getProductItem(ProductParam productParam);
 	public List<ProductItem> getProductList(String itemCodes);
