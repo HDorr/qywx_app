@@ -24,13 +24,13 @@
                     <p>防伪验证</p>
                 </a>
             </li>
-            <li class="flex-item">
-                <%--<a href="${maintainUrl}">--%>
-                <a >
-                    <img src="${f_ctxpath}/resources/images/bindProduct/orderMantainance_gray.png">
-                    <p style="color:#b3b3b3">产品说明书</p>
-                </a>
-            </li>
+            <%--<li class="flex-item">--%>
+                <%--&lt;%&ndash;<a href="${maintainUrl}">&ndash;%&gt;--%>
+                <%--<a >--%>
+                    <%--<img src="${f_ctxpath}/resources/images/bindProduct/orderMantainance_gray.png">--%>
+                    <%--<p style="color:#b3b3b3">产品说明书</p>--%>
+                <%--</a>--%>
+            <%--</li>--%>
 
             <li class="flex-item">
                 <a href="javascript:;" id="install">

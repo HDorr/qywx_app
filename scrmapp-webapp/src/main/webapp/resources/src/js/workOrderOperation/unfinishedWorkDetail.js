@@ -199,6 +199,7 @@ function changeOrderAction() {
                 text: "确认更改预约为<br/>" + updateTime + "?",
                 tip: "友情提示：<br/>更改前请跟客户协商达成一致！",
                 textArea: true,
+                orderType: 4,
                 callback: function(fn, reason) {
                     //判断textarea里的值是否为空
                     var text = reason.trim();
