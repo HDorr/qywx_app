@@ -15,16 +15,7 @@ import com.ziwow.scrmapp.common.constants.Constant;
 import com.ziwow.scrmapp.common.constants.SystemConstants;
 import com.ziwow.scrmapp.common.enums.AppraiseEnum;
 import com.ziwow.scrmapp.common.enums.DeliveryType;
-import com.ziwow.scrmapp.common.persistence.entity.Product;
-import com.ziwow.scrmapp.common.persistence.entity.QyhUser;
-import com.ziwow.scrmapp.common.persistence.entity.QyhUserAppraisal;
-import com.ziwow.scrmapp.common.persistence.entity.QyhUserAppraisalVo;
-import com.ziwow.scrmapp.common.persistence.entity.ServiceFeeProduct;
-import com.ziwow.scrmapp.common.persistence.entity.SmsMarketing;
-import com.ziwow.scrmapp.common.persistence.entity.WechatOrderAppraise;
-import com.ziwow.scrmapp.common.persistence.entity.WechatOrderServiceFee;
-import com.ziwow.scrmapp.common.persistence.entity.WechatOrders;
-import com.ziwow.scrmapp.common.persistence.entity.WechatOrdersRecord;
+import com.ziwow.scrmapp.common.persistence.entity.*;
 import com.ziwow.scrmapp.common.result.BaseResult;
 import com.ziwow.scrmapp.common.result.Result;
 import com.ziwow.scrmapp.common.service.MobileService;
@@ -1131,8 +1122,9 @@ public class WechatOrdersController {
                             orderType = wechatOrders.getOrderType();
                             break;
                     }
-                    //发送评价积分
-                    grantPointService.grantOrderComment(userId, ordersCode, orderType);
+
+                    grantPointService.grantOrderComment(userId, ordersCode, orderType,
+                            new ServiceComment(attitude,profession,wechatOrderAppraise.getContent(),wechatOrders.getCreateTime()));
 
                 } else {
                     throw new SQLException("qyhUserAppraisalVo:" + JSONObject.toJSONString(qyhUserAppraisalVo));

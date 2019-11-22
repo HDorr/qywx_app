@@ -447,6 +447,32 @@
         AND opr.orderId = #{ordersId}
     </select>
 
+    <select id="selectByOrdersCode" resultType="com.ziwow.scrmapp.common.bean.vo.ProductVo"
+            parameterType="java.lang.String">
+        SELECT
+        p.id as productId,
+        p.productName AS productName,
+        p.productCode AS productCode,
+        p.productBarCode AS productBarCode,
+        p.modelName AS modelName,
+        p.typeName AS typeName,
+        p.levelId as levelId,
+        p.itemKind as itemKind,
+        p.o2o,
+        p.buyTime,
+        p.shoppingOrder,
+        p.buyChannel,
+        p.saleType,
+        p.productBarCodeTwenty,
+        opr.status
+        FROM t_product as p
+        inner join t_orders_pro_relations opr on p.id = opr.productId
+        inner join t_wechat_orders o on opr.orderId = o.id
+        WHERE
+        opr.productId = p.id
+        AND o.ordersCode = #{ordersCode}
+    </select>
+
     <select id="getProductInfoById" parameterType="java.util.List" resultType="com.ziwow.scrmapp.common.bean.vo.ProductVo">
         SELECT
         id as productId,

@@ -42,6 +42,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -455,7 +456,8 @@ public class QyhUserController {
             // 发送模板消息
             sendTemplate(completeParam);
             //调用服务号发积分方法,
-            grantPoint(ordersCode, PointConstant.INSTALL,1);
+            logger.info("预约安装完工发放积分！ordersCode = [{}]",ordersCode);
+            grantPoint(ordersCode, PointConstant.INSTALL,1,wechatOrdersMapper.getWechatOrdersVoByCode(ordersCode).getCreateTime());
 
 
         } catch (RuntimeException ex) {
@@ -515,11 +517,8 @@ public class QyhUserController {
             //如果产品状态全部为取消或完工,则工单算作完工状态,发送短信和消息模板
             if (qyhOrdersService.isFinish(qyhProductService.getAllStatus(completeParam.getOrdersId()))) {
                 sendTemplate(completeParam);
-                // 产品状态全部为已完工时，才能发放积分
-                if(qyhOrdersService.isNormaFinish(qyhProductService.getAllStatus(completeParam.getOrdersId()))){
-                    logger.info("维修单正常完工发送积分！ordersCode = [{}]",ordersCode);
-                    grantPoint(ordersCode,PointConstant.REPAIR,2);
-                }
+                logger.info("预约维修完工发放积分！ordersCode = [{}]",ordersCode);
+                grantPoint(ordersCode,PointConstant.REPAIR,2,wechatOrdersMapper.getWechatOrdersVoByCode(ordersCode).getCreateTime());
             }
 
         } catch (RuntimeException ex) {
@@ -582,7 +581,10 @@ public class QyhUserController {
             qyhOrdersService.finishMakeAppointment(completeParam.getOrdersCode());
             Integer orderType = wechatOrdersMapper.getParamByOrdersCode(ordersCode).getMaintType() == 1
                     ? 4 : 3 ;
-            grantPoint(ordersCode, PointConstant.FILTER,orderType);
+            Date createTime = wechatOrdersMapper.getWechatOrdersVoByCode(ordersCode).getCreateTime();
+            String path = (orderType == 4) ? PointConstant.FILTER:PointConstant.WASH;
+            logger.info("预约保养完工发放积分！ordersCode = [{}]",ordersCode);
+            grantPoint(ordersCode, path,orderType,createTime);
         } catch (RuntimeException ex) {
             logger.error("师傅点击工单[{}]完工操作出现异常,原因:[{}]", ordersCode, ex);
             result.setReturnCode(Constant.FAIL);
@@ -1097,13 +1099,14 @@ public class QyhUserController {
     /**
      * 内部调用发积分
      */
-    private void grantPoint(String ordersCode,String path,Integer orderType){
+    private void grantPoint(String ordersCode, String path, Integer orderType, Date createTime){
         WechatOrderVo wechatOrdersVoByCode = wechatOrdersMapper
             .getWechatOrdersVoByCode(ordersCode);
         Map<String,Object> params = new HashMap<String,Object>();
         if(null!=wechatOrdersVoByCode){
             params.put("userId",wechatOrdersVoByCode.getUserId());
             params.put("ordersCode",ordersCode);
+            params.put("createTime",createTime);
             if(null!=orderType){
                 params.put("orderType",orderType);
             }

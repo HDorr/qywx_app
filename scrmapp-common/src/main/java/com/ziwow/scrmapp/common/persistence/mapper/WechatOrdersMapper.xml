@@ -358,7 +358,9 @@
     where id = #{id,jdbcType=BIGINT}
   </update>
     <select id="getWechatOrdersVoByCode" parameterType="java.lang.String" resultMap="BaseResultMapVo">
-        select o.id,o.ordersCode,o.ordersNo,o.orderType,o.orderTime,o.userId,o.qyhUserId,a.attitude,a.profession,a.integrity,a.recommend,a.is_order,a.is_repair,o.status,o.contacts,o.contactsMobile,o.province,o.city,o.area,o.address
+        select o.id,o.ordersCode,o.ordersNo,o.orderType,o.orderTime,o.userId,o.qyhUserId,a.attitude,
+        a.profession,a.integrity,a.recommend,a.is_order,a.is_repair,o.status,o.contacts,
+        o.contactsMobile,o.province,o.city,o.area,o.address,o.createTime
         FROM
         t_wechat_orders o
         left join t_qyh_user_appraisal a

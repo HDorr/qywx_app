@@ -51,6 +51,8 @@ public interface ProductMapper {
 
     List<ProductVo> selectByOrdersId(Long ordersId);
 
+    List<ProductVo> selectByOrdersCode(@Param("ordersCode") String ordersCode);
+
     List<ProductVo> selectByOrdersIds(Long[] ordersIds);
 
     List<ProductFinishVo> getFinishedOrdersDetail(Long ordersId);

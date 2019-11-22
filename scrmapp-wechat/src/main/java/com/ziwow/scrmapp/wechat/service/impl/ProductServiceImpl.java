@@ -767,6 +767,11 @@ public class ProductServiceImpl implements ProductService {
         return productMapper.selectByOrdersId(orderId);
     }
 
+    @Override
+    public List<com.ziwow.scrmapp.common.bean.vo.ProductVo> selectByOrdersCode(String ordersCode){
+        return productMapper.selectByOrdersCode(ordersCode);
+    }
+
     @Async
     @Override
     public void syncProdBindToMiniApp(String userId, String productCode, boolean isFirst, String productBarcode) {

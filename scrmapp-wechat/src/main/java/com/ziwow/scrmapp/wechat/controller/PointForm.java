@@ -1,5 +1,7 @@
 package com.ziwow.scrmapp.wechat.controller;
 
+import java.util.Date;
+
 /**
  * User: wangdong
  * Date: 19-6-11.
@@ -11,6 +13,15 @@ public class PointForm {
   private String userId;
   private String ordersCode;
   private Integer orderType;
+  private Date createTime;
+
+  public Date getCreateTime() {
+    return createTime;
+  }
+
+  public void setCreateTime(Date createTime) {
+    this.createTime = createTime;
+  }
 
   public String getUserId() {
     return userId;
