@@ -1,5 +1,6 @@
 package com.ziwow.scrmapp.common.bean.pojo;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.ziwow.scrmapp.common.bean.vo.csm.DispatchDotProductVo;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -30,6 +31,12 @@ public class DispatchDotParam implements Serializable {
     private String ordersTime;      // 预约时间format（yyyy-MM-dd 12:00-14:00）
     // 产品相关
     private List<DispatchDotProductVo> products;
+
+    /**
+     * 商城订单号
+     */
+    @JsonProperty("net_sale_no")
+    private String netSaleNo;
 
     public String getTimeStamp() {
         return timeStamp;
@@ -149,5 +156,13 @@ public class DispatchDotParam implements Serializable {
 
     public void setOrdersTime(String ordersTime) {
         this.ordersTime = ordersTime;
+    }
+
+    public String getNetSaleNo() {
+        return netSaleNo;
+    }
+
+    public void setNetSaleNo(String netSaleNo) {
+        this.netSaleNo = netSaleNo;
     }
 }

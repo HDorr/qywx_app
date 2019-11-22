@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.text.MessageFormat;
+import java.util.List;
 
 /**
  * @author songkaiqi
@@ -50,11 +51,22 @@ public abstract class AbstractGrantEwCard extends IJobHandler {
             if (grantEwCardRecordService.selectReceiveRecordByPhone(mobile)){
                 logger.error("该手机号已发放,手机号码为{}",mobile);
                 XxlJobLogger.log("该手机号已发放,手机号码为{}",mobile);
+                //修改发送标识，但是不加发送时间(用以区分)
+                grantEwCardRecordService.updateSendNoTimeByPhone(mobile,true,sendType);
                 return false;
             }
             if (wechatUserService.getUserByMobilePhone(mobile) != null){
                 logger.error("该用户是微信会员，手机号码为:{}",mobile);
                 XxlJobLogger.log("该用户是微信会员，手机号码为:{}",mobile);
+                //修改发送标识，但是不加发送时间(用以区分)
+                grantEwCardRecordService.updateSendNoTimeByPhone(mobile,true,sendType);
+                return false;
+            }
+        }else {
+            if (grantEwCardRecordService.isGrantCard(mobile)){
+                logger.error("赠送延保卡，该用户已经完工发放过，手机号码为:{}",mobile);
+                System.out.println("赠送延保卡，该用户已经完工发放过，手机号码为 = " + mobile);
+                XxlJobLogger.log("赠送延保卡，该用户已经完工发放过:{}",mobile);
                 return false;
             }
         }

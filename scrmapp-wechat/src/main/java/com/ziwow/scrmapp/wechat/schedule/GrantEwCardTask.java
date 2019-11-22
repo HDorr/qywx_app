@@ -6,6 +6,7 @@ import com.xxl.job.core.log.XxlJobLogger;
 import com.ziwow.scrmapp.common.enums.EwCardSendTypeEnum;
 import com.ziwow.scrmapp.wechat.persistence.entity.EwCardSendType;
 import com.ziwow.scrmapp.wechat.persistence.entity.GrantEwCardRecord;
+import com.ziwow.scrmapp.wechat.service.ConfigService;
 import com.ziwow.scrmapp.wechat.service.GrantEwCardRecordService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,6 +35,8 @@ public class GrantEwCardTask extends AbstractGrantEwCard{
     private volatile boolean flag = true;
 
     private HashMap<String, EwCardSendType> params = new HashMap<>();
+
+
 
     @PostConstruct
     private void InitParams(){

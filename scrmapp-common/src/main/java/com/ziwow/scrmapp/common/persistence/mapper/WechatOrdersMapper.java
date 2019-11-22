@@ -82,4 +82,12 @@ public interface WechatOrdersMapper {
     List<WechatOrdersVo> pageOrdersByUserId(@Param("userId") String userId, @Param("page") Page page);
 
     long selectCountByUserId(@Param("userId") String userId);
+
+    /**
+     * 根据code查询id
+     * @param orderCode
+     * @return
+     */
+    long getIdByCode(@Param("orderCode") String orderCode);
+
 }

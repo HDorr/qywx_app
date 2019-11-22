@@ -35,7 +35,7 @@ public interface EwCardMapper {
      * @param fansId
      * @return
      */
-    List<EwCard> selectEwCardByFansId(@Param("fansId") Long fansId);
+    Set<EwCard> selectEwCardByFansId(@Param("fansId") Long fansId);
 
     /**
      * 根据类型名称和fansId查询延保卡
@@ -76,7 +76,7 @@ public interface EwCardMapper {
      * @param cardIds
      * @return
      */
-    List<EwCard> selectEwCardByCardIds(@Param("cardIds") List<Long> cardIds);
+    Set<EwCard> selectEwCardByCardIds(@Param("cardIds") List<Long> cardIds);
 
     /**
      * 插入延保
@@ -142,4 +142,10 @@ public interface EwCardMapper {
      */
     @Select("select id from t_ew_card where card_no = #{cardNo}")
     Long loadEwCardByNo(@Param("cardNo") String cardNo);
+
+    /**
+     * 保存全参数的延保卡
+     * @param ewCard
+     */
+    void saveCompleteEwCard(EwCard ewCard);
 }

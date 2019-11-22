@@ -43,7 +43,7 @@ public class EwCardServiceImpl implements EwCardService {
     }
 
     @Override
-    public List<EwCard> selectEwCardByFansId(Long fansId) {
+    public Set<EwCard> selectEwCardByFansId(Long fansId) {
         return ewCardMapper.selectEwCardByFansId(fansId);
     }
 
@@ -73,10 +73,10 @@ public class EwCardServiceImpl implements EwCardService {
     }
 
     @Override
-    public List<EwCard> selectEwCardByProductCode(String productCode, Long id) {
+    public Set<EwCard> selectEwCardByProductCode(String productCode, Long id) {
         final List<Long> cardIds = ewCardMapper.selectEwCardIdByCodeAndFansId(productCode, id);
         if (CollectionUtils.isEmpty(cardIds)) {
-            return Collections.EMPTY_LIST;
+            return Collections.EMPTY_SET;
         } else {
             return ewCardMapper.selectEwCardByCardIds(cardIds);
         }
@@ -110,6 +110,11 @@ public class EwCardServiceImpl implements EwCardService {
     @Override
     public Long loadByNo(String cardNo) {
         return ewCardMapper.loadEwCardByNo(cardNo);
+    }
+
+    @Override
+    public void saveEwCard(EwCard ewCard) {
+        ewCardMapper.saveCompleteEwCard(ewCard);
     }
 
 }
