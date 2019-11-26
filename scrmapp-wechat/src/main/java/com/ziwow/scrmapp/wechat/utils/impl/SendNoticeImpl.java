@@ -35,12 +35,17 @@ public class SendNoticeImpl implements SendNotice {
     @Override
     public boolean sendNotice(String title, String remark, String type, List<String> param, String phone) {
         if (noticeRosterService.isIncludeByPhone(phone)){
-            XxlJobLogger.log("该用户已经发放过通知了,手机号为：[]",phone);
+            XxlJobLogger.log("该用户已经发放过通知了,手机号为：[{}]",phone);
             return false;
         }
-        final WechatUser user = wechatUserService.getUserByMobilePhone(phone);
-        final WechatFans fans = wechatFansService.getWechatFansById(user.getWfId());
-        wechatTemplateService.sendTemplate(fans.getOpenId(),"",param,type,true,title,remark);
-        return false;
+        try {
+            final WechatUser user = wechatUserService.getUserByMobilePhone(phone);
+            final WechatFans fans = wechatFansService.getWechatFansById(user.getWfId());
+            wechatTemplateService.sendTemplate(fans.getOpenId(),"",param,type,true,title,remark);
+        } catch (Exception e) {
+            XxlJobLogger.log("发放通知失败，手机号：{}，错误：{}",phone,title);
+            return false;
+        }
+        return true;
     }
 }

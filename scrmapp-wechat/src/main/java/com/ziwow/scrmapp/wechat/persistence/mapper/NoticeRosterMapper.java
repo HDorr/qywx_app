@@ -23,6 +23,7 @@ public interface NoticeRosterMapper {
             @Result(column="id", property="id"),
             @Result(column="phone", property="phone"),
             @Result(column="buy_time", property="buyTime"),
+            @Result(column="product_code", property="productCode"),
             @Result(column="proper_type", property="properType")
     })
     @Select("select id,phone,buy_time,proper_type,product_code from t_notice_roster where send = 0 and proper_type = #{crowd}")
