@@ -48,7 +48,8 @@ public class SendNoticeRosterTask extends IJobHandler {
         List<NoticeRoster> list = noticeRosterService.queryByType(serviceSubscribeCrowd);
         //符合类型的消息消息通知
         final Map<String, String> map = notice.get(split[1]);
-
+        //符合清洗的人群类型
+        final List<String> clean = (List)configService.getConfig("filter_warn_class").get("clean");
         //发放
         AtomicInteger sum = new AtomicInteger(0);
         for (NoticeRoster noticeRoster : list) {
@@ -56,9 +57,9 @@ public class SendNoticeRosterTask extends IJobHandler {
                 //发放
                 try {
                     List<String> param = new ArrayList<>(2);
-                    param.add(noticeRoster.getBuyTime() == null ? "" : DateFormatUtils.format(noticeRoster.getBuyTime(),"YYYY年MM月dd日"));
                     param.add(noticeRoster.getProductCode());
-                    final boolean send = sendNotice.sendNotice(map.get("title"),map.get("remark"), "expirationReminderTemplate" ,param,noticeRoster.getPhone());
+                    param.add(noticeRoster.getBuyTime() == null ? "" : DateFormatUtils.format(noticeRoster.getBuyTime(),"YYYY年MM月dd日"));
+                    final boolean send = sendNotice.sendNotice(map.get("title"),map.get("remark"), "expirationReminderTemplate" ,param,noticeRoster.getPhone(),clean.contains(split[1]));
                     if (send){
                         //修改发放标记
                         noticeRosterService.updateSendById(noticeRoster.getId());

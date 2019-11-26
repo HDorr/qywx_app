@@ -15,8 +15,9 @@ public interface SendNotice {
      * @param type
      * @param param
      * @param phone
+     * @param isClean 是否是清洗
      * @return
      */
-    boolean sendNotice(String title, String remark, String type, List<String> param, String phone);
+    boolean sendNotice(String title, String remark, String type, List<String> param, String phone,boolean isClean);
 
 }
