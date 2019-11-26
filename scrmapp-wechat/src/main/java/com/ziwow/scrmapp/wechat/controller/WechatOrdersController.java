@@ -259,7 +259,7 @@ public class WechatOrdersController {
             final String properType = (String) noticeRosterService.queryIdAndTypeByPhone(wechatUser.getMobilePhone()).get("proper_type");
             if (wechatOrdersParamExt.getDeliveryType() == DeliveryType.NORMAL){
                 if (wechatOrdersParamExt.getOrderType() == 3 && StringUtils.isNotBlank(properType) && clean.contains(properType)){
-                    wechatOrdersParamExt.setDescription(wechatOrdersParamExt.getDescription()+"/n免费保养单-长期未换芯");
+                    wechatOrdersParamExt.setDescription(wechatOrdersParamExt.getDescription()+"【免费保养单-长期未换芯】");
                     isClean = true;
                 }
             }
