@@ -26,21 +26,21 @@ public interface NoticeRosterMapper {
             @Result(column="product_code", property="productCode"),
             @Result(column="proper_type", property="properType")
     })
-    @Select("select id,phone,buy_time,proper_type,product_code from t_notice_roster where send = 0 and proper_type = #{crowd}")
+    @Select("select id,phone,buy_time,proper_type,product_code from t_notice_list where send = 0 and proper_type = #{crowd}")
     List<NoticeRoster> queryNoSendByType(@Param("crowd") ServiceSubscribeCrowd serviceSubscribeCrowd);
 
     /**
      * 根据id 修改发放标识
      * @param id
      */
-    @Update("update t_notice_roster set send_time = now() , send = 1 ,updated_at = now() where id = #{id}")
+    @Update("update t_notice_list set send_time = now() , send = 1 ,updated_at = now() where id = #{id}")
     void updateSendById(@Param("id") Long id);
 
     /**
      * 根据id 修改发放标识(无时间)
      * @param id
      */
-    @Update("update t_notice_roster set send = 1 ,updated_at = now() where id = #{id}")
+    @Update("update t_notice_list set send = 1 ,updated_at = now() where id = #{id}")
     void updateSendNoTimeById(@Param("id") Long id);
 
     /**
@@ -48,7 +48,7 @@ public interface NoticeRosterMapper {
      * @param id
      * @param handleType
      */
-    @Update("update t_notice_roster set handle = 1,handle_time = now() ,handle_type = #{handleType} ,updated_at = now()  where id = #{id}")
+    @Update("update t_notice_list set handle = 1,handle_time = now() ,handle_type = #{handleType} ,updated_at = now()  where id = #{id}")
     void updateHandleById(@Param("id") Long id, @Param("handleType") String handleType);
 
     /**
@@ -56,7 +56,7 @@ public interface NoticeRosterMapper {
      * @param mobilePhone
      * @return
      */
-    @Select("select id from t_notice_roster where phone = #{phone} and send = 1 and handle = 0 and send_time is not null limit 1")
+    @Select("select id from t_notice_list where phone = #{phone} and send = 1 and handle = 0 and send_time is not null limit 1")
     Long queryNoHandleByPhone(@Param("phone") String mobilePhone);
 
     /**
@@ -64,6 +64,6 @@ public interface NoticeRosterMapper {
      * @param mobilePhone
      * @return
      */
-    @Select("select id,proper_type from t_notice_roster where phone = #{phone} and send = 1 and handle = 0 and send_time is not null limit 1")
+    @Select("select id,proper_type from t_notice_list where phone = #{phone} and send = 1 and handle = 0 and send_time is not null limit 1")
     Map<String, Object> queryIdAndTypeByPhone(@Param("phone") String mobilePhone);
 }
