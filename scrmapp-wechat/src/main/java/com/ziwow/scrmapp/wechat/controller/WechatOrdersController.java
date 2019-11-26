@@ -36,21 +36,12 @@ import com.ziwow.scrmapp.tools.utils.CookieUtil;
 import com.ziwow.scrmapp.tools.utils.DateUtil;
 import com.ziwow.scrmapp.tools.utils.StringUtil;
 import com.ziwow.scrmapp.wechat.constants.WeChatConstants;
+import com.ziwow.scrmapp.wechat.enums.ServiceSubscribeCrowd;
 import com.ziwow.scrmapp.wechat.enums.SmsMarketingEmus.SmsTypeEnum;
 import com.ziwow.scrmapp.wechat.persistence.entity.WechatUser;
 import com.ziwow.scrmapp.wechat.schedule.SmsMarketingTask;
-import com.ziwow.scrmapp.wechat.service.FailRecordService;
-import com.ziwow.scrmapp.wechat.service.GrantPointService;
-import com.ziwow.scrmapp.wechat.service.OrdersProRelationsService;
-import com.ziwow.scrmapp.wechat.service.ProductService;
-import com.ziwow.scrmapp.wechat.service.SmsMarketingService;
-import com.ziwow.scrmapp.wechat.service.WXPayService;
-import com.ziwow.scrmapp.wechat.service.WechatFansService;
-import com.ziwow.scrmapp.wechat.service.WechatOrderServiceFeeService;
-import com.ziwow.scrmapp.wechat.service.WechatOrdersRecordService;
-import com.ziwow.scrmapp.wechat.service.WechatOrdersService;
-import com.ziwow.scrmapp.wechat.service.WechatQyhUserService;
-import com.ziwow.scrmapp.wechat.service.WechatUserService;
+import com.ziwow.scrmapp.wechat.service.*;
+import com.ziwow.scrmapp.wechat.utils.SendNotice;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -114,6 +105,10 @@ public class WechatOrdersController {
     private SmsMarketingService smsMarketingService;
     @Autowired
     private GrantPointService grantPointService;
+    @Autowired
+    private NoticeRosterService noticeRosterService;
+    @Autowired
+    private ConfigService configService;
 
 
     /**
@@ -223,7 +218,8 @@ public class WechatOrdersController {
     @ResponseBody
     public Result addWechatOrders(HttpServletRequest request, HttpServletResponse response, @RequestBody WechatOrdersParamExt wechatOrdersParamExt) {
         Result result = new BaseResult();
-
+        //滤芯清洗换芯通知记录id
+        Long noticeId;
         try {
             String userId = null;
             if (org.apache.commons.lang3.StringUtils.isBlank(wechatOrdersParamExt.getUserId())) {
@@ -243,6 +239,7 @@ public class WechatOrdersController {
                 return result;
             }
 
+
             //检查用户是否提交产品
             String productIds = wechatOrdersParamExt.getProductIds();
             if (StringUtil.isBlank(productIds)) {
@@ -252,6 +249,20 @@ public class WechatOrdersController {
             //根据productId获取产品信息(批量)
             List<ProductVo> list = wechatOrdersService.getProductInfoById(wechatOrdersParamExt.getProductIds());
             wechatOrdersParamExt.setProducts(list);
+
+            //增加发放换芯通知逻辑
+            //为正常预约保养单并且符合名单中的记录
+            final List<String> clean = (List)configService.getConfig("filter_warn_class").get("clean");
+            noticeId = (Long)noticeRosterService.queryIdAndTypeByPhone(wechatUser.getMobilePhone()).get("id");
+            boolean isClean = false;
+            //
+            final String properType = (String) noticeRosterService.queryIdAndTypeByPhone(wechatUser.getMobilePhone()).get("proper_type");
+            if (wechatOrdersParamExt.getDeliveryType() == DeliveryType.NORMAL){
+                if (wechatOrdersParamExt.getOrderType() == 3 && StringUtils.isNotBlank(properType) && clean.contains(properType)){
+                    wechatOrdersParamExt.setDescription(wechatOrdersParamExt.getDescription()+"/n免费保养单-长期未换芯");
+                    isClean = true;
+                }
+            }
 
             // 获取modelName   拼接CSM用
 //            List<String> mnList = new ArrayList<String>();
@@ -392,6 +403,7 @@ public class WechatOrdersController {
                 result.setData(webAppealNo);
                 logger.info("生成受理单,userId = [{}] , ordersCode = [{}]", userId, webAppealNo);
 
+
                 // 向沁园小程序推送预约成功
                 String scOrderItemId = wechatOrdersParamExt.getScOrderItemId();
                 String serviceFeeIds = wechatOrdersParamExt.getServiceFeeIds();
@@ -420,6 +432,10 @@ public class WechatOrdersController {
 
                 }
 
+                //增加发放清洗换芯通知标识
+                if (noticeId != null){
+                    noticeRosterService.updateHandleById(noticeId,isClean ? "CLEAN" : "RENEW");
+                }
 
             } else {
                 throw new SQLException("wechatOrders:" + JSONObject.toJSONString(wechatOrders));
