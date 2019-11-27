@@ -248,23 +248,6 @@ public class WechatOrdersController {
             List<ProductVo> list = wechatOrdersService.getProductInfoById(wechatOrdersParamExt.getProductIds());
             wechatOrdersParamExt.setProducts(list);
 
-            //增加发放换芯通知逻辑
-            //为正常预约保养单并且符合名单中的记录
-            final List<String> clean = (List)configService.getConfig("filter_warn_class").get("clean");
-            final Map<String, Object> noticeMap = noticeRosterService.queryIdAndTypeByPhone(wechatUser.getMobilePhone());
-
-            boolean isClean = false;
-            if (CollectionUtils.isEmpty(noticeMap)){
-                noticeId = (Long)noticeMap.get("id");
-                //
-                final String properType = (String) noticeRosterService.queryIdAndTypeByPhone(wechatUser.getMobilePhone()).get("proper_type");
-                if (wechatOrdersParamExt.getDeliveryType() == DeliveryType.NORMAL){
-                    if (wechatOrdersParamExt.getOrderType() == 3 && StringUtils.isNotBlank(properType) && clean.contains(properType)){
-                        wechatOrdersParamExt.setDescription(wechatOrdersParamExt.getDescription()+"【免费保养单-长期未换芯】");
-                        isClean = true;
-                    }
-                }
-            }
 
 
             // 获取modelName   拼接CSM用
@@ -435,10 +418,6 @@ public class WechatOrdersController {
 
                 }
 
-                //增加发放清洗换芯通知标识
-                if (noticeId != null){
-                    noticeRosterService.updateHandleById(noticeId,isClean ? "CLEAN" : "RENEW");
-                }
 
             } else {
                 throw new SQLException("wechatOrders:" + JSONObject.toJSONString(wechatOrders));
