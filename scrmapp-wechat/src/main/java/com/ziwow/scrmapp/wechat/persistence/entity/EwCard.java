@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.ziwow.scrmapp.common.enums.EwCardStatus;
+import com.ziwow.scrmapp.common.enums.EwCardTypeEnum;
 import com.ziwow.scrmapp.common.enums.Guarantee;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
@@ -86,6 +87,19 @@ public class EwCard {
      */
     private Boolean installList;
 
+    /**
+     * 延保卡类型
+     */
+    private EwCardTypeEnum type;
+
+
+    public EwCardTypeEnum getType() {
+        return type;
+    }
+
+    public void setType(EwCardTypeEnum type) {
+        this.type = type;
+    }
 
     public Boolean getInstallList() {
         return installList;
