@@ -58,6 +58,8 @@ public abstract class AbstractGrantEwCard extends IJobHandler {
             if (wechatUserService.getUserByMobilePhone(mobile) != null){
                 logger.error("该用户是微信会员，手机号码为:{}",mobile);
                 XxlJobLogger.log("该用户是微信会员，手机号码为:{}",mobile);
+                //修改发送标识，但是不加发送时间(用以区分)
+                grantEwCardRecordService.updateSendNoTimeByPhone(mobile,true,sendType);
                 return false;
             }
         }else {
