@@ -127,7 +127,7 @@ public class ServiceCenterDataController extends BaseController {
     final Map<String, Object> noticeMap = noticeRosterService.queryIdAndTypeByPhone(wechatUser.getMobilePhone());
     boolean isClean = false;
     Long noticeId = null;
-    if (CollectionUtils.isEmpty(noticeMap)){
+    if (!CollectionUtils.isEmpty(noticeMap)){
       noticeId = (Long)noticeMap.get("id");
       //
       final String properType = (String) noticeRosterService.queryIdAndTypeByPhone(wechatUser.getMobilePhone()).get("proper_type");
