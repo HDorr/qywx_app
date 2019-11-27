@@ -633,7 +633,8 @@ public class WechatController {
      * @return
      */
     private boolean isOnlineCompletion(String remarks) {
-        final String removeStr = StringUtils.remove(remarks, "邮寄滤芯");
+        final String removeStr = StringUtils.remove(remarks, "邮寄滤芯&");
+        //样例  邮寄滤芯&退单邮寄：中通公司+73123285582371
         if (remarks.contains("邮寄滤芯") && StringUtils.isNotBlank(removeStr)){
             return true;
         }
