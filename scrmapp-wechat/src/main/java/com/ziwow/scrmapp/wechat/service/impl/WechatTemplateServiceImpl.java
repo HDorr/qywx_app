@@ -267,7 +267,7 @@ public class WechatTemplateServiceImpl implements WechatTemplateService {
     String templateKey=type+KEY;
 		String templateShortId = environment.getProperty(templateKey);
 		String templateID = this.getTemplateID(templateShortId);
-		String myRemark =StringUtils.isNotBlank(remark)? wechatTemplateMapper.getTemplateRemark(templateShortId);
+		String myRemark =StringUtils.isNotBlank(remark) ? remark : wechatTemplateMapper.getTemplateRemark(templateShortId);
 		String myTitle = StringUtils.isNotBlank(title)?title:wechatTemplateMapper.getTemplateTitle(templateShortId);
 		List<String> paramList=new ArrayList<>();
 		paramList.add(myTitle);
