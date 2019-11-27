@@ -48,6 +48,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -59,10 +60,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.math.BigDecimal;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by xiaohei on 2017/4/7.
@@ -219,7 +217,7 @@ public class WechatOrdersController {
     public Result addWechatOrders(HttpServletRequest request, HttpServletResponse response, @RequestBody WechatOrdersParamExt wechatOrdersParamExt) {
         Result result = new BaseResult();
         //滤芯清洗换芯通知记录id
-        Long noticeId;
+        Long noticeId = null;
         try {
             String userId = null;
             if (org.apache.commons.lang3.StringUtils.isBlank(wechatOrdersParamExt.getUserId())) {
@@ -253,16 +251,21 @@ public class WechatOrdersController {
             //增加发放换芯通知逻辑
             //为正常预约保养单并且符合名单中的记录
             final List<String> clean = (List)configService.getConfig("filter_warn_class").get("clean");
-            noticeId = (Long)noticeRosterService.queryIdAndTypeByPhone(wechatUser.getMobilePhone()).get("id");
+            final Map<String, Object> noticeMap = noticeRosterService.queryIdAndTypeByPhone(wechatUser.getMobilePhone());
+
             boolean isClean = false;
-            //
-            final String properType = (String) noticeRosterService.queryIdAndTypeByPhone(wechatUser.getMobilePhone()).get("proper_type");
-            if (wechatOrdersParamExt.getDeliveryType() == DeliveryType.NORMAL){
-                if (wechatOrdersParamExt.getOrderType() == 3 && StringUtils.isNotBlank(properType) && clean.contains(properType)){
-                    wechatOrdersParamExt.setDescription(wechatOrdersParamExt.getDescription()+"【免费保养单-长期未换芯】");
-                    isClean = true;
+            if (CollectionUtils.isEmpty(noticeMap)){
+                noticeId = (Long)noticeMap.get("id");
+                //
+                final String properType = (String) noticeRosterService.queryIdAndTypeByPhone(wechatUser.getMobilePhone()).get("proper_type");
+                if (wechatOrdersParamExt.getDeliveryType() == DeliveryType.NORMAL){
+                    if (wechatOrdersParamExt.getOrderType() == 3 && StringUtils.isNotBlank(properType) && clean.contains(properType)){
+                        wechatOrdersParamExt.setDescription(wechatOrdersParamExt.getDescription()+"【免费保养单-长期未换芯】");
+                        isClean = true;
+                    }
                 }
             }
+
 
             // 获取modelName   拼接CSM用
 //            List<String> mnList = new ArrayList<String>();
