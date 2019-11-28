@@ -1122,7 +1122,7 @@ public class WechatOrdersController {
                             orderType = wechatOrders.getOrderType();
                             break;
                     }
-
+                    logger.info("工单评论发放积分！ordersCode = [{}]",ordersCode);
                     grantPointService.grantOrderComment(userId, ordersCode, orderType,
                             new ServiceComment(attitude,profession,wechatOrderAppraise.getContent(),wechatOrders.getCreateTime()));
 
