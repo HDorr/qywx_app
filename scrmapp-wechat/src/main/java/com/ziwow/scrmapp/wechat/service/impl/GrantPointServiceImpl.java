@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -27,6 +28,8 @@ import java.util.Map;
  */
 @Service
 public class GrantPointServiceImpl implements GrantPointService {
+
+  private static final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
   private static final Logger LOG = LoggerFactory.getLogger(GrantPointServiceImpl.class);
   @Autowired
@@ -108,12 +111,12 @@ public class GrantPointServiceImpl implements GrantPointService {
     params.put("ordersCode", orderCode);
     params.put("timestamp", timestamp);
     params.put("unionId", unionId);
-    params.put("createTime",createTime);
+    params.put("createTime",sdf.format(createTime));
     if(null!=orderType){
       params.put("orderType", orderType);
     }
     if(null!=productName){
-      params.put("productName",productName);
+      params.put("productName",productName.toString());
     }
     params.put("signture", MD5.toMD5(Constant.AUTH_KEY + timestamp));
     String result = HttpClientUtils
@@ -148,7 +151,7 @@ public class GrantPointServiceImpl implements GrantPointService {
     params.put("attitude",serviceComment.getAttitude());
     params.put("profession",serviceComment.getProfession());
     params.put("content",serviceComment.getContent());
-    params.put("orderTime",serviceComment.getOrderTime());
+    params.put("createTime",sdf.format(serviceComment.getOrderTime()));
     params.put("signture", MD5.toMD5(Constant.AUTH_KEY + timestamp));
     String result = HttpClientUtils
             .postJson(url, JSONObject.fromObject(params).toString());
