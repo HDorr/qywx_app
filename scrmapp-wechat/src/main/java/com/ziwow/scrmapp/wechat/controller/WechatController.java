@@ -602,9 +602,10 @@ public class WechatController {
         result.setReturnMsg("工单完工同步成功!");
         result.setReturnCode(Constant.SUCCESS);
         try {
-            if (StringUtils.isBlank(dispatchOrderParam.getRemarks())){
+            if (StringUtils.isNotBlank(dispatchOrderParam.getRemarks())){
                 //是否符合 邮寄滤芯 快递公司+快递单号
                 if (isOnlineCompletion(dispatchOrderParam.getRemarks())){
+                    dispatchOrderParam.setFinishNumber("邮寄完工");
                     wechatOrdersService.dispatchCompleteOrder(dispatchOrderParam);
                     sendMallShare(dispatchOrderParam.getAcceptNumber(), dispatchOrderParam.getRemarks());
                 }else {
@@ -659,6 +660,7 @@ public class WechatController {
 
         if (isCompletion(dispatchRetreatParam.getRemarks())) {
             try {
+                dispatchRetreatParam.setFinishNumber("邮寄完工");
                 wechatOrdersService.dispatchCompleteOrder(dispatchRetreatParam);
                 sendMallShare(dispatchRetreatParam.getAcceptNumber(), dispatchRetreatParam.getRemarks());
             } catch (Exception e) {
