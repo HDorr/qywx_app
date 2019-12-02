@@ -119,11 +119,15 @@ public class WechatOrdersController {
     @ResponseBody
     public Result qyscSaveOrder(HttpServletRequest request, HttpServletResponse response, @RequestBody MallOrdersForm mallOrdersForm) {
         logger.info("收到商城原单原回受理单,[{}]", JSON.toJSONString(mallOrdersForm));
-        String userId = wechatUserService.getUserByUnionid(mallOrdersForm.getUnionId()).getUserId();
+        final WechatUser wechatUser = wechatUserService.getUserByUnionid(mallOrdersForm.getUnionId());
+        String userId = wechatUser.getUserId();
+        //处理换芯通知
+        handleSendNotice(wechatUser.getMobilePhone());
         //保存工单号，以便于回滚
         List<String> orderNos = new ArrayList<>();
         Result result = new BaseResult();
         StringBuffer retNo = new StringBuffer();
+
         for (WechatOrdersParamExt wechatOrdersParamExt : mallOrdersForm.getForms()) {
             try {
                 wechatOrdersParamExt.setUserId(userId);
@@ -198,6 +202,22 @@ public class WechatOrdersController {
         result.setReturnCode(mallOrdersForm.getForms().size() / orderNos.size());
         result.setReturnMsg(retNo.toString());
         return result;
+    }
+
+    /**
+     * 对发放换芯通知的用户进行标识
+     */
+    private void handleSendNotice(String phone){
+        //增加发放换芯通知逻辑
+        //为正常预约保养单并且符合名单中的记录
+        final List<String> clean = (List)configService.getConfig("filter_warn_class").get("clean");
+        final Map<String, Object> noticeMap = noticeRosterService.queryIdAndTypeByPhone(phone);
+        Long noticeId;
+        final String properType = (String) noticeRosterService.queryIdAndTypeByPhone(phone).get("proper_type");
+        if (!CollectionUtils.isEmpty(noticeMap) && !clean.contains(properType)){
+            noticeId = (Long)noticeMap.get("id");
+            noticeRosterService.updateHandleById(noticeId,"RENEW");
+        }
     }
 
 

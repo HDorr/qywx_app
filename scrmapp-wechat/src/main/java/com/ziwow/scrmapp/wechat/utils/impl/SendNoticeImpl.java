@@ -34,7 +34,7 @@ public class SendNoticeImpl implements SendNotice {
 
     private String cleanUrl = "/pages/selectProduct?appointmentType=clean";
 
-    private String filterUrl = "/pages/selectProduct?appointmentType=filter";
+    private String filterUrl = "/pages/buyfilter_element";
 
     @Override
     public boolean sendNotice(String title, String remark, String type, List<String> param, String phone, boolean isClean) {

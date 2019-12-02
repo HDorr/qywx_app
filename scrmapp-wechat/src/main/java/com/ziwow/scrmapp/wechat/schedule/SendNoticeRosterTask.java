@@ -64,7 +64,7 @@ public class SendNoticeRosterTask extends IJobHandler {
                         //修改发放标记
                         noticeRosterService.updateSendById(noticeRoster.getId());
                         sum.addAndGet(1);
-                        XxlJobLogger.log("已发放[{}]张，手机号为：[{}]",sum,noticeRoster.getPhone());
+                        XxlJobLogger.log("已发放[{}]条，手机号为：[{}]",sum,noticeRoster.getPhone());
                     }else {
                         noticeRosterService.updateSendNoTimeById(noticeRoster.getId());
                     }

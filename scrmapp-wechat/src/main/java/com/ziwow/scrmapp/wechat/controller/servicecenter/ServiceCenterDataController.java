@@ -125,15 +125,13 @@ public class ServiceCenterDataController extends BaseController {
     //为正常预约保养单并且符合名单中的记录
     final List<String> clean = (List)configService.getConfig("filter_warn_class").get("clean");
     final Map<String, Object> noticeMap = noticeRosterService.queryIdAndTypeByPhone(wechatUser.getMobilePhone());
-    boolean isClean = false;
     Long noticeId = null;
     if (!CollectionUtils.isEmpty(noticeMap)){
       noticeId = (Long)noticeMap.get("id");
       //
       final String properType = (String) noticeRosterService.queryIdAndTypeByPhone(wechatUser.getMobilePhone()).get("proper_type");
-      if (wechatOrdersParamExt.getOrderType() == 3 && org.apache.commons.lang.StringUtils.isNotBlank(properType) && clean.contains(properType)){
+      if (param.getMaintType() == 1 && org.apache.commons.lang.StringUtils.isNotBlank(properType) && clean.contains(properType)){
         wechatOrdersParamExt.setDescription(wechatOrdersParamExt.getDescription()+"【免费保养单-长期未换芯】");
-        isClean = true;
       }
     }
     // 调用csm接口生成受理单
@@ -162,7 +160,7 @@ public class ServiceCenterDataController extends BaseController {
 
     //增加发放清洗换芯通知标识
     if (noticeId != null){
-      noticeRosterService.updateHandleById(noticeId,isClean ? "CLEAN" : "RENEW");
+      noticeRosterService.updateHandleById(noticeId, "CLEAN");
     }
     log.info(
         "生成受理单,userId = [{}] , ordersCode = [{}]",
