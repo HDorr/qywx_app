@@ -119,10 +119,7 @@ public class WechatOrdersController {
     @ResponseBody
     public Result qyscSaveOrder(HttpServletRequest request, HttpServletResponse response, @RequestBody MallOrdersForm mallOrdersForm) {
         logger.info("收到商城原单原回受理单,[{}]", JSON.toJSONString(mallOrdersForm));
-        final WechatUser wechatUser = wechatUserService.getUserByUnionid(mallOrdersForm.getUnionId());
-        String userId = wechatUser.getUserId();
-        //处理换芯通知
-        handleSendNotice(mallOrdersForm.getForms(),wechatUser.getMobilePhone());
+        String userId = wechatUserService.getUserByUnionid(mallOrdersForm.getUnionId()).getUserId();
         //保存工单号，以便于回滚
         List<String> orderNos = new ArrayList<>();
         Result result = new BaseResult();
@@ -204,26 +201,6 @@ public class WechatOrdersController {
         return result;
     }
 
-    /**
-     * 对发放换芯通知的用户进行标识
-     */
-    private void handleSendNotice(List<WechatOrdersParamExt> paramExts,String phone){
-        for (WechatOrdersParamExt paramExt : paramExts) {
-            //买的必须是滤芯
-            if (paramExt.getFilter()){
-                final List<String> clean = (List)configService.getConfig("filter_warn_class").get("clean");
-                final Map<String, Object> noticeMap = noticeRosterService.queryIdAndTypeByPhone(phone);
-                Long noticeId;
-                final String properType = (String) noticeRosterService.queryIdAndTypeByPhone(phone).get("proper_type");
-                if (!CollectionUtils.isEmpty(noticeMap) && !clean.contains(properType)){
-                    noticeId = (Long)noticeMap.get("id");
-                    noticeRosterService.updateHandleById(noticeId,"RENEW");
-                }
-                break;
-            }
-        }
-    }
-
 
     /**
      * 用户预约
@@ -240,8 +217,7 @@ public class WechatOrdersController {
     @ResponseBody
     public Result addWechatOrders(HttpServletRequest request, HttpServletResponse response, @RequestBody WechatOrdersParamExt wechatOrdersParamExt) {
         Result result = new BaseResult();
-        //滤芯清洗换芯通知记录id
-        Long noticeId = null;
+
         try {
             String userId = null;
             if (org.apache.commons.lang3.StringUtils.isBlank(wechatOrdersParamExt.getUserId())) {
@@ -261,7 +237,6 @@ public class WechatOrdersController {
                 return result;
             }
 
-
             //检查用户是否提交产品
             String productIds = wechatOrdersParamExt.getProductIds();
             if (StringUtil.isBlank(productIds)) {
@@ -271,8 +246,6 @@ public class WechatOrdersController {
             //根据productId获取产品信息(批量)
             List<ProductVo> list = wechatOrdersService.getProductInfoById(wechatOrdersParamExt.getProductIds());
             wechatOrdersParamExt.setProducts(list);
-
-
 
             // 获取modelName   拼接CSM用
 //            List<String> mnList = new ArrayList<String>();
@@ -412,7 +385,6 @@ public class WechatOrdersController {
                 result.setReturnMsg("预约成功!");
                 result.setData(webAppealNo);
                 logger.info("生成受理单,userId = [{}] , ordersCode = [{}]", userId, webAppealNo);
-
 
                 // 向沁园小程序推送预约成功
                 String scOrderItemId = wechatOrdersParamExt.getScOrderItemId();
