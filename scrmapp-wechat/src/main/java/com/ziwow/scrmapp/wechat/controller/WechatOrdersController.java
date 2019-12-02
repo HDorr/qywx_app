@@ -122,7 +122,7 @@ public class WechatOrdersController {
         final WechatUser wechatUser = wechatUserService.getUserByUnionid(mallOrdersForm.getUnionId());
         String userId = wechatUser.getUserId();
         //处理换芯通知
-        handleSendNotice(wechatUser.getMobilePhone());
+        handleSendNotice(mallOrdersForm.getForms(),wechatUser.getMobilePhone());
         //保存工单号，以便于回滚
         List<String> orderNos = new ArrayList<>();
         Result result = new BaseResult();
@@ -207,16 +207,20 @@ public class WechatOrdersController {
     /**
      * 对发放换芯通知的用户进行标识
      */
-    private void handleSendNotice(String phone){
-        //增加发放换芯通知逻辑
-        //为正常预约保养单并且符合名单中的记录
-        final List<String> clean = (List)configService.getConfig("filter_warn_class").get("clean");
-        final Map<String, Object> noticeMap = noticeRosterService.queryIdAndTypeByPhone(phone);
-        Long noticeId;
-        final String properType = (String) noticeRosterService.queryIdAndTypeByPhone(phone).get("proper_type");
-        if (!CollectionUtils.isEmpty(noticeMap) && !clean.contains(properType)){
-            noticeId = (Long)noticeMap.get("id");
-            noticeRosterService.updateHandleById(noticeId,"RENEW");
+    private void handleSendNotice(List<WechatOrdersParamExt> paramExts,String phone){
+        for (WechatOrdersParamExt paramExt : paramExts) {
+            //买的必须是滤芯
+            if (paramExt.getFilter()){
+                final List<String> clean = (List)configService.getConfig("filter_warn_class").get("clean");
+                final Map<String, Object> noticeMap = noticeRosterService.queryIdAndTypeByPhone(phone);
+                Long noticeId;
+                final String properType = (String) noticeRosterService.queryIdAndTypeByPhone(phone).get("proper_type");
+                if (!CollectionUtils.isEmpty(noticeMap) && !clean.contains(properType)){
+                    noticeId = (Long)noticeMap.get("id");
+                    noticeRosterService.updateHandleById(noticeId,"RENEW");
+                }
+                break;
+            }
         }
     }
 
