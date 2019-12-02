@@ -59,6 +59,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.math.BigDecimal;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -71,6 +72,8 @@ import java.util.Map;
 @RequestMapping(value = "/scrmapp/consumer")
 public class WechatOrdersController {
     private final Logger logger = LoggerFactory.getLogger(WechatOrdersController.class);
+
+    private static final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     @Value("${order.detail.url}")
     private String orderDetailUrl;
@@ -1124,7 +1127,7 @@ public class WechatOrdersController {
                     }
                     logger.info("工单评论发放积分！ordersCode = [{}]",ordersCode);
                     grantPointService.grantOrderComment(userId, ordersCode, orderType,
-                            new ServiceComment(attitude,profession,wechatOrderAppraise.getContent(),wechatOrders.getCreateTime()));
+                            new ServiceComment(attitude,profession,wechatOrderAppraise.getContent(),sdf.format(wechatOrders.getCreateTime())));
 
                 } else {
                     throw new SQLException("qyhUserAppraisalVo:" + JSONObject.toJSONString(qyhUserAppraisalVo));

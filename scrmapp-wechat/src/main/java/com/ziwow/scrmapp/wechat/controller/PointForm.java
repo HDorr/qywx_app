@@ -13,13 +13,13 @@ public class PointForm {
   private String userId;
   private String ordersCode;
   private Integer orderType;
-  private Date createTime;
+  private String createTime;
 
-  public Date getCreateTime() {
+  public String getCreateTime() {
     return createTime;
   }
 
-  public void setCreateTime(Date createTime) {
+  public void setCreateTime(String createTime) {
     this.createTime = createTime;
   }
 

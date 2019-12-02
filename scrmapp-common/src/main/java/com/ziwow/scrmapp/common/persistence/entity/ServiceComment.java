@@ -11,20 +11,20 @@ public class ServiceComment {
     private BigDecimal attitude; // 专业度星级
     private BigDecimal profession; // 服务态度星级
     private String content; // 评论内容
-    private Date orderTime; // 工单预约时间
+    private String orderTime; // 工单预约时间
 
-    public ServiceComment(BigDecimal attitude, BigDecimal profession, String content, Date orderTime){
+    public ServiceComment(BigDecimal attitude, BigDecimal profession, String content, String orderTime){
         this.attitude = attitude;
         this.profession = profession;
         this.content = content;
         this.orderTime = orderTime;
     }
 
-    public Date getOrderTime() {
+    public String getOrderTime() {
         return orderTime;
     }
 
-    public void setOrderTime(Date orderTime) {
+    public void setOrderTime(String orderTime) {
         this.orderTime = orderTime;
     }
 

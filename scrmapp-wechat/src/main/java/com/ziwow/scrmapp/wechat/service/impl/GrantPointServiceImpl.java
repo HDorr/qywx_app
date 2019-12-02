@@ -29,8 +29,6 @@ import java.util.Map;
 @Service
 public class GrantPointServiceImpl implements GrantPointService {
 
-  private static final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-
   private static final Logger LOG = LoggerFactory.getLogger(GrantPointServiceImpl.class);
   @Autowired
   private WechatUserService wechatUserService;
@@ -56,7 +54,7 @@ public class GrantPointServiceImpl implements GrantPointService {
    */
   @Async
   @Override
-  public void grantOrderInstallPoint(String userId, String orderCode,Integer orderType,StringBuilder productName, Date createTime) {
+  public void grantOrderInstallPoint(String userId, String orderCode,Integer orderType,StringBuilder productName, String createTime) {
     //调用商城发积分接口
     awardPoint(orderInstallUrl,userId,orderCode,orderType,productName,createTime);
 
@@ -69,7 +67,7 @@ public class GrantPointServiceImpl implements GrantPointService {
    */
   @Async
   @Override
-  public void grantOrderFilterPoint(String userId, String orderCode,Integer orderType,StringBuilder productName, Date createTime) {
+  public void grantOrderFilterPoint(String userId, String orderCode,Integer orderType,StringBuilder productName, String createTime) {
     awardPoint(orderFilterUrl,userId,orderCode,orderType,productName,createTime);
   }
 
@@ -86,13 +84,13 @@ public class GrantPointServiceImpl implements GrantPointService {
 
   @Async
   @Override
-  public void grantFinishRepair(String userId, String orderCode,Integer orderType,StringBuilder productName, Date createTime) {
+  public void grantFinishRepair(String userId, String orderCode,Integer orderType,StringBuilder productName, String createTime) {
     awardPoint(orderRepairUrl,userId,orderCode,orderType,productName,createTime);
   }
 
   @Async
   @Override
-  public void grantFinishWash(String userId, String orderCode,Integer orderType,StringBuilder productName, Date createTime) {
+  public void grantFinishWash(String userId, String orderCode,Integer orderType,StringBuilder productName, String createTime) {
     awardPoint(orderWashUrl,userId,orderCode,orderType,productName,createTime);
   }
 
@@ -104,14 +102,14 @@ public class GrantPointServiceImpl implements GrantPointService {
     return wechatUserService.loadByUnionId(userId);
   }
 
-  private void awardPoint(String url,String userId,String orderCode,Integer orderType,StringBuilder productName,Date createTime){
+  private void awardPoint(String url,String userId,String orderCode,Integer orderType,StringBuilder productName,String createTime){
     String unionId = findUnionId(userId);
     Map<String, Object> params = new HashMap<String, Object>();
     long timestamp = System.currentTimeMillis();
     params.put("ordersCode", orderCode);
     params.put("timestamp", timestamp);
     params.put("unionId", unionId);
-    params.put("createTime",sdf.format(createTime));
+    params.put("createTime",createTime);
     if(null!=orderType){
       params.put("orderType", orderType);
     }
@@ -151,7 +149,7 @@ public class GrantPointServiceImpl implements GrantPointService {
     params.put("attitude",serviceComment.getAttitude());
     params.put("profession",serviceComment.getProfession());
     params.put("content",serviceComment.getContent());
-    params.put("createTime",sdf.format(serviceComment.getOrderTime()));
+    params.put("createTime",serviceComment.getOrderTime());
     params.put("signture", MD5.toMD5(Constant.AUTH_KEY + timestamp));
     String result = HttpClientUtils
             .postJson(url, JSONObject.fromObject(params).toString());
