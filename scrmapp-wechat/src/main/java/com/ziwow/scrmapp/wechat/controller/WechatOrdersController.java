@@ -15,7 +15,17 @@ import com.ziwow.scrmapp.common.constants.Constant;
 import com.ziwow.scrmapp.common.constants.SystemConstants;
 import com.ziwow.scrmapp.common.enums.AppraiseEnum;
 import com.ziwow.scrmapp.common.enums.DeliveryType;
-import com.ziwow.scrmapp.common.persistence.entity.*;
+import com.ziwow.scrmapp.common.persistence.entity.Product;
+import com.ziwow.scrmapp.common.persistence.entity.QyhUser;
+import com.ziwow.scrmapp.common.persistence.entity.QyhUserAppraisal;
+import com.ziwow.scrmapp.common.persistence.entity.QyhUserAppraisalVo;
+import com.ziwow.scrmapp.common.persistence.entity.ServiceComment;
+import com.ziwow.scrmapp.common.persistence.entity.ServiceFeeProduct;
+import com.ziwow.scrmapp.common.persistence.entity.SmsMarketing;
+import com.ziwow.scrmapp.common.persistence.entity.WechatOrderAppraise;
+import com.ziwow.scrmapp.common.persistence.entity.WechatOrderServiceFee;
+import com.ziwow.scrmapp.common.persistence.entity.WechatOrders;
+import com.ziwow.scrmapp.common.persistence.entity.WechatOrdersRecord;
 import com.ziwow.scrmapp.common.result.BaseResult;
 import com.ziwow.scrmapp.common.result.Result;
 import com.ziwow.scrmapp.common.service.MobileService;
@@ -160,7 +170,7 @@ public class WechatOrdersController {
                         final Long pid = productService.save(product);
                         pids.append(pid).append(",");
                         // 绑定产品成功后异步推送给小程序
-                        productService.syncProdBindToMiniApp(userId, product.getProductCode(), isFirst,product.getProductBarCode());
+                        productService.syncProdBindToMiniApp(userId, product.getProductCode(), isFirst,product.getProductBarCode(), product.getModelName());
                     } else {
                         pids.append(products.get(0).getId()).append(",");
                     }
