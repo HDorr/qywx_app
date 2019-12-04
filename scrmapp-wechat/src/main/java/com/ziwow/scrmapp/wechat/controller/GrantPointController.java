@@ -15,6 +15,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * User: wangdong
@@ -87,12 +89,14 @@ public class GrantPointController {
      * @return
      */
   private StringBuilder getProductName(String ordersCode){
-      StringBuilder productName = new StringBuilder();
-      for (ProductVo productVo : productService.selectByOrdersCode(ordersCode)) {
-          productName.append(productVo.getProductName()).append(",");
+    StringBuilder productName = new StringBuilder();
+    List<ProductVo> productVos = productService.selectByOrdersCode(ordersCode);
+    for (int i = 0; i < productVos.size(); i++) {
+      productName.append(productVos.get(i).getProductName());
+      if(i < productVos.size() - 1){
+        productName.append(",");
       }
-      return productName;
+    }
+    return productName;
   }
-
-
 }
