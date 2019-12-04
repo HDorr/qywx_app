@@ -570,7 +570,7 @@ public class ProductServiceImpl implements ProductService {
                 batchSave(prodLst, filterLevels);
                 // 绑定产品成功后异步推送给小程序
                 for (int i = 0; i < prodLst.size(); i++) {
-                    syncProdBindToMiniApp(userId, prodLst.get(i).getProductCode(),i==0,prodLst.get(i).getProductBarCode());
+                    syncProdBindToMiniApp(userId, prodLst.get(i).getProductCode(),i==0,prodLst.get(i).getProductBarCode(), prodLst.get(i).getModelName());
                 }
             }
         } catch (Exception e) {
@@ -774,7 +774,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Async
     @Override
-    public void syncProdBindToMiniApp(String userId, String productCode, boolean isFirst, String productBarcode) {
+    public void syncProdBindToMiniApp(String userId, String productCode, boolean isFirst, String productBarcode, String modelName) {
         // 异步推送给小程序对接方
         WechatFans wechatFans = wechatFansMapper.getWechatFansByUserId(userId);
         String unionId = wechatFans.getUnionId();
@@ -789,6 +789,7 @@ public class ProductServiceImpl implements ProductService {
         params.put("unionId", wechatFans.getUnionId());
         params.put("productCode", productCode);
         params.put("productBarcode", productBarcode);
+        params.put("modelName", modelName);
         params.put("isFirst",isFirst);
         LOG.info("绑定产品信息同步到小程序请求参数:{}", JSON.toJSONString(params));
         String result = HttpClientUtils.postJson(syncProdBindUrl, net.sf.json.JSONObject.fromObject(params).toString());
