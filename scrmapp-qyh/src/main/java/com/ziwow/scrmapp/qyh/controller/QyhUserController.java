@@ -585,7 +585,7 @@ public class QyhUserController {
             Integer orderType = wechatOrdersMapper.getParamByOrdersCode(ordersCode).getMaintType() == 1
                     ? 4 : 3 ;
             Date createTime = wechatOrdersMapper.getWechatOrdersVoByCode(ordersCode).getCreateTime();
-            String path = (orderType == 4) ? PointConstant.FILTER:PointConstant.WASH;
+            String path = (orderType == 4) ? PointConstant.WASH:PointConstant.FILTER;
             logger.info("预约保养完工发放积分！ordersCode = [{}]",ordersCode);
             grantPoint(ordersCode, path,orderType,sdf.format(createTime));
         } catch (RuntimeException ex) {
