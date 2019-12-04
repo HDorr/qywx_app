@@ -44,10 +44,14 @@ public class SendNoticeImpl implements SendNotice {
         }
         try {
             final WechatUser user = wechatUserService.getUserByMobilePhone(phone);
+            if (user == null){
+                XxlJobLogger.log("改手机号不是会员，手机号为:{}",phone);
+                return false;
+            }
             final WechatFans fans = wechatFansService.getWechatFansById(user.getWfId());
             wechatTemplateService.sendTemplate(fans.getOpenId(),isClean ? cleanUrl : filterUrl,param,type,true,title,remark);
         } catch (Exception e) {
-            XxlJobLogger.log("发放通知失败，手机号：{}，错误：{}",phone,title);
+            XxlJobLogger.log("发放通知失败，手机号：{}，错误：{}",phone,e);
             return false;
         }
         return true;
