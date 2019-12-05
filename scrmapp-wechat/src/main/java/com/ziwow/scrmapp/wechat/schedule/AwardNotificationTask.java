@@ -59,7 +59,7 @@ public class AwardNotificationTask extends IJobHandler {
                     WechatFans fans = wechatFansService.getWechatFansById(user.getWfId());
                     String[] params={"2019年8月19日","免费净水器体检","2019年8月20日"};
                     wechatTemplateService.sendTemplate(fans.getOpenId(),notificationUrl, Arrays.asList(params),
-                            "MGMNotification1Template",false,StringUtils.EMPTY);
+                            "MGMNotification1Template",false,StringUtils.EMPTY, "");
                     logger.info("中奖通知-发送通知成功,user:{}",temp.getMobile());
                 }else{
                     logger.info("中奖通知-用户不存在,user:{}",temp.getMobile());

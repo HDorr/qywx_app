@@ -110,16 +110,9 @@ public class EwCardController {
         Result result = new BaseResult();
         QueryNoEwCardVo ewCardVo = null;
         EwCard ewCard = null;
-        //先去本地系统查询
-        ewCard = ewCardService.selectEwCardByNo(cardNo);
-        if (ewCard != null) {
-            result.setReturnCode(Constant.FAIL);
-            result.setReturnMsg("该卡券已领取");
-            logger.info("延保卡已经被注册,{}", cardNo);
-            return result;
-        }
 
         boolean isActivity = isActivity(cardNo);
+
         GrantEwCardRecord gwr = null;
         if (isActivity) {
             gwr = grantEwCardRecordService.selectRecordByMask(cardNo);
@@ -133,6 +126,15 @@ public class EwCardController {
             if (StringUtils.isBlank(cardNo)) {
                 result.setReturnCode(Constant.FAIL);
                 result.setReturnMsg("对不起，延保卡发放完毕");
+                return result;
+            }
+        }else {
+            //先去本地系统查询
+            ewCard = ewCardService.selectEwCardByNo(cardNo);
+            if (ewCard != null) {
+                result.setReturnCode(Constant.FAIL);
+                result.setReturnMsg("该卡券已领取");
+                logger.info("延保卡已经被注册,{}", cardNo);
                 return result;
             }
         }
