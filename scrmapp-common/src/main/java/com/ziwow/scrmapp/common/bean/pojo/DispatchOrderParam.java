@@ -17,6 +17,7 @@ public class DispatchOrderParam implements Serializable {
     private String signture;
     private String acceptNumber;
     private String finishNumber;
+    private String remarks;
 
     public static long getSerialVersionUID() {
         return serialVersionUID;
@@ -52,5 +53,24 @@ public class DispatchOrderParam implements Serializable {
 
     public void setFinishNumber(String finishNumber) {
         this.finishNumber = finishNumber;
+    }
+
+    public String getRemarks() {
+        return remarks;
+    }
+
+    public void setRemarks(String remarks) {
+        this.remarks = remarks;
+    }
+
+    @Override
+    public String toString() {
+        return "DispatchOrderParam{" +
+                "timeStamp='" + timeStamp + '\'' +
+                ", signture='" + signture + '\'' +
+                ", acceptNumber='" + acceptNumber + '\'' +
+                ", finishNumber='" + finishNumber + '\'' +
+                ", remarks='" + remarks + '\'' +
+                '}';
     }
 }

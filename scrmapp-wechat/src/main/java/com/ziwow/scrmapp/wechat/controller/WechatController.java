@@ -602,15 +602,44 @@ public class WechatController {
         result.setReturnMsg("工单完工同步成功!");
         result.setReturnCode(Constant.SUCCESS);
         try {
-            wechatOrdersService.dispatchCompleteOrder(dispatchOrderParam);
-            sendMallShare(dispatchOrderParam.getAcceptNumber(), dispatchOrderParam.getFinishNumber());
+            if (StringUtils.isNotBlank(dispatchOrderParam.getRemarks())){
+                //是否符合 邮寄滤芯 快递公司+快递单号
+                if (isOnlineCompletion(dispatchOrderParam.getRemarks())){
+                    dispatchOrderParam.setFinishNumber("邮寄完工");
+                    wechatOrdersService.dispatchCompleteOrder(dispatchOrderParam);
+                    sendMallShare(dispatchOrderParam.getAcceptNumber(), dispatchOrderParam.getRemarks());
+                }else {
+                    logger.error("在线完工失败，备注信息不符合,单号为:[{}]",dispatchOrderParam.getAcceptNumber());
+                    result.setReturnMsg("工单完工同步失败!");
+                    result.setReturnCode(Constant.SUCCESS);
+                    return result;
+                }
+            }else {
+                wechatOrdersService.dispatchCompleteOrder(dispatchOrderParam);
+                sendMallShare(dispatchOrderParam.getAcceptNumber(), dispatchOrderParam.getFinishNumber());
+            }
+
         } catch (Exception e) {
             logger.error("工单完工同步失败:", e);
             result.setReturnCode(Constant.FAIL);
             result.setReturnMsg("工单完工同步失败[" + e.getMessage() + "]");
         }
         return result;
+    }
 
+
+    /**
+     * 是否符合在线完工的条件
+     * @param remarks
+     * @return
+     */
+    private boolean isOnlineCompletion(String remarks) {
+        final String removeStr = StringUtils.remove(remarks, "邮寄滤芯&");
+        //样例  邮寄滤芯&退单邮寄：中通公司+73123285582371
+        if (remarks.contains("邮寄滤芯") && StringUtils.isNotBlank(removeStr)){
+            return true;
+        }
+        return false;
     }
 
 
@@ -631,6 +660,8 @@ public class WechatController {
 
         if (isCompletion(dispatchRetreatParam.getRemarks())) {
             try {
+                dispatchRetreatParam.setFinishNumber("邮寄完工");
+                wechatOrdersService.dispatchCompleteOrder(dispatchRetreatParam);
                 sendMallShare(dispatchRetreatParam.getAcceptNumber(), dispatchRetreatParam.getRemarks());
             } catch (Exception e) {
                 logger.error("工单退单同步失败，参数为：{},错误信息为{}", dispatchRetreatParam, e);
