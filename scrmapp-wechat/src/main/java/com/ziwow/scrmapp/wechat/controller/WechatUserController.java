@@ -455,12 +455,7 @@ public class WechatUserController {
   @RequestMapping(value = "/getOAuthUserInfo", method = RequestMethod.GET)
   public ModelAndView getOAuthUserInfo(HttpServletRequest request, HttpServletResponse response, @RequestParam("code") String code) {
     Map<String, Object> map = new HashMap<String, Object>();
-    //WechatFansVo wechatFansVo = wechatFansService.getOAuthUserInfo(code, request, response);
-    WechatFansVo wechatFansVo = new WechatFansVo();
-    wechatFansVo.setCode(2);
-    wechatFansVo.setUserId("G5WST99A");
-    wechatFansVo.setNickName("凯");
-    wechatFansVo.setHeadimgurl("http://photocdn.sohu.com/20120103/Img331047726.jpg");
+    WechatFansVo wechatFansVo = wechatFansService.getOAuthUserInfo(code, request, response);
     if (wechatFansVo.getCode() == 0) {
       return new ModelAndView("/register/scan_QR_code");
     } else if (wechatFansVo.getCode() == 1) {
@@ -488,8 +483,7 @@ public class WechatUserController {
 
     try {
       String encode = CookieUtil.readCookie(request, response, WeChatConstants.SCRMAPP_USER);
-      //String userId = new String(Base64.decode(encode));
-      String userId = "G5WST99A";
+      String userId = new String(Base64.decode(encode));
 
       WechatUser wechatUser = wechatUserService.getUserByUserId(userId);
       //数据库中未查到数据
