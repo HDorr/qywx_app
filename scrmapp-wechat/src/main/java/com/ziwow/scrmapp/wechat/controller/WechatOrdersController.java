@@ -19,6 +19,7 @@ import com.ziwow.scrmapp.common.persistence.entity.Product;
 import com.ziwow.scrmapp.common.persistence.entity.QyhUser;
 import com.ziwow.scrmapp.common.persistence.entity.QyhUserAppraisal;
 import com.ziwow.scrmapp.common.persistence.entity.QyhUserAppraisalVo;
+import com.ziwow.scrmapp.common.persistence.entity.ServiceComment;
 import com.ziwow.scrmapp.common.persistence.entity.ServiceFeeProduct;
 import com.ziwow.scrmapp.common.persistence.entity.SmsMarketing;
 import com.ziwow.scrmapp.common.persistence.entity.WechatOrderAppraise;
@@ -60,6 +61,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.math.BigDecimal;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -69,6 +71,8 @@ import java.util.*;
 @RequestMapping(value = "/scrmapp/consumer")
 public class WechatOrdersController {
     private final Logger logger = LoggerFactory.getLogger(WechatOrdersController.class);
+
+    private static final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     @Value("${order.detail.url}")
     private String orderDetailUrl;
@@ -163,7 +167,7 @@ public class WechatOrdersController {
                         final Long pid = productService.save(product);
                         pids.append(pid).append(",");
                         // 绑定产品成功后异步推送给小程序
-                        productService.syncProdBindToMiniApp(userId, product.getProductCode(), isFirst,product.getProductBarCode());
+                        productService.syncProdBindToMiniApp(userId, product.getProductCode(), isFirst,product.getProductBarCode(), product.getModelName());
                     } else {
                         pids.append(products.get(0).getId()).append(",");
                     }
@@ -1137,8 +1141,22 @@ public class WechatOrdersController {
                 if (count > 0) {
                     //修改预约单状态为已评价
                     wechatOrdersService.updateOrdersStatus(ordersCode, userId, date, SystemConstants.APPRAISE);
-                    //发送评价积分
-                    grantPointService.grantOrderComment(userId, ordersCode, wechatOrders.getOrderType());
+                    // 区分滤芯和清洗
+                    Integer orderType;
+                    switch (wechatOrdersService.getParamByOrdersCode(ordersCode).getMaintType()){
+                        case 2:
+                            orderType = 3; // 滤芯
+                            break;
+                        case 1:
+                            orderType = 4; // 清洗
+                            break;
+                        default:
+                            orderType = wechatOrders.getOrderType();
+                            break;
+                    }
+                    logger.info("工单评论发放积分！ordersCode = [{}]",ordersCode);
+                    grantPointService.grantOrderComment(userId, ordersCode, orderType,
+                            new ServiceComment(attitude,profession,wechatOrderAppraise.getContent(),sdf.format(wechatOrders.getCreateTime())));
 
                 } else {
                     throw new SQLException("qyhUserAppraisalVo:" + JSONObject.toJSONString(qyhUserAppraisalVo));
