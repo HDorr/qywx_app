@@ -67,7 +67,7 @@ public class WechatTemplateController {
                 return result;
             }
             wechatTemplateService.sendTemplate(fans.getOpenId(),StringUtils.isNotBlank(url)?url:"", paramList,type, toMini
-                !=null? toMini :false,"");
+                !=null? toMini :false,"", "");
         } catch (Exception e) {
             logger.error("通知发送失败，原因", e);
             result.setReturnCode(Constant.FAIL);

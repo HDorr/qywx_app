@@ -513,7 +513,7 @@ public class WechatOrdersServiceImpl implements WechatOrdersService {
     //wechatTemplateService.subscribeResultNoticeTemplate(openId, getOrdersListPageOauthUrl(), title, name, phone, address, serverType, subscribeResult, remark);
     wechatTemplateService
         .sendTemplate(openId, "pages/queryProgress?from=metinfo", Arrays.asList(params),
-            "subscribeResultNoticeTemplate", true, title);
+            "subscribeResultNoticeTemplate", true, title, "");
 
   }
 
@@ -530,7 +530,7 @@ public class WechatOrdersServiceImpl implements WechatOrdersService {
       // wechatTemplateService.serviceOrCancellationTemplate(openId, getOrdersListPageOauthUrl(), title, serverType, time, time, remark);
       wechatTemplateService
           .sendTemplate(openId, "pages/queryProgress?from=metinfo", Arrays.asList(params),
-              "serviceOrCancellationTemplate", true, title);
+              "serviceOrCancellationTemplate", true, title, "");
     }
   }
 
@@ -545,7 +545,7 @@ public class WechatOrdersServiceImpl implements WechatOrdersService {
       String[] params = {ordersCode,orderTime};
       wechatTemplateService
           .sendTemplate(openId, "pages/queryProgress?from=metinfo", Arrays.asList(params),
-              "serviceEvaluationToRemindTemplate", true, title);
+              "serviceEvaluationToRemindTemplate", true, title, "");
       //wechatTemplateService.serviceEvaluationToRemindTemplate(openId, getOrdersListPageOauthUrl(), title, ordersCode, orderTime, remark);
     }
   }
@@ -572,7 +572,7 @@ public class WechatOrdersServiceImpl implements WechatOrdersService {
       String[] params = {orderType, orderCode, orderTime, engineerName};
       wechatTemplateService
           .sendTemplate(openId, "pages/queryProgress?from=metinfo", Arrays.asList(params),
-              "servicesToNoticeTemplate", true, title);
+              "servicesToNoticeTemplate", true, title, "");
       //String url = myOrderDetailUrl + "?userId=" + userId + "&ordersCode=" + orderCode;
       //wechatTemplateService.servicesToNoticeTemplate(openId, getOrdersListPageOauthUrl(), title, orderType, orderCode, orderTime, engineerName, mobilePhone, remark);
     }

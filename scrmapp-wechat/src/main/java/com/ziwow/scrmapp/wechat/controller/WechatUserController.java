@@ -687,8 +687,8 @@ public class WechatUserController {
     int count = wechatUserService.updateUser(wechatUser, wfId);
     if (count > 0) {
       // 修改成功后发送模板消息
-      WechatFans wechatFans = wechatFansService.getWechatFansById(wfId);
-      wechatUserService.sendUserUpdTemplateMsg(wechatFans.getOpenId(), wechatFans.getWfNickName());
+//      WechatFans wechatFans = wechatFansService.getWechatFansById(wfId);
+//      wechatUserService.sendUserUpdTemplateMsg(wechatFans.getOpenId(), wechatFans.getWfNickName());
       result.setReturnCode(Constant.SUCCESS);
       result.setReturnMsg("修改成功！");
       logger.info("WechatUser数据更新成功,userId = [{}]", wechatUser.getUserId());
