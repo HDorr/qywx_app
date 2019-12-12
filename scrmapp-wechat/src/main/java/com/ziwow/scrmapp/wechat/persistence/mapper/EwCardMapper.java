@@ -1,11 +1,10 @@
 package com.ziwow.scrmapp.wechat.persistence.mapper;
 
 import com.ziwow.scrmapp.common.enums.EwCardStatus;
+import com.ziwow.scrmapp.common.enums.EwCardTypeEnum;
 import com.ziwow.scrmapp.wechat.persistence.entity.EwCard;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.ResultMap;
-import org.apache.ibatis.annotations.Select;
+import com.ziwow.scrmapp.wechat.persistence.entity.EwCardItems;
+import org.apache.ibatis.annotations.*;
 
 import java.util.Date;
 import java.util.List;
@@ -38,14 +37,6 @@ public interface EwCardMapper {
     Set<EwCard> selectEwCardByFansId(@Param("fansId") Long fansId);
 
     /**
-     * 根据类型名称和fansId查询延保卡
-     * @param itemName 分类名称
-     * @param fansId
-     * @return
-     */
-    List<EwCard> selectEwCardByItemNameAndFansId(@Param("itemName") String itemName, @Param("fansId") Long fansId);
-
-    /**
      * 根据卡号id和fansId查询延保卡
      * @param cardNo 卡号
      * @param fansId
@@ -63,13 +54,6 @@ public interface EwCardMapper {
      */
     void updateCard(@Param("cardNo") String cardNo, @Param("productBarCode") String productBarCode, @Param("purchDate") Date purchDate, @Param("repairTerm") Date repairTerm, @Param("installList") Boolean installList, @Param("cardStatus")EwCardStatus ewCardStatus);
 
-    /**
-     * 根据产品条码和fansId查询最新的延保卡
-     * @param barCode
-     * @param fansId
-     * @return
-     */
-    EwCard selectEwCardByBarCodeAndFansId(@Param("barCode") String barCode, @Param("fansId") Long fansId);
 
     /**
      * 根据卡号集合查询产品
@@ -89,11 +73,11 @@ public interface EwCardMapper {
 
     /**
      * 查询出符合编号的延保卡id
-     * @param productCode
+     * @param ewCardTypeEnum
      * @param fansId
      * @return
      */
-    List<Long> selectEwCardIdByCodeAndFansId(@Param("productCode")String productCode,@Param("fansId")Long fansId);
+    List<Long> selectEwCardIdByCodeAndFansId(@Param("ewCardTypeEnum")EwCardTypeEnum ewCardTypeEnum,@Param("fansId")Long fansId);
 
     /**
      * 根据产品条码查询对应的延保卡(最新的)
@@ -148,4 +132,27 @@ public interface EwCardMapper {
      * @param ewCard
      */
     void saveCompleteEwCard(EwCard ewCard);
+
+    /**
+     * 根据code查询延保卡的类型
+     * @param itemCode
+     * @return
+     */
+    @Select("select type from t_ew_card_items where item_code = #{itemCode} limit 1")
+    EwCardTypeEnum queryTypeByCode(@Param("itemCode") String itemCode);
+
+    /**
+     * 依据容量查找所适配的所有型号
+     * @param type
+     * @return
+     */
+    @Results({
+            @Result(id = true,property = "id",column = "id"),
+            @Result(id = true,property = "itemCode",column = "item_code"),
+            @Result(id = true,property = "itemName",column = "item_name")
+    })
+    @Select("select id,item_code,item_name from t_ew_card_items where type = #{type}")
+    List<EwCardItems> queryCodesByType(@Param("type") EwCardTypeEnum type);
+
+
 }

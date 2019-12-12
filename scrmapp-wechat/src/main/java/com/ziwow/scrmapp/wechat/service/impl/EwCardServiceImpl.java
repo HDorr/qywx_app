@@ -1,6 +1,7 @@
 package com.ziwow.scrmapp.wechat.service.impl;
 
 import com.ziwow.scrmapp.common.enums.EwCardStatus;
+import com.ziwow.scrmapp.common.enums.EwCardTypeEnum;
 import com.ziwow.scrmapp.wechat.persistence.entity.EwCard;
 import com.ziwow.scrmapp.wechat.persistence.entity.EwCardItems;
 import com.ziwow.scrmapp.wechat.persistence.mapper.EwCardMapper;
@@ -28,39 +29,40 @@ public class EwCardServiceImpl implements EwCardService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void addEwCard(EwCard ewCard, String[] itemNames, String[] itemCodes) {
+        //是50g 还是 400g
+        EwCardTypeEnum type = ewCardMapper.queryTypeByCode(itemCodes[0]);
+        ewCard.setType(type);
         ewCardMapper.saveEwCard(ewCard);
-        for (int i = 0; i < itemNames.length; i++) {
-            EwCardItems ewCardItem = new EwCardItems();
-            ewCardItem.setItemCode(itemCodes[i]);
-            ewCardItem.setItemName(itemNames[i]);
-            ewCardMapper.addEwCardItems(ewCard.getId(), itemNames[i], itemCodes[i]);
-        }
     }
 
     @Override
     public EwCard selectEwCardByNo(String cardNo) {
-        return ewCardMapper.selectEwCardByNo(cardNo);
+        final EwCard ewCard = ewCardMapper.selectEwCardByNo(cardNo);
+        if (ewCard == null){
+            return null;
+        }
+        List<EwCardItems> codes = ewCardMapper.queryCodesByType(ewCard.getType());
+        ewCard.setEwCardItems(codes);
+        return ewCard;
     }
 
     @Override
     public Set<EwCard> selectEwCardByFansId(Long fansId) {
-        return ewCardMapper.selectEwCardByFansId(fansId);
+        final Set<EwCard> ewCards = ewCardMapper.selectEwCardByFansId(fansId);
+        for (EwCard ewCard : ewCards) {
+            List<EwCardItems> codes = ewCardMapper.queryCodesByType(ewCard.getType());
+            ewCard.setEwCardItems(codes);
+        }
+        return ewCards;
     }
 
-    @Override
-    public List<EwCard> selectEwCardByItemName(String itemName, Long fansId) {
-        return ewCardMapper.selectEwCardByItemNameAndFansId(itemName, fansId);
-    }
+
 
     @Override
     public EwCard selectEwCardByBarCode(String barCode) {
         return ewCardMapper.selectEwCardByBarCode(barCode);
     }
 
-    @Override
-    public EwCard selectEwCardByBarCodeAndFansId(String barCode, Long fansId) {
-        return ewCardMapper.selectEwCardByBarCodeAndFansId(barCode, fansId);
-    }
 
     @Override
     public void useEwCard(String cardNo, String productBarCode, Date purchDate, Date repairTerm, Boolean installList, EwCardStatus ewCardStatus) {
@@ -69,16 +71,24 @@ public class EwCardServiceImpl implements EwCardService {
 
     @Override
     public EwCard selectMyEwCardByNo(String cardNo, Long fansId) {
-        return ewCardMapper.selectEwCardByNoAndFansId(cardNo, fansId);
+        final EwCard ewCard = ewCardMapper.selectEwCardByNoAndFansId(cardNo, fansId);
+        ewCard.setEwCardItems(ewCardMapper.queryCodesByType(ewCard.getType()));
+        return ewCard;
     }
 
     @Override
     public Set<EwCard> selectEwCardByProductCode(String productCode, Long id) {
-        final List<Long> cardIds = ewCardMapper.selectEwCardIdByCodeAndFansId(productCode, id);
+        final EwCardTypeEnum ewCardTypeEnum = ewCardMapper.queryTypeByCode(productCode);
+        final List<Long> cardIds = ewCardMapper.selectEwCardIdByCodeAndFansId(ewCardTypeEnum, id);
         if (CollectionUtils.isEmpty(cardIds)) {
             return Collections.EMPTY_SET;
         } else {
-            return ewCardMapper.selectEwCardByCardIds(cardIds);
+            final Set<EwCard> ewCards = ewCardMapper.selectEwCardByCardIds(cardIds);
+            for (EwCard ewCard : ewCards) {
+                List<EwCardItems> codes = ewCardMapper.queryCodesByType(ewCard.getType());
+                ewCard.setEwCardItems(codes);
+            }
+            return ewCards;
         }
     }
 
