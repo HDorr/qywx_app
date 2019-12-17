@@ -14,6 +14,7 @@
 		<result column="product_bar_code_twenty" property="productBarCodeTwenty"></result>
 		<result column="card_status" property="cardStatus"></result>
 		<result column="install_list" property="installList"></result>
+		<result column="type" property="type"></result>
 	</resultMap>
 
 	<resultMap id="ewCardMap" type="com.ziwow.scrmapp.wechat.persistence.entity.EwCard" extends="BaseEwCardMap">
@@ -26,8 +27,8 @@
 
 
     <insert id="saveEwCard" parameterType="com.ziwow.scrmapp.wechat.persistence.entity.EwCard" useGeneratedKeys="true" keyProperty="id">
-		insert into t_ew_card(fans_id,card_no,purch_date,repair_term,valid_time)
-		values(#{fansId},#{cardNo},#{purchDate},#{repairTerm},#{validTime})
+		insert into t_ew_card(fans_id,card_no,purch_date,repair_term,valid_time,`type`)
+		values(#{fansId},#{cardNo},#{purchDate},#{repairTerm},#{validTime},#{type})
 	</insert>
 
 	<insert id="saveCompleteEwCard"  useGeneratedKeys="true">
@@ -35,37 +36,31 @@
 		values(#{fansId},#{cardNo},#{purchDate},#{repairTerm},#{validTime},#{productBarCodeTwenty},#{cardStatus},#{installList})
 	</insert>
 
-	<select id="selectEwCardByNo" resultMap="ewCardMap">
-		select ec.*,eci.id eid,eci.item_name,eci.item_code from t_ew_card ec left join t_ew_card_items eci on eci.ew_card_id=ec.id where ec.card_no=#{cardNo}
+	<select id="selectEwCardByNo" resultMap="BaseEwCardMap">
+		select ec.* from t_ew_card ec  where ec.card_no=#{cardNo}
 	</select>
 
-	<select id="selectEwCardByFansId" resultMap="ewCardMap">
-		select ec.*,eci.id eid,eci.item_name,eci.item_code from t_ew_card ec left join t_ew_card_items eci on eci.ew_card_id=ec.id where ec.fans_id=#{fansId} and ec.card_status = "NOT_USE"
+	<select id="selectEwCardByFansId" resultMap="BaseEwCardMap">
+		select ec.* from t_ew_card ec where ec.fans_id=#{fansId} and ec.card_status = "NOT_USE"
 	</select>
 
-	<select id="selectEwCardByItemNameAndFansId" resultMap="ewCardMap">
-		select ec.*,eci.id eid,eci.item_name,eci.item_code from t_ew_card ec left join t_ew_card_items eci on eci.ew_card_id=ec.id where ec.fans_id=#{fansId} and ec.item_name=#{itemName} and ec.card_status = "NOT_USE"
-	</select>
 
-	<select id="selectEwCardByCardIds" resultMap="ewCardMap">
-		select ec.*,eci.id eid,eci.item_name,eci.item_code from t_ew_card ec left join t_ew_card_items eci on eci.ew_card_id=ec.id where ec.card_status = "NOT_USE"
+
+	<select id="selectEwCardByCardIds" resultMap="BaseEwCardMap">
+		select ec.* from t_ew_card ec where ec.card_status = "NOT_USE"
 		and ec.id in
 		<foreach collection="cardIds" item="cardId" open="(" close=")" separator=",">
 		#{cardId}
 		</foreach>
 	</select>
 
-	<select id="selectEwCardByNoAndFansId" resultMap="ewCardMap">
-		select ec.*,eci.id eid,eci.item_name,eci.item_code from t_ew_card ec left join t_ew_card_items eci on eci.ew_card_id=ec.id where ec.card_no=#{cardNo} and ec.card_status = "NOT_USE" limit 1
-	</select>
-
-	<select id="selectEwCardByBarCodeAndFansId" resultMap="ewCardMap">
-		select ec.*,eci.id eid,eci.item_name,eci.item_code from t_ew_card ec left join t_ew_card_items eci on eci.ew_card_id=ec.id where ec.fans_id=#{fansId} and ec.product_bar_code_twenty=#{barCode} and ec.card_status != "NOT_USE" order by ec.repair_term desc
+	<select id="selectEwCardByNoAndFansId" resultMap="BaseEwCardMap">
+		select ec.* from t_ew_card ec  where ec.card_no=#{cardNo} and ec.card_status = "NOT_USE" limit 1
 	</select>
 
 
 	<select id="selectEwCardIdByCodeAndFansId" resultType="Long">
-		select ec.id from t_ew_card ec inner join t_ew_card_items eci on eci.ew_card_id=ec.id and eci.item_code=#{productCode} where ec.fans_id=#{fansId}
+		select ec.id from t_ew_card ec where ec.fans_id=#{fansId} and ec.type = #{ewCardTypeEnum}
 	</select>
 
 

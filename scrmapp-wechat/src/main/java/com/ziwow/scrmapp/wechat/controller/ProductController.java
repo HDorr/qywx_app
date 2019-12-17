@@ -264,7 +264,7 @@ public class ProductController {
 
             productService.save(product);
             // 绑定产品成功后异步推送给小程序
-            productService.syncProdBindToMiniApp(userId, product.getProductCode(),isFirst,product.getProductBarCode());
+            productService.syncProdBindToMiniApp(userId, product.getProductCode(),isFirst,product.getProductBarCode(), product.getModelName());
 
             // 产品绑定后发送模板消息
             productService.productBindTemplateMsg(product);

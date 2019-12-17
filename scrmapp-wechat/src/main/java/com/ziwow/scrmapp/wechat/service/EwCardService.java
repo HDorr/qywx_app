@@ -39,13 +39,6 @@ public interface EwCardService {
      */
     Set<EwCard> selectEwCardByFansId(Long fansId);
 
-    /**
-     * 根据类型查询延保卡信息
-     * @param itemName 型号名称
-     * @param fansId
-     * @return
-     */
-    List<EwCard> selectEwCardByItemName(String itemName,Long fansId);
 
     /**
      * 根据产品条码查询最新的延保卡
@@ -53,8 +46,6 @@ public interface EwCardService {
      * @return
      */
     EwCard selectEwCardByBarCode(String barCode);
-
-    EwCard selectEwCardByBarCodeAndFansId(String barCode, Long fansId);
 
     /**
      * 使用延保卡

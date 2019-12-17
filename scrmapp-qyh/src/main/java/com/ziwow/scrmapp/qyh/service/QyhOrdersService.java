@@ -157,4 +157,5 @@ public interface QyhOrdersService {
     int doCancel(Long ordersId, Long productId,String ordersCode);
 
     boolean isFinish(List<Integer> productStatus);
+
 }

@@ -20,7 +20,9 @@
     select
     f.id,f.filterName,f.price,f.maintain
     from t_filter f,t_level_filter_relations r
-    where f.id = r.filterId and r.levelId = #{levelId,jdbcType=BIGINT} order by f.id asc
+    where f.id = r.filterId and r.levelId = #{levelId,jdbcType=BIGINT}
+    GROUP BY f.id
+    order by f.id asc
   </select>
   <select id="findFilterByIds" resultMap="BaseResultMap">
     select

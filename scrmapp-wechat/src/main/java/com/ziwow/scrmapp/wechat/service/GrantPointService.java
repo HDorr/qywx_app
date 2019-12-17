@@ -1,5 +1,9 @@
 package com.ziwow.scrmapp.wechat.service;
 
+import com.ziwow.scrmapp.common.persistence.entity.ServiceComment;
+
+import java.util.Date;
+
 /**
  * User: wangdong
  * Date: 19-6-11.
@@ -10,11 +14,25 @@ package com.ziwow.scrmapp.wechat.service;
 public interface GrantPointService {
 
 
-  void grantOrderInstallPoint(String userId,String orderCode);
+  void grantOrderInstallPoint(String userId, String orderCode, Integer orderType, StringBuilder productName, String createTime);
 
-  void grantOrderFilterPoint(String userId,String orderCode);
+  void grantOrderFilterPoint(String userId,String orderCode,Integer orderType,StringBuilder productName, String createTime);
 
-  void grantOrderComment(String userId,String orderCode,Integer orderType);
+  void grantOrderComment(String userId, String orderCode, Integer orderType, ServiceComment serviceComment);
+
+  /**
+   * 维修单正常完工发送积分
+   * @param userId
+   * @param orderCode
+   */
+  void grantFinishRepair(String userId,String orderCode,Integer orderType,StringBuilder productName, String createTime);
+
+  /**
+   * 保养单（清洗、换芯）正常完工发送积分
+   * @param userId
+   * @param orderCode
+   */
+  void grantFinishWash(String userId,String orderCode,Integer orderType,StringBuilder productName, String createTime);
 
 
 }
