@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.sql.SQLDataException;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by xiaohei on 2017/4/5.
@@ -126,5 +127,12 @@ public interface ProductService {
      * @return
      */
     List<com.ziwow.scrmapp.common.bean.vo.ProductVo> getProductByModelNames(List<String> productModelNames);
+
+    /**
+     * 根据 当前userId,
+     * @param userId
+     * @return
+     */
+    Map<String,String> annualReport(String userId);
 
 }

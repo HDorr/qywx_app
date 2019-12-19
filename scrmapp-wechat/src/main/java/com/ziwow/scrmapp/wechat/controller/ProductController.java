@@ -1003,5 +1003,25 @@ public class ProductController {
         result.setReturnCode(Constant.SUCCESS);
         return result;
     }
+    /**
+     * 根据unionId，查询 对应用户绑定的产品
+     */
+    @RequestMapping(value = "/from/wechat", method = RequestMethod.POST)
+    @ResponseBody
+    @MiniAuthentication
+    public Result queryFromWechat(@RequestParam("signture") String signture,
+        @RequestParam("timestamp") String timeStamp,
+        @RequestParam("unionId") String unionId){
+        Result result = new BaseResult();
+        WechatUser user = wechatUserService.getUserByUnionid(unionId);
+        if(null != user){
+            String userId = user.getUserId();
+            Map<String, String> annualReport = productService.annualReport(userId);
+            result.setData(annualReport);
+            result.setReturnCode(Constant.SUCCESS);
+        }
+        return result;
+    }
+
 
 }
