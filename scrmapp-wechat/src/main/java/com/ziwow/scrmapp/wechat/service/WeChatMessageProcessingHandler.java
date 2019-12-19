@@ -396,11 +396,6 @@ public class WeChatMessageProcessingHandler {
                 .append("/scrmapp/consumer/product/index'>【找售后•一键服务】</a>\n")
                 .append("24小时在线预约滤芯、安装、保养、维修等售后服务\n")
                 .append("\n")
-                .append("点击<a href='http://www.qinyuan.cn' data-miniprogram-appid='")
-                .append(miniappAppid)
-                .append("' data-miniprogram-path='pages/web_myinvite'>【邀请购买返现金】</a>")
-                .append("立即参与限时活动，推荐亲友购买成功，即可获得现金红包\n")
-                .append("\n")
                 .append("2019，沁园和您一起更净一步！");
         }
         replyMessage(inMessage, response, msgsb);
