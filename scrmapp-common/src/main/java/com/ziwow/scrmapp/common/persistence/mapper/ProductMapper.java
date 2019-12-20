@@ -128,6 +128,6 @@ public interface ProductMapper {
      * @param userId
      * @return
      */
-    @Select("SELECT * FROM t_product  as p WHERE p.userId =#{userId} AND p.status=1 AND (productBarCode != '' OR productBarCode IS NOT NULL ) ORDER BY id")
+    @Select("SELECT * FROM t_product  as p WHERE p.userId =#{userId} AND p.status=1 AND p.productBarCode != '' and p.productBarCode IS NOT NULL  ORDER BY id")
     List<Product> selectByUserIdOrderById(@Param("userId") String userId);
 }
