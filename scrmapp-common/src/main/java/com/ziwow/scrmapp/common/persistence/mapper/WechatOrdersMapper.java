@@ -8,6 +8,7 @@ import org.apache.ibatis.annotations.Param;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 public interface WechatOrdersMapper {
     int deleteByPrimaryKey(Long id);
@@ -89,5 +90,7 @@ public interface WechatOrdersMapper {
      * @return
      */
     long getIdByCode(@Param("orderCode") String orderCode);
+
+    Map<String,String> selectByUserIdMaintainOrders(@Param("userId") String userId);
 
 }

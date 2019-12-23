@@ -122,4 +122,12 @@ public interface ProductMapper {
      * @return long
      */
     long selectCount(@Param("userId") String userId);
+
+    /**
+     * 根据用户userId查询产品信息
+     * @param userId
+     * @return
+     */
+    @Select("SELECT * FROM t_product  as p WHERE p.userId =#{userId} AND p.status=1 AND p.productBarCode != '' and p.productBarCode IS NOT NULL  ORDER BY id")
+    List<Product> selectByUserIdOrderById(@Param("userId") String userId);
 }

@@ -923,4 +923,18 @@
     <select id="getIdByCode" resultType="long">
         select id from t_wechat_orders where ordersCode = #{orderCode}  limit 0,1
     </select>
+
+    <select id="selectByUserIdMaintainOrders" resultType="java.util.Map">
+        select
+          IFNULL(MAX(CASE maintType WHEN 0 then amount  ELSE 0 end),0) as '0',
+          IFNULL(MAX(CASE maintType WHEN 1 then amount  ELSE 0 end),0) as '1',
+          IFNULL(MAX(CASE maintType WHEN 2 then amount  ELSE 0 end),0) as '2'
+        from
+        (SELECT COUNT(*) as amount ,maintType  FROM  t_wechat_orders
+        WHERE userId = #{userId}
+        AND orderType = 3  AND
+        (status= 5  or status = 6)
+        AND  createTime > '2019-01-01 00:00:00'
+        GROUP BY  maintType) t
+    </select>
 </mapper>
