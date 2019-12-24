@@ -248,14 +248,16 @@ public interface WechatTemplateService {
 
 	/****
 	 * 下单通知模板
-   * @param openId 用户openid
-   * @param url 链接
-   * @param params
-   * @param type
-   * @param toMiniProgram
-   * @param title
-   */
+     * @param openId 用户openid
+     * @param url 链接
+     * @param params
+     * @param type
+     * @param toMiniProgram
+     * @param title
+     * @param remark
+     */
 	void sendTemplate(String openId, String url, List<String> params, String type,
-      boolean toMiniProgram, String title);
+                      boolean toMiniProgram, String title, String remark);
+
 
 }

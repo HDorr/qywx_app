@@ -34,17 +34,12 @@ import com.ziwow.scrmapp.wechat.params.order.OrderModifyParam;
 import com.ziwow.scrmapp.wechat.params.order.OrderSaveParam;
 import com.ziwow.scrmapp.wechat.persistence.entity.WechatUser;
 import com.ziwow.scrmapp.wechat.persistence.entity.WechatUserAddress;
-import com.ziwow.scrmapp.wechat.service.OrdersProRelationsService;
-import com.ziwow.scrmapp.wechat.service.ProductService;
-import com.ziwow.scrmapp.wechat.service.WechatOrdersRecordService;
-import com.ziwow.scrmapp.wechat.service.WechatOrdersService;
-import com.ziwow.scrmapp.wechat.service.WechatQyhUserService;
-import com.ziwow.scrmapp.wechat.service.WechatUserAddressService;
-import com.ziwow.scrmapp.wechat.service.WechatUserService;
+import com.ziwow.scrmapp.wechat.service.*;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -80,6 +75,8 @@ public class ServiceCenterDataController extends BaseController {
   private final WechatOrdersRecordService wechatOrdersRecordService;
   private final WechatQyhUserService wechatQyhUserService;
   private final OrdersProRelationsService ordersProRelationsService;
+  private final ConfigService configService;
+  private final NoticeRosterService noticeRosterService;
 
   @Autowired
   public ServiceCenterDataController(
@@ -89,7 +86,9 @@ public class ServiceCenterDataController extends BaseController {
       WechatOrdersService wechatOrdersService,
       WechatOrdersRecordService wechatOrdersRecordService,
       WechatQyhUserService wechatQyhUserService,
-      OrdersProRelationsService ordersProRelationsService) {
+      OrdersProRelationsService ordersProRelationsService,
+      ConfigService configService,
+      NoticeRosterService noticeRosterService) {
     this.productService = productService;
     this.wechatUserService = wechatUserService;
     this.wechatUserAddressService = wechatUserAddressService;
@@ -97,6 +96,8 @@ public class ServiceCenterDataController extends BaseController {
     this.wechatOrdersRecordService = wechatOrdersRecordService;
     this.wechatQyhUserService = wechatQyhUserService;
     this.ordersProRelationsService = ordersProRelationsService;
+    this.configService = configService;
+    this.noticeRosterService = noticeRosterService;
   }
 
   /**
@@ -121,6 +122,19 @@ public class ServiceCenterDataController extends BaseController {
         telephoneBlank
             ? wechatUser.getMobilePhone()
             : wechatOrdersParamExt.getContactsTelephone().replace("-", ""));
+    //增加发放换芯通知逻辑
+    //为正常预约保养单并且符合名单中的记录
+    final List<String> clean = (List)configService.getConfig("filter_warn_class").get("clean");
+    final Map<String, Object> noticeMap = noticeRosterService.queryIdAndTypeByPhone(wechatUser.getMobilePhone());
+    Long noticeId = null;
+    if (!CollectionUtils.isEmpty(noticeMap)){
+      noticeId = (Long)noticeMap.get("id");
+      //
+      final String properType = (String) noticeRosterService.queryIdAndTypeByPhone(wechatUser.getMobilePhone()).get("proper_type");
+      if (param.getMaintType() == 1 && org.apache.commons.lang.StringUtils.isNotBlank(properType) && clean.contains(properType)){
+        wechatOrdersParamExt.setDescription(wechatOrdersParamExt.getDescription()+"【免费保养单-长期未换芯】");
+      }
+    }
     // 调用csm接口生成受理单
     Result result = generateOrderFromCsm(wechatOrdersParamExt);
     // 保存预约单
@@ -144,6 +158,11 @@ public class ServiceCenterDataController extends BaseController {
     }
     // 推送模板通知和短信，保存工单进度
     pushMessageAndSaveRecord(wechatOrders, date);
+
+    //增加发放清洗换芯通知标识
+    if (noticeId != null){
+      noticeRosterService.updateHandleById(noticeId, "CLEAN");
+    }
     log.info(
         "生成受理单,userId = [{}] , ordersCode = [{}]",
         wechatUser.getUserId(),

@@ -3,7 +3,10 @@ package com.ziwow.scrmapp.wechat.service.impl;
 import com.alibaba.druid.util.StringUtils;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.aliyun.oss.model.LiveChannelListing;
 import com.google.common.base.Joiner;
+import com.google.common.base.Optional;
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.ziwow.scrmapp.common.bean.pojo.ProductFilterGradeParam;
@@ -23,11 +26,7 @@ import com.ziwow.scrmapp.common.persistence.entity.FilterChangeRemind;
 import com.ziwow.scrmapp.common.persistence.entity.FilterLevel;
 import com.ziwow.scrmapp.common.persistence.entity.LevelFilterRelations;
 import com.ziwow.scrmapp.common.persistence.entity.Product;
-import com.ziwow.scrmapp.common.persistence.mapper.FilterChangeRemindMapper;
-import com.ziwow.scrmapp.common.persistence.mapper.FilterLevelMapper;
-import com.ziwow.scrmapp.common.persistence.mapper.FilterMapper;
-import com.ziwow.scrmapp.common.persistence.mapper.LevelFilterRelationsMapper;
-import com.ziwow.scrmapp.common.persistence.mapper.ProductMapper;
+import com.ziwow.scrmapp.common.persistence.mapper.*;
 import com.ziwow.scrmapp.common.result.BaseResult;
 import com.ziwow.scrmapp.common.result.Result;
 import com.ziwow.scrmapp.common.service.ThirdPartyService;
@@ -60,10 +59,13 @@ import com.ziwow.scrmapp.wechat.utils.BarCodeConvert;
 import com.ziwow.scrmapp.wechat.vo.ProductVo;
 import com.ziwow.scrmapp.wechat.vo.WechatFansVo;
 import com.ziwow.scrmapp.wechat.vo.WechatUserVo;
+import org.apache.commons.collections.CollectionUtils;
+import org.aspectj.weaver.patterns.HasThisTypePatternTriedToSneakInSomeGenericOrParameterizedTypePatternMatchingStuffAnywhereVisitor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.jdbc.support.incrementer.PostgreSQLSequenceMaxValueIncrementer;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -72,6 +74,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.sql.SQLDataException;
 import java.text.SimpleDateFormat;
@@ -102,6 +105,9 @@ public class ProductServiceImpl implements ProductService {
 
     @Value("${mine.baseUrl}")
     private String mineBaseUrl;
+
+    @Autowired
+    private WechatOrdersMapper wechatOrdersMapper;
 
 
 //    public List<ProductSeries> getAllProductSeries() {
@@ -570,7 +576,7 @@ public class ProductServiceImpl implements ProductService {
                 batchSave(prodLst, filterLevels);
                 // 绑定产品成功后异步推送给小程序
                 for (int i = 0; i < prodLst.size(); i++) {
-                    syncProdBindToMiniApp(userId, prodLst.get(i).getProductCode(),i==0,prodLst.get(i).getProductBarCode());
+                    syncProdBindToMiniApp(userId, prodLst.get(i).getProductCode(),i==0,prodLst.get(i).getProductBarCode(), prodLst.get(i).getModelName());
                 }
             }
         } catch (Exception e) {
@@ -767,9 +773,14 @@ public class ProductServiceImpl implements ProductService {
         return productMapper.selectByOrdersId(orderId);
     }
 
+    @Override
+    public List<com.ziwow.scrmapp.common.bean.vo.ProductVo> selectByOrdersCode(String ordersCode){
+        return productMapper.selectByOrdersCode(ordersCode);
+    }
+
     @Async
     @Override
-    public void syncProdBindToMiniApp(String userId, String productCode, boolean isFirst, String productBarcode) {
+    public void syncProdBindToMiniApp(String userId, String productCode, boolean isFirst, String productBarcode, String modelName) {
         // 异步推送给小程序对接方
         WechatFans wechatFans = wechatFansMapper.getWechatFansByUserId(userId);
         String unionId = wechatFans.getUnionId();
@@ -784,6 +795,7 @@ public class ProductServiceImpl implements ProductService {
         params.put("unionId", wechatFans.getUnionId());
         params.put("productCode", productCode);
         params.put("productBarcode", productBarcode);
+        params.put("modelName", modelName);
         params.put("isFirst",isFirst);
         LOG.info("绑定产品信息同步到小程序请求参数:{}", JSON.toJSONString(params));
         String result = HttpClientUtils.postJson(syncProdBindUrl, net.sf.json.JSONObject.fromObject(params).toString());
@@ -945,5 +957,52 @@ public class ProductServiceImpl implements ProductService {
         }
         return list;
     }
+
+    @Override
+    public Map<String, String> annualReport(String userId) {
+        List<Product> products = productMapper.selectByUserIdOrderById(userId);
+        Map<String, String> map = null;
+        if(CollectionUtils.isNotEmpty(products)){
+            int size = products.size();
+            Date first = products.get(0).getCreateTime();
+            Date last = size != 1 ? products.get(size - 1).getCreateTime() : first;
+            String pd = DateUtil.DateToString(first, DateUtil.YYYY_MM_DD);
+            String ld = DateUtil.DateToString(last, DateUtil.YYYY_MM_DD);
+            String pn = size != 1 ? products.get(size - 1).getProductName()
+                : products.get(0).getProductName();
+            Map<String, String> maintains = wechatOrdersMapper
+                .selectByUserIdMaintainOrders(userId);
+            int fn = Integer.parseInt(String.valueOf(maintains.get("2")));
+            int mn = Integer.parseInt(String.valueOf(maintains.get("1"))) + Integer
+                .parseInt(String.valueOf(maintains.get("0")));
+            String wc = "" +DateUtil.DateDiff(new Date(), last)*5;
+            String fr = transformRadio(fn);
+            String mr = transformRadio(mn);
+            String nd = DateUtil.DateToString(new Date(),DateUtil.YYYY_MM_DD);
+            map = ImmutableMap.<String, String>builder().put("pd", pd).put("ld", ld).put("pn", pn)
+                .put("mn", "" + mn).put("mr", mr).put("fn", "" + fn).put("fr", fr).put("wc", wc)
+                .put("nd", nd).put("ib","true").build();
+        }
+        return map;
+    }
+
+    /**
+     * 保养次数转换落后比例
+     *
+     * @param count 次数
+     * @return 比例值
+     */
+    private String transformRadio( int count) {
+        double d = 99.9;
+        if (count >= 1 && count < 3) {
+            d = 83.4;
+        } else if (count >= 3 && count < 5) {
+            d = 91.3;
+        } else if (count >= 5) {
+            d = 98.8;
+        }
+        return "" + d;
+    }
+
 
 }

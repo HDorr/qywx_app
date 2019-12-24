@@ -9,6 +9,7 @@ import org.apache.ibatis.annotations.Select;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 public interface WechatOrdersMapper {
     int deleteByPrimaryKey(Long id);
@@ -107,5 +108,7 @@ public interface WechatOrdersMapper {
      */
     @Select("select p.productCode from t_orders_pro_relations opr left join t_product p on opr.productId = p.id where opr.orderId = #{orderId}")
     List<String> queryProductCodes(@Param("orderId") Long wechatOrdersId);
+
+    Map<String,String> selectByUserIdMaintainOrders(@Param("userId") String userId);
 
 }

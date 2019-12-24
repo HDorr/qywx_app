@@ -19,6 +19,7 @@ import com.ziwow.scrmapp.common.persistence.entity.Product;
 import com.ziwow.scrmapp.common.persistence.entity.QyhUser;
 import com.ziwow.scrmapp.common.persistence.entity.QyhUserAppraisal;
 import com.ziwow.scrmapp.common.persistence.entity.QyhUserAppraisalVo;
+import com.ziwow.scrmapp.common.persistence.entity.ServiceComment;
 import com.ziwow.scrmapp.common.persistence.entity.ServiceFeeProduct;
 import com.ziwow.scrmapp.common.persistence.entity.SmsMarketing;
 import com.ziwow.scrmapp.common.persistence.entity.WechatOrderAppraise;
@@ -36,27 +37,19 @@ import com.ziwow.scrmapp.tools.utils.CookieUtil;
 import com.ziwow.scrmapp.tools.utils.DateUtil;
 import com.ziwow.scrmapp.tools.utils.StringUtil;
 import com.ziwow.scrmapp.wechat.constants.WeChatConstants;
+import com.ziwow.scrmapp.wechat.enums.ServiceSubscribeCrowd;
 import com.ziwow.scrmapp.wechat.enums.SmsMarketingEmus.SmsTypeEnum;
 import com.ziwow.scrmapp.wechat.persistence.entity.WechatUser;
 import com.ziwow.scrmapp.wechat.schedule.SmsMarketingTask;
-import com.ziwow.scrmapp.wechat.service.FailRecordService;
-import com.ziwow.scrmapp.wechat.service.GrantPointService;
-import com.ziwow.scrmapp.wechat.service.OrdersProRelationsService;
-import com.ziwow.scrmapp.wechat.service.ProductService;
-import com.ziwow.scrmapp.wechat.service.SmsMarketingService;
-import com.ziwow.scrmapp.wechat.service.WXPayService;
-import com.ziwow.scrmapp.wechat.service.WechatFansService;
-import com.ziwow.scrmapp.wechat.service.WechatOrderServiceFeeService;
-import com.ziwow.scrmapp.wechat.service.WechatOrdersRecordService;
-import com.ziwow.scrmapp.wechat.service.WechatOrdersService;
-import com.ziwow.scrmapp.wechat.service.WechatQyhUserService;
-import com.ziwow.scrmapp.wechat.service.WechatUserService;
+import com.ziwow.scrmapp.wechat.service.*;
+import com.ziwow.scrmapp.wechat.utils.SendNotice;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -68,10 +61,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.math.BigDecimal;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 /**
  * Created by xiaohei on 2017/4/7.
@@ -80,6 +71,8 @@ import java.util.Map;
 @RequestMapping(value = "/scrmapp/consumer")
 public class WechatOrdersController {
     private final Logger logger = LoggerFactory.getLogger(WechatOrdersController.class);
+
+    private static final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     @Value("${order.detail.url}")
     private String orderDetailUrl;
@@ -114,6 +107,10 @@ public class WechatOrdersController {
     private SmsMarketingService smsMarketingService;
     @Autowired
     private GrantPointService grantPointService;
+    @Autowired
+    private NoticeRosterService noticeRosterService;
+    @Autowired
+    private ConfigService configService;
 
 
     /**
@@ -126,11 +123,15 @@ public class WechatOrdersController {
     @ResponseBody
     public Result qyscSaveOrder(HttpServletRequest request, HttpServletResponse response, @RequestBody MallOrdersForm mallOrdersForm) {
         logger.info("收到商城原单原回受理单,[{}]", JSON.toJSONString(mallOrdersForm));
-        String userId = wechatUserService.getUserByUnionid(mallOrdersForm.getUnionId()).getUserId();
+        final WechatUser wechatUser = wechatUserService.getUserByUnionid(mallOrdersForm.getUnionId());
+        String userId = wechatUser.getUserId();
+        //处理换芯通知
+        handleSendNotice(mallOrdersForm.getForms(),wechatUser.getMobilePhone());
         //保存工单号，以便于回滚
         List<String> orderNos = new ArrayList<>();
         Result result = new BaseResult();
         StringBuffer retNo = new StringBuffer();
+
         for (WechatOrdersParamExt wechatOrdersParamExt : mallOrdersForm.getForms()) {
             try {
                 wechatOrdersParamExt.setUserId(userId);
@@ -166,7 +167,7 @@ public class WechatOrdersController {
                         final Long pid = productService.save(product);
                         pids.append(pid).append(",");
                         // 绑定产品成功后异步推送给小程序
-                        productService.syncProdBindToMiniApp(userId, product.getProductCode(), isFirst,product.getProductBarCode());
+                        productService.syncProdBindToMiniApp(userId, product.getProductCode(), isFirst,product.getProductBarCode(), product.getModelName());
                     } else {
                         pids.append(products.get(0).getId()).append(",");
                     }
@@ -205,6 +206,28 @@ public class WechatOrdersController {
         result.setReturnCode(mallOrdersForm.getForms().size() / orderNos.size());
         result.setReturnMsg(retNo.toString());
         return result;
+    }
+
+    /**
+     * 对发放换芯通知的用户进行标识
+     */
+    private void handleSendNotice(List<WechatOrdersParamExt> paramExts,String phone){
+        for (WechatOrdersParamExt paramExt : paramExts) {
+            //买的必须是滤芯
+            logger.info("对发放换芯通知的用户进行标识-开始");
+            if (paramExt.getFilter()){
+                final List<String> clean = (List)configService.getConfig("filter_warn_class").get("clean");
+                final Map<String, Object> noticeMap = noticeRosterService.queryIdAndTypeByPhone(phone);
+                Long noticeId;
+                //final String properType = (String) noticeRosterService.queryIdAndTypeByPhone(phone).get("proper_type");
+                if (!CollectionUtils.isEmpty(noticeMap) && !clean.contains(noticeMap.get("proper_type"))){
+                    noticeId = (Long)noticeMap.get("id");
+                    noticeRosterService.updateHandleById(noticeId,"RENEW");
+                }
+                break;
+            }
+            logger.info("对发放换芯通知的用户进行标识-结束");
+        }
     }
 
 
@@ -1118,8 +1141,22 @@ public class WechatOrdersController {
                 if (count > 0) {
                     //修改预约单状态为已评价
                     wechatOrdersService.updateOrdersStatus(ordersCode, userId, date, SystemConstants.APPRAISE);
-                    //发送评价积分
-                    grantPointService.grantOrderComment(userId, ordersCode, wechatOrders.getOrderType());
+                    // 区分滤芯和清洗
+                    Integer orderType;
+                    switch (wechatOrdersService.getParamByOrdersCode(ordersCode).getMaintType()){
+                        case 2:
+                            orderType = 3; // 滤芯
+                            break;
+                        case 1:
+                            orderType = 4; // 清洗
+                            break;
+                        default:
+                            orderType = wechatOrders.getOrderType();
+                            break;
+                    }
+                    logger.info("工单评论发放积分！ordersCode = [{}]",ordersCode);
+                    grantPointService.grantOrderComment(userId, ordersCode, orderType,
+                            new ServiceComment(attitude,profession,wechatOrderAppraise.getContent(),sdf.format(wechatOrders.getCreateTime())));
 
                 } else {
                     throw new SQLException("qyhUserAppraisalVo:" + JSONObject.toJSONString(qyhUserAppraisalVo));
