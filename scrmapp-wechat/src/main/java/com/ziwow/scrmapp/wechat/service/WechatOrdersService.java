@@ -10,6 +10,7 @@ import com.ziwow.scrmapp.common.exception.ParamException;
 import com.ziwow.scrmapp.common.pagehelper.Page;
 import com.ziwow.scrmapp.common.persistence.entity.WechatOrders;
 import com.ziwow.scrmapp.common.result.Result;
+import com.ziwow.scrmapp.wechat.params.order.ConfirmOrderParam;
 
 /**
  * Created by xiaohei on 2017/4/10.
@@ -93,4 +94,12 @@ public interface WechatOrdersService {
     List<WechatOrdersVo> getWechatOrdersByProductId(Long productId);
 
     boolean isYDYHOrder(String orderCode);
+
+    /**
+     * 判断工单是否存在二次提交
+     * @param param
+     * @param userId
+     * @return
+     */
+    boolean confirmOrder(ConfirmOrderParam param,String userId);
 }

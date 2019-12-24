@@ -29,6 +29,7 @@ import com.ziwow.scrmapp.tools.utils.MD5;
 import com.ziwow.scrmapp.tools.utils.StringUtil;
 import com.ziwow.scrmapp.wechat.constants.WeChatConstants;
 import com.ziwow.scrmapp.wechat.enums.BuyChannel;
+import com.ziwow.scrmapp.wechat.params.order.ConfirmOrderParam;
 import com.ziwow.scrmapp.wechat.persistence.entity.WechatFans;
 import com.ziwow.scrmapp.wechat.persistence.entity.WechatUser;
 import com.ziwow.scrmapp.wechat.persistence.mapper.WechatUserMapper;
@@ -1027,5 +1028,52 @@ public class WechatOrdersServiceImpl implements WechatOrdersService {
     public boolean isYDYHOrder(String orderCode){
         return wechatOrdersMapper.isYDYHOrder(orderCode) != null;
     }
+
+    /**
+     *
+     * @param param
+     * @param userId
+     * @return  true 存在
+     */
+    @Override
+    public boolean confirmOrder(ConfirmOrderParam param, String userId) {
+        //获取用户某种类型未完成并且未取消的单子
+        List<Long> wechatOrdersIds = wechatOrdersMapper.queryNoCancelAndNoEnd(userId,param.getOrderType());
+        if (wechatOrdersIds.size() == 0){
+            return false;
+        }
+        final List<Product> products = productMapper.findByUserId(userId);
+        final List<String> codes = collectionCodes(products, param.getProductIds());
+        //进行逻辑比较返回结果
+        for (Long wechatOrdersId : wechatOrdersIds) {
+            //根据订单号查询所对应的产品code型号
+            List<String> pros = wechatOrdersMapper.queryProductCodes(wechatOrdersId);
+            //如果之前的包含当前预约的型号
+            if (pros.containsAll(codes)){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     *  收集code
+     * @param products 用户已有的产品
+     * @param proIds 选中的产品
+     * @return
+     */
+    private List<String> collectionCodes(List<Product> products,List<String> proIds){
+        List<String> codes = new ArrayList<>(proIds.size());
+        for (String proId : proIds) {
+            for (Product product : products) {
+                if (product.getId().equals(Long.valueOf(proId))){
+                    codes.add(product.getProductCode());
+                    break;
+                }
+            }
+        }
+        return codes;
+    }
+
 
 }

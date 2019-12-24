@@ -428,6 +428,7 @@
         <include refid="select_orders_by_userId_column"/>
     </select>
 
+
     <select id="getByOrdersCode" parameterType="java.lang.String" resultMap="orderMap">
         SELECT
             o.id AS id,

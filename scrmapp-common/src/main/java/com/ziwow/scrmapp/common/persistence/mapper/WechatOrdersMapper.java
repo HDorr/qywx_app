@@ -5,6 +5,7 @@ import com.ziwow.scrmapp.common.bean.vo.*;
 import com.ziwow.scrmapp.common.pagehelper.Page;
 import com.ziwow.scrmapp.common.persistence.entity.WechatOrders;
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
 
 import java.util.Date;
 import java.util.List;
@@ -89,5 +90,22 @@ public interface WechatOrdersMapper {
      * @return
      */
     long getIdByCode(@Param("orderCode") String orderCode);
+
+    /**
+     * 获取用户某种类型未完成并且未取消的单子
+     * @param userId
+     * @param orderType
+     * @return
+     */
+    @Select("select id from t_wechat_orders where userId = #{userId} and orderType = #{orderType} and status in (1,3,4) limit 20")
+    List<Long> queryNoCancelAndNoEnd(@Param("userId") String userId,@Param("orderType") Integer orderType);
+
+    /**
+     * 根据订单号查询所对应的产品code型号
+     * @param wechatOrdersId
+     * @return
+     */
+    @Select("select p.productCode from t_orders_pro_relations opr left join t_product p on opr.productId = p.id where opr.orderId = #{orderId}")
+    List<String> queryProductCodes(@Param("orderId") Long wechatOrdersId);
 
 }

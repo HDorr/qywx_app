@@ -174,7 +174,7 @@ public class WechatOrdersController {
                 wechatOrdersParamExt.setProductIds(pids.toString());
                 result = this.addWechatOrders(request, response, wechatOrdersParamExt);
             } catch (Exception e) {
-                logger.error("【原单原回】-保存工单出现异常-unionId为:[{}],异常信息为[{}],", mallOrdersForm.getUnionId(), e);
+                logger.error("【原单原回】-保存工单出现异常-unionId为:[{}],异常信息为[{}],订单号为:[{}]", mallOrdersForm.getUnionId(), e,mallOrdersForm.getOrderNo());
                 result.setReturnCode(0);
             }
             if (result.getReturnCode() == 0) {
