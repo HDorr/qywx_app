@@ -1131,6 +1131,7 @@ public class WechatOrdersController {
                 qyhUserAppraisalVo.setContent(wechatOrderAppraise.getContent());
                 qyhUserAppraisalVo.setQyhUserId(wechatOrders.getQyhUserId());
                 qyhUserAppraisalVo.setUserId(userId);
+                qyhUserAppraisalVo.setRecommended(wechatOrderAppraise.getRecommended());
                 qyhUserAppraisalVo.setIs_order(convertBoolean(wechatOrderAppraise.getOrder()));
                 if (SystemConstants.REPAIR_APPRAISE == covertStringToInt(wechatOrderAppraise.getAppraiseType())) {
                     qyhUserAppraisalVo.setIs_repair(convertBoolean(wechatOrderAppraise.getRepair()));

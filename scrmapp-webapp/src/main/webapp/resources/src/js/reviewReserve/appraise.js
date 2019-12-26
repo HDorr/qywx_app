@@ -92,6 +92,12 @@ function addEvent() {
         star.next().text(show);
     })
 
+    //服务推荐亲友
+    $('.t-star-3 div').on('click', function () {
+        $(".t-star-3").attr("recommended",$(this).index())
+        $(this).addClass('select-div').siblings().removeClass();
+    })
+
     //文本域输入备注事件
     $(".t-text").on("input", function () {
         var maxlen = $(this).attr("maxlength");
@@ -111,6 +117,7 @@ function submitData() {
     //获得服务礼仪和专业度值
     var attitude = $(".t-star-1").attr("attitude");
     var profession = $(".t-star-2").attr("profession");
+    var recommended = $(".t-star-3").attr("recommended");
     if (appraiseType === 2) {
         if (!$("#t-repair-choosed").hasClass("t-checked") && !$("#t-repair-unchoosed").hasClass("t-checked")) {
             $.alertNew("报修故障是否已排除?");
@@ -127,6 +134,10 @@ function submitData() {
     }
     if (profession == 0) {
         $.alertNew("请您为专业技能点亮星星");
+        return;
+    }
+    if (recommended == 0) {
+        $.alertNew("请您为我们的服务推荐给亲友");
         return;
     }
 
@@ -156,6 +167,7 @@ function submitData() {
     var params = {
         "attitude": attitude,
         "profession": profession,
+        "recommended": recommended,
         "repair": !map.get("repair") ? "" : map.get("repair"),
         "order": map.get("order"),
         "content": content,
