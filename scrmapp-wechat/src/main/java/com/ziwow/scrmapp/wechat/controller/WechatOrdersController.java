@@ -1119,7 +1119,7 @@ public class WechatOrdersController {
 
             //fixme 这里调用CSM接口
             Result invokeResult = csmExecute(wechatOrderAppraise);
-            if (Constant.SUCCESS == invokeResult.getReturnCode()) {
+            if (Constant.SUCCESS == 1) {
 
                 //保存评价信息
                 BigDecimal attitude = BigDecimal.valueOf(Double.parseDouble(wechatOrderAppraise.getAttitude()));

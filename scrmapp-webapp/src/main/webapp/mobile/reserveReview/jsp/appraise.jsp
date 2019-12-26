@@ -68,11 +68,11 @@
         </div>
         <div class="t-box">
             <div class="t-box-img">
-                <img class="on-recommended" src="./清洗保养评价_files/recommended.png">
+                <img class="on-recommended" src="${f_ctxpath}/resources/src/images/appraise/recommended.png">
                 肯定不推荐
             </div>
             <div class="t-box-img">
-                <img src="./清洗保养评价_files/recommended.png">
+                <img src="${f_ctxpath}/resources/src/images/appraise/recommended.png">
                 肯定推荐
             </div>
             <!-- <span class="t-show"></span> -->
