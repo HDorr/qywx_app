@@ -12,21 +12,12 @@ import java.util.List;
  */
 public class ConfirmOrderParam extends CenterServiceParam {
 
-    private String orderNo;
 
     private Integer orderType;
 
     /** 产品列表pro1,pro2,.. */
     private String productIds;
 
-
-    public String getOrderNo() {
-        return orderNo;
-    }
-
-    public void setOrderNo(String orderNo) {
-        this.orderNo = orderNo;
-    }
 
     public Integer getOrderType() {
         return orderType;

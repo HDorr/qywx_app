@@ -98,7 +98,7 @@ public interface WechatOrdersMapper {
      * @param orderType
      * @return
      */
-    @Select("select id from t_wechat_orders where userId = #{userId} and orderType = #{orderType} and status in (1,3,4) limit 20")
+    @Select("select id from t_wechat_orders where userId = #{userId} and orderType = #{orderType} and status in (1,3,4) order by createTime desc limit 20 ")
     List<Long> queryNoCancelAndNoEnd(@Param("userId") String userId,@Param("orderType") Integer orderType);
 
     /**
