@@ -1219,6 +1219,7 @@ public class WechatOrdersController {
         evaluateParam.setIs_recommend(0);
         evaluateParam.setIs_wxgz(covertStringToInt(appraise.getRepair()) + 1);
         evaluateParam.setIs_wxzs(covertStringToInt(appraise.getOrder()) + 1);
+        evaluateParam.setIs_nps_score(appraise.getRecommended() == null ? 11 : appraise.getRecommended());
 
         return wechatUserService.invokeCssEvaluate(evaluateParam);
     }

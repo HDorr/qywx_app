@@ -16,7 +16,15 @@ public class EvaluateParam implements java.io.Serializable {
 	private Integer is_recommend;//推荐意愿
 	private Integer is_wxzs;//
 	private Integer is_wxgz;
+	private Integer is_nps_score;//nps评分
 
+	public Integer getIs_nps_score() {
+		return is_nps_score;
+	}
+
+	public void setIs_nps_score(Integer is_nps_score) {
+		this.is_nps_score = is_nps_score;
+	}
 
 	// 单号
 	public int getNumber_type() {
