@@ -52,7 +52,7 @@
             <p><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">您是否愿意因为我们的服务将沁园推荐给您的亲友？</font></font></p>
         </div>
         <div class="t-row-3">
-            <div class="t-div t-star-3" recommended="0">
+            <div class="t-div t-star-3" recommended="11">
                 <div>0</div>
                 <div>1</div>
                 <div>2</div>

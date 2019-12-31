@@ -136,7 +136,7 @@ function submitData() {
         $.alertNew("请您为专业技能点亮星星");
         return;
     }
-    if (recommended == 0) {
+    if (recommended == 11) {
         $.alertNew("请您为我们的服务推荐给亲友");
         return;
     }
