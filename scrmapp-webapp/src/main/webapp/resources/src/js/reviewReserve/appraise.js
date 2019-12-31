@@ -125,19 +125,19 @@ function submitData() {
         }
     }
     if (!$("#t-order-choosed").hasClass("t-checked") && !$("#t-order-unchoosed").hasClass("t-checked")) {
-        $.alertNew("工程师是否如约而至?");
+        $.alertNew("请您对我们的服务时效进行评分");
         return;
     }
     if (attitude == 0) {
-        $.alertNew("请您为服务礼仪点亮星星");
+        $.alertNew("请您对我们的专业技能进行评分");
         return;
     }
     if (profession == 0) {
-        $.alertNew("请您为专业技能点亮星星");
+        $.alertNew("请您对我们的服务礼仪进行评分");
         return;
     }
     if (recommended == 11) {
-        $.alertNew("请您为我们的服务推荐给亲友");
+        $.alertNew("请您对我们的服务进行推荐值评分");
         return;
     }
 
