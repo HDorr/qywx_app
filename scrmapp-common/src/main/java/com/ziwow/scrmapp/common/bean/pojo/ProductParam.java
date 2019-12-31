@@ -8,9 +8,10 @@ public class ProductParam {
     public ProductParam() {
     }
 
-    public ProductParam(String spec, String barCode) {
+    public ProductParam(String spec, String barCode,String item_code) {
         this.spec = spec;
         this.barCode = barCode;
+        this.item_code = item_code;
     }
 
     public String getSpec() {

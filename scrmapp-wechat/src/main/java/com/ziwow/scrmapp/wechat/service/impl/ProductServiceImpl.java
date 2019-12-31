@@ -3,9 +3,7 @@ package com.ziwow.scrmapp.wechat.service.impl;
 import com.alibaba.druid.util.StringUtils;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.aliyun.oss.model.LiveChannelListing;
 import com.google.common.base.Joiner;
-import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -60,12 +58,10 @@ import com.ziwow.scrmapp.wechat.vo.ProductVo;
 import com.ziwow.scrmapp.wechat.vo.WechatFansVo;
 import com.ziwow.scrmapp.wechat.vo.WechatUserVo;
 import org.apache.commons.collections.CollectionUtils;
-import org.aspectj.weaver.patterns.HasThisTypePatternTriedToSneakInSomeGenericOrParameterizedTypePatternMatchingStuffAnywhereVisitor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.jdbc.support.incrementer.PostgreSQLSequenceMaxValueIncrementer;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -74,7 +70,6 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.Serializable;
 import java.math.BigDecimal;
 import java.sql.SQLDataException;
 import java.text.SimpleDateFormat;
@@ -153,18 +148,20 @@ public class ProductServiceImpl implements ProductService {
     }
 
     /**
-     * 通过条形码或者产品型号查询产品信息
+     * 通过条形码或者产品型号或产品U9编码查询产品信息
      * （需要调用沁园查询接口）
      *
      * @param modelName
      * @param productBarCode
+     * @param productEncode
      * @return
      */
     @Override
-    public ProductVo queryProduct(String modelName, String productBarCode) {
+    public ProductVo queryProduct(String modelName, String productBarCode,
+        String productEncode) {
         ProductVo product = null;
         /*调用沁园查询产品接口方法*/
-        ProductItem productItem = thirdPartyService.getProductItem(new ProductParam(modelName, productBarCode));
+        ProductItem productItem = thirdPartyService.getProductItem(new ProductParam(modelName, productBarCode,productEncode));
 
         if (productItem != null) {
             product = new ProductVo();
@@ -190,6 +187,8 @@ public class ProductServiceImpl implements ProductService {
         }
         return product;
     }
+
+
 
 
     @Transactional(rollbackFor = SQLDataException.class)
@@ -939,11 +938,13 @@ public class ProductServiceImpl implements ProductService {
         return productMapper.getProductsByBarCode(productBarCodeTwenty);
     }
 
+
     @Override
-    public List<com.ziwow.scrmapp.common.bean.vo.ProductVo> getProductByModelNames(List<String> productModelNames) {
+    public List<com.ziwow.scrmapp.common.bean.vo.ProductVo> getProductByEncode(
+        List<String> productEncode) {
         List<com.ziwow.scrmapp.common.bean.vo.ProductVo> list = new ArrayList<>();
-        for (String modelName : productModelNames) {
-            final ProductVo productVo = this.queryProduct(modelName, null);
+        for (String encode : productEncode) {
+            final ProductVo productVo = this.queryProduct(null,null,encode);
             com.ziwow.scrmapp.common.bean.vo.ProductVo pv = new com.ziwow.scrmapp.common.bean.vo.ProductVo();
             pv.setProductName(productVo.getProductName());
             pv.setProductBarCode("");

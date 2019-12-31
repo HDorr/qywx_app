@@ -27,6 +27,18 @@ public class WechatOrdersParamExt extends WechatOrdersParam{
 	 * 滤芯所匹配的产品code
 	 */
 	List<String> productModelNames;
+	/**
+	 * 滤芯所适配的机器U9编码
+	 */
+	private List<String> productEncodes;
+
+	public List<String> getProductEncodes() {
+		return productEncodes;
+	}
+
+	public void setProductEncodes(List<String> productEncodes) {
+		this.productEncodes = productEncodes;
+	}
 
 	public String getUserId() {
 		return userId;

@@ -1,5 +1,6 @@
 package com.ziwow.scrmapp.wechat.service;
 
+import com.ziwow.scrmapp.common.bean.pojo.ProductParam;
 import com.ziwow.scrmapp.common.pagehelper.Page;
 import com.ziwow.scrmapp.common.persistence.entity.FilterLevel;
 import com.ziwow.scrmapp.common.persistence.entity.Product;
@@ -35,7 +36,7 @@ public interface ProductService {
     List<Product> pageProductsByUserId(String userId, Page page);
     long getCountByUserId(String userId);
 
-    ProductVo queryProduct(String modelName, String productBarCode);
+    ProductVo queryProduct(String modelName, String productBarCode, String productEncode);
 
     Long save(Product product) throws SQLDataException;
 
@@ -126,7 +127,7 @@ public interface ProductService {
      * @param productModelNames
      * @return
      */
-    List<com.ziwow.scrmapp.common.bean.vo.ProductVo> getProductByModelNames(List<String> productModelNames);
+    //List<com.ziwow.scrmapp.common.bean.vo.ProductVo> getProductByModelNames(List<String> productModelNames);
 
     /**
      * 根据 当前userId,
@@ -134,5 +135,11 @@ public interface ProductService {
      * @return
      */
     Map<String,String> annualReport(String userId);
+    /**
+     * 根据产品U9编码查询产品信息
+     * @param productEncode
+     * @return
+     */
+    List<com.ziwow.scrmapp.common.bean.vo.ProductVo> getProductByEncode(List<String> productEncode);
 
 }
