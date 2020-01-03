@@ -57,22 +57,23 @@ function renderDetail(data) {
         '        </ul>';
 
     //有滤芯
-    if (data.filterList.length > 0) {
-        var str2 = '<ul class="pdtInfo">'
-        $.each(data.filterList, function(i, v) {
-            str2 += '<li class="pdtInfoForm" data-id="' + v.id + '"><span>第' + numArr[i] + '级滤芯:</span><span>' + v.filterName + '</span></li>'
-        })
-        str2 += ' <li class="toggleRemind">' +
-            '     <button data-id="' + data.id + '"onclick="setRemindFilter(this)">' + data.filterRemindName + '</button>' +
-            '      </li>' +
-            '       </ul>' +
-            '       <button class="qy-btn-all" onclick="gotoIndex()" style="padding-bottom:5%">+ 一键服务</button>';
-    } else { //没滤芯
-        var str2 = '<p style="padding-left:0.333333rem;font-size:0.2933333rem">没有查到该产品的滤芯数据</p>'
-        str2 += '<button class="qy-btn-all" onclick="gotoIndex()" style="padding-bottom:5%">+ 一键服务</button>';
 
-    }
-    str1 = str1 + str2;
+    // if (data.filterList.length > 0) {
+    //     var str2 = '<ul class="pdtInfo">'
+    //     $.each(data.filterList, function(i, v) {
+    //         str2 += '<li class="pdtInfoForm" data-id="' + v.id + '"><span>第' + numArr[i] + '级滤芯:</span><span>' + v.filterName + '</span></li>'
+    //     })
+    //     str2 += ' <li class="toggleRemind">' +
+    //         '     <button data-id="' + data.id + '"onclick="setRemindFilter(this)">' + data.filterRemindName + '</button>' +
+    //         '      </li>' +
+    //         '       </ul>' +
+    //         '       <button class="qy-btn-all" onclick="gotoIndex()" style="padding-bottom:5%">+ 一键服务</button>';
+    // } else { //没滤芯
+    //     var str2 = '<p style="padding-left:0.333333rem;font-size:0.2933333rem">没有查到该产品的滤芯数据</p>'
+    //     str2 += '<button class="qy-btn-all" onclick="gotoIndex()" style="padding-bottom:5%">+ 一键服务</button>';
+    //
+    // }
+    str1 = str1 + '<button class="qy-btn-all" onclick="gotoIndex()" style="padding-bottom:5%">+ 一键服务</button>';
     $(".main_layer").css("padding-top", "0").html(str1);
 }
 
