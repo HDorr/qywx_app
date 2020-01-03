@@ -964,8 +964,8 @@ public class ProductServiceImpl implements ProductService {
         Map<String, String> map = null;
         if(CollectionUtils.isNotEmpty(products)){
             int size = products.size();
-            Date first = products.get(0).getCreateTime();
-            Date last = size != 1 ? products.get(size - 1).getCreateTime() : first;
+            Date first = products.get(0).getBuyTime();
+            Date last = size != 1 ? products.get(size - 1).getBuyTime() : first;
             String pd = DateUtil.DateToString(first, DateUtil.YYYY_MM_DD);
             String ld = DateUtil.DateToString(last, DateUtil.YYYY_MM_DD);
             String pn = size != 1 ? products.get(size - 1).getProductName()
