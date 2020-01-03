@@ -14,6 +14,11 @@ public class ProductParam {
         this.item_code = item_code;
     }
 
+    public ProductParam(String spec, String barCode) {
+        this.spec = spec;
+        this.barCode = barCode;
+    }
+
     public String getSpec() {
         return spec;
     }
