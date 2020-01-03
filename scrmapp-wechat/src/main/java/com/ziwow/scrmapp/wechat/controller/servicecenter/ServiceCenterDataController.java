@@ -28,6 +28,7 @@ import com.ziwow.scrmapp.wechat.params.address.AddressDeleteParam;
 import com.ziwow.scrmapp.wechat.params.address.AddressModifyParam;
 import com.ziwow.scrmapp.wechat.params.address.AddressSaveParam;
 import com.ziwow.scrmapp.wechat.params.common.CenterServiceParam;
+import com.ziwow.scrmapp.wechat.params.order.ConfirmOrderParam;
 import com.ziwow.scrmapp.wechat.params.order.OrderCancelParam;
 import com.ziwow.scrmapp.wechat.params.order.OrderModifyParam;
 import com.ziwow.scrmapp.wechat.params.order.OrderSaveParam;
@@ -169,6 +170,8 @@ public class ServiceCenterDataController extends BaseController {
     return success(wechatOrders);
   }
 
+
+
   /**
    * 工单列表
    *
@@ -189,6 +192,20 @@ public class ServiceCenterDataController extends BaseController {
         wechatOrdersService.pageByUserId(wechatUser.getUserId(), page);
     return toPageMap(wechatOrders, count);
   }
+
+
+  /**
+   * 确认工单是否有重复提交的情况
+   * @param param
+   * @return
+   */
+  @RequestMapping("/order/confirm")
+  public Result orderConfirm (@RequestBody ConfirmOrderParam param) {
+    WechatUser wechatUser = obtainWeChatUser(param);
+    boolean isContains = wechatOrdersService.confirmOrder(param,wechatUser.getUserId());
+    return success(isContains);
+  }
+
 
   /**
    * 用户取消预约
