@@ -269,14 +269,14 @@ public class ProductServiceImpl implements ProductService {
         } else {
             productVo.setChannelName("其它");
         }
-        //查询滤芯级别对应的滤芯
-        if (product.getLevelId() != null && product.getLevelId() != 0) {
-            List<Filter> filterList = filterMapper.findByLevelId(product.getLevelId());
-            productVo.setFilterList(filterList);
-            if (filterList.size() == 0) {
-                batchSave(productVo);
-            }
-        }
+//        //查询滤芯级别对应的滤芯
+//        if (product.getLevelId() != null && product.getLevelId() != 0) {
+//            List<Filter> filterList = filterMapper.findByLevelId(product.getLevelId());
+//            productVo.setFilterList(filterList);
+//            if (filterList.size() == 0) {
+//                batchSave(productVo);
+//            }
+//        }
         return productVo;
     }
 
