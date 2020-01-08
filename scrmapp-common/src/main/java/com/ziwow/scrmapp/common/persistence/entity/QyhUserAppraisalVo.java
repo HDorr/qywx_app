@@ -4,6 +4,15 @@ public class QyhUserAppraisalVo extends QyhUserAppraisal{
     private Boolean is_repair;
     private Boolean is_order;
     private Integer is_source;
+    private Integer recommended;//nps    0-10
+
+    public Integer getRecommended() {
+        return recommended;
+    }
+
+    public void setRecommended(Integer recommended) {
+        this.recommended = recommended;
+    }
 
     public Boolean getIs_repair() {
         return is_repair;
