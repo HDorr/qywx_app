@@ -207,7 +207,7 @@ public class ProductController {
             if (StringUtil.isNotBlank(productBarCode) && 20 == productBarCode.length()) {
                 productBarCode = BarCodeConvert.convert(productBarCode);
             }
-            ProductVo product = productService.queryProduct(modelName, productBarCode);
+            ProductVo product = productService.queryProduct(modelName, productBarCode, null);
             if (null != productBarCode || "".equals(productBarCode)) {
                 product.setProductBarCode(productBarCode);
             }

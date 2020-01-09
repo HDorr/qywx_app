@@ -139,7 +139,7 @@ public class WechatOrdersController {
                 wechatOrdersParamExt.setOrderNo(mallOrdersForm.getOrderNo());
                 //买的是滤芯
                 if (wechatOrdersParamExt.getFilter()) {
-                    List<ProductVo> list = productService.getProductByModelNames(wechatOrdersParamExt.getProductModelNames());
+                    List<ProductVo> list = productService.getProductByEncode(wechatOrdersParamExt.getProductEncodes());
                     wechatOrdersParamExt.setProducts(list);
                 }
                 StringBuilder pids = new StringBuilder();
