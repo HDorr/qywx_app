@@ -384,9 +384,9 @@ public class ProductServiceImpl implements ProductService {
     public String queryProductImage(String modelName) {
         //String productImg = thirdPartyService.getProductImg(modelName);
         String productImg = "https://wx.qinyuan.cn/wx/resources/images/defaultPdtImg.jpg";
-        if (!StringUtils.isEmpty(productImg)) {
-            updateProductImage(modelName, productImg);
-        }
+//        if (!StringUtils.isEmpty(productImg)) {
+//            updateProductImage(modelName, productImg);
+//        }
         return productImg;
     }
 
