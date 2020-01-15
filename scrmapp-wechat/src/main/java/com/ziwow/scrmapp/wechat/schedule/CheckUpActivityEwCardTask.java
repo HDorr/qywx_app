@@ -39,6 +39,7 @@ public class CheckUpActivityEwCardTask extends IJobHandler {
         List<GrantEwCardRecord> grantEwCardRecords = grantEwCardRecordService.selectReceiveRecord(false);
         for (GrantEwCardRecord grantEwCardRecord : grantEwCardRecords) {
             if (StringUtils.isNotBlank(grantEwCardRecord.getPhone()) ||  grantEwCardRecord.getSendTime() != null){
+
                 if (EwCardUtil.gtSevenDay(grantEwCardRecord.getSendTime())) {
                     try {
                         grantEwCardRecordService.resetGrantEwCardRecord(grantEwCardRecord.getPhone());
@@ -47,6 +48,7 @@ public class CheckUpActivityEwCardTask extends IJobHandler {
                         XxlJobLogger.log("重置数据失败，延保卡号:{}",grantEwCardRecord.getMask());
                     }
                 }
+
             }
         }
         return ReturnT.SUCCESS;
