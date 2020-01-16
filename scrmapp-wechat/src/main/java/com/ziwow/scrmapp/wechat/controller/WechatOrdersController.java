@@ -175,7 +175,7 @@ public class WechatOrdersController {
                 wechatOrdersParamExt.setProductIds(pids.toString());
                 result = this.addWechatOrders(request, response, wechatOrdersParamExt);
             } catch (Exception e) {
-                logger.error("【原单原回】-保存工单出现异常-unionId为:[{}],异常信息为[{}],", mallOrdersForm.getUnionId(), e);
+                logger.error("【原单原回】-保存工单出现异常-unionId为:[{}],异常信息为[{}],订单号为:[{}]", mallOrdersForm.getUnionId(), e,mallOrdersForm.getOrderNo());
                 result.setReturnCode(0);
             }
             if (result.getReturnCode() == 0) {
@@ -1131,6 +1131,7 @@ public class WechatOrdersController {
                 qyhUserAppraisalVo.setContent(wechatOrderAppraise.getContent());
                 qyhUserAppraisalVo.setQyhUserId(wechatOrders.getQyhUserId());
                 qyhUserAppraisalVo.setUserId(userId);
+                qyhUserAppraisalVo.setRecommended(wechatOrderAppraise.getRecommended());
                 qyhUserAppraisalVo.setIs_order(convertBoolean(wechatOrderAppraise.getOrder()));
                 if (SystemConstants.REPAIR_APPRAISE == covertStringToInt(wechatOrderAppraise.getAppraiseType())) {
                     qyhUserAppraisalVo.setIs_repair(convertBoolean(wechatOrderAppraise.getRepair()));
@@ -1218,6 +1219,7 @@ public class WechatOrdersController {
         evaluateParam.setIs_recommend(0);
         evaluateParam.setIs_wxgz(covertStringToInt(appraise.getRepair()) + 1);
         evaluateParam.setIs_wxzs(covertStringToInt(appraise.getOrder()) + 1);
+        evaluateParam.setIs_nps_score(appraise.getRecommended() == null ? 11 : appraise.getRecommended());
 
         return wechatUserService.invokeCssEvaluate(evaluateParam);
     }

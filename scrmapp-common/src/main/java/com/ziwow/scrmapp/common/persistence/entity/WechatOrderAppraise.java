@@ -16,6 +16,15 @@ public class WechatOrderAppraise implements Serializable {
     private String content;//评价内容
     private String orderCode;//评价对应的订单
     private String appraiseType;//评价对应订单的类型
+    private Integer recommended;//nps    0-10
+
+    public Integer getRecommended() {
+        return recommended;
+    }
+
+    public void setRecommended(Integer recommended) {
+        this.recommended = recommended;
+    }
 
     public String getAttitude() {
         return attitude;

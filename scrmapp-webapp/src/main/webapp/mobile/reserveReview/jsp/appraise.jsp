@@ -47,6 +47,37 @@
             <p>工程师操作专业且井然有序,讲解使用及保养知识</p>
         </div>
     </div>
+    <div class="t-container t-body">
+        <div class=" t-row-1">
+            <p><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">您是否愿意因为我们的服务将沁园推荐给您的亲友？</font></font></p>
+        </div>
+        <div class="t-row-3">
+            <div class="t-div t-star-3" recommended="11">
+                <div>0</div>
+                <div>1</div>
+                <div>2</div>
+                <div>3</div>
+                <div>4</div>
+                <div>5</div>
+                <div>6</div>
+                <div>7</div>
+                <div>8</div>
+                <div>9</div>
+                <div>10</div>
+            </div>
+        </div>
+        <div class="t-box">
+            <div class="t-box-img">
+                <img class="on-recommended" src="${f_ctxpath}/resources/src/images/appraise/recommended.png">
+                肯定不推荐
+            </div>
+            <div class="t-box-img">
+                <img src="${f_ctxpath}/resources/src/images/appraise/recommended.png">
+                肯定推荐
+            </div>
+            <!-- <span class="t-show"></span> -->
+        </div>
+    </div>
     <div class="t-container t-content-area">
         <textarea placeholder="亲，您对我们的服务还满意吗？" maxlength="80" class="t-text"></textarea>
         <div class="t-limit">还能输入<span>80</span>个字</div>

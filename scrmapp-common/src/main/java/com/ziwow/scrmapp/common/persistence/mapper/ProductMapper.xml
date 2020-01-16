@@ -87,12 +87,12 @@
     <insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="com.ziwow.scrmapp.common.persistence.entity.Product">
 	    insert into t_product (
 	    	itemKind, typeName, smallcName, modelName, levelId, levelName,
-	      	productName, productCode, productImage, productBarCode,barCodeImage, shoppingOrder, saleType,
+	      	productName, productCode, productBarCode,barCodeImage, shoppingOrder, saleType,
 		    o2o, buyChannel, filterRemind,  userId, buyTime, status, createTime,productBarCodeTwenty
 	    )values (
 	   		#{itemKind,jdbcType=VARCHAR}, #{typeName,jdbcType=VARCHAR}, #{smallcName,jdbcType=VARCHAR},
 		    #{modelName,jdbcType=VARCHAR}, #{levelId,jdbcType=BIGINT}, #{levelName,jdbcType=VARCHAR}, 
-		    #{productName,jdbcType=VARCHAR}, #{productCode,jdbcType=VARCHAR}, #{productImage,jdbcType=VARCHAR},
+		    #{productName,jdbcType=VARCHAR}, #{productCode,jdbcType=VARCHAR},
 		    #{productBarCode,jdbcType=VARCHAR},#{barCodeImage,jdbcType=VARCHAR}, #{shoppingOrder,jdbcType=VARCHAR}, #{saleType,jdbcType=CHAR},
 		    #{o2o,jdbcType=INTEGER}, #{buyChannel,jdbcType=INTEGER}, #{filterRemind,jdbcType=INTEGER},
 		    #{userId,jdbcType=VARCHAR}, #{buyTime,jdbcType=DATE}, #{status,jdbcType=INTEGER}, #{createTime,jdbcType=DATE},#{productBarCodeTwenty,jdbcType=VARCHAR}
@@ -102,7 +102,7 @@
     <insert id="batchSave" parameterType="java.util.List">
         insert into t_product (itemKind, typeName,
         smallcName, modelName, levelId, levelName,
-        productName, productCode, productImage,
+        productName, productCode,
         productBarCode, barCodeImage, shoppingOrder, saleType,
         o2o, buyChannel, filterRemind,
         userId, buyTime, status, createTime,isAutoBind)
@@ -111,7 +111,7 @@
             (#{item.itemKind,jdbcType=VARCHAR}, #{item.typeName,jdbcType=VARCHAR}, #{item.smallcName,jdbcType=VARCHAR},
             #{item.modelName,jdbcType=VARCHAR}, #{item.levelId,jdbcType=BIGINT}, #{item.levelName,jdbcType=VARCHAR},
             #{item.productName,jdbcType=VARCHAR}, #{item.productCode,jdbcType=VARCHAR},
-            #{item.productImage,jdbcType=VARCHAR},#{item.productBarCode,jdbcType=VARCHAR},
+            #{item.productBarCode,jdbcType=VARCHAR},
             #{item.barCodeImage,jdbcType=VARCHAR},#{item.shoppingOrder,jdbcType=VARCHAR},#{item.saleType,jdbcType=CHAR},
             #{item.o2o,jdbcType=INTEGER}, #{item.buyChannel,jdbcType=INTEGER}, #{item.filterRemind,jdbcType=INTEGER},
             #{item.userId,jdbcType=VARCHAR}, #{item.buyTime,jdbcType=DATE}, #{item.status,jdbcType=INTEGER},
