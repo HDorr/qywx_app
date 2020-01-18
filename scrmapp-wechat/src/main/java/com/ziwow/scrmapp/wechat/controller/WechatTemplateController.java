@@ -72,7 +72,7 @@ public class WechatTemplateController {
                 logger.error("发送通知模板出错，用户不存在");
                 return result;
             }
-            wechatTemplateService.sendTemplate(fans.getOpenId(),StringUtils.isNotBlank(url)?url:"", paramList,type, toMini
+            wechatTemplateService.sendTemplateByType(fans.getOpenId(),StringUtils.isNotBlank(url)?url:"", paramList,type, toMini
                 !=null? toMini :false,"", "");
         } catch (Exception e) {
             logger.error("通知发送失败，原因", e);
@@ -89,29 +89,35 @@ public class WechatTemplateController {
   @ResponseBody
   public Result sendNewTemplateNotify(@RequestBody NotifyParam notifyParam) {
     Result result = new BaseResult();
-    try {
-      // 校验参数，模板id和参数集合不能为空
-      if (StringUtils.isBlank(notifyParam.getTemplateId())
-          || org.springframework.util.CollectionUtils.isEmpty(notifyParam.getParams())
-          || StringUtils.isBlank(notifyParam.getTimestamp())
-          || StringUtils.isBlank(notifyParam.getSignature())) {
-        result.setReturnCode(Constant.FAIL);
-        result.setReturnMsg("请求参数有误，请检查后再试！");
-        return result;
-      }
-      boolean isLegal =
-          SignUtil.checkSignature(
-              notifyParam.getSignature(), notifyParam.getTimestamp(), Constant.AUTH_KEY);
-      // 校验签名
-      if (!isLegal) {
-        result.setReturnCode(Constant.FAIL);
-        result.setReturnMsg(Constant.ILLEGAL_REQUEST);
-        return result;
-      }
-      // 遍历集合，发送通知
-      List<String> list = notifyParam.getParams();
-      //第一行默认不带标题
-      for (int i = 0; i < list.size(); i++) {
+    // 校验参数，模板id和参数集合不能为空
+    if (StringUtils.isBlank(notifyParam.getTemplateId())
+        || org.springframework.util.CollectionUtils.isEmpty(notifyParam.getParams())
+        || StringUtils.isBlank(notifyParam.getTimestamp())
+        || StringUtils.isBlank(notifyParam.getSignature())) {
+      result.setReturnCode(Constant.FAIL);
+      result.setReturnMsg("请求参数有误，请检查后再试！");
+      return result;
+    }
+    boolean isLegal =
+        SignUtil.checkSignature(
+            notifyParam.getSignature(), notifyParam.getTimestamp(), Constant.AUTH_KEY);
+    // 校验签名
+    if (!isLegal) {
+      result.setReturnCode(Constant.FAIL);
+      result.setReturnMsg(Constant.ILLEGAL_REQUEST);
+      return result;
+    }
+    //校验模板id合法性
+    if(StringUtils.isBlank(wechatTemplateService.getTemplateID(notifyParam.getTemplateId()))){
+      result.setReturnCode(Constant.FAIL);
+      result.setReturnMsg("模板id不存在，请在微信公众号查询是否存在");
+      return result;
+    }
+    // 遍历集合，发送通知
+    List<String> list = notifyParam.getParams();
+    // 第一行默认不带标题
+    for (int i = 0; i < list.size(); i++) {
+      try {
         String[] params = list.get(i).split(",");
         List<String> paramList = Arrays.asList(params);
         // 通过手机号查询fansId
@@ -129,7 +135,7 @@ public class WechatTemplateController {
             List<String> arrList = new ArrayList<String>(paramList);
             // 删除第一个参数:手机号
             arrList.remove(0);
-            wechatTemplateService.sendTemplate(
+            wechatTemplateService.sendTemplateByShortId(
                 wechatFans.getOpenId(),
                 StringUtils.isNotBlank(notifyParam.getUrl()) ? notifyParam.getUrl() : "",
                 arrList,
@@ -139,13 +145,13 @@ public class WechatTemplateController {
                 notifyParam.getRemark());
           }
         }
+      } catch (Exception e) {
+        logger.error("通知发送失败，原因", e);
+        result.setReturnCode(Constant.FAIL);
+        result.setReturnMsg("发送通知失败!");
       }
-    } catch (Exception e) {
-      logger.error("通知发送失败，原因", e);
-      result.setReturnCode(Constant.FAIL);
-      result.setReturnMsg("发送通知失败!");
     }
+
     return result;
   }
-
 }

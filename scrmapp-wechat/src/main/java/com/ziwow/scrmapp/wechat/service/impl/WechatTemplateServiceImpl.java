@@ -261,36 +261,33 @@ public class WechatTemplateServiceImpl implements WechatTemplateService {
 
 	private static final String KEY=".id";
 	@Override
-	public void sendTemplate(String openId, String url, List<String> params, String type,
+	public void sendTemplateByType(String openId, String url, List<String> params, String type,
 							 boolean toMiniProgram, String title, String remark) {
-	  //根据类型获取模板id
-		String templateShortId;
-		String templateID;
-		String id = this.getTemplateID(type);
-		if(null == id){
-			String templateKey=type+KEY;
-			templateShortId = environment.getProperty(templateKey);
-			templateID = this.getTemplateID(templateShortId);
-		}else {
-			templateShortId = type;
-			templateID = id;
-		}
-		String myRemark =StringUtils.isNotBlank(remark) ? remark : wechatTemplateMapper.getTemplateRemark(templateShortId);
-		String myTitle = StringUtils.isNotBlank(title)?title:wechatTemplateMapper.getTemplateTitle(templateShortId);
-		List<String> paramList=new ArrayList<>();
-		paramList.add(myTitle);
-		paramList.addAll(params);
-		paramList.add(myRemark);
-		//获取模板的内容
-		TemplateData templateData = TemplateSetting.generateTemplateData(openId,templateID
-				, url,paramList.toArray(new String[0]));
-		if(toMiniProgram){
-		  LOG.info("模板跳转方式设置为小程序,appid:{},path:{}",miniProgramAppId,url);
-			templateData.getMiniprogram().setAppid(miniProgramAppId);
-			templateData.getMiniprogram().setPagepath(url);
-		}
-		this.sendTemplateMsgByToken(weiXinService.getAccessToken(appid, secret), templateData);
-
+		//根据类型获取模板id
+		String templateKey=type+KEY;
+		String templateShortId = environment.getProperty(templateKey);
+		this.sendTemplateByShortId(openId,url,params,templateShortId,toMiniProgram,title,remark);
 	}
 
-}
+  @Override
+  public void sendTemplateByShortId(String openId, String url, List<String> params, String shortId,
+      boolean toMiniProgram, String title, String remark) {
+    String myRemark = StringUtils.isNotBlank(remark) ? remark : wechatTemplateMapper.getTemplateRemark(shortId);
+    String myTitle = StringUtils.isNotBlank(title) ? title : wechatTemplateMapper.getTemplateTitle(shortId);
+    String templateID = this.getTemplateID(shortId);
+    List<String> paramList = new ArrayList<>();
+    paramList.add(myTitle);
+    paramList.addAll(params);
+    paramList.add(myRemark);
+    // 获取模板的内容
+    TemplateData templateData =
+        TemplateSetting.generateTemplateData(
+            openId, templateID, url, paramList.toArray(new String[0]));
+    if (toMiniProgram) {
+      LOG.info("模板跳转方式设置为小程序,appid:{},path:{}", miniProgramAppId, url);
+      templateData.getMiniprogram().setAppid(miniProgramAppId);
+      templateData.getMiniprogram().setPagepath(url);
+    }
+    this.sendTemplateMsgByToken(weiXinService.getAccessToken(appid, secret), templateData);
+  }
+	}
