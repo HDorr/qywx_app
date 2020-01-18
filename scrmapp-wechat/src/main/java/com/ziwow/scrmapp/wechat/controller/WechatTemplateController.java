@@ -112,7 +112,8 @@ public class WechatTemplateController {
       }
       // 遍历集合，发送通知
       List<String> list = notifyParam.getParams();
-      for (int i = 0; i <= list.size(); i++) {
+      //第一行标题不接受，坐标从1开始
+      for (int i = 1; i <= list.size(); i++) {
         String[] params = list.get(i).split(",");
         List<String> paramList = Arrays.asList(params);
         // 通过手机号查询fansId
