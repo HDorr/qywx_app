@@ -125,19 +125,19 @@ public class WechatTemplateController {
             result.setReturnCode(Constant.FAIL);
             result.setReturnMsg("用户无效，请退出重新操作！");
             logger.error("发送通知模板出错，用户不存在,手机号为：{}", wechatUser.getMobilePhone());
-            return result;
+          } else {
+            List<String> arrList = new ArrayList<String>(paramList);
+            // 删除第一个参数:手机号
+            arrList.remove(0);
+            wechatTemplateService.sendTemplate(
+                wechatFans.getOpenId(),
+                StringUtils.isNotBlank(notifyParam.getUrl()) ? notifyParam.getUrl() : "",
+                arrList,
+                notifyParam.getTemplateId(),
+                notifyParam.getToMini() != null ? notifyParam.getToMini() : false,
+                notifyParam.getTitle(),
+                notifyParam.getRemark());
           }
-          List<String> arrList = new ArrayList<String>(paramList);
-          //删除第一个参数:手机号
-          arrList.remove(0);
-          wechatTemplateService.sendTemplate(
-              wechatFans.getOpenId(),
-              StringUtils.isNotBlank(notifyParam.getUrl()) ? notifyParam.getUrl() : "",
-              paramList,
-              notifyParam.getTemplateId(),
-              notifyParam.getToMini() != null ? notifyParam.getToMini() : false,
-              notifyParam.getTitle(),
-              notifyParam.getRemark());
         }
       }
     } catch (Exception e) {
