@@ -38,7 +38,7 @@ public class WechatTemplateController {
     }
     private WechatUserService wechatUserService;
     @Autowired
-    private void setWechatUserService(WechatUserService wechatUserServic){
+    private void setWechatUserService(WechatUserService wechatUserService){
         this.wechatUserService = wechatUserService;
     }
 
