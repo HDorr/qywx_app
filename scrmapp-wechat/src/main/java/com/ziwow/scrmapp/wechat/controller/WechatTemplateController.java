@@ -10,6 +10,7 @@ import com.ziwow.scrmapp.wechat.persistence.entity.WechatUser;
 import com.ziwow.scrmapp.wechat.service.WechatFansService;
 import com.ziwow.scrmapp.wechat.service.WechatTemplateService;
 import com.ziwow.scrmapp.wechat.service.WechatUserService;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import org.apache.commons.collections.CollectionUtils;
@@ -110,7 +111,7 @@ public class WechatTemplateController {
       // 遍历集合，发送通知
       List<String> list = notifyParam.getParams();
       //第一行标题不接受，坐标从1开始
-      for (int i = 1; i <= list.size(); i++) {
+      for (int i = 1; i < list.size(); i++) {
         String[] params = list.get(i).split(",");
         List<String> paramList = Arrays.asList(params);
         // 通过手机号查询fansId
@@ -126,6 +127,9 @@ public class WechatTemplateController {
             logger.error("发送通知模板出错，用户不存在,手机号为：{}", wechatUser.getMobilePhone());
             return result;
           }
+          List<String> arrList = new ArrayList<String>(paramList);
+          //删除第一个参数:手机号
+          arrList.remove(0);
           wechatTemplateService.sendTemplate(
               wechatFans.getOpenId(),
               StringUtils.isNotBlank(notifyParam.getUrl()) ? notifyParam.getUrl() : "",
@@ -143,4 +147,5 @@ public class WechatTemplateController {
     }
     return result;
   }
+
 }
