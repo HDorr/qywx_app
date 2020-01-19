@@ -146,9 +146,10 @@ public class WechatTemplateController {
           }
         }
       } catch (Exception e) {
-        logger.error("通知发送失败，原因", e);
-        result.setReturnCode(Constant.FAIL);
-        result.setReturnMsg("发送通知失败!");
+        logger.error("通知发送失败，参数为{}，原因:{}",notifyParam.getParams(), e);
+        //这里不需要把错误信息塞入，如果是最后一个失败，会导致整体失败，只需要打印错误日志即可
+        /*result.setReturnCode(Constant.FAIL);
+        result.setReturnMsg("发送通知失败!");*/
       }
     }
 
