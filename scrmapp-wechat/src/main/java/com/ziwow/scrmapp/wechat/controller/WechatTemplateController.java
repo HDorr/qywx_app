@@ -115,6 +115,7 @@ public class WechatTemplateController {
     }
     // 遍历集合，发送通知
     List<String> list = notifyParam.getParams();
+    int errCount=0;
     // 第一行默认不带标题
     for (int i = 0; i < list.size(); i++) {
       try {
@@ -128,8 +129,7 @@ public class WechatTemplateController {
 
           // 没有查到用户
           if (null == wechatFans) {
-            result.setReturnCode(Constant.FAIL);
-            result.setReturnMsg("用户无效，请退出重新操作！");
+            errCount++;
             logger.error("发送通知模板出错，用户不存在,手机号为：{}", wechatUser.getMobilePhone());
           } else {
             List<String> arrList = new ArrayList<String>(paramList);
@@ -152,7 +152,9 @@ public class WechatTemplateController {
         result.setReturnMsg("发送通知失败!");*/
       }
     }
-
+    logger.info("发送通知模板完成，总数:{},失败:{}",list.size(),errCount);
+    result.setReturnCode(Constant.SUCCESS);
+    result.setReturnMsg("推送成功，总数:"+list.size()+" 失败:"+errCount);
     return result;
   }
 }
