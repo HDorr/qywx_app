@@ -396,9 +396,9 @@ public class WeChatMessageProcessingHandler {
                 .append("' data-miniprogram-path='pages/home'>【要购买•微信商城】</a>\n")
                 .append("全场积分抵现享不停，积分多积多优惠\n")
                 .append("\n")
-                .append("点击<a href='")
-                .append(mineBaseUrl)
-                .append("/scrmapp/consumer/product/index'>【找售后•一键服务】</a>\n")
+                .append("点击<a href='http://www.qinyuan.cn' data-miniprogram-appid='")
+                .append(miniappAppid)
+                .append("' data-miniprogram-path='pages/serviceCenter?index=2'>【找售后•一键服务】</a>")
                 .append("24小时在线预约滤芯、安装、保养、维修等售后服务\n")
                 .append("\n")
                 .append("2020，沁园和您一起更净一步！");
@@ -491,30 +491,30 @@ public class WeChatMessageProcessingHandler {
               .append("\n")
               .append("已购滤芯：\n")
               .append("更换滤芯,请点击")
-              .append("<a href='")
-              .append(mineBaseUrl)
-              .append("/scrmapp/consumer/product/index'>【预约滤芯】</a>\n")
+              .append("<a href='http://www.qinyuan.cn' data-miniprogram-appid='")
+              .append(miniappAppid)
+              .append("' data-miniprogram-path='pages/selectProduct?appointmentType=filter'>【预约滤芯】</a>")
               .append("\n")
               .append("其他咨询,请输入文字\"人工客服\"\n");
         }else if (content.contains("预约")){
           msgsb.append("您好,小沁在此为您服务！\n")
               .append("\n")
               .append("机器安装,请点击")
-              .append("<a href='")
-              .append(mineBaseUrl)
-              .append("/scrmapp/consumer/product/index?1'>【预约安装】</a>")
+              .append("<a href='http://www.qinyuan.cn' data-miniprogram-appid='")
+              .append(miniappAppid)
+              .append("' data-miniprogram-path='pages/selectProduct?appointmentType=install'>【预约安装】</a>")
               .append("\n")
               .append("\n")
               .append("机器维修,请点击")
-              .append("<a href='")
-              .append(mineBaseUrl)
-              .append("/scrmapp/consumer/product/index?2'>【预约维修】</a>")
+              .append("<a href='http://www.qinyuan.cn' data-miniprogram-appid='")
+              .append(miniappAppid)
+              .append("' data-miniprogram-path='pages/selectProduct?appointmentType=maintain'>【预约维修】</a>")
               .append("\n")
               .append("\n")
               .append("机器清洗,请点击")
-              .append("<a href='")
-              .append(mineBaseUrl)
-              .append("/scrmapp/consumer/product/index?3'>【预约清洗】</a>")
+              .append("<a href='http://www.qinyuan.cn' data-miniprogram-appid='")
+              .append(miniappAppid)
+              .append("' data-miniprogram-path='pages/selectProduct?appointmentType=clean'>【预约清洗】</a>")
               .append("\n")
               .append("\n")
               .append("其他咨询,请输入文字\"人工客服\"\n");
@@ -522,9 +522,9 @@ public class WeChatMessageProcessingHandler {
           msgsb.append("您好,小沁在此为您服务！\n")
               .append("\n")
               .append("机器安装,请点击")
-              .append("<a href='")
-              .append(mineBaseUrl)
-              .append("/scrmapp/consumer/product/index'>【预约安装】</a>")
+              .append("<a href='http://www.qinyuan.cn' data-miniprogram-appid='")
+              .append(miniappAppid)
+              .append("' data-miniprogram-path='pages/selectProduct?appointmentType=install'>【预约安装】</a>")
               .append("\n")
               .append("其他咨询,请输入文字\"人工客服\"\n");
         }else if (content.contains("更换")){
@@ -532,9 +532,9 @@ public class WeChatMessageProcessingHandler {
               .append("\n")
               .append("已购滤芯：\n")
               .append("更换滤芯,请点击")
-              .append("<a href='")
-              .append(mineBaseUrl)
-              .append("/scrmapp/consumer/product/index'>【预约滤芯】</a>")
+              .append("<a href='http://www.qinyuan.cn' data-miniprogram-appid='")
+              .append(miniappAppid)
+              .append("' data-miniprogram-path='pages/selectProduct?appointmentType=filter'>【预约滤芯】</a>")
               .append("\n")
               .append("\n")
               .append("未购滤芯：\n")
@@ -555,18 +555,18 @@ public class WeChatMessageProcessingHandler {
           msgsb.append("您好,小沁在此为您服务！\n")
               .append("\n")
               .append("机器维修,请点击")
-              .append("<a href='")
-              .append(mineBaseUrl)
-              .append("/scrmapp/consumer/product/index'>【预约维修】</a>")
+              .append("<a href='http://www.qinyuan.cn' data-miniprogram-appid='")
+              .append(miniappAppid)
+              .append("' data-miniprogram-path='pages/selectProduct?appointmentType=maintain'>【预约维修】</a>")
               .append("\n")
               .append("其他咨询,请输入文字\"人工客服\"\n");
         }else if (content.contains("保养")){
           msgsb.append("您好,小沁在此为您服务！\n")
               .append("\n")
               .append("机器清洗,请点击")
-              .append("<a href='")
-              .append(mineBaseUrl)
-              .append("/scrmapp/consumer/product/index'>【预约清洗】</a>")
+              .append("<a href='http://www.qinyuan.cn' data-miniprogram-appid='")
+              .append(miniappAppid)
+              .append("' data-miniprogram-path='pages/selectProduct?appointmentType=clean'>【预约清洗】</a>")
               .append("\n")
               .append("其他咨询,请输入文字\"人工客服\"\n");
         }else if (content.contains("投诉")){
@@ -606,43 +606,6 @@ public class WeChatMessageProcessingHandler {
             }
             return  false;
 
-        } else if (content.contains("水质检测")) {
-            //初始化时间
-            String fomatData = checkWaterTime;
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-            //解析date类
-            Date planDate = sdf.parse(fomatData);
-            Date nowDate = new Date();
-
-            //对比时间
-            int result = nowDate.compareTo(planDate);
-            //若result<0说明未达到10月7日
-            if (result < 0) {
-                msgsb.append("恭喜您已成功报名！\n")
-                        .append("请持续关注我们,\n")
-                        .append("实时查看您的状态！\n")
-                        .append("后续我们会在公布中奖名单后\n")
-                        .append("主动联系您！\n");
-            } else {
-                //根据openid查询
-                WechatUser wechatUser = wechatUserService.getUserByOpenId(inMessage.getFromUserName());
-                //初始化判断变量,如果未查询到该用户则直接返回未中奖
-                boolean isLucky = false;
-                if (wechatUser != null){
-                    //查看是否在中奖名单中
-                    isLucky = wechatUserService.findUserLuckyByPhone(wechatUser.getMobilePhone());
-                }
-
-                if (isLucky) {
-                    msgsb.append("恭喜您！\n")
-                            .append("您已获得免费检测机会！\n")
-                            .append("我们的工作人员将会主动联系您！");
-                } else {
-                    msgsb.append("很抱歉！\n")
-                            .append("您未获得免费检测机会！\n")
-                            .append("请持续关注其他福利活动！");
-                }
-            }
         }else {
 
             boolean isInChat=checkChatStatus(inMessage.getFromUserName());
@@ -667,34 +630,27 @@ public class WeChatMessageProcessingHandler {
               .append("\n")
               .append("售后服务：\n")
               .append("机器安装,请点击")
-              .append("<a href='")
-              .append(mineBaseUrl)
-              .append("/scrmapp/consumer/product/index?1'>【预约安装】</a>")
+              .append("<a href='http://www.qinyuan.cn' data-miniprogram-appid='")
+              .append(miniappAppid)
+              .append("' data-miniprogram-path='pages/selectProduct?appointmentType=install'>【预约安装】</a>")
               .append("\n")
               .append("\n")
               .append("机器清洗,请点击")
-              .append("<a href='")
-              .append(mineBaseUrl)
-              .append("/scrmapp/consumer/product/index?2'>【预约清洗】</a>")
+              .append("<a href='http://www.qinyuan.cn' data-miniprogram-appid='")
+              .append(miniappAppid)
+              .append("' data-miniprogram-path='pages/selectProduct?appointmentType=clean'>【预约清洗】</a>")
               .append("\n")
               .append("\n")
               .append("机器维修,请点击")
-              .append("<a href='")
-              .append(mineBaseUrl)
-              .append("/scrmapp/consumer/product/index?3'>【预约维修】</a>")
+              .append("<a href='http://www.qinyuan.cn' data-miniprogram-appid='")
+              .append(miniappAppid)
+              .append("' data-miniprogram-path='pages/selectProduct?appointmentType=maintain'>【预约维修】</a>")
               .append("\n")
               .append("\n")
               .append("预约查询,请点击")
-//              .append("<a href='")
-//              .append(orderlisturl)
-//              .append("'>【工单查询】</a>")
-              .append("<a href='https://open.weixin.qq.com/connect/oauth2/authorize?appid=")
-              .append(appid)
-              .append("&redirect_uri=")
-              .append(URLEncoder.encode(orderlisturl))
-              .append("&response_type=code&scope=snsapi_base&component_appid=")
-              .append(component_appid)
-              .append("#wechat_redirect'>【工单查询】</a>")
+              .append("<a href='http://www.qinyuan.cn' data-miniprogram-appid='")
+              .append(miniappAppid)
+              .append("' data-miniprogram-path='pages/queryProgress'>【进度查询】</a>")
               .append("\n")
               .append("\n")
               .append("其他咨询,请输入文字\"人工客服\"\n");
