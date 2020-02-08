@@ -31,6 +31,8 @@ import com.ziwow.scrmapp.wechat.vo.Articles;
 import com.ziwow.scrmapp.wechat.vo.TextOutMessage;
 import com.ziwow.scrmapp.wechat.vo.UserInfo;
 import com.ziwow.scrmapp.wechat.vo.callCenter.CallCenterMessage;
+import java.util.List;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -122,6 +124,9 @@ public class WeChatMessageProcessingHandler {
 
     @Value("${callCenter.tenantId}")
     private String callCenterTenantId;
+
+    @Autowired
+    private ConfigService configService;
 
     @Autowired
     private OpenWeixinService openWeixinService;
@@ -438,6 +443,13 @@ public class WeChatMessageProcessingHandler {
         if (StringUtil.isBlank(content)){
             return false;
         }
+
+        //从动态配置中获取要过滤的关键字，join为一个字符串 后期需要做缓存优化
+        final List<String> filterKeyWords = (List)configService.getConfig("filter_key_word").get("filterKeyWord");
+        String filterkeyWord="";
+        if(CollectionUtils.isNotEmpty(filterKeyWords)){
+            filterkeyWord=String.join("-",filterKeyWords);
+        }
         StringBuilder msgsb=new StringBuilder();
 
         //链接后面的无效参数是为了避免微信前端点击粘连
@@ -575,7 +587,7 @@ public class WeChatMessageProcessingHandler {
             }
             replyMessage(inMessage, response, msgsb);
             return isPushToCallCenter;
-        }else if (content.contains("攻略")||content.contains("延保卡")||content.contains("家庭日")){
+        }else if (filterkeyWord.contains(content)){
             return false;
         }else if (content.equals("appV")){
             msgsb.append("version:"+appVersion);
