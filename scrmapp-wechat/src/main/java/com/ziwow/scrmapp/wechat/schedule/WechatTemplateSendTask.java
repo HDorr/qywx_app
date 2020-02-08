@@ -104,11 +104,12 @@ public class WechatTemplateSendTask extends IJobHandler {
                             group.getToMini(),
                             group.getTitle(),
                             group.getRemark());
-                        templateUserMapper.updateSendStatusById(user.getId());
                     }
                 } catch (Exception e) {
-                    LOG.info("人群包发送出错-{}", groupName, e);
-                    XxlJobLogger.log("人群包发送出错-{}", groupName, e);
+                    LOG.info("人群包发送出错-{},{}", groupName,user, e);
+                    XxlJobLogger.log("人群包发送出错-{},{}", groupName,user, e);
+                }finally {
+                    templateUserMapper.updateSendStatusById(user.getId());
                 }
             }
         }
