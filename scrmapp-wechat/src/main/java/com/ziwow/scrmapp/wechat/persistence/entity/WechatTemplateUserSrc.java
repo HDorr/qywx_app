@@ -36,9 +36,9 @@ public class WechatTemplateUserSrc {
      */
     private Boolean flag;
 
-    private String prarm1;
-    private String prarm2;
-    private String prarm3;
+    private String param1;
+    private String param2;
+    private String param3;
 
 
     public Long getId() {
@@ -81,30 +81,30 @@ public class WechatTemplateUserSrc {
         this.flag = flag;
     }
 
-    public String getPrarm1() {
-        return prarm1;
+
+    public String getParam1() {
+        return param1;
     }
 
-    public void setPrarm1(String prarm1) {
-        this.prarm1 = prarm1;
+    public void setParam1(String param1) {
+        this.param1 = param1;
     }
 
-    public String getPrarm2() {
-        return prarm2;
+    public String getParam2() {
+        return param2;
     }
 
-    public void setPrarm2(String prarm2) {
-        this.prarm2 = prarm2;
+    public void setParam2(String param2) {
+        this.param2 = param2;
     }
 
-    public String getPrarm3() {
-        return prarm3;
+    public String getParam3() {
+        return param3;
     }
 
-    public void setPrarm3(String prarm3) {
-        this.prarm3 = prarm3;
+    public void setParam3(String param3) {
+        this.param3 = param3;
     }
-
 
     public Long getGroupId() {
         return groupId;
