@@ -448,7 +448,7 @@ public class WeChatMessageProcessingHandler {
         final List<String> filterKeyWords = (List)configService.getConfig("filter_key_word").get("filterKeyWord");
         String filterkeyWord="";
         if(CollectionUtils.isNotEmpty(filterKeyWords)){
-            filterkeyWord=String.join("-",filterKeyWords);
+            filterkeyWord= StringUtils.join(filterKeyWords,"-");
         }
         StringBuilder msgsb=new StringBuilder();
 
