@@ -149,20 +149,20 @@ public class WechatTemplateSendTask extends IJobHandler {
     List<String> handleTemplateParam(WechatTemplateUserGroup group, WechatTemplateUserSrc src) {
         List<String> params = new ArrayList<>();
         if (group.getCenterParam()) {
-            params.add(group.getPrarm1());
+            params.add(group.getParam1());
             if (group.getParamCount() >= 2) {
-                params.add(group.getPrarm2());
+                params.add(group.getParam2());
             if (group.getParamCount() >= 3) {
-                    params.add(group.getPrarm3());
+                    params.add(group.getParam3());
                 }
             }
         } else {
-            params.add(src.getPrarm1());
+            params.add(src.getParam1());
             if (src.getParamCount() >= 2) {
-                params.add(src.getPrarm2());
+                params.add(src.getParam2());
             }
             if (src.getParamCount() >= 3) {
-                params.add(src.getPrarm3());
+                params.add(src.getParam3());
             }
         }
         return params;
