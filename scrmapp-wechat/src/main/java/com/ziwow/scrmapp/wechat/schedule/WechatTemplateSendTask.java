@@ -105,9 +105,9 @@ public class WechatTemplateSendTask extends IJobHandler {
                             group.getTitle(),
                             group.getRemark());
                         LOG.info("发送通知模板成功:openID-{},模板id-{},标题-{},备注-{},跳转-{},是否跳转小程序-{},参数-{}",
-                            openId,group.getTitle(),group.getRemark(),group.getUrl(),group.getToMini(),params.toString());
+                            openId,group.getTemplateId(),group.getTitle(),group.getRemark(),group.getUrl(),group.getToMini(),params.toString());
                         XxlJobLogger.log("发送通知模板成功:openID-{},模板id-{},标题-{},备注-{},跳转-{},是否跳转小程序-{},参数-{}",
-                            openId,group.getTitle(),group.getRemark(),group.getUrl(),group.getToMini(),params.toString());
+                            openId,group.getTemplateId(),group.getTitle(),group.getRemark(),group.getUrl(),group.getToMini(),params.toString());
                     }
                 } catch (Exception e) {
                     LOG.info("人群包发送出错-{},{}", groupName,user, e);
@@ -117,8 +117,11 @@ public class WechatTemplateSendTask extends IJobHandler {
                 }
             }
         }
+        LOG.info("推送完成");
+        XxlJobLogger.log("推送完成");
         return ReturnT.SUCCESS;
     }
+
 
     /***
      * 提取userSrc对应的用户openid
