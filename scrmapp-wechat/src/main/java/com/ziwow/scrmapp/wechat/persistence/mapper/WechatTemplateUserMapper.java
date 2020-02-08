@@ -32,7 +32,7 @@ public interface WechatTemplateUserMapper {
       @Result(column = "param_3", property = "param3"),
   })
   @Select("select id,group_id,identity,identity_type,param_count,param_1,param_2,param_3,flag  from t_wechat_template_user_src where flag=0 and group_id=#{groupId}  order by id limit #{size}")
-  List<WechatTemplateUserSrc> selectUnsendTemplateUserSrc(long groupId,int size);
+  List<WechatTemplateUserSrc> selectUnsendTemplateUserSrc(@Param("groupId") long groupId,@Param("size")int size);
 
 
   /**
@@ -48,7 +48,7 @@ public interface WechatTemplateUserMapper {
    * @param id
    */
   @Update("update t_wechat_template_user_src set flag=1 where id=#{id}")
-  void updateSendStatusById(long id);
+  void updateSendStatusById(@Param("id")long id);
 
 
   /***
@@ -65,7 +65,7 @@ public interface WechatTemplateUserMapper {
       @Result(column = "param_2", property = "param2"),
       @Result(column = "param_3", property = "param3"),
   })
-  @Select("select id,name,title,remark,url,to_mini,center_param,param_count,param_1,param_2,param_3 from t_wechat_template_user_group where name=#{name} limit 1")
-  WechatTemplateUserGroup selectGroupByName(String name);
+  @Select("select id,name,title,remark,url,template_id,to_mini,center_param,param_count,param_1,param_2,param_3 from t_wechat_template_user_group where name=#{name} limit 1")
+  WechatTemplateUserGroup selectGroupByName(@Param("name") String name);
 
 }
