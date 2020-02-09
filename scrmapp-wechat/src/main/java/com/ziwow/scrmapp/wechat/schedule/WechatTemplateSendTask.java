@@ -39,7 +39,7 @@ public class WechatTemplateSendTask extends IJobHandler {
     /**
      * 分页的页面大小
      */
-    final static int PAGE_SIZE = 2;
+    final static int PAGE_SIZE = 100;
 
     private WechatTemplateService wechatTemplateService;
 
