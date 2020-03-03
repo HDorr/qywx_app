@@ -30,6 +30,7 @@ import com.ziwow.scrmapp.wechat.utils.ProductServiceParamUtil;
 import com.ziwow.scrmapp.wechat.vo.EnumVo;
 import com.ziwow.scrmapp.wechat.vo.EwCardProductVo;
 import com.ziwow.scrmapp.wechat.vo.ProductVo;
+import org.apache.commons.lang.time.DateUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -313,6 +314,10 @@ public class ProductController {
             product.setStatus(1);
             product.setCreateTime(new Date());
             product.setFilterRemind(SystemConstants.REMIND);
+            if (product.getBuyTime() == null){
+                //默认值为昨天
+                product.setBuyTime(DateUtils.addDays(new Date(),-1));
+            }
 
             boolean isFirst=productService.isFirstBindProduct(wechatUser.getUserId());
 
