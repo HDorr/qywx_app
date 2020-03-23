@@ -142,4 +142,11 @@ public interface ProductService {
      */
     List<com.ziwow.scrmapp.common.bean.vo.ProductVo> getProductByEncode(List<String> productEncode);
 
+    /**
+     * 去微商城查询商品图片
+     * @param productCode
+     * @return
+     */
+    String queryImageByCode(String productCode);
+
 }
