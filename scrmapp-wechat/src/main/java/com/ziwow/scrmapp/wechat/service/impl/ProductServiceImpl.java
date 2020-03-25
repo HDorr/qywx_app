@@ -969,7 +969,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public String queryImageByCode(String productCode) {
-        String res = restTemplate.getForObject(queryImageUrl, String.class, productCode);
+        String res = restTemplate.getForObject(queryImageUrl+"?productCode={1}", String.class, productCode);
         JSONObject jsonObject = JSON.parseObject(res);
         if (!org.springframework.util.CollectionUtils.isEmpty(jsonObject) && (Integer) jsonObject.get("errorCode") != 200) {
             LOG.error("同步订单状态失败: [{}]", jsonObject.get("moreInfo"));
