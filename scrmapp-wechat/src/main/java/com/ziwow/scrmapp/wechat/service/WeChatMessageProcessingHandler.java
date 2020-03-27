@@ -374,14 +374,18 @@ public class WeChatMessageProcessingHandler {
         LOG.info("我在这里等着你：EventKey:------------------:" + inMessage.getEventKey());
         if (StringUtils.isNotEmpty(inMessage.getEventKey())) {
             //获取渠道号
-            String channelId = inMessage.getEventKey().split("_")[1];
-            //通过渠道号获取欢迎语
-            String welcomeText = channelService.selectWelcomeTextByChannelId(channelId);
-
-            if (StringUtils.isNotBlank(welcomeText)){
-                msgsb.append(welcomeText);
-                flag = 1;
+          String[] split = inMessage.getEventKey().split("_");
+          String channelId = split[1];
+          //通过渠道号获取欢迎语
+          String welcomeText = channelService.selectWelcomeTextByChannelId(channelId);
+          if (StringUtils.isNotBlank(welcomeText)){
+            if(split.length > 2){
+              // scene_str如果包含两个参数的时候，说明是拉新的操作
+              welcomeText = String.format(welcomeText, split[2]);
             }
+            msgsb.append(welcomeText);
+            flag = 1;
+          }
         }
         if (flag == 0){
             msgsb.append("Hi~欢迎进入沁园水健康守护基地\n")
