@@ -1,12 +1,19 @@
 package com.ziwow.scrmapp.wechat.params.wechat;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 /**
  * 获取二维码参数
  *
  * @author yyc
  * @since 20-3-27
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class QrCodeParam {
+
+  private long timestamp;
+
+  private String signture;
 
   /** 二维码过期时间 */
   private Integer expireSeconds;
@@ -21,6 +28,22 @@ public class QrCodeParam {
 
   /** 场景值ID（字符串形式的ID），字符串类型，长度限制为1到64 */
   private String sceneStr;
+
+  public long getTimestamp() {
+    return timestamp;
+  }
+
+  public void setTimestamp(long timestamp) {
+    this.timestamp = timestamp;
+  }
+
+  public String getSignture() {
+    return signture;
+  }
+
+  public void setSignture(String signture) {
+    this.signture = signture;
+  }
 
   public Integer getExpireSeconds() {
     return expireSeconds;

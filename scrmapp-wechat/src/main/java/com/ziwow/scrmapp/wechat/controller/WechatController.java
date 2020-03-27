@@ -823,8 +823,14 @@ public class WechatController {
     @RequestMapping(value = "/getQrCode",method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
     @ResponseBody
     public Result getQrCode(@RequestBody QrCodeParam qrCodeParam){
-        Map<String, Object> res = weiXinService.getQrCode(qrCodeParam, appid, secret);
-        return BaseResult.build(Constant.SUCCESS,"获取二维码",res);
+      boolean isPermitted =
+              SignUtil.checkSignature(qrCodeParam.getSignture(),
+                      "" + qrCodeParam.getTimestamp(), Constant.AUTH_KEY);
+      if(!isPermitted) {
+        return BaseResult.build(Constant.FAIL,"获取二维码失败",null);
+      }
+      Map<String, Object> res = weiXinService.getQrCode(qrCodeParam, appid, secret);
+        return BaseResult.build(Constant.SUCCESS,"获取二维码成功",res);
     }
 
     @RequestMapping(value = "/sendSms", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
