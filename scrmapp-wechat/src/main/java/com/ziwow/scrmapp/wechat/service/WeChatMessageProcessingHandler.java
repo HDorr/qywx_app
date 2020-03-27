@@ -371,7 +371,7 @@ public class WeChatMessageProcessingHandler {
     private void dealWithSubscribe(InMessage inMessage,HttpServletResponse response) {
         StringBuilder msgsb=new StringBuilder();
         int flag = 0;
-        LOG.info("我在这里等着你：EventKey:------------------:" + inMessage.getEvent());
+        LOG.info("我在这里等着你：EventKey:------------------:" + inMessage.getEventKey());
         if (StringUtils.isNotEmpty(inMessage.getEventKey())) {
             //获取渠道号
             String channelId = inMessage.getEventKey().split("_")[1];
