@@ -34,6 +34,7 @@ import com.ziwow.scrmapp.tools.utils.StringUtil;
 import com.ziwow.scrmapp.tools.utils.UniqueIDBuilder;
 import com.ziwow.scrmapp.wechat.constants.WeChatConstants;
 import com.ziwow.scrmapp.wechat.enums.BuyChannel;
+import com.ziwow.scrmapp.wechat.params.wechat.QrCodeParam;
 import com.ziwow.scrmapp.wechat.persistence.entity.MallPcUser;
 import com.ziwow.scrmapp.wechat.persistence.entity.WechatFans;
 import com.ziwow.scrmapp.wechat.persistence.entity.WechatUser;
@@ -813,6 +814,18 @@ public class WechatController {
         return result;
     }
 
+  /**
+   * 获取二维码新版
+   *
+   * @param qrCodeParam {@link QrCodeParam}
+   * @return {@link Result}
+   */
+    @RequestMapping(value = "/getQrCode",method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
+    @ResponseBody
+    public Result getQrCode(@RequestBody QrCodeParam qrCodeParam){
+        Map<String, Object> res = weiXinService.getQrCode(qrCodeParam, appid, secret);
+        return BaseResult.build(Constant.SUCCESS,"获取二维码",res);
+    }
 
     @RequestMapping(value = "/sendSms", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
     @ResponseBody
