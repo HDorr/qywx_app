@@ -212,7 +212,7 @@ public class ProductController {
             if (null != productBarCode || "".equals(productBarCode)) {
                 product.setProductBarCode(productBarCode);
             }
-            String image = productService.queryProductImage(product.getModelName());
+            String image = productService.queryImageByCode(product.getProductCode());
             product.setProductImage(image);
             result.setData(product);
             result.setReturnCode(Constant.SUCCESS);
