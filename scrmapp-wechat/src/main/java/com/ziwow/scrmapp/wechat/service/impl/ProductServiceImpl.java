@@ -29,6 +29,7 @@ import com.ziwow.scrmapp.common.result.BaseResult;
 import com.ziwow.scrmapp.common.result.Result;
 import com.ziwow.scrmapp.common.service.ThirdPartyService;
 import com.ziwow.scrmapp.common.utils.HttpKit;
+import com.ziwow.scrmapp.common.utils.JsonUtil;
 import com.ziwow.scrmapp.tools.utils.Base64;
 import com.ziwow.scrmapp.tools.utils.BeanUtils;
 import com.ziwow.scrmapp.tools.utils.CookieUtil;
@@ -66,6 +67,7 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
@@ -101,8 +103,14 @@ public class ProductServiceImpl implements ProductService {
     @Value("${mine.baseUrl}")
     private String mineBaseUrl;
 
+    @Value("${mall.queryproimg.url}")
+    private String queryImageUrl;
+
     @Autowired
     private WechatOrdersMapper wechatOrdersMapper;
+
+    @Autowired
+    private RestTemplate restTemplate;
 
 
 //    public List<ProductSeries> getAllProductSeries() {
@@ -957,6 +965,17 @@ public class ProductServiceImpl implements ProductService {
             list.add(pv);
         }
         return list;
+    }
+
+    @Override
+    public String queryImageByCode(String productCode) {
+        String res = restTemplate.getForObject(queryImageUrl+"?productCode={1}", String.class, productCode);
+        JSONObject jsonObject = JSON.parseObject(res);
+        if (!org.springframework.util.CollectionUtils.isEmpty(jsonObject) && (Integer) jsonObject.get("errorCode") != 200) {
+            LOG.error("同步订单状态失败: [{}]", jsonObject.get("moreInfo"));
+            return "http://wx.qinyuan.cn/wx/resources/images/defaultPdtImg.jpg";
+        }
+        return (String) jsonObject.get("data");
     }
 
     @Override
