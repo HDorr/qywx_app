@@ -122,10 +122,16 @@ public class WechatOrdersController {
     public Result qyscSaveOrder(HttpServletRequest request, HttpServletResponse response, @RequestBody MallOrdersForm mallOrdersForm) {
         logger.info("收到商城原单原回受理单,[{}]", JSON.toJSONString(mallOrdersForm));
         final WechatUser wechatUser = wechatUserService.getUserByUnionid(mallOrdersForm.getUnionId());
+        Result result = new BaseResult();
+        if (wechatUser == null){
+            result.setReturnCode(2);
+            result.setData("用户信息错误");
+            return result;
+        }
         String userId = wechatUser.getUserId();
         //保存工单号，以便于回滚
         List<String> orderNos = new ArrayList<>();
-        Result result = new BaseResult();
+
         StringBuffer retNo = new StringBuffer();
 
         for (WechatOrdersParamExt wechatOrdersParamExt : mallOrdersForm.getForms()) {
@@ -172,7 +178,8 @@ public class WechatOrdersController {
                 result = this.addWechatOrders(request, response, wechatOrdersParamExt);
             } catch (Exception e) {
                 logger.error("【原单原回】-保存工单出现异常-unionId为:[{}],异常信息为[{}],订单号为:[{}]", mallOrdersForm.getUnionId(), e,mallOrdersForm.getOrderNo());
-                result.setReturnCode(0);
+                handlerCsmResult(result,userId,mallOrdersForm.getOrderNo());
+                return result;
             }
             if (result.getReturnCode() == 0) {
                 //取消预约
@@ -204,6 +211,22 @@ public class WechatOrdersController {
         return result;
     }
 
+    /**
+     * 包装csm返回消息处理
+     * @param result
+     * @param userId
+     * @param orderNo
+     */
+    private void handlerCsmResult(Result result,String userId,String orderNo){
+        if (result.getReturnMsg().equals("网点不存在")){
+            result.setReturnCode(3);
+            logger.error("【原单原回】-网点不存在，,userId = [{}] , ordersNo = [{}]", userId, orderNo);
+        }else {
+            result.setReturnCode(4);
+            logger.error("【原单原回】-csm预约失败,userId = [{}] , ordersNo = [{}],错误原因为 = [{}]", userId, orderNo,result.getReturnMsg());
+            result.setReturnMsg("csm预约失败");
+        }
+    }
 
     /**
      * 用户预约
