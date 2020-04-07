@@ -26,7 +26,7 @@
                 </div>
             </div>
             <button class="qy-btn-all nextStep">下一步</button>
-            <button class="haventFindQrCode">我没有找到产品条码</button>
+           <!-- <button class="haventFindQrCode">我没有找到产品条码</button>-->
         </div>
         <script src="${f_ctxpath}/resources/src/js/flexible.js"></script>
         <script src="${f_ctxpath}/resources/thirdparty/jquery/dist/jquery.min.js"></script>
