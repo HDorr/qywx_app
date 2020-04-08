@@ -200,6 +200,7 @@ public class WechatOrdersController {
                         }
                     }
                 }
+                handlerCsmResult(result,userId,mallOrdersForm.getOrderNo());
                 return result;
             }
             orderNos.add((String) result.getData());
