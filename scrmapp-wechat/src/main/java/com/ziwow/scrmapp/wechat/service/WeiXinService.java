@@ -10,6 +10,7 @@ package com.ziwow.scrmapp.wechat.service;
 
 import com.alibaba.fastjson.JSONObject;
 import com.ziwow.scrmapp.common.persistence.entity.QyhUser;
+import com.ziwow.scrmapp.wechat.params.wechat.QrCodeParam;
 import com.ziwow.scrmapp.wechat.vo.AccessToken;
 import com.ziwow.scrmapp.wechat.vo.OauthUser;
 import com.ziwow.scrmapp.wechat.vo.UserInfo;
@@ -17,6 +18,7 @@ import com.ziwow.scrmapp.wechat.vo.WechatJSSdkSignVO;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Map;
 
 
 /**
@@ -102,4 +104,13 @@ public interface WeiXinService {
     QyhUser getOAuthQyhUserInfo(String code, HttpServletRequest request, HttpServletResponse response);
 
     String getQRTicket(Long channelId, String appId, String secret);
+
+    /**
+     * 获取二维码
+     * @param qrCodeParam {@link QrCodeParam}
+     * @param appId {@link String}
+     * @param secret {@link String}
+     * @return {@link Map}
+     */
+    Map<String,Object> getQrCode(QrCodeParam qrCodeParam, String appId, String secret);
 }
