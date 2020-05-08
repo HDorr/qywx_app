@@ -603,23 +603,15 @@ public class WechatController {
         result.setReturnMsg("工单完工同步成功!");
         result.setReturnCode(Constant.SUCCESS);
         try {
-            if (StringUtils.isNotBlank(dispatchOrderParam.getRemarks())){
-                //是否符合 邮寄滤芯 快递公司+快递单号
-                if (isOnlineCompletion(dispatchOrderParam.getRemarks())){
-                    dispatchOrderParam.setFinishNumber("邮寄完工");
-                    wechatOrdersService.dispatchCompleteOrder(dispatchOrderParam);
-                    sendMallShare(dispatchOrderParam.getAcceptNumber(), dispatchOrderParam.getRemarks());
-                }else {
-                    logger.error("在线完工失败，备注信息不符合,单号为:[{}]",dispatchOrderParam.getAcceptNumber());
-                    result.setReturnMsg("工单完工同步失败!");
-                    result.setReturnCode(Constant.SUCCESS);
-                    return result;
-                }
+            //是否符合 邮寄滤芯 快递公司+快递单号
+            if (isOnlineCompletion(dispatchOrderParam.getRemarks())){
+                dispatchOrderParam.setFinishNumber("邮寄完工");
+                wechatOrdersService.dispatchCompleteOrder(dispatchOrderParam);
+                sendMallShare(dispatchOrderParam.getAcceptNumber(), dispatchOrderParam.getRemarks());
             }else {
                 wechatOrdersService.dispatchCompleteOrder(dispatchOrderParam);
                 sendMallShare(dispatchOrderParam.getAcceptNumber(), dispatchOrderParam.getFinishNumber());
             }
-
         } catch (Exception e) {
             logger.error("工单完工同步失败:", e);
             result.setReturnCode(Constant.FAIL);
