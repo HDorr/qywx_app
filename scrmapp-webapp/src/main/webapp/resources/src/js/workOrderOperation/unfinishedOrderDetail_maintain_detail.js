@@ -340,7 +340,7 @@ var app = new Vue({
         }
     },
     created: function () {
-        this.getProductData().then(this.getMaintainAndFilters)
+        this.getProductData()
     }
 })
 
