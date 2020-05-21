@@ -108,8 +108,6 @@ public class WechatOrdersController {
     @Autowired
     private GrantPointService grantPointService;
     @Autowired
-    private NoticeRosterService noticeRosterService;
-    @Autowired
     private ConfigService configService;
 
 
@@ -124,12 +122,16 @@ public class WechatOrdersController {
     public Result qyscSaveOrder(HttpServletRequest request, HttpServletResponse response, @RequestBody MallOrdersForm mallOrdersForm) {
         logger.info("收到商城原单原回受理单,[{}]", JSON.toJSONString(mallOrdersForm));
         final WechatUser wechatUser = wechatUserService.getUserByUnionid(mallOrdersForm.getUnionId());
+        Result result = new BaseResult();
+        if (wechatUser == null){
+            result.setReturnCode(2);
+            result.setData("用户信息错误");
+            return result;
+        }
         String userId = wechatUser.getUserId();
-        //处理换芯通知
-        handleSendNotice(mallOrdersForm.getForms(),wechatUser.getMobilePhone());
         //保存工单号，以便于回滚
         List<String> orderNos = new ArrayList<>();
-        Result result = new BaseResult();
+
         StringBuffer retNo = new StringBuffer();
 
         for (WechatOrdersParamExt wechatOrdersParamExt : mallOrdersForm.getForms()) {
@@ -176,7 +178,8 @@ public class WechatOrdersController {
                 result = this.addWechatOrders(request, response, wechatOrdersParamExt);
             } catch (Exception e) {
                 logger.error("【原单原回】-保存工单出现异常-unionId为:[{}],异常信息为[{}],订单号为:[{}]", mallOrdersForm.getUnionId(), e,mallOrdersForm.getOrderNo());
-                result.setReturnCode(0);
+                handlerCsmResult(result,userId,mallOrdersForm.getOrderNo());
+                return result;
             }
             if (result.getReturnCode() == 0) {
                 //取消预约
@@ -197,6 +200,7 @@ public class WechatOrdersController {
                         }
                     }
                 }
+                handlerCsmResult(result,userId,mallOrdersForm.getOrderNo());
                 return result;
             }
             orderNos.add((String) result.getData());
@@ -209,27 +213,21 @@ public class WechatOrdersController {
     }
 
     /**
-     * 对发放换芯通知的用户进行标识
+     * 包装csm返回消息处理
+     * @param result
+     * @param userId
+     * @param orderNo
      */
-    private void handleSendNotice(List<WechatOrdersParamExt> paramExts,String phone){
-        for (WechatOrdersParamExt paramExt : paramExts) {
-            //买的必须是滤芯
-            logger.info("对发放换芯通知的用户进行标识-开始");
-            if (paramExt.getFilter()){
-                final List<String> clean = (List)configService.getConfig("filter_warn_class").get("clean");
-                final Map<String, Object> noticeMap = noticeRosterService.queryIdAndTypeByPhone(phone);
-                Long noticeId;
-                //final String properType = (String) noticeRosterService.queryIdAndTypeByPhone(phone).get("proper_type");
-                if (!CollectionUtils.isEmpty(noticeMap) && !clean.contains(noticeMap.get("proper_type"))){
-                    noticeId = (Long)noticeMap.get("id");
-                    noticeRosterService.updateHandleById(noticeId,"RENEW");
-                }
-                break;
-            }
-            logger.info("对发放换芯通知的用户进行标识-结束");
+    private void handlerCsmResult(Result result,String userId,String orderNo){
+        if (result.getReturnMsg().equals("网点不存在")){
+            result.setReturnCode(3);
+            logger.error("【原单原回】-网点不存在，,userId = [{}] , ordersNo = [{}]", userId, orderNo);
+        }else {
+            result.setReturnCode(4);
+            logger.error("【原单原回】-csm预约失败,userId = [{}] , ordersNo = [{}],错误原因为 = [{}]", userId, orderNo,result.getReturnMsg());
+            result.setReturnMsg("csm预约失败");
         }
     }
-
 
     /**
      * 用户预约

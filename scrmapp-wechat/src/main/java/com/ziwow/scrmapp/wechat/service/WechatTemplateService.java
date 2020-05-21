@@ -247,17 +247,29 @@ public interface WechatTemplateService {
 			String orderTime, String qyhUserName, String qyhUserPhone, String remark);
 
 	/****
-	 * 下单通知模板
-     * @param openId 用户openid
-     * @param url 链接
-     * @param params
-     * @param type
-     * @param toMiniProgram
-     * @param title
-     * @param remark
-     */
-	void sendTemplate(String openId, String url, List<String> params, String type,
+	 * 通知模板-type
+	 * @param openId 用户openid
+	 * @param url 链接
+	 * @param params
+	 * @param type
+	 * @param toMiniProgram
+	 * @param title
+	 * @param remark
+	 */
+	void sendTemplateByType(String openId, String url, List<String> params, String type,
                       boolean toMiniProgram, String title, String remark);
 
+	/****
+	 * 通知模板
+	 * @param openId 用户openid
+	 * @param url 链接
+	 * @param params
+	 * @param shortId
+	 * @param toMiniProgram
+	 * @param title
+	 * @param remark
+	 */
+	void sendTemplateByShortId(String openId, String url, List<String> params, String shortId,
+			boolean toMiniProgram, String title, String remark);
 
 }

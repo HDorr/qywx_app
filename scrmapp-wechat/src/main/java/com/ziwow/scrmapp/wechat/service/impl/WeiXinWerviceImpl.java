@@ -19,6 +19,7 @@ import com.ziwow.scrmapp.tools.utils.CookieUtil;
 import com.ziwow.scrmapp.tools.utils.StringUtil;
 import com.ziwow.scrmapp.wechat.constants.RedisKeyConstants;
 import com.ziwow.scrmapp.wechat.constants.WeChatConstants;
+import com.ziwow.scrmapp.wechat.params.wechat.QrCodeParam;
 import com.ziwow.scrmapp.wechat.persistence.entity.OpenAuthorizationWeixin;
 import com.ziwow.scrmapp.wechat.service.OpenWeixinService;
 import com.ziwow.scrmapp.wechat.service.WeiXinService;
@@ -167,6 +168,34 @@ public class WeiXinWerviceImpl implements WeiXinService {
             LOG.error("发送客服消息失败[{}]", e);
         }
         return StringUtils.EMPTY;
+    }
+
+    @Override
+    public Map<String, Object> getQrCode(QrCodeParam qrCodeParam, String appId, String secret) {
+        String accessToken = this.getAccessToken(appId, secret);
+        JSONObject sceneIdOrStr = new JSONObject();
+        if(qrCodeParam.getSceneId() != null) {
+            sceneIdOrStr.put("scene_id",qrCodeParam.getSceneId());
+        } else{
+            sceneIdOrStr.put("scene_str",qrCodeParam.getSceneStr());
+        }
+        JSONObject scene = new JSONObject();
+        scene.put("scene", sceneIdOrStr);
+        JSONObject object = new JSONObject();
+        object.put("action_name", qrCodeParam.getActionName());
+        object.put("action_info", scene);
+        if(qrCodeParam.getExpireSeconds() != null) {
+            object.put("expire_seconds",qrCodeParam.getExpireSeconds());
+        }
+        try {
+            String result = HttpKit.post(WeChatConstants.QR_TICKET_URL.concat(accessToken), object.toJSONString());
+            if (StringUtils.isNotEmpty(result)) {
+                return JSONObject.parseObject(result);
+            }
+        } catch (Exception e) {
+            LOG.error("获取二维码失败", e);
+        }
+        return null;
     }
 
     /**

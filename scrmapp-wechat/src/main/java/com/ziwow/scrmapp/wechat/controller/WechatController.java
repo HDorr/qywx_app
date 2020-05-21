@@ -34,6 +34,7 @@ import com.ziwow.scrmapp.tools.utils.StringUtil;
 import com.ziwow.scrmapp.tools.utils.UniqueIDBuilder;
 import com.ziwow.scrmapp.wechat.constants.WeChatConstants;
 import com.ziwow.scrmapp.wechat.enums.BuyChannel;
+import com.ziwow.scrmapp.wechat.params.wechat.QrCodeParam;
 import com.ziwow.scrmapp.wechat.persistence.entity.MallPcUser;
 import com.ziwow.scrmapp.wechat.persistence.entity.WechatFans;
 import com.ziwow.scrmapp.wechat.persistence.entity.WechatUser;
@@ -602,23 +603,15 @@ public class WechatController {
         result.setReturnMsg("工单完工同步成功!");
         result.setReturnCode(Constant.SUCCESS);
         try {
-            if (StringUtils.isNotBlank(dispatchOrderParam.getRemarks())){
-                //是否符合 邮寄滤芯 快递公司+快递单号
-                if (isOnlineCompletion(dispatchOrderParam.getRemarks())){
-                    dispatchOrderParam.setFinishNumber("邮寄完工");
-                    wechatOrdersService.dispatchCompleteOrder(dispatchOrderParam);
-                    sendMallShare(dispatchOrderParam.getAcceptNumber(), dispatchOrderParam.getRemarks());
-                }else {
-                    logger.error("在线完工失败，备注信息不符合,单号为:[{}]",dispatchOrderParam.getAcceptNumber());
-                    result.setReturnMsg("工单完工同步失败!");
-                    result.setReturnCode(Constant.SUCCESS);
-                    return result;
-                }
+            //是否符合 邮寄滤芯 快递公司+快递单号
+            if (isOnlineCompletion(dispatchOrderParam.getRemarks())){
+                dispatchOrderParam.setFinishNumber("邮寄完工");
+                wechatOrdersService.dispatchCompleteOrder(dispatchOrderParam);
+                sendMallShare(dispatchOrderParam.getAcceptNumber(), dispatchOrderParam.getRemarks());
             }else {
                 wechatOrdersService.dispatchCompleteOrder(dispatchOrderParam);
                 sendMallShare(dispatchOrderParam.getAcceptNumber(), dispatchOrderParam.getFinishNumber());
             }
-
         } catch (Exception e) {
             logger.error("工单完工同步失败:", e);
             result.setReturnCode(Constant.FAIL);
@@ -813,6 +806,24 @@ public class WechatController {
         return result;
     }
 
+  /**
+   * 获取二维码新版
+   *
+   * @param qrCodeParam {@link QrCodeParam}
+   * @return {@link Result}
+   */
+    @RequestMapping(value = "/getQrCode",method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
+    @ResponseBody
+    public Result getQrCode(@RequestBody QrCodeParam qrCodeParam){
+      boolean isPermitted =
+              SignUtil.checkSignature(qrCodeParam.getSignture(),
+                      "" + qrCodeParam.getTimestamp(), Constant.AUTH_KEY);
+      if(!isPermitted) {
+        return BaseResult.build(Constant.FAIL,"获取二维码失败",null);
+      }
+      Map<String, Object> res = weiXinService.getQrCode(qrCodeParam, appid, secret);
+        return BaseResult.build(Constant.SUCCESS,"获取二维码成功",res);
+    }
 
     @RequestMapping(value = "/sendSms", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
     @ResponseBody

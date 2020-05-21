@@ -30,6 +30,7 @@ import com.ziwow.scrmapp.wechat.utils.ProductServiceParamUtil;
 import com.ziwow.scrmapp.wechat.vo.EnumVo;
 import com.ziwow.scrmapp.wechat.vo.EwCardProductVo;
 import com.ziwow.scrmapp.wechat.vo.ProductVo;
+import org.apache.commons.lang.time.DateUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -211,7 +212,7 @@ public class ProductController {
             if (null != productBarCode || "".equals(productBarCode)) {
                 product.setProductBarCode(productBarCode);
             }
-            String image = productService.queryProductImage(product.getModelName());
+            String image = productService.queryImageByCode(product.getProductCode());
             product.setProductImage(image);
             result.setData(product);
             result.setReturnCode(Constant.SUCCESS);
@@ -281,6 +282,63 @@ public class ProductController {
         return result;
     }
 
+
+    /**
+     * 绑定产品信息（小程序）
+     * @param product
+     * @return
+     */
+    @RequestMapping(value = "/product/mini/save", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+    @MiniAuthentication
+    @ResponseBody
+    public Result miniBindProduct(@RequestParam("signture") String signture,
+                                  @RequestParam("time_stamp") String timeStamp,
+                                  @RequestParam("unionId") String unionId,
+                                  @ModelAttribute Product product) {
+        Result result = new BaseResult();
+        try {
+            final WechatUser wechatUser = wechatUserService.getUserByUnionid(unionId);
+            if (null == wechatUser) {
+                logger.error("绑定产品失败，cookie中userId错误");
+                result.setReturnCode(Constant.FAIL);
+                result.setReturnMsg("用户无效，请退出重新操作！");
+                return result;
+            }
+            if (productService.isOnlyBindProduct(wechatUser.getUserId(),product.getProductBarCode())){
+                logger.error("绑定产品条码已存在");
+                result.setReturnCode(Constant.FAIL);
+                result.setReturnMsg("该产品已经绑定！");
+                return result;
+            }
+            product.setUserId(wechatUser.getUserId());
+            product.setStatus(1);
+            product.setCreateTime(new Date());
+            product.setFilterRemind(SystemConstants.REMIND);
+            if (product.getBuyTime() == null){
+                //默认值为昨天
+                product.setBuyTime(DateUtils.addDays(new Date(),-1));
+            }
+
+            boolean isFirst=productService.isFirstBindProduct(wechatUser.getUserId());
+
+            productService.save(product);
+            // 绑定产品成功后异步推送给小程序
+            productService.syncProdBindToMiniApp(wechatUser.getUserId(), product.getProductCode(),isFirst,product.getProductBarCode(), product.getModelName());
+
+            // 产品绑定后发送模板消息
+            productService.productBindTemplateMsg(product);
+            String content = "亲爱的用户，恭喜您成功绑定产品。积分商城全新上线、微商城下单即可享受积分专属抵扣，积分也能当钱花!";
+            mobileService.sendContentByEmay(wechatUser.getMobilePhone(), content, Constant.CUSTOMER);
+
+            result.setReturnCode(Constant.SUCCESS);
+            result.setReturnMsg("产品绑定成功!");
+        } catch (Exception e) {
+            result.setReturnCode(Constant.FAIL);
+            result.setReturnMsg("产品绑定失败!");
+            logger.error("产品绑定失败,原因[{}]", e);
+        }
+        return result;
+    }
 
 
     /**
