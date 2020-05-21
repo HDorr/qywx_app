@@ -38,11 +38,11 @@ public class CheckUpActivityEwCardTask extends IJobHandler {
         //获取已经发送，但是没有领取，未到期的延保卡号
         List<GrantEwCardRecord> grantEwCardRecords = grantEwCardRecordService.selectReceiveRecord(false);
         for (GrantEwCardRecord grantEwCardRecord : grantEwCardRecords) {
-            if (StringUtils.isNotBlank(grantEwCardRecord.getPhone()) ||  grantEwCardRecord.getSendTime() != null){
+            if (StringUtils.isNotBlank(grantEwCardRecord.getMask()) && grantEwCardRecord.getSendTime() != null){
 
                 if (EwCardUtil.gtSevenDay(grantEwCardRecord.getSendTime())) {
                     try {
-                        grantEwCardRecordService.resetGrantEwCardRecord(grantEwCardRecord.getPhone());
+                        grantEwCardRecordService.resetGrantEwCardRecord(grantEwCardRecord.getMask());
                     } catch (Exception e) {
                         logger.error("重置数据失败，延保卡号:{},错误信息：{}",grantEwCardRecord.getMask(),e);
                         XxlJobLogger.log("重置数据失败，延保卡号:{}",grantEwCardRecord.getMask());

@@ -110,10 +110,10 @@ public interface GrantEwCardRecordMapper {
 
     /**
      * 根据手机号重置延保记录
-     * @param phone
+     * @param mask
      */
-    @Update("update t_grant_ew_card_record set receive = false,send = false,mask = null,send_time = null where phone = #{phone}")
-    void resetGrantEwCardRecord(@Param("phone") String phone);
+    @Update("update t_grant_ew_card_record set receive = false,send = false,mask = null,send_time = null where mask = #{mask}")
+    void resetGrantEwCardRecord(@Param("mask") String mask);
 
     /**
      * 查询该手机号发送的id
