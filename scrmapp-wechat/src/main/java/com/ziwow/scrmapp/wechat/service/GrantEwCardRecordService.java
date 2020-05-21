@@ -74,9 +74,9 @@ public interface GrantEwCardRecordService {
 
     /**
      * 重置赠送延保记录
-     * @param phone
+     * @param mask
      */
-    void resetGrantEwCardRecord(String phone);
+    void resetGrantEwCardRecord(String mask);
 
     /**
      * 根据手机号查询该延保卡是否存在

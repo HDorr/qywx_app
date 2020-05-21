@@ -58,8 +58,8 @@ public class GrantEwCardRecordServiceImpl implements GrantEwCardRecordService {
     }
 
     @Override
-    public void resetGrantEwCardRecord(String phone) {
-        grantEwCardRecordMapper.resetGrantEwCardRecord(phone);
+    public void resetGrantEwCardRecord(String mask) {
+        grantEwCardRecordMapper.resetGrantEwCardRecord(mask);
     }
 
     @Override
