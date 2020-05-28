@@ -1,5 +1,5 @@
 #scrm app
-FROM 47.96.110.23:8081/scrm/base:0.02
+FROM registry.cn-shanghai.aliyuncs.com/byy/qinyuan-scrm-base:1.0
 LABEL auth="Jitre"
 LABEL time="2019年03月23日"
 
