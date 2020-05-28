@@ -42,6 +42,7 @@ public class WechatOrdersVo {
     private String maintType;
     private String buyFilter;
     private String contactsTelephone;
+    private String qyhUserPhone; // 工程师手机号
     
     //查看完工详情时使用
     private List<ProductFinishVo> productFinish = new ArrayList<ProductFinishVo>();
@@ -301,4 +302,12 @@ public class WechatOrdersVo {
 	public void setContactsTelephone(String contactsTelephone) {
 		this.contactsTelephone = contactsTelephone;
 	}
+
+    public String getQyhUserPhone() {
+        return qyhUserPhone;
+    }
+
+    public void setQyhUserPhone(String qyhUserPhone) {
+        this.qyhUserPhone = qyhUserPhone;
+    }
 }

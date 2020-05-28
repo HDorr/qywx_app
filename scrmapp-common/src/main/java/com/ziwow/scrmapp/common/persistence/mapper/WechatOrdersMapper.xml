@@ -60,6 +60,7 @@
         <result column="buyFilter" property="buyFilter" jdbcType="INTEGER"/>
         <result column="contactsTelephone" property="contactsTelephone" jdbcType="VARCHAR"/>
         <result column="faultImage" property="faultImage" jdbcType="VARCHAR"/>
+        <result column="qyhUserId" property="qyhUserId" jdbcType="VARCHAR"/>
     </resultMap>
 
     <sql id="Base_Column_List">
@@ -376,6 +377,7 @@
             o.faultImage,
             o.buyFilter,
             o.description,
+            o.qyhUserId,
             CASE o.orderType
         WHEN 1 THEN
             '安装单'
