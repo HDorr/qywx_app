@@ -149,4 +149,12 @@ public interface ProductService {
      */
     String queryImageByCode(String productCode);
 
+    /**
+     * 根据userId和产品条码绑定产品
+     * @param userId
+     * @param sncode
+     * @throws Exception
+     */
+    boolean bindProduct(String userId,String sncode) throws Exception;
+
 }

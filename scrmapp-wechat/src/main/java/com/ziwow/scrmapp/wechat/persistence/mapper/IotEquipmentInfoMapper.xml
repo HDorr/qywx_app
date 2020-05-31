@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ziwow.scrmapp.wechat.persistence.mapper.IotEquipmentInfoMapper">
+
+	<resultMap id="equipmentInfo" type="com.ziwow.scrmapp.common.iot.IotEquipmentInfo">
+		<id property="id" column="id"></id>
+		<result property="sncode" column="sncode"></result>
+		<result property="unionId" column="unionId"></result>
+		<result property="source" column="source"></result>
+		<result property="activeStatus" column="active_status"></result>
+		<result property="activeTime" column="active_time"></result>
+		<result property="offlineTime" column="offline_time"></result>
+		<result property="archive" column="archive"></result>
+		<result property="updatedAt" column="updated_at"></result>
+		<result property="createdAt" column="created_at"></result>
+	</resultMap>
+
+	<insert id="saveEquipmentInfos">
+		insert into t_iot_equipment_info (union_id,source,active_status,active_time,status,offline_time)
+		values
+		<foreach collection ="list" item="equipmentInfo" index= "index" separator ="," open="(" close=")">
+			#{equipmentInfo.unionId}, #{equipmentInfo.source}, #{equipmentInfo.activeStatus},
+			#{equipmentInfo.activeTime}, #{equipmentInfo.status},#{equipmentInfo.offlineTime}
+		</foreach>
+		ON DUPLICATE KEY UPDATE
+		union_id = VALUES(union_id),
+		source = VALUES(source),
+		active_status = VALUES(active_status),
+		active_time = VALUES(active_time),
+		status = VALUES(status),
+		offline_time = VALUES(offline_time),
+		updated_at = now()
+	</insert>
+
+	<select id="queryBySnCode" resultMap="equipmentInfo">
+		select * from t_iot_equipment_info
+		where sncode = #{sncode}
+	</select>
+
+
+</mapper>

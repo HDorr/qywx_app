@@ -68,5 +68,12 @@ public interface WechatUserService {
 
     WechatUser getUserByFansUnionId(String unionId);
 
+    /**
+     * 根据unionId获取用户信息。忽视是否关注公众号
+     * @param unionId
+     * @return
+     */
+    WechatUser getUserByFansUnionIdIgnoreIsCancel(String unionId);
+
     boolean findUserLuckyByPhone(String mobilePhone);
 }

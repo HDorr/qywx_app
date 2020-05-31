@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ziwow.scrmapp.wechat.persistence.mapper.IotFilterInfoMapper">
+
+	<insert id="saveFilterInfos">
+		insert into t_ (union_id,source,active_status,active_time,status,offline_time)
+		values
+		<foreach collection ="list" item="equipmentInfo" index= "index" separator ="," open="(" close=")">
+			#{equipmentInfo.unionId}, #{equipmentInfo.source}, #{equipmentInfo.activeStatus},
+			#{equipmentInfo.activeTime}, #{equipmentInfo.status},#{equipmentInfo.offlineTime}
+		</foreach>
+		ON DUPLICATE KEY UPDATE
+		union_id = VALUES(union_id),
+		source = VALUES(source),
+		active_status = VALUES(active_status),
+		active_time = VALUES(active_time),
+		status = VALUES(status),
+		offline_time = VALUES(offline_time),
+		updated_at = now()
+
+		insert into t_iot_filter_info (filter_percent, filter_life)
+		values
+		<foreach collection ="list" item="filerInfo" index= "index" separator ="," open="(" close=")">
+			#{filerInfo.filter_percent}, #{filerInfo.filter_life}
+		</foreach>
+		on duplicate key update
+		filter_life = values(filter_life),
+		filter_percent = values(filter_percent),
+		updated_at = now()
+	</insert>
+
+
+</mapper>

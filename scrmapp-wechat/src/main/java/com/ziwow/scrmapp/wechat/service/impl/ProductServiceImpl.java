@@ -59,6 +59,7 @@ import com.ziwow.scrmapp.wechat.vo.ProductVo;
 import com.ziwow.scrmapp.wechat.vo.WechatFansVo;
 import com.ziwow.scrmapp.wechat.vo.WechatUserVo;
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.time.DateUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -74,6 +75,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.math.BigDecimal;
 import java.sql.SQLDataException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -976,6 +978,38 @@ public class ProductServiceImpl implements ProductService {
             return "http://wx.qinyuan.cn/wx/resources/images/defaultPdtImg.jpg";
         }
         return (String) jsonObject.get("data");
+    }
+
+    @Override
+    public boolean bindProduct(String userId,String sncode) throws ParseException {
+        ProductVo productVo = queryProduct(null, sncode, null);
+
+
+        Product product = new Product();
+        product.setBuyTime(DateUtils.parseDate(productVo.getBuyTime(),"yyyy-MM-dd"));
+        product.setProductBarCode(productVo.getProductBarCode());
+        product.setProductName(productVo.getProductName());
+        product.setTypeName(productVo.getTypeName());
+        product.setProductCode(productVo.getProductCode());
+        product.setModelName(productVo.getModelName());
+        product.setLevelName(productVo.getLevelName());
+        product.setSaleType(productVo.getSaleType());
+
+        product.setUserId(userId);
+        product.setStatus(1);
+        product.setCreateTime(new Date());
+        product.setFilterRemind(SystemConstants.REMIND);
+        boolean isFirst = isFirstBindProduct(userId);
+
+        try {
+            save(product);
+        }catch (SQLDataException e){
+            LOG.error("绑定产品失败，产品条码:[{}],userId:[{}],错误信息:[{}]",sncode,userId,e);
+            return false;
+        }
+        // 绑定产品成功后异步推送给小程序
+        syncProdBindToMiniApp(userId, product.getProductCode(),isFirst,product.getProductBarCode(), product.getModelName());
+        return true;
     }
 
     @Override

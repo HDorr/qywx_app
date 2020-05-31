@@ -246,7 +246,12 @@ public class WechatUserServiceImpl implements WechatUserService {
     return wechatUserMapper.selectUserByFansUnionId(unionId);
   }
 
-  @Override
+    @Override
+    public WechatUser getUserByFansUnionIdIgnoreIsCancel(String unionId) {
+        return wechatUserMapper.selectUserByFansUnionIdIgnoreIsCancel(unionId);
+    }
+
+    @Override
     public MallPcUser getMallPcUserByMobile(String mobile) {
         return mallPcUserMapper.getMallPcUserByMobile(mobile);
     }

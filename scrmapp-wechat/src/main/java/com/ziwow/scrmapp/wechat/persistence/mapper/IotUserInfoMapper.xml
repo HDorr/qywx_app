@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ziwow.scrmapp.wechat.persistence.mapper.IotUserInfoMapper">
+	
+	<resultMap id="userInfo" type="com.ziwow.scrmapp.common.iot.IotUserInfo">
+		<id column="id" property="id"></id>
+		<result column="nick_name" property="nickName"></result>
+		<result column="sex" property="sex"></result>
+		<result column="phone" property="phone"></result>
+		<result column="sncode" property="sncode"></result>
+		<result column="iot_create_time" property="iotCreateTime"></result>
+		<result column="archive" property="archive"></result>
+		<result column="updated_at" property="updatedAt"></result>
+		<result column="created_at" property="createdAt"></result>
+	</resultMap>
+
+	<insert id="saveUserInfos">
+		insert into t_iot_user_info (phone,sex,source,nick_name,iot_create_time,sncode)
+		values
+		<foreach collection ="list" item="userInfo" index= "index" separator ="," open="(" close=")">
+			#{userInfo.phone}, #{userInfo.sex}, #{userInfo.source},
+			#{userInfo.nickName}, #{userInfo.iotCreateTime},#{userInfo.sncode}
+		</foreach>
+		ON DUPLICATE KEY UPDATE
+		phone = VALUES(phone),
+		sex = VALUES(sex),
+		source = VALUES(source),
+		nick_name = VALUES(nick_name),
+		iot_create_time = VALUES(iot_create_time),
+		sncode = VALUES(sncode),
+		updated_at = now()
+	</insert>
+
+	<select id="queryUserInfoBySncode" resultMap="userInfo">
+		select * from t_iot_user_info where sncode = #{sncode}
+	</select>
+
+
+</mapper>

@@ -37,4 +37,6 @@ public interface WechatUserMapper {
 
 
    int findUserLuckyByPhone(String mobilePhone);
+
+    WechatUser selectUserByFansUnionIdIgnoreIsCancel(String unionId);
 }
