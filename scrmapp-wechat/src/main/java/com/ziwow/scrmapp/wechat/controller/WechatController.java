@@ -13,6 +13,7 @@ import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
 import com.ziwow.scrmapp.common.annotation.MiniAuthentication;
 import com.ziwow.scrmapp.common.bean.pojo.*;
+import com.ziwow.scrmapp.common.bean.pojo.fans.WxFansListParam;
 import com.ziwow.scrmapp.common.bean.vo.csm.ProductItem;
 import com.ziwow.scrmapp.common.bean.vo.mall.MallOrderVo;
 import com.ziwow.scrmapp.common.bean.vo.mall.OrderItem;
@@ -148,7 +149,7 @@ public class WechatController {
             result.setReturnCode(Constant.FAIL);
             return result;
         }
-        final List<String> filterPhones = (List)configService.getConfig("grant_filter_list").get("phone");
+        final List<String> filterPhones = (List) configService.getConfig("grant_filter_list").get("phone");
         if (filterPhones.contains(mobile) && grantEwCardRecordService.selectReceiveRecordByPhone(mobile)) {
             logger.error("该手机号已发放，手机号码为:{}", mobile);
             result.setReturnMsg("该手机号已发放");
@@ -540,6 +541,30 @@ public class WechatController {
         return result;
     }
 
+    /**
+     * 拉取粉丝关注变化的数据
+     *
+     * @param param DispatchWxFansParam
+     * @return Result
+     */
+    @RequestMapping(value = {"/syncFansData"}, method = {RequestMethod.POST}, produces = {"application/json;charset=UTF-8"})
+    @ResponseBody
+    public Result syncPageWxFansList(@RequestBody WxFansListParam param) {
+        logger.info("csm调用接口拉取粉丝关注列表,请求参数：{}", param);
+        Result result = BaseResult.build(Constant.FAIL, Constant.ILLEGAL_REQUEST, null);
+        boolean isLegal = SignUtil.checkSignature(param.getSignature(), param.getTimeStamp(), Constant.AUTH_KEY);
+        if(isLegal) {
+            result.setReturnCode(Constant.SUCCESS);
+            result.setReturnMsg(Constant.OK);
+            if(param.getDataType() == 1) {
+                result.setData( wechatFansService.pageWxFansList(param));
+            } else {
+                result.setData(wechatFansService.pageWxFansTotal(param));
+            }
+        }
+        return result;
+    }
+
     @RequestMapping(value = {"/syncAddAppraise"}, method = {RequestMethod.POST}, produces = {"application/json;charset=UTF-8"})
     @ResponseBody
     public Result syncAddAppraise(@RequestBody AppraiseParam appraiseParam) {
@@ -604,11 +629,11 @@ public class WechatController {
         result.setReturnCode(Constant.SUCCESS);
         try {
             //是否符合 邮寄滤芯 快递公司+快递单号
-            if (isOnlineCompletion(dispatchOrderParam.getRemarks())){
+            if (isOnlineCompletion(dispatchOrderParam.getRemarks())) {
                 dispatchOrderParam.setFinishNumber("邮寄完工");
                 wechatOrdersService.dispatchCompleteOrder(dispatchOrderParam);
                 sendMallShare(dispatchOrderParam.getAcceptNumber(), dispatchOrderParam.getRemarks());
-            }else {
+            } else {
                 wechatOrdersService.dispatchCompleteOrder(dispatchOrderParam);
                 sendMallShare(dispatchOrderParam.getAcceptNumber(), dispatchOrderParam.getFinishNumber());
             }
@@ -623,13 +648,14 @@ public class WechatController {
 
     /**
      * 是否符合在线完工的条件
+     *
      * @param remarks
      * @return
      */
     private boolean isOnlineCompletion(String remarks) {
         final String removeStr = StringUtils.remove(remarks, "邮寄滤芯&");
         //样例  邮寄滤芯&退单邮寄：中通公司+73123285582371
-        if (remarks.contains("邮寄滤芯") && StringUtils.isNotBlank(removeStr)){
+        if (remarks.contains("邮寄滤芯") && StringUtils.isNotBlank(removeStr)) {
             return true;
         }
         return false;
@@ -806,23 +832,23 @@ public class WechatController {
         return result;
     }
 
-  /**
-   * 获取二维码新版
-   *
-   * @param qrCodeParam {@link QrCodeParam}
-   * @return {@link Result}
-   */
-    @RequestMapping(value = "/getQrCode",method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
+    /**
+     * 获取二维码新版
+     *
+     * @param qrCodeParam {@link QrCodeParam}
+     * @return {@link Result}
+     */
+    @RequestMapping(value = "/getQrCode", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
     @ResponseBody
-    public Result getQrCode(@RequestBody QrCodeParam qrCodeParam){
-      boolean isPermitted =
-              SignUtil.checkSignature(qrCodeParam.getSignture(),
-                      "" + qrCodeParam.getTimestamp(), Constant.AUTH_KEY);
-      if(!isPermitted) {
-        return BaseResult.build(Constant.FAIL,"获取二维码失败",null);
-      }
-      Map<String, Object> res = weiXinService.getQrCode(qrCodeParam, appid, secret);
-        return BaseResult.build(Constant.SUCCESS,"获取二维码成功",res);
+    public Result getQrCode(@RequestBody QrCodeParam qrCodeParam) {
+        boolean isPermitted =
+                SignUtil.checkSignature(qrCodeParam.getSignture(),
+                        "" + qrCodeParam.getTimestamp(), Constant.AUTH_KEY);
+        if (!isPermitted) {
+            return BaseResult.build(Constant.FAIL, "获取二维码失败", null);
+        }
+        Map<String, Object> res = weiXinService.getQrCode(qrCodeParam, appid, secret);
+        return BaseResult.build(Constant.SUCCESS, "获取二维码成功", res);
     }
 
     @RequestMapping(value = "/sendSms", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
