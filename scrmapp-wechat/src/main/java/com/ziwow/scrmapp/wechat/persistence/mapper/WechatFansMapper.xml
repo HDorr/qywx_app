@@ -64,7 +64,10 @@
 				wf_nickname = #{wfNickName},
 			</if>
 			<if test="unionId != null">
-				unionid = #{unionId}
+				unionid = #{unionId},
+			</if>
+			<if test="followAt != null">
+				follow_at = #{followAt},
 			</if>
 		</set>
 		where openid = #{openId}
@@ -101,7 +104,10 @@
 				wf_nickname = #{wfNickName},
 			</if>
 			<if test="unionId != null">
-				unionid = #{unionId}
+				unionid = #{unionId},
+			</if>
+			<if test="followAt != null">
+				follow_at = #{followAt},
 			</if>
 		</set>
 		where id = #{id}
