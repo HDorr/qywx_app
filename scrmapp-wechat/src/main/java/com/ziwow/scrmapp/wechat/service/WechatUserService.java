@@ -76,4 +76,9 @@ public interface WechatUserService {
     WechatUser getUserByFansUnionIdIgnoreIsCancel(String unionId);
 
     boolean findUserLuckyByPhone(String mobilePhone);
+
+    /**
+     * 自动注册
+     */
+    void autoRegiter(String phone,String unionId);
 }

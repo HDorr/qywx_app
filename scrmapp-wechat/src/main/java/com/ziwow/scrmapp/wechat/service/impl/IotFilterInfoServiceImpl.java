@@ -19,4 +19,9 @@ public class IotFilterInfoServiceImpl implements IotFilterInfoService {
     public void saveFilterInfos(List<IotFilterInfo> iotFilterInfos) {
         iotFilterInfoMapper.saveFilterInfos(iotFilterInfos);
     }
+
+    @Override
+    public void queryByFilterLife(int i) {
+        iotFilterInfoMapper.queryByFilterLife(i);
+    }
 }

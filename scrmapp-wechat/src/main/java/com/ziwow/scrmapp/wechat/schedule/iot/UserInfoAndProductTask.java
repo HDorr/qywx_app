@@ -3,13 +3,18 @@ package com.ziwow.scrmapp.wechat.schedule.iot;
 import com.xxl.job.core.biz.model.ReturnT;
 import com.xxl.job.core.handler.IJobHandler;
 import com.xxl.job.core.handler.annotation.JobHandler;
+import com.xxl.job.core.log.XxlJobLogger;
 import com.ziwow.scrmapp.common.iot.IotEquipmentInfo;
 import com.ziwow.scrmapp.common.iot.IotUserInfo;
 import com.ziwow.scrmapp.common.persistence.entity.Product;
 import com.ziwow.scrmapp.tools.utils.UniqueIDBuilder;
 import com.ziwow.scrmapp.wechat.persistence.entity.WechatFans;
 import com.ziwow.scrmapp.wechat.persistence.entity.WechatUser;
+import com.ziwow.scrmapp.wechat.schedule.CheckUpActivityEwCardTask;
 import com.ziwow.scrmapp.wechat.service.*;
+import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -23,6 +28,8 @@ import java.util.List;
 @JobHandler("userInfoAndProductTask")
 public class UserInfoAndProductTask extends IJobHandler {
 
+    private static final Logger logger = LoggerFactory.getLogger(UserInfoAndProductTask.class);
+
     @Autowired
     private IotUserInfoService iotUserInfoService;
 
@@ -34,9 +41,6 @@ public class UserInfoAndProductTask extends IJobHandler {
 
     @Autowired
     private ProductService productService;
-
-    @Autowired
-    private WechatOrdersService wechatOrdersService;
 
     @Override
     public ReturnT<String> execute(String param) throws Exception {
@@ -54,6 +58,11 @@ public class UserInfoAndProductTask extends IJobHandler {
 
         for (IotEquipmentInfo equipmentInfo : equipmentInfos) {
             String unionId = equipmentInfo.getUnionId();
+            if (StringUtils.isBlank(unionId)){
+                XxlJobLogger.log("iot设备信息对应unionid为空,sncode为:[{}]",equipmentInfo.getSncode());
+                logger.error("iot设备信息对应unionid为空,sncode为:[{}]",equipmentInfo.getSncode());
+                continue;
+            }
             //判断是否已经注册过
             WechatUser wechatUser = wechatUserService.getUserByFansUnionIdIgnoreIsCancel(unionId);
             //已经注册
@@ -68,8 +77,13 @@ public class UserInfoAndProductTask extends IJobHandler {
             }else {
                 //未进行注册
                 IotUserInfo userInfo = iotUserInfoService.queryUserInfoBySncode(equipmentInfo.getSncode());
+                if (userInfo == null){
+                    XxlJobLogger.log("iot自动注册，根据sncode无法找到对应的iot用户信息，sncode为:[{}]",equipmentInfo.getSncode());
+                    logger.error("iot自动注册，根据sncode无法找到对应的iot用户信息，sncode为:[{}]",equipmentInfo.getSncode());
+                    continue;
+                }
                 //完成注册逻辑
-
+                wechatUserService.autoRegiter(userInfo.getPhone(),unionId);
                 //产品自动绑定
                 productService.bindProduct(wechatUser.getUserId(),equipmentInfo.getSncode());
             }
@@ -78,24 +92,5 @@ public class UserInfoAndProductTask extends IJobHandler {
         return ReturnT.SUCCESS;
     }
 
-
-    private void re(IotUserInfo iotUserInfo,String unionId){
-        WechatFans wechatFans = new WechatFans();
-        wechatFans.setIsMember(2);
-        wechatFans.setUnionId(unionId);
-
-        // 设置用户信息
-        String userId = UniqueIDBuilder.getUniqueIdValue();
-        WechatUser wechatUser = new WechatUser();
-        wechatUser.setUserId(userId);
-        wechatUser.setMobilePhone(iotUserInfo.getPhone().trim());
-        wechatUser.setRegisterSrc(1001);
-        wechatUserService.syncUserFromMiniApp(wechatFans, wechatUser);
-
-        // 异步同步该用户的历史产品信息
-        productService.syncHistroyProductItemFromCemTemp(iotUserInfo.getPhone().trim(), userId);
-        // 异步同步该用户的历史受理单信息
-        wechatOrdersService.syncHistoryAppInfo(iotUserInfo.getPhone().trim(), userId);
-    }
 
 }

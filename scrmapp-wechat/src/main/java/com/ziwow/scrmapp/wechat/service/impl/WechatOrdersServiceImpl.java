@@ -1,4 +1,4 @@
-package com.ziwow.scrmapp.wechat.service.impl;
+package com.ziwow.scrmapp.wecha.service.impl;
 
 import com.alibaba.fastjson.JSON;
 import com.google.common.collect.Lists;

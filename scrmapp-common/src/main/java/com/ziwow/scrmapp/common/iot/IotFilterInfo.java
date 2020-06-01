@@ -34,6 +34,11 @@ public class IotFilterInfo {
      */
     private Integer filterLife;
 
+    /**
+     * 过期时间
+     */
+    private Date overdueDate;
+
     private Boolean archive;
 
     private Date updatedAt;
@@ -46,6 +51,14 @@ public class IotFilterInfo {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Date getOverdueDate() {
+        return overdueDate;
+    }
+
+    public void setOverdueDate(Date overdueDate) {
+        this.overdueDate = overdueDate;
     }
 
     public String getSncode() {

@@ -30,4 +30,8 @@
 	</insert>
 
 
+	<select id="queryByFilterLife">
+		select * from t_iot_filter_info tifi
+	</select>
+
 </mapper>

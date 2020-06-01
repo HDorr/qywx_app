@@ -7,15 +7,20 @@ import com.ziwow.scrmapp.common.iot.IotEquipmentInfo;
 import com.ziwow.scrmapp.common.iot.IotFilterInfo;
 import com.ziwow.scrmapp.wechat.service.IotEquipmentInfoService;
 import com.ziwow.scrmapp.wechat.service.IotFilterInfoService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Component
 @JobHandler("filterInfoTask")
 public class FilterInfoTask extends IJobHandler {
+
+    private static final Logger logger = LoggerFactory.getLogger(UserInfoAndProductTask.class);
 
     @Autowired
     private IotFilterInfoService iotFilterInfoService;
@@ -30,6 +35,9 @@ public class FilterInfoTask extends IJobHandler {
 
         //组装id
         for (IotFilterInfo iotFilterInfo : iotFilterInfos) {
+            if (iotFilterInfo.getFilterLife() == 0) {
+                iotFilterInfo.setOverdueDate(new Date());
+            }
             IotEquipmentInfo equipmentInfo = iotEquipmentInfoService.queryBySnCode(iotFilterInfo.getSncode());
             iotFilterInfo.setEquipmentInfoId(equipmentInfo.getId());
         }

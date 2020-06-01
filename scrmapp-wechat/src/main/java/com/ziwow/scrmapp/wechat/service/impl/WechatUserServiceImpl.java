@@ -21,8 +21,8 @@ import com.ziwow.scrmapp.common.result.Result;
 import com.ziwow.scrmapp.common.service.ThirdPartyService;
 import com.ziwow.scrmapp.tools.utils.HttpClientUtils;
 import com.ziwow.scrmapp.tools.utils.MD5;
-import com.ziwow.scrmapp.wechat.service.WechatOrdersRecordService;
-import com.ziwow.scrmapp.wechat.service.WechatOrdersService;
+import com.ziwow.scrmapp.tools.utils.UniqueIDBuilder;
+import com.ziwow.scrmapp.wechat.service.*;
 import com.ziwow.scrmapp.wechat.vo.QtyUserVO;
 import com.ziwow.scrmapp.wechat.vo.WechatUserVo;
 import net.sf.json.JSONObject;
@@ -43,8 +43,6 @@ import com.ziwow.scrmapp.wechat.persistence.entity.WechatUser;
 import com.ziwow.scrmapp.wechat.persistence.mapper.MallPcUserMapper;
 import com.ziwow.scrmapp.wechat.persistence.mapper.WechatFansMapper;
 import com.ziwow.scrmapp.wechat.persistence.mapper.WechatUserMapper;
-import com.ziwow.scrmapp.wechat.service.WechatTemplateService;
-import com.ziwow.scrmapp.wechat.service.WechatUserService;
 
 @Service
 public class WechatUserServiceImpl implements WechatUserService {
@@ -57,6 +55,8 @@ public class WechatUserServiceImpl implements WechatUserService {
     private MallPcUserMapper mallPcUserMapper;
     @Autowired
     private WechatTemplateService wechatTemplateService;
+    @Autowired
+    private ProductService productService;
     @Value("${miniapp.user.sync}")
     private String syncUserUrl;
 
@@ -264,5 +264,28 @@ public class WechatUserServiceImpl implements WechatUserService {
     @Override
     public boolean findUserLuckyByPhone(String mobilePhone) {
         return wechatUserMapper.findUserLuckyByPhone(mobilePhone)>0? true:false;
+    }
+
+    @Override
+    public void autoRegiter(String phone, String unionId) {
+        WechatFans wechatFans = new WechatFans();
+        wechatFans.setIsMember(2);
+        wechatFans.setUnionId(unionId);
+
+        // 设置用户信息
+        String userId = UniqueIDBuilder.getUniqueIdValue();
+        WechatUser wechatUser = new WechatUser();
+        wechatUser.setUserId(userId);
+        wechatUser.setMobilePhone(phone);
+        wechatUser.setRegisterSrc(1001);
+        syncUserFromMiniApp(wechatFans, wechatUser);
+
+        // 异步同步该用户的历史产品信息
+        productService.syncHistroyProductItemFromCemTemp(phone, userId);
+        // 异步同步该用户的历史受理单信息
+        wechatOrdersService.syncHistoryAppInfo(phone, userId);
+
+        //推送商城
+
     }
 }
