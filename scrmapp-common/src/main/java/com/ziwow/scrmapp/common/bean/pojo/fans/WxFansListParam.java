@@ -37,8 +37,8 @@ public class WxFansListParam extends AbstractBaseParam {
 
     public Integer getSize() {
         // 防止size过大查询阻塞
-        if (size > 100) {
-            size = 100;
+        if (size > 200) {
+            size = 200;
         }
         return size;
     }
