@@ -1,6 +1,7 @@
 package com.ziwow.scrmapp.common.bean.pojo.fans;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.ziwow.scrmapp.common.bean.pojo.AbstractBaseParam;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.time.DateFormatUtils;
@@ -20,6 +21,7 @@ import java.util.GregorianCalendar;
  *
  * @author xiaohei
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class WxFansListParam extends AbstractBaseParam {
 
     private Integer page = 0; // 当前页，从0开始
