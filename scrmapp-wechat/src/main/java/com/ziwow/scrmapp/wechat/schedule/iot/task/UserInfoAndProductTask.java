@@ -1,4 +1,4 @@
-package com.ziwow.scrmapp.wechat.schedule.iot;
+package com.ziwow.scrmapp.wechat.schedule.iot.task;
 
 import com.xxl.job.core.biz.model.ReturnT;
 import com.xxl.job.core.handler.IJobHandler;
@@ -7,10 +7,7 @@ import com.xxl.job.core.log.XxlJobLogger;
 import com.ziwow.scrmapp.common.iot.IotEquipmentInfo;
 import com.ziwow.scrmapp.common.iot.IotUserInfo;
 import com.ziwow.scrmapp.common.persistence.entity.Product;
-import com.ziwow.scrmapp.tools.utils.UniqueIDBuilder;
-import com.ziwow.scrmapp.wechat.persistence.entity.WechatFans;
 import com.ziwow.scrmapp.wechat.persistence.entity.WechatUser;
-import com.ziwow.scrmapp.wechat.schedule.CheckUpActivityEwCardTask;
 import com.ziwow.scrmapp.wechat.service.*;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -53,6 +50,7 @@ public class UserInfoAndProductTask extends IJobHandler {
 
         //拉取设备信息
         List<IotEquipmentInfo> equipmentInfos = new ArrayList<>();
+
         //同步
         iotEquipmentInfoService.saveEquipmentInfos(equipmentInfos);
 

@@ -2,36 +2,55 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.ziwow.scrmapp.wechat.persistence.mapper.IotFilterInfoMapper">
 
-	<insert id="saveFilterInfos">
-		insert into t_ (union_id,source,active_status,active_time,status,offline_time)
-		values
-		<foreach collection ="list" item="equipmentInfo" index= "index" separator ="," open="(" close=")">
-			#{equipmentInfo.unionId}, #{equipmentInfo.source}, #{equipmentInfo.activeStatus},
-			#{equipmentInfo.activeTime}, #{equipmentInfo.status},#{equipmentInfo.offlineTime}
-		</foreach>
-		ON DUPLICATE KEY UPDATE
-		union_id = VALUES(union_id),
-		source = VALUES(source),
-		active_status = VALUES(active_status),
-		active_time = VALUES(active_time),
-		status = VALUES(status),
-		offline_time = VALUES(offline_time),
-		updated_at = now()
+	<resultMap id="IotFilterReminderMap" type="com.ziwow.scrmapp.wechat.schedule.iot.dto.IotFilterReminder">
+		<result property="filterName" column="filter_name"></result>
+		<result property="phone" column="phone"></result>
+		<result property="sncode" column="sncode"></result>
+	</resultMap>
 
-		insert into t_iot_filter_info (filter_percent, filter_life)
+	<insert id="saveFilterInfos">
+		insert into t_iot_filter_info (sncode, filter_level, u9_code, filter_name)
 		values
 		<foreach collection ="list" item="filerInfo" index= "index" separator ="," open="(" close=")">
-			#{filerInfo.filter_percent}, #{filerInfo.filter_life}
+			#{filerInfo.sncode},
+			#{filerInfo.filterLevel},
+			#{filerInfo.erpCode},
+			#{filerInfo.name}
+		</foreach>
+		on duplicate key update
+		u9_code = values(u9_code),
+		filter_name = values(filter_name),
+		updated_at = now()
+	</insert>
+
+	<insert id="saveFilterLifeInfos">
+		insert into t_iot_filter_info (sncode, filter_level, filter_percent, filter_life, overdue_date)
+		values
+		<foreach collection ="list" item="filerInfo" index= "index" separator ="," open="(" close=")">
+			#{filerInfo.sncode},
+			#{filerInfo.filterLevel},
+			#{filerInfo.filterPercent},
+			#{filerInfo.filterLife},
+			#{filerInfo.overdueDate}
 		</foreach>
 		on duplicate key update
 		filter_life = values(filter_life),
 		filter_percent = values(filter_percent),
+		overdue_date = values(overdue_date),
 		updated_at = now()
 	</insert>
 
 
-	<select id="queryByFilterLife">
-		select * from t_iot_filter_info tifi
+	<select id="queryByFilterLife" resultMap="IotFilterReminderMap">
+		select tifi.filter_name,tiui.phone,tifi.sncode from t_iot_filter_info tifi
+        left join t_iot_user_info tiui on tifi.sncode = tiui.sncode
+        where tifi.archive = false and tiui.archive = false and tifi.filter_life = #{filerLife}
+	</select>
+
+	<select id="queryByOverdueDate" resultMap="IotFilterReminderMap">
+		select tifi.filter_name,tiui.phone,tifi.sncode from t_iot_filter_info tifi
+		left join t_iot_user_info tiui on tifi.sncode = tiui.sncode
+		where tifi.archive = false and tiui.archive = false and overdue_date = #{date};
 	</select>
 
 </mapper>

@@ -1,65 +1,31 @@
 package com.ziwow.scrmapp.common.iot;
 
-import java.util.Date;
-
 /**
- * iot滤芯信息
+ * iot滤芯基本信息
+ * @author songkaiqi
+ * @since 2020/06/02/上午11:46
  */
 public class IotFilterInfo {
 
-    private Long id;
-
     /**
-     * 关联设别编号
+     * 设备编码
      */
     private String sncode;
 
     /**
-     * 关联设备id
-     */
-    private Long equipmentInfoId;
-
-    /**
-     * 滤芯级数
+     * 滤芯级别
      */
     private String filterLevel;
 
     /**
-     * 滤芯剩余百分比
+     * 滤芯u9
      */
-    private Integer filterPercent;
+    private String erpCode;
 
     /**
-     * 滤芯剩余使用天数
+     * 滤芯名称
      */
-    private Integer filterLife;
-
-    /**
-     * 过期时间
-     */
-    private Date overdueDate;
-
-    private Boolean archive;
-
-    private Date updatedAt;
-
-    private Date createdAt;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Date getOverdueDate() {
-        return overdueDate;
-    }
-
-    public void setOverdueDate(Date overdueDate) {
-        this.overdueDate = overdueDate;
-    }
+    private String name;
 
     public String getSncode() {
         return sncode;
@@ -67,14 +33,6 @@ public class IotFilterInfo {
 
     public void setSncode(String sncode) {
         this.sncode = sncode;
-    }
-
-    public Long getEquipmentInfoId() {
-        return equipmentInfoId;
-    }
-
-    public void setEquipmentInfoId(Long equipmentInfoId) {
-        this.equipmentInfoId = equipmentInfoId;
     }
 
     public String getFilterLevel() {
@@ -85,43 +43,19 @@ public class IotFilterInfo {
         this.filterLevel = filterLevel;
     }
 
-    public Integer getFilterPercent() {
-        return filterPercent;
+    public String getErpCode() {
+        return erpCode;
     }
 
-    public void setFilterPercent(Integer filterPercent) {
-        this.filterPercent = filterPercent;
+    public void setErpCode(String erpCode) {
+        this.erpCode = erpCode;
     }
 
-    public Integer getFilterLife() {
-        return filterLife;
+    public String getName() {
+        return name;
     }
 
-    public void setFilterLife(Integer filterLife) {
-        this.filterLife = filterLife;
-    }
-
-    public Boolean getArchive() {
-        return archive;
-    }
-
-    public void setArchive(Boolean archive) {
-        this.archive = archive;
-    }
-
-    public Date getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(Date updatedAt) {
-        this.updatedAt = updatedAt;
-    }
-
-    public Date getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(Date createdAt) {
-        this.createdAt = createdAt;
+    public void setName(String name) {
+        this.name = name;
     }
 }

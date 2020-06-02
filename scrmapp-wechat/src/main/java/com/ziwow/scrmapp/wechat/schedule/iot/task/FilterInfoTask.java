@@ -1,10 +1,11 @@
-package com.ziwow.scrmapp.wechat.schedule.iot;
+package com.ziwow.scrmapp.wechat.schedule.iot.task;
 
 import com.xxl.job.core.biz.model.ReturnT;
 import com.xxl.job.core.handler.IJobHandler;
 import com.xxl.job.core.handler.annotation.JobHandler;
 import com.ziwow.scrmapp.common.iot.IotEquipmentInfo;
 import com.ziwow.scrmapp.common.iot.IotFilterInfo;
+import com.ziwow.scrmapp.common.iot.IotFilterLifeInfo;
 import com.ziwow.scrmapp.wechat.service.IotEquipmentInfoService;
 import com.ziwow.scrmapp.wechat.service.IotFilterInfoService;
 import org.slf4j.Logger;
@@ -30,20 +31,21 @@ public class FilterInfoTask extends IJobHandler {
 
     @Override
     public ReturnT<String> execute(String param) throws Exception {
-        //拉取滤芯寿命信息
-        List<IotFilterInfo> iotFilterInfos = new ArrayList<>();
 
+        //拉取滤芯信息并同步
+        List<IotFilterInfo> filterInfos = new ArrayList<>();
+        iotFilterInfoService.saveFilterInfos(filterInfos);
+
+        //拉取滤芯寿命并同步
+        List<IotFilterLifeInfo> iotFilterInfos = new ArrayList<>();
         //组装id
-        for (IotFilterInfo iotFilterInfo : iotFilterInfos) {
+        for (IotFilterLifeInfo iotFilterInfo : iotFilterInfos) {
+            //设置过期时间
             if (iotFilterInfo.getFilterLife() == 0) {
                 iotFilterInfo.setOverdueDate(new Date());
             }
-            IotEquipmentInfo equipmentInfo = iotEquipmentInfoService.queryBySnCode(iotFilterInfo.getSncode());
-            iotFilterInfo.setEquipmentInfoId(equipmentInfo.getId());
         }
-
-        iotFilterInfoService.saveFilterInfos(iotFilterInfos);
-
+        iotFilterInfoService.saveFilterLifeInfos(iotFilterInfos);
         return ReturnT.SUCCESS;
     }
 
