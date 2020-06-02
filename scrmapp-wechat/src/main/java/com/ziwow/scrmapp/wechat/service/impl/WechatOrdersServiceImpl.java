@@ -919,7 +919,7 @@ public class WechatOrdersServiceImpl implements WechatOrdersService {
 
             // 完工发送评价提醒
           try {
-            String strDate = DateUtil.DateToString(wechatOrders.getOrderTime(), "yyyy-MM-dd HH");
+            String strDate = DateUtil.DateToString(wechatOrders.getOrderTime(), "yyyy-MM-dd HH:mm:ss");
             sendOrderFinishTemplateMsg(wechatOrders.getOrdersCode(),wechatOrders.getUserId(),strDate);
           } catch (Exception e) {
             LOG.error("400发送完工评价提醒失败：",e);
