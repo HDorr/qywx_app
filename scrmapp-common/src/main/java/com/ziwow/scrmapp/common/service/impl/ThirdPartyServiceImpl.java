@@ -13,11 +13,14 @@ import com.ziwow.scrmapp.common.bean.vo.cem.CemAssertInfo;
 import com.ziwow.scrmapp.common.bean.vo.cem.CemProductInfo;
 import com.ziwow.scrmapp.common.bean.vo.cem.CemResp;
 import com.ziwow.scrmapp.common.bean.vo.csm.*;
+import com.ziwow.scrmapp.common.bean.vo.iot.IotBaseResult;
+import com.ziwow.scrmapp.common.bean.vo.iot.UserInfoRet;
 import com.ziwow.scrmapp.common.bean.vo.mall.MallOrderVo;
 import com.ziwow.scrmapp.common.bean.vo.mall.OrderItem;
 import com.ziwow.scrmapp.common.constants.Constant;
 import com.ziwow.scrmapp.common.constants.ErrorCodeConstants;
 import com.ziwow.scrmapp.common.exception.ThirdException;
+import com.ziwow.scrmapp.common.iot.IotUserInfo;
 import com.ziwow.scrmapp.common.persistence.entity.InstallPart;
 import com.ziwow.scrmapp.common.persistence.entity.RepairItem;
 import com.ziwow.scrmapp.common.persistence.entity.RepairPart;
@@ -25,6 +28,7 @@ import com.ziwow.scrmapp.common.result.BaseResult;
 import com.ziwow.scrmapp.common.result.Result;
 import com.ziwow.scrmapp.common.service.ThirdPartyService;
 import com.ziwow.scrmapp.common.utils.HttpKit;
+import com.ziwow.scrmapp.common.utils.IotHttpUtils;
 import com.ziwow.scrmapp.common.utils.JsonUtil;
 import com.ziwow.scrmapp.common.utils.MD5;
 import java.io.IOException;
@@ -35,6 +39,8 @@ import net.sf.json.JSONObject;
 import net.sf.json.JsonConfig;
 import org.apache.axis.client.Call;
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.time.DateFormatUtils;
+import org.apache.commons.lang.time.DateUtils;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -1412,6 +1418,29 @@ public class ThirdPartyServiceImpl implements ThirdPartyService {
                 result.setReturnMsg(cemResp.getStatus().getMessage());
                 result.setReturnCode(Constant.FAIL);
             }
+        }
+        return result;
+    }
+
+    @Override
+    public List<IotUserInfo> getIotUserInfo(Integer pageSize) {
+        //参数组装
+        final Map<String, String> param = IotHttpUtils.getParam();
+        param.put("pageSize",pageSize.toString());
+        final Date date = DateUtils.addDays(new Date(), -1);
+        param.put("updateTime", DateFormatUtils.format(date,"yyyy-MM-dd 00:00:00"));
+
+        UserInfoRet ret = (UserInfoRet)iotGet("http://101.37.7.41:81/web/open/api/userInfo",param);
+        return ret.getData();
+    }
+
+    private IotBaseResult iotGet(String url, Map<String,String> param){
+        LOG.info("调用iot接口：http get:[{}]", url);
+        final UserInfoRet result = restTemplate.getForObject(url+"?pageSize={1}&updateTime=${2}&timestamp={3}&sign={4}", UserInfoRet.class, param.get("pageSize"),param.get("updateTime"),param.get("timestamp"),param.get("sign"));
+        LOG.info("调用iot接口：http get:[{}],返回值为:[{}]", url,result);
+        if (!result.getSuccess()){
+            LOG.error("调用iot接口失败：http get:[{}],返回值为:[{}]", url,result);
+            return null;
         }
         return result;
     }

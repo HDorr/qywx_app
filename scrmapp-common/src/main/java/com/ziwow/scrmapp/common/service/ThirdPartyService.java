@@ -5,6 +5,7 @@ import java.util.List;
 import com.ziwow.scrmapp.common.bean.pojo.*;
 import com.ziwow.scrmapp.common.bean.vo.csm.*;
 import com.ziwow.scrmapp.common.bean.vo.mall.MallOrderVo;
+import com.ziwow.scrmapp.common.iot.IotUserInfo;
 import com.ziwow.scrmapp.common.result.Result;
 
 public interface ThirdPartyService {
@@ -75,6 +76,13 @@ public interface ThirdPartyService {
 
 	Result getCemProductInfo(String productCode);
 
+	//iot
+
+	/**
+	 * iot系统获取用户信息
+	 * @return
+	 */
+	List<IotUserInfo> getIotUserInfo(Integer pageSize);
 
 
 }

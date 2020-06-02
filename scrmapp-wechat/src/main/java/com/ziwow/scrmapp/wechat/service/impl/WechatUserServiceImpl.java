@@ -284,7 +284,6 @@ public class WechatUserServiceImpl implements WechatUserService {
         productService.syncHistroyProductItemFromCemTemp(phone, userId);
         // 异步同步该用户的历史受理单信息
         wechatOrdersService.syncHistoryAppInfo(phone, userId);
-
         //推送商城
 
     }
