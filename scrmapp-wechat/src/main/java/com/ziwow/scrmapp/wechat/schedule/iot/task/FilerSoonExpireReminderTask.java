@@ -39,7 +39,7 @@ public class FilerSoonExpireReminderTask extends IJobHandler {
 
 
     @Override
-    public ReturnT<String> execute(String s) throws Exception {
+    public ReturnT<String> execute(String s) {
         //拉取还有30天到期的滤芯
         final List<IotFilterReminder> filterReminders = iotFilterInfoService.queryByFilterLife(30);
         for (IotFilterReminder filterReminder : filterReminders) {

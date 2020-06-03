@@ -267,10 +267,11 @@ public class WechatUserServiceImpl implements WechatUserService {
     }
 
     @Override
-    public void autoRegiter(String phone, String unionId) {
+    public String autoRegister(String phone, String unionId) {
         WechatFans wechatFans = new WechatFans();
         wechatFans.setIsMember(2);
         wechatFans.setUnionId(unionId);
+        wechatFans.setIsCancel(1);
 
         // 设置用户信息
         String userId = UniqueIDBuilder.getUniqueIdValue();
@@ -285,6 +286,7 @@ public class WechatUserServiceImpl implements WechatUserService {
         // 异步同步该用户的历史受理单信息
         wechatOrdersService.syncHistoryAppInfo(phone, userId);
         //推送商城
-
+        syncUserToMiniApp(unionId,phone);
+        return userId;
     }
 }

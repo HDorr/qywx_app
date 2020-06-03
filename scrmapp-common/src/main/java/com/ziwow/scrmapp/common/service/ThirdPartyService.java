@@ -5,6 +5,9 @@ import java.util.List;
 import com.ziwow.scrmapp.common.bean.pojo.*;
 import com.ziwow.scrmapp.common.bean.vo.csm.*;
 import com.ziwow.scrmapp.common.bean.vo.mall.MallOrderVo;
+import com.ziwow.scrmapp.common.iot.IotEquipmentInfo;
+import com.ziwow.scrmapp.common.iot.IotFilterInfo;
+import com.ziwow.scrmapp.common.iot.IotFilterLifeInfo;
 import com.ziwow.scrmapp.common.iot.IotUserInfo;
 import com.ziwow.scrmapp.common.result.Result;
 
@@ -80,9 +83,29 @@ public interface ThirdPartyService {
 
 	/**
 	 * iot系统获取用户信息
+	 * @param pageSize 查询数据条数 （最大值500）
 	 * @return
 	 */
 	List<IotUserInfo> getIotUserInfo(Integer pageSize);
 
+	/**
+	 * iot系统获取设备基本信息
+	 * @param pageSize 查询数据条数 （最大值500）
+	 * @return
+	 */
+	List<IotEquipmentInfo> getIotEquipmentInfo(Integer pageSize);
 
+	/**
+	 * iot系统获取滤芯基本信息
+	 * @param pageSize 查询数据条数 （最大值500）
+	 * @return
+	 */
+	List<IotFilterInfo> getIotFilterInfo(Integer pageSize);
+
+	/**
+	 * iot系统获取滤芯寿命信息
+	 * @param pageSize 查询数据条数 （最大值500）
+	 * @return
+	 */
+	List<IotFilterLifeInfo> getIotFilterLifeInfo(Integer pageSize);
 }

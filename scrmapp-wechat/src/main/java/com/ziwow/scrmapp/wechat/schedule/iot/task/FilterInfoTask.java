@@ -6,8 +6,10 @@ import com.xxl.job.core.handler.annotation.JobHandler;
 import com.ziwow.scrmapp.common.iot.IotEquipmentInfo;
 import com.ziwow.scrmapp.common.iot.IotFilterInfo;
 import com.ziwow.scrmapp.common.iot.IotFilterLifeInfo;
+import com.ziwow.scrmapp.common.service.ThirdPartyService;
 import com.ziwow.scrmapp.wechat.service.IotEquipmentInfoService;
 import com.ziwow.scrmapp.wechat.service.IotFilterInfoService;
+import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,25 +29,29 @@ public class FilterInfoTask extends IJobHandler {
     private IotFilterInfoService iotFilterInfoService;
 
     @Autowired
-    private IotEquipmentInfoService iotEquipmentInfoService;
+    private ThirdPartyService thirdPartyService;
 
     @Override
     public ReturnT<String> execute(String param) throws Exception {
 
         //拉取滤芯信息并同步
-        List<IotFilterInfo> filterInfos = new ArrayList<>();
-        iotFilterInfoService.saveFilterInfos(filterInfos);
+        List<IotFilterInfo> filterInfos = thirdPartyService.getIotFilterInfo(10);
+        if (CollectionUtils.isNotEmpty(filterInfos)){
+            iotFilterInfoService.saveFilterInfos(filterInfos);
+        }
 
         //拉取滤芯寿命并同步
-        List<IotFilterLifeInfo> iotFilterInfos = new ArrayList<>();
-        //组装id
-        for (IotFilterLifeInfo iotFilterInfo : iotFilterInfos) {
-            //设置过期时间
-            if (iotFilterInfo.getFilterLife() == 0) {
-                iotFilterInfo.setOverdueDate(new Date());
+        List<IotFilterLifeInfo> filterLifeInfos = thirdPartyService.getIotFilterLifeInfo(10);
+        if (CollectionUtils.isNotEmpty(filterLifeInfos)){
+            //组装id
+            for (IotFilterLifeInfo iotFilterInfo : filterLifeInfos) {
+                //设置过期时间
+                if (iotFilterInfo.getFilterLife() == 0) {
+                    iotFilterInfo.setOverdueDate(new Date());
+                }
             }
+            iotFilterInfoService.saveFilterLifeInfos(filterLifeInfos);
         }
-        iotFilterInfoService.saveFilterLifeInfos(iotFilterInfos);
         return ReturnT.SUCCESS;
     }
 

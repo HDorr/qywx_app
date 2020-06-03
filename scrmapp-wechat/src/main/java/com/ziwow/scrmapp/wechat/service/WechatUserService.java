@@ -79,6 +79,9 @@ public interface WechatUserService {
 
     /**
      * 自动注册
+     * @param phone
+     * @param unionId
+     * @return 用户id
      */
-    void autoRegiter(String phone,String unionId);
+    String autoRegister(String phone,String unionId);
 }

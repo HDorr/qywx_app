@@ -13,13 +13,15 @@ import com.ziwow.scrmapp.common.bean.vo.cem.CemAssertInfo;
 import com.ziwow.scrmapp.common.bean.vo.cem.CemProductInfo;
 import com.ziwow.scrmapp.common.bean.vo.cem.CemResp;
 import com.ziwow.scrmapp.common.bean.vo.csm.*;
-import com.ziwow.scrmapp.common.bean.vo.iot.IotBaseResult;
-import com.ziwow.scrmapp.common.bean.vo.iot.UserInfoRet;
+import com.ziwow.scrmapp.common.bean.vo.iot.*;
 import com.ziwow.scrmapp.common.bean.vo.mall.MallOrderVo;
 import com.ziwow.scrmapp.common.bean.vo.mall.OrderItem;
 import com.ziwow.scrmapp.common.constants.Constant;
 import com.ziwow.scrmapp.common.constants.ErrorCodeConstants;
 import com.ziwow.scrmapp.common.exception.ThirdException;
+import com.ziwow.scrmapp.common.iot.IotEquipmentInfo;
+import com.ziwow.scrmapp.common.iot.IotFilterInfo;
+import com.ziwow.scrmapp.common.iot.IotFilterLifeInfo;
 import com.ziwow.scrmapp.common.iot.IotUserInfo;
 import com.ziwow.scrmapp.common.persistence.entity.InstallPart;
 import com.ziwow.scrmapp.common.persistence.entity.RepairItem;
@@ -125,6 +127,16 @@ public class ThirdPartyServiceImpl implements ThirdPartyService {
     private String cemAssetsUrl;
     @Value("${cem.productInfo.url}")
     private String cemProductInfoUrl;
+
+    @Value("${iot.userInfo.url}")
+    private String iotUserInfoUrl;
+    @Value("${iot.equipmentInfo.url}")
+    private String iotEquipmentInfoUrl;
+    @Value("${iot.filterInfo.url}")
+    private String iotFilterInfoUrl;
+    @Value("${iot.filterLifeInfo.url}")
+    private String iotFilterLifeInfoUrl;
+
     /**
      * 读取超时时间
      */
@@ -1424,24 +1436,53 @@ public class ThirdPartyServiceImpl implements ThirdPartyService {
 
     @Override
     public List<IotUserInfo> getIotUserInfo(Integer pageSize) {
-        //参数组装
-        final Map<String, String> param = IotHttpUtils.getParam();
-        param.put("pageSize",pageSize.toString());
-        final Date date = DateUtils.addDays(new Date(), -1);
-        param.put("updateTime", DateFormatUtils.format(date,"yyyy-MM-dd 00:00:00"));
-
-        UserInfoRet ret = (UserInfoRet)iotGet("http://101.37.7.41:81/web/open/api/userInfo",param);
+        String result = iotGet(iotUserInfoUrl,pageSize);
+        UserInfoRet ret = JSON.parseObject(result, new TypeReference<UserInfoRet>(){});
+        if (!ret.getSuccess()) {
+            LOG.error("调用iot接口失败：http get:[{}],失败原因为:[{}],错误码:[{}]",iotUserInfoUrl,ret.getMessage(),ret.getCode());
+            return Collections.EMPTY_LIST;
+        }
         return ret.getData();
     }
 
-    private IotBaseResult iotGet(String url, Map<String,String> param){
-        LOG.info("调用iot接口：http get:[{}]", url);
-        final UserInfoRet result = restTemplate.getForObject(url+"?pageSize={1}&updateTime=${2}&timestamp={3}&sign={4}", UserInfoRet.class, param.get("pageSize"),param.get("updateTime"),param.get("timestamp"),param.get("sign"));
-        LOG.info("调用iot接口：http get:[{}],返回值为:[{}]", url,result);
-        if (!result.getSuccess()){
-            LOG.error("调用iot接口失败：http get:[{}],返回值为:[{}]", url,result);
-            return null;
+    @Override
+    public List<IotEquipmentInfo> getIotEquipmentInfo(Integer pageSize) {
+        String result = iotGet(iotEquipmentInfoUrl,pageSize);
+        EquipmentInfoRet ret = JSON.parseObject(result, new TypeReference<EquipmentInfoRet>(){});
+        if (!ret.getSuccess()) {
+            LOG.error("调用iot接口失败：http get:[{}],失败原因为:[{}],错误码:[{}]",iotEquipmentInfoUrl,ret.getMessage(),ret.getCode());
+            return Collections.EMPTY_LIST;
         }
+        return ret.getData();
+    }
+
+    @Override
+    public List<IotFilterInfo> getIotFilterInfo(Integer pageSize) {
+        String result = iotGet(iotFilterInfoUrl,pageSize);
+        FilterInfoRet ret = JSON.parseObject(result, new TypeReference<FilterInfoRet>(){});
+        if (!ret.getSuccess()) {
+            LOG.error("调用iot接口失败：http get:[{}],失败原因为:[{}],错误码:[{}]",iotFilterInfoUrl,ret.getMessage(),ret.getCode());
+            return Collections.EMPTY_LIST;
+        }
+        return ret.getData();
+    }
+
+    @Override
+    public List<IotFilterLifeInfo> getIotFilterLifeInfo(Integer pageSize) {
+        String result = iotGet(iotFilterLifeInfoUrl,pageSize);
+        FilterLifeInfoRet ret = JSON.parseObject(result, new TypeReference<FilterLifeInfoRet>(){});
+        if (!ret.getSuccess()) {
+            LOG.error("调用iot接口失败：http get:[{}],失败原因为:[{}],错误码:[{}]",iotFilterLifeInfoUrl,ret.getMessage(),ret.getCode());
+            return Collections.EMPTY_LIST;
+        }
+        return ret.getData();
+    }
+
+    private String iotGet(String url, Integer pageSize){
+        final Map<String, String> param = IotHttpUtils.getParam(pageSize);
+        LOG.info("调用iot接口：http get:[{}]", url);
+        final String result = restTemplate.getForObject(url+"?pageSize={pageSize}&updateTime={updateTime}&timestamp={timestamp}&sign={sign}", String.class, param);
+        LOG.info("调用iot接口：http get:[{}],返回值为:[{}]", url,result);
         return result;
     }
 

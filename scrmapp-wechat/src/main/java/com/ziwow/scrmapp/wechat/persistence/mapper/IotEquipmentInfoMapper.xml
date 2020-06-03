@@ -18,9 +18,9 @@
 	<insert id="saveEquipmentInfos">
 		insert into t_iot_equipment_info (union_id,source,active_status,active_time,status,offline_time)
 		values
-		<foreach collection ="list" item="equipmentInfo" index= "index" separator ="," open="(" close=")">
-			#{equipmentInfo.unionId}, #{equipmentInfo.source}, #{equipmentInfo.activeStatus},
-			#{equipmentInfo.activeTime}, #{equipmentInfo.status},#{equipmentInfo.offlineTime}
+		<foreach collection ="list" item="equipmentInfo" index= "index" separator =",">
+			(#{equipmentInfo.unionId}, #{equipmentInfo.source}, #{equipmentInfo.activeStatus},
+			#{equipmentInfo.activeTime}, #{equipmentInfo.status},#{equipmentInfo.offlineTime})
 		</foreach>
 		ON DUPLICATE KEY UPDATE
 		union_id = VALUES(union_id),

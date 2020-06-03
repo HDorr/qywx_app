@@ -40,7 +40,7 @@ public class FilterOverdueReminderTask extends IJobHandler {
     private ProductService productService;
 
     @Override
-    public ReturnT<String> execute(String s) throws Exception {
+    public ReturnT<String> execute(String s) {
         //计算出30天前
         final String date = DateUtil.format(DateUtils.addDays(new Date(), -30), "yyyy-MM-dd");
         //获取过期30天的滤芯信息

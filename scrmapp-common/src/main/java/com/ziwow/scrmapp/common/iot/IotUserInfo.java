@@ -35,6 +35,12 @@ public class IotUserInfo {
      */
     private String sncode;
 
+    /**
+     * 1: IOT2.0
+     * 2: Antifake
+     */
+    private String source;
+
     private Boolean archive;
 
     private Date updatedAt;
@@ -111,5 +117,13 @@ public class IotUserInfo {
 
     public void setCreatedAt(Date createdAt) {
         this.createdAt = createdAt;
+    }
+
+    public String getSource() {
+        return source;
+    }
+
+    public void setSource(String source) {
+        this.source = source;
     }
 }

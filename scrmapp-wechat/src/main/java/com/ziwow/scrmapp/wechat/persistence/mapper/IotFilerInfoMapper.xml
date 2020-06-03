@@ -12,10 +12,10 @@
 		insert into t_iot_filter_info (sncode, filter_level, u9_code, filter_name)
 		values
 		<foreach collection ="list" item="filerInfo" index= "index" separator ="," open="(" close=")">
-			#{filerInfo.sncode},
+			(#{filerInfo.sncode},
 			#{filerInfo.filterLevel},
 			#{filerInfo.erpCode},
-			#{filerInfo.name}
+			#{filerInfo.name})
 		</foreach>
 		on duplicate key update
 		u9_code = values(u9_code),
@@ -26,12 +26,12 @@
 	<insert id="saveFilterLifeInfos">
 		insert into t_iot_filter_info (sncode, filter_level, filter_percent, filter_life, overdue_date)
 		values
-		<foreach collection ="list" item="filerInfo" index= "index" separator ="," open="(" close=")">
-			#{filerInfo.sncode},
+		<foreach collection ="list" item="filerInfo" index= "index" separator =",">
+			(#{filerInfo.sncode},
 			#{filerInfo.filterLevel},
 			#{filerInfo.filterPercent},
 			#{filerInfo.filterLife},
-			#{filerInfo.overdueDate}
+			#{filerInfo.overdueDate})
 		</foreach>
 		on duplicate key update
 		filter_life = values(filter_life),

@@ -17,9 +17,9 @@
 	<insert id="saveUserInfos">
 		insert into t_iot_user_info (phone,sex,source,nick_name,iot_create_time,sncode)
 		values
-		<foreach collection ="list" item="userInfo" index= "index" separator ="," open="(" close=")">
-			#{userInfo.phone}, #{userInfo.sex}, #{userInfo.source},
-			#{userInfo.nickName}, #{userInfo.iotCreateTime},#{userInfo.sncode}
+		<foreach collection ="list" item="userInfo" index= "index" separator =",">
+			(#{userInfo.phone}, #{userInfo.sex}, #{userInfo.source},
+			#{userInfo.nickName}, #{userInfo.iotCreateTime},#{userInfo.sncode})
 		</foreach>
 		ON DUPLICATE KEY UPDATE
 		phone = VALUES(phone),
