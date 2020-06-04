@@ -41,8 +41,6 @@ public class FilerSoonExpireReminderTask extends IJobHandler {
     @Autowired
     private ProductService productService;
 
-    private String cleanUrl = "/pages/selectProduct?appointmentType=clean";
-
     @Value("${expirationReminderTemplate.id}")
     private String expirationReminderTemplateId;
 
@@ -59,7 +57,7 @@ public class FilerSoonExpireReminderTask extends IJobHandler {
             if (product != null){
                 param.add(product.getModelName());
                 param.add(DateUtil.format(product.getBuyTime(),"yyyy年MM月dd日"));
-                wechatTemplateService.sendTemplateByShortId(openId,cleanUrl,param,expirationReminderTemplateId,true,"","");
+                wechatTemplateService.sendTemplateByShortId(openId,null,param,expirationReminderTemplateId,false,"","");
                 param.clear();
             }
         }

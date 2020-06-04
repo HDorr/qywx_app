@@ -6,6 +6,7 @@
 		<result property="filterName" column="filter_name"></result>
 		<result property="phone" column="phone"></result>
 		<result property="sncode" column="sncode"></result>
+		<result property="overdueDate" column="overdue_date"></result>
 	</resultMap>
 
 	<insert id="saveFilterInfos">
@@ -42,13 +43,13 @@
 
 
 	<select id="queryByFilterLife" resultMap="IotFilterReminderMap">
-		select tifi.filter_name,tiui.phone,tifi.sncode from t_iot_filter_info tifi
+		select tifi.filter_name,tiui.phone,tifi.sncode,tifi.overdue_date from t_iot_filter_info tifi
         left join t_iot_user_info tiui on tifi.sncode = tiui.sncode
         where tifi.archive = false and tiui.archive = false and tifi.filter_life = #{filerLife}
 	</select>
 
 	<select id="queryByOverdueDate" resultMap="IotFilterReminderMap">
-		select tifi.filter_name,tiui.phone,tifi.sncode from t_iot_filter_info tifi
+		select tifi.filter_name,tiui.phone,tifi.sncode,tifi.overdue_date from t_iot_filter_info tifi
 		left join t_iot_user_info tiui on tifi.sncode = tiui.sncode
 		where tifi.archive = false and tiui.archive = false and overdue_date = #{date};
 	</select>

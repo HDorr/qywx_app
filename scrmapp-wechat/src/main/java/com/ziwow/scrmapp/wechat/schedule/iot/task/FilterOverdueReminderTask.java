@@ -42,9 +42,6 @@ public class FilterOverdueReminderTask extends IJobHandler {
     @Autowired
     private ProductService productService;
 
-
-    private String filterUrl = "/pages/buyfilter_element";
-
     @Value("${changeReminderTemplage.id}")
     private String changeReminderTemplateId;
 
@@ -64,9 +61,9 @@ public class FilterOverdueReminderTask extends IJobHandler {
             if (product != null){
                 param.add(product.getModelName());
                 param.add(DateUtil.format(product.getBuyTime(),"yyyy年MM月dd日"));
-                param.add(DateUtil.format(new Date(),"yyyy年MM月dd日"));
+                param.add(DateUtil.format(filterReminder.getOverdueDate(),"yyyy年MM月dd日"));
                 param.add(filterReminder.getFilterName());
-                wechatTemplateService.sendTemplateByShortId(openId,filterUrl,param,changeReminderTemplateId,true,"","");
+                wechatTemplateService.sendTemplateByShortId(openId,null,param,changeReminderTemplateId,false,"","");
                 param.clear();
             }
         }

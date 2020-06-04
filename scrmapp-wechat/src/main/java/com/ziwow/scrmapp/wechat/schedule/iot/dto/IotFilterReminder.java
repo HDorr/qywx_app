@@ -54,6 +54,19 @@ public class IotFilterReminder {
      */
     private String sncode;
 
+    /**
+     * 滤芯到期时间
+     */
+    private Date overdueDate;
+
+    public Date getOverdueDate() {
+        return overdueDate;
+    }
+
+    public void setOverdueDate(Date overdueDate) {
+        this.overdueDate = overdueDate;
+    }
+
     public String getSncode() {
         return sncode;
     }
