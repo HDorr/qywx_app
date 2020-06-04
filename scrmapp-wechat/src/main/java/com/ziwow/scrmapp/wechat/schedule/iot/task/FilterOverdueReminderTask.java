@@ -11,8 +11,10 @@ import com.ziwow.scrmapp.wechat.service.*;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -40,6 +42,12 @@ public class FilterOverdueReminderTask extends IJobHandler {
     @Autowired
     private ProductService productService;
 
+
+    private String filterUrl = "/pages/buyfilter_element";
+
+    @Value("${changeReminderTemplage.id}")
+    private String changeReminderTemplateId;
+
     @Override
     public ReturnT<String> execute(String s) {
         //计算出30天前
@@ -47,14 +55,19 @@ public class FilterOverdueReminderTask extends IJobHandler {
         //获取过期30天的滤芯信息
         List<IotFilterReminder> filterReminders = iotFilterInfoService.queryByOverdueDate(date);
         //找到滤芯对应的用户。
+        List<String> param = new ArrayList<>();
         for (IotFilterReminder filterReminder : filterReminders) {
             final String phone = filterReminder.getPhone();
             final WechatUser user = wechatUserService.getUserByMobilePhone(phone);
             final String openId = wechatFansService.getWechatFansByUserId(user.getUserId()).getOpenId();
             final Product product = productService.getProductsByBarCodeAndUserId(user.getUserId(), StringUtils.substring(filterReminder.getSncode(),5));
             if (product != null){
-                wechatTemplateService.changeReminderTemplate(openId,"","",product.getModelName(),
-                        DateUtil.format(product.getBuyTime(),"yyyy-MM-dd"),null,filterReminder.getFilterName(),null);
+                param.add(product.getModelName());
+                param.add(DateUtil.format(product.getBuyTime(),"yyyy年MM月dd日"));
+                param.add(DateUtil.format(new Date(),"yyyy年MM月dd日"));
+                param.add(filterReminder.getFilterName());
+                wechatTemplateService.sendTemplateByShortId(openId,filterUrl,param,changeReminderTemplateId,true,"","");
+                param.clear();
             }
         }
         return ReturnT.SUCCESS;
