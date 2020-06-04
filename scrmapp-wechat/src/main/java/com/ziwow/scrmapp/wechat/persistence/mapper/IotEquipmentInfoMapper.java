@@ -10,7 +10,16 @@ import java.util.List;
  */
 public interface IotEquipmentInfoMapper {
 
+    /**
+     * 同步Iot设备信息
+     * @param equipmentInfos
+     */
     void saveEquipmentInfos(List<IotEquipmentInfo> equipmentInfos);
 
+    /**
+     * 根据设备条码查询相关信息
+     * @param sncode
+     * @return
+     */
     IotEquipmentInfo queryBySnCode(@Param("sncode") String sncode);
 }

@@ -64,6 +64,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 import javax.annotation.PostConstruct;
@@ -1481,9 +1482,15 @@ public class ThirdPartyServiceImpl implements ThirdPartyService {
     private String iotGet(String url, Integer pageSize){
         final Map<String, String> param = IotHttpUtils.getParam(pageSize);
         LOG.info("调用iot接口：http get:[{}]", url);
-        final String result = restTemplate.getForObject(url+"?pageSize={pageSize}&updateTime={updateTime}&timestamp={timestamp}&sign={sign}", String.class, param);
-        LOG.info("调用iot接口：http get:[{}],返回值为:[{}]", url,result);
-        return result;
+        final String result;
+        try {
+            result = restTemplate.getForObject(url+"?pageSize={pageSize}&updateTime={updateTime}&timestamp={timestamp}&sign={sign}", String.class, param);
+            LOG.info("调用iot接口：http get:[{}],返回值为:[{}]", url,result);
+            return result;
+        } catch (RestClientException e) {
+            LOG.error("请求Iot接口失败，错误信息:[{}]",e);
+            throw e;
+        }
     }
 
     private String cemGet(String url) throws IOException {

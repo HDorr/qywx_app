@@ -11,7 +11,7 @@
 	<insert id="saveFilterInfos">
 		insert into t_iot_filter_info (sncode, filter_level, u9_code, filter_name)
 		values
-		<foreach collection ="list" item="filerInfo" index= "index" separator ="," open="(" close=")">
+		<foreach collection ="list" item="filerInfo" index= "index" separator =",">
 			(#{filerInfo.sncode},
 			#{filerInfo.filterLevel},
 			#{filerInfo.erpCode},

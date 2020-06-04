@@ -10,6 +10,7 @@ import com.ziwow.scrmapp.common.service.ThirdPartyService;
 import com.ziwow.scrmapp.wechat.service.IotEquipmentInfoService;
 import com.ziwow.scrmapp.wechat.service.IotFilterInfoService;
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.time.DateUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,7 +48,8 @@ public class FilterInfoTask extends IJobHandler {
             for (IotFilterLifeInfo iotFilterInfo : filterLifeInfos) {
                 //设置过期时间
                 if (iotFilterInfo.getFilterLife() == 0) {
-                    iotFilterInfo.setOverdueDate(new Date());
+                    //拉取的是昨天的数据，所以过期时间设为昨天
+                    iotFilterInfo.setOverdueDate(DateUtils.addDays(new Date(),-1));
                 }
             }
             iotFilterInfoService.saveFilterLifeInfos(filterLifeInfos);

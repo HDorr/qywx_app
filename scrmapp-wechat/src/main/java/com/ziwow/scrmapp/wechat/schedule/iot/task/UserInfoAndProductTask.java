@@ -80,7 +80,7 @@ public class UserInfoAndProductTask extends IJobHandler {
         //已经注册
         if (wechatUser != null) {
             //查询用户是否已经绑定了产品
-            Product product = productService.getProductsByBarCodeAndUserId(wechatUser.getUserId(), equipmentInfo.getSncode());
+            Product product = productService.getProductsByBarCodeAndUserId(wechatUser.getUserId(), StringUtils.substring(equipmentInfo.getSncode(),5));
             //没有则进行产品绑定
             if (product == null) {
                 //产品自动绑定

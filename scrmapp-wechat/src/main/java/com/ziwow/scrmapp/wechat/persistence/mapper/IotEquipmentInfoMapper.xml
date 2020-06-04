@@ -16,11 +16,13 @@
 	</resultMap>
 
 	<insert id="saveEquipmentInfos">
-		insert into t_iot_equipment_info (union_id,source,active_status,active_time,status,offline_time)
+		insert into t_iot_equipment_info (union_id,source,active_status,active_time,status,offline_time,sncode)
 		values
 		<foreach collection ="list" item="equipmentInfo" index= "index" separator =",">
 			(#{equipmentInfo.unionId}, #{equipmentInfo.source}, #{equipmentInfo.activeStatus},
-			#{equipmentInfo.activeTime}, #{equipmentInfo.status},#{equipmentInfo.offlineTime})
+			#{equipmentInfo.activeTime}, #{equipmentInfo.status},#{equipmentInfo.offlineTime},
+			#{equipmentInfo.sncode}
+			)
 		</foreach>
 		ON DUPLICATE KEY UPDATE
 		union_id = VALUES(union_id),
@@ -29,6 +31,7 @@
 		active_time = VALUES(active_time),
 		status = VALUES(status),
 		offline_time = VALUES(offline_time),
+		sncode = VALUES(sncode),
 		updated_at = now()
 	</insert>
 

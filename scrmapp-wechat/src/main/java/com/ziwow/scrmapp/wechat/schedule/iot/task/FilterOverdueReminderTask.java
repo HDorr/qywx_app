@@ -8,6 +8,7 @@ import com.ziwow.scrmapp.tools.utils.DateUtil;
 import com.ziwow.scrmapp.wechat.persistence.entity.WechatUser;
 import com.ziwow.scrmapp.wechat.schedule.iot.dto.IotFilterReminder;
 import com.ziwow.scrmapp.wechat.service.*;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -50,7 +51,7 @@ public class FilterOverdueReminderTask extends IJobHandler {
             final String phone = filterReminder.getPhone();
             final WechatUser user = wechatUserService.getUserByMobilePhone(phone);
             final String openId = wechatFansService.getWechatFansByUserId(user.getUserId()).getOpenId();
-            final Product product = productService.getProductsByBarCodeAndUserId(user.getUserId(), filterReminder.getSncode());
+            final Product product = productService.getProductsByBarCodeAndUserId(user.getUserId(), StringUtils.substring(filterReminder.getSncode(),5));
             if (product != null){
                 wechatTemplateService.changeReminderTemplate(openId,"","",product.getModelName(),
                         DateUtil.format(product.getBuyTime(),"yyyy-MM-dd"),null,filterReminder.getFilterName(),null);
