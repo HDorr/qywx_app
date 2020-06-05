@@ -63,7 +63,7 @@
 			<if test="wfNickName != null">
 				wf_nickname = #{wfNickName},
 			</if>
-			<if test="unionId != null">
+			<if test="unionId != null and unionId != ''">
 				unionid = #{unionId}
 			</if>
 		</set>
