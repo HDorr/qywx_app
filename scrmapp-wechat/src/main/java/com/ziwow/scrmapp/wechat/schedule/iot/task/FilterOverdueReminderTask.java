@@ -52,7 +52,7 @@ public class FilterOverdueReminderTask extends IJobHandler {
         //获取过期30天的滤芯信息
         List<IotFilterReminder> filterReminders = iotFilterInfoService.queryByOverdueDate(date);
         //找到滤芯对应的用户。
-        List<String> param = new ArrayList<>();
+        List<String> param = new ArrayList<>(2);
         for (IotFilterReminder filterReminder : filterReminders) {
             final String phone = filterReminder.getPhone();
             final WechatUser user = wechatUserService.getUserByMobilePhone(phone);
@@ -61,8 +61,6 @@ public class FilterOverdueReminderTask extends IJobHandler {
             if (product != null){
                 param.add(product.getModelName());
                 param.add(DateUtil.format(product.getBuyTime(),"yyyy年MM月dd日"));
-                param.add(DateUtil.format(filterReminder.getOverdueDate(),"yyyy年MM月dd日"));
-                param.add(filterReminder.getFilterName());
                 wechatTemplateService.sendTemplateByShortId(openId,null,param,changeReminderTemplateId,false,"","");
                 param.clear();
             }

@@ -48,7 +48,7 @@ public class FilerSoonExpireReminderTask extends IJobHandler {
     public ReturnT<String> execute(String s) {
         //拉取还有30天到期的滤芯
         final List<IotFilterReminder> filterReminders = iotFilterInfoService.queryByFilterLife(30);
-        List<String> param = new ArrayList<>(2);
+        List<String> param = new ArrayList<>(4);
         for (IotFilterReminder filterReminder : filterReminders) {
             final String phone = filterReminder.getPhone();
             final WechatUser user = wechatUserService.getUserByMobilePhone(phone);
@@ -57,6 +57,8 @@ public class FilerSoonExpireReminderTask extends IJobHandler {
             if (product != null){
                 param.add(product.getModelName());
                 param.add(DateUtil.format(product.getBuyTime(),"yyyy年MM月dd日"));
+                param.add(DateUtil.format(filterReminder.getOverdueDate(),"yyyy年MM月dd日"));
+                param.add(filterReminder.getFilterName());
                 wechatTemplateService.sendTemplateByShortId(openId,null,param,expirationReminderTemplateId,false,"","");
                 param.clear();
             }
