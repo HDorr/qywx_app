@@ -405,6 +405,7 @@ public class WechatUserController {
         WechatFans wechatFans = new WechatFans();
         wechatFans.setId(wxId);
         wechatFans.setUnionId(unionId);
+        wechatFans.setIsCancel(1);
         wechatFansService.updWechatFansById(wechatFans);
       } else {
         // 检查该unionid是否已经存在
@@ -415,6 +416,7 @@ public class WechatUserController {
           wechatFans = new WechatFans();
           wechatFans.setIsMember(2);
           wechatFans.setUnionId(unionId);
+          wechatFans.setIsCancel(1);
         }
         // 设置用户信息
         String userId = UniqueIDBuilder.getUniqueIdValue();

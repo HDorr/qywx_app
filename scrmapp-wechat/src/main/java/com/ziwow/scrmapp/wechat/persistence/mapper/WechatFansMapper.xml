@@ -33,7 +33,7 @@
 	</select>
 
 	<insert id="syncUserFansAndGetId" useGeneratedKeys="true" keyProperty="id" parameterType="com.ziwow.scrmapp.wechat.persistence.entity.WechatFans">
-		insert into t_wechat_fans (openid,create_time,isMember,unionid) values (#{unionId},NOW(),#{isMember},#{unionId});
+		insert into t_wechat_fans (openid,create_time,isMember,unionid,is_cancel) values (#{unionId},NOW(),#{isMember},#{unionId},#{isCancel});
 	</insert>
 
 	<update id="updateWechatFans" parameterType="com.ziwow.scrmapp.wechat.persistence.entity.WechatFans">
