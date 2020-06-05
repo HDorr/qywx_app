@@ -267,7 +267,7 @@ public class WechatUserServiceImpl implements WechatUserService {
     }
 
     @Override
-    public String autoRegister(String phone, String unionId) {
+    public String autoRegister(String phone, String unionId,Integer registerSrc) {
         WechatFans wechatFans = new WechatFans();
         wechatFans.setIsMember(2);
         wechatFans.setUnionId(unionId);
@@ -278,7 +278,7 @@ public class WechatUserServiceImpl implements WechatUserService {
         WechatUser wechatUser = new WechatUser();
         wechatUser.setUserId(userId);
         wechatUser.setMobilePhone(phone);
-        wechatUser.setRegisterSrc(1001);
+        wechatUser.setRegisterSrc(registerSrc);
         syncUserFromMiniApp(wechatFans, wechatUser);
 
         // 异步同步该用户的历史产品信息

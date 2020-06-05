@@ -95,7 +95,7 @@ public class UserInfoAndProductTask extends IJobHandler {
                 return;
             }
             //完成注册逻辑
-            String userId = wechatUserService.autoRegister(userInfo.getPhone(),unionId);
+            String userId = wechatUserService.autoRegister(userInfo.getPhone(),unionId,1001);
             //产品自动绑定
             productService.bindProduct(userId,equipmentInfo.getSncode());
         }

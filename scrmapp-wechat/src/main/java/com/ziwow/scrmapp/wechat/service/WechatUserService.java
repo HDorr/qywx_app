@@ -81,7 +81,8 @@ public interface WechatUserService {
      * 自动注册
      * @param phone
      * @param unionId
+     * @param registerSrc 注册渠道编号
      * @return 用户id
      */
-    String autoRegister(String phone,String unionId);
+    String autoRegister(String phone,String unionId,Integer registerSrc);
 }
