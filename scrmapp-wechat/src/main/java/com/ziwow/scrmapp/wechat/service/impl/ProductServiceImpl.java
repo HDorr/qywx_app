@@ -982,10 +982,14 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public boolean bindProduct(String userId,String sncode) throws ParseException {
-        ProductVo productVo = queryProduct(null, sncode, null);
-
-
+        String barcode = sncode;
         Product product = new Product();
+        if (sncode.length() == 20){
+            barcode = sncode.substring(5);
+            product.setProductBarCodeTwenty(sncode);
+        }
+        ProductVo productVo = queryProduct(null, barcode, null);
+
         product.setBuyTime(DateUtils.parseDate(productVo.getBuyTime(),"yyyy-MM-dd"));
         product.setProductBarCode(productVo.getProductBarCode());
         product.setProductName(productVo.getProductName());
@@ -994,7 +998,6 @@ public class ProductServiceImpl implements ProductService {
         product.setModelName(productVo.getModelName());
         product.setLevelName(productVo.getLevelName());
         product.setSaleType(productVo.getSaleType());
-
         product.setUserId(userId);
         product.setStatus(1);
         product.setCreateTime(new Date());
