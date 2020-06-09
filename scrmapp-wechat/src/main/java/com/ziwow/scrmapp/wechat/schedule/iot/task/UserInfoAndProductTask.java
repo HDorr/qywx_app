@@ -47,13 +47,13 @@ public class UserInfoAndProductTask extends IJobHandler {
     @Override
     public ReturnT<String> execute(String param) {
         //拉取用户信息
-        List<IotUserInfo> userInfos = thirdPartyService.getIotUserInfo(10);
+        List<IotUserInfo> userInfos = thirdPartyService.getIotUserInfo(500);
         if (CollectionUtils.isNotEmpty(userInfos)){
             //存储到本地
             iotUserInfoService.saveUserInfos(userInfos);
         }
         //拉取设备信息
-        List<IotEquipmentInfo> equipmentInfos = thirdPartyService.getIotEquipmentInfo(10);
+        List<IotEquipmentInfo> equipmentInfos = thirdPartyService.getIotEquipmentInfo(500);
         if (CollectionUtils.isNotEmpty(equipmentInfos)){
             //同步
             iotEquipmentInfoService.saveEquipmentInfos(equipmentInfos);

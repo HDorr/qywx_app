@@ -36,13 +36,13 @@ public class FilterInfoTask extends IJobHandler {
     public ReturnT<String> execute(String param) throws Exception {
 
         //拉取滤芯信息并同步
-        List<IotFilterInfo> filterInfos = thirdPartyService.getIotFilterInfo(10);
+        List<IotFilterInfo> filterInfos = thirdPartyService.getIotFilterInfo(500);
         if (CollectionUtils.isNotEmpty(filterInfos)){
             iotFilterInfoService.saveFilterInfos(filterInfos);
         }
 
         //拉取滤芯寿命并同步
-        List<IotFilterLifeInfo> filterLifeInfos = thirdPartyService.getIotFilterLifeInfo(10);
+        List<IotFilterLifeInfo> filterLifeInfos = thirdPartyService.getIotFilterLifeInfo(500);
         if (CollectionUtils.isNotEmpty(filterLifeInfos)){
             //组装id
             for (IotFilterLifeInfo iotFilterInfo : filterLifeInfos) {
