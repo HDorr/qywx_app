@@ -55,10 +55,13 @@ public class WechatUserServiceImpl implements WechatUserService {
     private MallPcUserMapper mallPcUserMapper;
     @Autowired
     private WechatTemplateService wechatTemplateService;
-    @Autowired
     private ProductService productService;
     @Value("${miniapp.user.sync}")
     private String syncUserUrl;
+    @Autowired
+    public void setProductService(ProductService productService) {
+        this.productService = productService;
+    }
 
     @Override
     public WechatUser getUserByOpenId(String openId) {
