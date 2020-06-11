@@ -287,6 +287,15 @@ public class WechatOrdersServiceImpl implements WechatOrdersService {
     Map<Long, WechatOrdersVo> map = new LinkedHashMap<>();
     //遍历工单列表，保存至map
     for (WechatOrdersVo vo : detailVo) {
+      // 查询当前工单的工程师数据
+      if(vo.getStatus() != SystemConstants.COMPLETE
+        && vo.getStatus() != SystemConstants.APPRAISE
+        && StringUtil.isNotBlank(vo.getQyhUserId())){
+        QyhUser qyhUser = wechatQyhUserService.getQyhUser(vo.getQyhUserId());
+        if(qyhUser != null) {
+          vo.setQyhUserPhone(qyhUser.getMobile());
+        }
+      }
       map.put(vo.getId(), vo);
       List<WechatOrdersRecordVo> wechatOrdersRecordList = wechatOrdersRecordMapper
           .findByOrdersId(vo.getId());
@@ -907,6 +916,14 @@ public class WechatOrdersServiceImpl implements WechatOrdersService {
             wechatOrdersRecord.setRecordContent("csm端完工!");
             wechatOrdersRecord.setRecordTime(date);
             wechatOrdersRecordService.saveWechatOrdersRecord(wechatOrdersRecord);
+
+            // 完工发送评价提醒
+          try {
+            String strDate = DateUtil.DateToString(wechatOrders.getOrderTime(), "yyyy-MM-dd HH:mm:ss");
+            sendOrderFinishTemplateMsg(wechatOrders.getOrdersCode(),wechatOrders.getUserId(),strDate);
+          } catch (Exception e) {
+            LOG.error("400发送完工评价提醒失败：",e);
+          }
         } else {
             throw new ParamException("完工失败,该工单在微信端系统中不存在!");
         }

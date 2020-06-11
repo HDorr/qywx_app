@@ -66,6 +66,9 @@
 			<if test="unionId != null and unionId != ''">
 				unionid = #{unionId}
 			</if>
+            <if test="followAt != null">
+                follow_at = #{followAt},
+            </if>
 		</set>
 		where openid = #{openId}
 	</update>
@@ -101,7 +104,10 @@
 				wf_nickname = #{wfNickName},
 			</if>
 			<if test="unionId != null">
-				unionid = #{unionId}
+				unionid = #{unionId},
+			</if>
+			<if test="followAt != null">
+				follow_at = #{followAt},
 			</if>
 		</set>
 		where id = #{id}
@@ -160,5 +166,21 @@
     SELECT  COUNT(*) FROM t_wechat_fans AS wf LEFT JOIN t_wechat_user AS wu ON wf.id=wu.wfId
     WHERE  wu.wfId   is NULL   AND  wf.is_cancel =0
   </select>
+
+	<select id="selectFollowFansCount" resultType="java.lang.Integer">
+		select count(*) from t_wechat_fans twf
+		join t_wechat_user twu on twf.id = twu.wfId
+		where follow_at &gt; #{followStartAt}
+		and follow_at &lt; #{followEndAt}
+	</select>
+
+	<select id="selectFollowFansList" resultType="com.ziwow.scrmapp.wechat.persistence.entity.WxFans">
+		select twu.mobilePhone as phone,twf.is_cancel as isCancel,twf.follow_at as followAt
+		from t_wechat_fans twf
+		join t_wechat_user twu on twf.id = twu.wfId
+		where follow_at &gt; #{followStartAt}
+		and follow_at &lt; #{followEndAt}
+		limit #{offset},#{size}
+	</select>
 
 </mapper>

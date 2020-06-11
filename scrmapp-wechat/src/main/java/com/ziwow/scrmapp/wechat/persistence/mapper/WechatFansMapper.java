@@ -2,6 +2,8 @@ package com.ziwow.scrmapp.wechat.persistence.mapper;
 
 import com.ziwow.scrmapp.wechat.persistence.entity.TempWechatFans;
 import java.util.List;
+
+import com.ziwow.scrmapp.wechat.persistence.entity.WxFans;
 import org.apache.ibatis.annotations.Param;
 
 import com.ziwow.scrmapp.wechat.persistence.entity.WechatFans;
@@ -32,4 +34,10 @@ public interface WechatFansMapper {
 
     List<TempWechatFans> selectTempWechatFansBtach1();
 
+    // 查询粉丝动态变化的总数
+    int selectFollowFansCount(@Param("followStartAt") String followStartAt, @Param("followEndAt") String followEndAt);
+
+    // 查询分析动态变化列表
+    List<WxFans> selectFollowFansList(@Param("offset") Integer offset, @Param("size") Integer size,
+                                      @Param("followStartAt") String followStartAt, @Param("followEndAt") String followEndAt);
 }

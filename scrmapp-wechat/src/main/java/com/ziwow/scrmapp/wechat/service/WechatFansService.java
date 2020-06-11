@@ -1,7 +1,9 @@
 package com.ziwow.scrmapp.wechat.service;
 
+import com.ziwow.scrmapp.common.bean.pojo.fans.WxFansListParam;
 import com.ziwow.scrmapp.wechat.persistence.entity.TempWechatFans;
 import com.ziwow.scrmapp.wechat.persistence.entity.WechatFans;
+import com.ziwow.scrmapp.wechat.persistence.entity.WxFans;
 import com.ziwow.scrmapp.wechat.vo.OauthUser;
 import com.ziwow.scrmapp.wechat.vo.UserInfo;
 import com.ziwow.scrmapp.wechat.vo.WechatFansVo;
@@ -30,4 +32,7 @@ public interface WechatFansService {
 
     public OauthUser getOAuthUserInfo(String code);
 
+    int pageWxFansTotal(WxFansListParam param);
+
+    List<WxFans> pageWxFansList(WxFansListParam param);
 }

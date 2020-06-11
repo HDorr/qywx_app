@@ -2,6 +2,8 @@ package com.ziwow.scrmapp.wechat.service.impl;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.ziwow.scrmapp.common.bean.pojo.AbstractBaseParam;
+import com.ziwow.scrmapp.common.bean.pojo.fans.WxFansListParam;
 import com.ziwow.scrmapp.common.utils.HttpKit;
 import com.ziwow.scrmapp.tools.utils.CookieUtil;
 import com.ziwow.scrmapp.tools.utils.StringUtil;
@@ -10,6 +12,7 @@ import com.ziwow.scrmapp.wechat.persistence.entity.OpenAuthorizationWeixin;
 import com.ziwow.scrmapp.wechat.persistence.entity.TempWechatFans;
 import com.ziwow.scrmapp.wechat.persistence.entity.WechatFans;
 import com.ziwow.scrmapp.wechat.persistence.entity.WechatUser;
+import com.ziwow.scrmapp.wechat.persistence.entity.WxFans;
 import com.ziwow.scrmapp.wechat.persistence.mapper.WechatFansMapper;
 import com.ziwow.scrmapp.wechat.service.OpenWeixinService;
 import com.ziwow.scrmapp.wechat.service.WechatAESService;
@@ -196,6 +199,17 @@ public class WechatFansServiceImpl implements WechatFansService {
 		}
 		return oauthUser;
 	}
+
+	@Override
+	public int pageWxFansTotal(WxFansListParam param) {
+		return wechatFansMapper.selectFollowFansCount(param.getFollowStartAt(),param.getFollowEndAt());
+	}
+
+    @Override
+    public List<WxFans> pageWxFansList(WxFansListParam param) {
+		return wechatFansMapper.selectFollowFansList(param.getOffset(),param.getSize(),
+															param.getFollowStartAt(),param.getFollowEndAt());
+    }
 
 	private WechatFansVo isFans(String openId, String code, boolean cookied) {
 		WechatFansVo wechatFansVo = new WechatFansVo();

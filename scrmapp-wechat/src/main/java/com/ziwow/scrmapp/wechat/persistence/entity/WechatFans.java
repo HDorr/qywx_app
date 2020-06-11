@@ -22,6 +22,7 @@ public class WechatFans implements java.io.Serializable {
 	private Integer isMember;       // 是否注册为会员 1:非会员  2:会员
 	private String unionId;			// 微信unionid
 	private String channelId;
+	private Date followAt; // 关注或取消公众号跟进时间
 	/**
 	 * @return the headImgUrl
 	 */
@@ -121,5 +122,13 @@ public class WechatFans implements java.io.Serializable {
 
 	public void setChannelId(String channelId) {
 		this.channelId = channelId;
+	}
+
+	public Date getFollowAt() {
+		return followAt;
+	}
+
+	public void setFollowAt(Date followAt) {
+		this.followAt = followAt;
 	}
 }

@@ -196,6 +196,7 @@ public class WeChatMessageProcessingHandler {
                                 }
                             }
                             fans.setIsCancel(0);
+                            fans.setFollowAt(new Date());
                             //修改fans表中相关数据
                             wechatFansService.updateWechatFans(fans);
                         } else {
@@ -231,6 +232,7 @@ public class WeChatMessageProcessingHandler {
                                 wFans.setCity(wechatFans.getCity());
                                 wFans.setCountry(wechatFans.getCountry());
                                 wFans.setProvince(wechatFans.getProvince());
+                                wFans.setFollowAt(new Date());
                                 wechatFansService.updWechatFansById(wFans);
                             } else {
                                 wechatFans.setOpenId(openId);
@@ -246,6 +248,7 @@ public class WeChatMessageProcessingHandler {
                         WechatFans wechatFans = new WechatFans();
                         wechatFans.setOpenId(openId);
                         wechatFans.setIsCancel(1);
+                        wechatFans.setFollowAt(new Date());
                         wechatFansService.updateWechatFans(wechatFans);
                     } else if ("CLICK".equals(inMessage.getEvent())) {
                         // 菜单点击事件
