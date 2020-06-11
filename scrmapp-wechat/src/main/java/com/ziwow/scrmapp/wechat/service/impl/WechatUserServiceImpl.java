@@ -59,6 +59,7 @@ public class WechatUserServiceImpl implements WechatUserService {
     @Value("${miniapp.user.sync}")
     private String syncUserUrl;
     @Autowired
+    @Lazy
     public void setProductService(ProductService productService) {
         this.productService = productService;
     }
