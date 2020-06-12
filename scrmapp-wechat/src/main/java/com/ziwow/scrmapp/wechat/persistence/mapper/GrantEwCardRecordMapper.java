@@ -35,6 +35,22 @@ public interface GrantEwCardRecordMapper {
     List<GrantEwCardRecord> selectRecord(@Param("sendType") EwCardSendTypeEnum sendType);
 
     /**
+     * 根据手机号查询已经发放的延保卡信息
+     * @param phone
+     * @return
+     */
+    @Select("select phone,type,mask,send_time,receive,src_type from t_grant_ew_card_record where send = true and phone = #{phone} ")
+    @Results({
+            @Result(column = "phone", property = "phone"),
+            @Result(column = "type", property = "type"),
+            @Result(column = "mask", property = "mask"),
+            @Result(column = "send_time", property = "sendTime"),
+            @Result(column = "receive", property = "receive"),
+            @Result(column = "src_type", property = "srcType")
+    })
+    List<GrantEwCardRecord> selectRecordByPhone(@Param("phone") String phone);
+
+    /**
      * 根据手机号码修改发送状态
      *
      * @param phone

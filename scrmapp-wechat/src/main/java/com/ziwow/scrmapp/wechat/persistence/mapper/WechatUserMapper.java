@@ -6,6 +6,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Param;
 
 import com.ziwow.scrmapp.wechat.persistence.entity.WechatUser;
+import org.apache.ibatis.annotations.Update;
 
 /**
  * @包名 com.ziwow.scrmapp.api.core.user.persistence.mapper
@@ -39,4 +40,21 @@ public interface WechatUserMapper {
    int findUserLuckyByPhone(String mobilePhone);
 
     WechatUser selectUserByFansUnionIdIgnoreIsCancel(String unionId);
+
+    /**
+     * 通过手机号修改用户状态
+     * @param status
+     * @param phone
+     */
+    @Update("update t_wechat_user set status = #{status} where mobilePhone = #{phone} and status = 0")
+    void updateStatusByPhone(@Param("status") int status,@Param("phone") String phone);
+
+    /**
+     * 修改手机号
+     * @param fromPhone 依据手机号
+     * @param toPhone 修改后的手机号
+     */
+    @Update("update t_wechat_user set mobilePhone = #{toPhone} where mobilePhone = #{fromPhone} and status = 0")
+    void updatePhoneByPhone(@Param("fromPhone") String fromPhone, @Param("toPhone") String toPhone);
+
 }

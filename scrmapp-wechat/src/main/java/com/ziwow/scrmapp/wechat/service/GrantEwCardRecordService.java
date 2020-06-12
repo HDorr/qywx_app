@@ -3,6 +3,7 @@ package com.ziwow.scrmapp.wechat.service;
 import com.ziwow.scrmapp.common.enums.EwCardSendTypeEnum;
 import com.ziwow.scrmapp.common.enums.EwCardTypeEnum;
 import com.ziwow.scrmapp.wechat.persistence.entity.GrantEwCardRecord;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -71,6 +72,12 @@ public interface GrantEwCardRecordService {
      */
     List<GrantEwCardRecord> selectReceiveRecord(Boolean recevice);
 
+    /**
+     * 根据手机号查询已发放记录
+     * @param phone
+     * @return
+     */
+    List<GrantEwCardRecord> selectRecordByPhone(@Param("phone") String phone);
 
     /**
      * 重置赠送延保记录

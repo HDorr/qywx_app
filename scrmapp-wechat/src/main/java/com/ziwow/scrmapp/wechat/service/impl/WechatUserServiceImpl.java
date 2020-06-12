@@ -293,4 +293,19 @@ public class WechatUserServiceImpl implements WechatUserService {
         syncUserToMiniApp(unionId,phone);
         return userId;
     }
+
+    @Override
+    public void logoutUserByPhone(String phone) {
+        wechatUserMapper.updateStatusByPhone(3,phone);
+    }
+
+    @Override
+    public void unboundByPhone(String phone) {
+        wechatUserMapper.updatePhoneByPhone(phone,"0".concat(phone));
+    }
+
+    @Override
+    public void replacePhone(String fromPhone, String toPhone) {
+        wechatUserMapper.updatePhoneByPhone(fromPhone,toPhone);
+    }
 }

@@ -85,4 +85,24 @@ public interface WechatUserService {
      * @return 用户id
      */
     String autoRegister(String phone,String unionId,Integer registerSrc);
+
+    /**
+     * 通过手机号注销用户信息
+     * @param phone
+     */
+    void logoutUserByPhone(String phone);
+
+    /**
+     * 根据手机号解绑当前用户
+     * 操作为在已有的手机号前面加一个0
+     * @param phone
+     */
+    void unboundByPhone(String phone);
+
+    /**
+     * 更换手机号
+     * @param fromPhone 需要更换的手机号
+     * @param toPhone 更换后的手机号
+     */
+    void replacePhone(String fromPhone, String toPhone);
 }

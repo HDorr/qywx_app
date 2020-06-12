@@ -58,6 +58,11 @@ public class GrantEwCardRecordServiceImpl implements GrantEwCardRecordService {
     }
 
     @Override
+    public List<GrantEwCardRecord> selectRecordByPhone(String phone) {
+        return grantEwCardRecordMapper.selectRecordByPhone(phone);
+    }
+
+    @Override
     public void resetGrantEwCardRecord(String mask) {
         grantEwCardRecordMapper.resetGrantEwCardRecord(mask);
     }
