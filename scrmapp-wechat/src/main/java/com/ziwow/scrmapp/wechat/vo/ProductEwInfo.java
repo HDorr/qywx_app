@@ -38,7 +38,7 @@ public class ProductEwInfo {
     /**
      * 相关延保信息
      */
-    private List<EwCardInfo> ewCardInfos;
+    private List<ProductEwCardInfo> ewCardInfos;
 
     public String getBarcode() {
         return barcode;
@@ -80,11 +80,11 @@ public class ProductEwInfo {
         this.ewEndDate = ewEndDate;
     }
 
-    public List<EwCardInfo> getEwCardInfos() {
+    public List<ProductEwCardInfo> getEwCardInfos() {
         return ewCardInfos;
     }
 
-    public void setEwCardInfos(List<EwCardInfo> ewCardInfos) {
+    public void setEwCardInfos(List<ProductEwCardInfo> ewCardInfos) {
         this.ewCardInfos = ewCardInfos;
     }
 }

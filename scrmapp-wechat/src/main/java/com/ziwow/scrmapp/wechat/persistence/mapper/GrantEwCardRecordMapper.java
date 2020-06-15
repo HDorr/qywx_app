@@ -45,7 +45,7 @@ public interface GrantEwCardRecordMapper {
             @Result(column = "type", property = "type"),
             @Result(column = "mask", property = "mask"),
             @Result(column = "send_time", property = "sendTime"),
-            @Result(column = "receive", property = "receive"),
+            @Result(column = "receive", property = "recevice"),
             @Result(column = "src_type", property = "srcType")
     })
     List<GrantEwCardRecord> selectRecordByPhone(@Param("phone") String phone);

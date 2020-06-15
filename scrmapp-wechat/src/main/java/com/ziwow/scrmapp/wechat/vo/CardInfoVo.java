@@ -56,7 +56,7 @@ public class CardInfoVo {
     /**
      * 延保期限
      */
-    private Integer validTime;
+    private String validTime;
 
 
     public String getReceivePhone() {
@@ -79,7 +79,7 @@ public class CardInfoVo {
         return ewCardType.getName();
     }
 
-    public void setEwCardType(EwCardTypeEnum ewCardTypeEnum) {
+    public void setEwCardType(EwCardTypeEnum ewCardType) {
         this.ewCardType = ewCardType;
     }
 
@@ -115,11 +115,11 @@ public class CardInfoVo {
         this.barcode = barcode;
     }
 
-    public Integer getValidTime() {
+    public String getValidTime() {
         return validTime;
     }
 
-    public void setValidTime(Integer validTime) {
+    public void setValidTime(String validTime) {
         this.validTime = validTime;
     }
 

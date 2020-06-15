@@ -12,10 +12,7 @@ import com.ziwow.scrmapp.wechat.service.EwCardActivityService;
 import com.ziwow.scrmapp.wechat.service.EwCardService;
 import com.ziwow.scrmapp.wechat.service.GrantEwCardRecordService;
 import com.ziwow.scrmapp.wechat.service.ProductService;
-import com.ziwow.scrmapp.wechat.vo.CardInfoVo;
-import com.ziwow.scrmapp.wechat.vo.EwCardInfo;
-import com.ziwow.scrmapp.wechat.vo.EwCards;
-import com.ziwow.scrmapp.wechat.vo.ProductEwInfo;
+import com.ziwow.scrmapp.wechat.vo.*;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,7 +57,7 @@ public class EwCardServiceController {
     @MiniAuthentication
     public Result cardInfo(@RequestParam("signture") String signture,
                            @RequestParam("time_stamp") String timeStamp,
-                           @RequestParam("fromPhone") String phone){
+                           @RequestParam("phone") String phone){
         Result result = new BaseResult();
         final List<GrantEwCardRecord> grantEwCardRecords = grantEwCardRecordService.selectRecordByPhone(phone);
         if (CollectionUtils.isEmpty(grantEwCardRecords)) {
@@ -85,7 +82,7 @@ public class EwCardServiceController {
                 cardInfoVo.setEwCardNo(cardNo);
                 final EwCard ewCard = ewCardService.selectEwCardByNo(cardNo);
                 cardInfoVo.setBarcode(ewCard.getProductBarCodeTwenty());
-                cardInfoVo.setValidTime(ewCard.getValidTime()/365);
+                cardInfoVo.setValidTime(ewCard.getValidTime()/365+"年卡");
             }
             cardInfoVos.add(cardInfoVo);
         }
@@ -108,7 +105,7 @@ public class EwCardServiceController {
     @MiniAuthentication
     public Result productEwInfo(@RequestParam("signture") String signture,
                            @RequestParam("time_stamp") String timeStamp,
-                           @RequestParam("fromPhone") String barcode){
+                           @RequestParam("barcode") String barcode){
         Result result = new BaseResult();
         //fixme 数据库 t_product表需要给条码加一个索引
         //查询出
@@ -120,16 +117,16 @@ public class EwCardServiceController {
         }
         List<EwCard> ewCards = ewCardService.selectEwCardsByBarCode(barcode);
         Date lastDate = ewCards.get(0).getRepairTerm();
-        List<EwCardInfo> ewCardInfos = new ArrayList<>(ewCards.size());
+        List<ProductEwCardInfo> ewCardInfos = new ArrayList<>(ewCards.size());
         for (EwCard card : ewCards) {
             if (lastDate.getTime() < card.getRepairTerm().getTime()){
                 lastDate = card.getRepairTerm();
             }
-            EwCardInfo ewCardInfo = new EwCardInfo();
-            ewCardInfo.setValidTime(card.getValidTime()/365);
-            ewCardInfo.setCardNo(card.getCardNo());
-            ewCardInfo.setCardAttribute(card.getType().getName());
-            ewCardInfos.add(ewCardInfo);
+            ProductEwCardInfo productEwCardInfo = new ProductEwCardInfo();
+            productEwCardInfo.setValidTime(card.getValidTime()/365+"年卡");
+            productEwCardInfo.setCardNo(card.getCardNo());
+            productEwCardInfo.setCardType(card.getType().getName());
+            ewCardInfos.add(productEwCardInfo);
         }
 
         ProductEwInfo productEwInfo = new ProductEwInfo();
@@ -142,6 +139,7 @@ public class EwCardServiceController {
 
         result.setReturnMsg("查询成功");
         result.setReturnCode(Constant.SUCCESS);
+        result.setData(productEwInfo);
 
         return result;
     }
