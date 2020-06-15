@@ -1,6 +1,7 @@
 package com.ziwow.scrmapp.wechat.vo;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * 产品延保信息
@@ -34,7 +35,10 @@ public class ProductEwInfo {
      */
     private Date ewEndDate;
 
-
+    /**
+     * 相关延保信息
+     */
+    private List<EwCardInfo> ewCardInfos;
 
     public String getBarcode() {
         return barcode;
@@ -74,5 +78,13 @@ public class ProductEwInfo {
 
     public void setEwEndDate(Date ewEndDate) {
         this.ewEndDate = ewEndDate;
+    }
+
+    public List<EwCardInfo> getEwCardInfos() {
+        return ewCardInfos;
+    }
+
+    public void setEwCardInfos(List<EwCardInfo> ewCardInfos) {
+        this.ewCardInfos = ewCardInfos;
     }
 }

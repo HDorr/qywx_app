@@ -5,6 +5,7 @@ import com.ziwow.scrmapp.common.constants.Constant;
 import com.ziwow.scrmapp.common.persistence.entity.Product;
 import com.ziwow.scrmapp.common.result.BaseResult;
 import com.ziwow.scrmapp.common.result.Result;
+import com.ziwow.scrmapp.common.utils.EwCardUtil;
 import com.ziwow.scrmapp.wechat.persistence.entity.EwCard;
 import com.ziwow.scrmapp.wechat.persistence.entity.GrantEwCardRecord;
 import com.ziwow.scrmapp.wechat.service.EwCardActivityService;
@@ -12,7 +13,11 @@ import com.ziwow.scrmapp.wechat.service.EwCardService;
 import com.ziwow.scrmapp.wechat.service.GrantEwCardRecordService;
 import com.ziwow.scrmapp.wechat.service.ProductService;
 import com.ziwow.scrmapp.wechat.vo.CardInfoVo;
+import com.ziwow.scrmapp.wechat.vo.EwCardInfo;
+import com.ziwow.scrmapp.wechat.vo.EwCards;
+import com.ziwow.scrmapp.wechat.vo.ProductEwInfo;
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -20,6 +25,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -107,7 +113,32 @@ public class EwCardServiceController {
         //fixme 数据库 t_product表需要给条码加一个索引
         //查询出
         final Product product = productService.getProductsByBarCode(barcode);
+        if (product == null) {
+            result.setReturnMsg("该产品条码无用户绑定");
+            result.setReturnCode(Constant.FAIL);
+            return result;
+        }
+        List<EwCard> ewCards = ewCardService.selectEwCardsByBarCode(barcode);
+        Date lastDate = ewCards.get(0).getRepairTerm();
+        List<EwCardInfo> ewCardInfos = new ArrayList<>(ewCards.size());
+        for (EwCard card : ewCards) {
+            if (lastDate.getTime() < card.getRepairTerm().getTime()){
+                lastDate = card.getRepairTerm();
+            }
+            EwCardInfo ewCardInfo = new EwCardInfo();
+            ewCardInfo.setValidTime(card.getValidTime()/365);
+            ewCardInfo.setCardNo(card.getCardNo());
+            ewCardInfo.setCardAttribute(card.getType().getName());
+            ewCardInfos.add(ewCardInfo);
+        }
 
+        ProductEwInfo productEwInfo = new ProductEwInfo();
+        productEwInfo.setBarcode(product.getProductCode());
+        productEwInfo.setEwBeginDate(product.getBuyTime());
+        productEwInfo.setEwEndDate(lastDate);
+        productEwInfo.setModelName(product.getModelName());
+        productEwInfo.setProductCode(product.getProductCode());
+        productEwInfo.setEwCardInfos(ewCardInfos);
 
         result.setReturnMsg("查询成功");
         result.setReturnCode(Constant.SUCCESS);
