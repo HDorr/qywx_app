@@ -106,6 +106,11 @@ public class AccountNumberServiceController {
             result.setReturnCode(Constant.FAIL);
             return result;
         }
+        if (wechatUserService.getUserByMobilePhone(toPhone) == null) {
+            result.setReturnMsg("更换后的手机号已绑定其他用户,手机号为:"+fromPhone);
+            result.setReturnCode(Constant.FAIL);
+            return result;
+        }
         wechatUserService.replacePhone(fromPhone,toPhone);
 
         //商城同步更换手机号
