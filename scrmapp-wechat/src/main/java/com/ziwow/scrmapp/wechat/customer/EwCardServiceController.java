@@ -78,7 +78,7 @@ public class EwCardServiceController {
 
             //如果已经领取，查询相关使用信息
             if (record.getRecevice()) {
-                final String cardNo = ewCardActivityService.selectCardNoByMask(record.getMask());
+                final String cardNo = ewCardActivityService.selectCardNoByPhone(record.getPhone());
                 cardInfoVo.setEwCardNo(cardNo);
                 final EwCard ewCard = ewCardService.selectEwCardByNo(cardNo);
                 cardInfoVo.setBarcode(ewCard.getProductBarCodeTwenty());

@@ -105,4 +105,12 @@ public interface EwCardActivityMapper {
      */
     @Select("select card_no from t_ew_card_activity where phone = #{phone} and type = #{type}")
     String selectCardNoByPhoneAndType(@Param("phone") String phone, @Param("type") EwCardTypeEnum type);
+
+    /**
+     * 根据手机号查询领取卡号
+     * @param phone
+     * @return
+     */
+    @Select("select card_no from t_ew_card_activity where phone = #{phone} and receive = true limit 1")
+    String selectCardNoByPhone(String phone);
 }

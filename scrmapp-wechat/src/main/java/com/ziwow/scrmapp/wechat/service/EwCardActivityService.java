@@ -14,11 +14,11 @@ public interface EwCardActivityService {
 
 
     /**
-     * 根据掩码查询对应的延保卡号
-     * @param cardNo
+     * 根据手机号查询领取卡号
+     * @param phone
      * @return
      */
-    String selectCardNoByMask(String cardNo);
+    String selectCardNoByPhone(String phone);
 
     /**
      * 根据卡号修改活动延保卡的状态
@@ -81,4 +81,5 @@ public interface EwCardActivityService {
      * @return
      */
     String selectCardNoByPhoneAndType(String phone, EwCardTypeEnum type);
+
 }

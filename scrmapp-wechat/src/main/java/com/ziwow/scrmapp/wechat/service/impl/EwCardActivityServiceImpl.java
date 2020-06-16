@@ -25,8 +25,8 @@ public class EwCardActivityServiceImpl implements EwCardActivityService {
     }
 
     @Override
-    public String selectCardNoByMask(String cardNo) {
-        return ewCardActivityMapper.selectCardNoByMask(cardNo);
+    public String selectCardNoByPhone(String phone) {
+        return ewCardActivityMapper.selectCardNoByPhone(phone);
     }
 
     @Override
