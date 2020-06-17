@@ -107,7 +107,7 @@ public class AccountNumberServiceController {
             return result;
         }
         if (wechatUserService.getUserByMobilePhone(toPhone) != null) {
-            result.setReturnMsg("更换后的手机号已绑定其他用户,手机号为:"+fromPhone);
+            result.setReturnMsg("更换后的手机号已绑定其他用户,手机号为:"+toPhone);
             result.setReturnCode(Constant.FAIL);
             return result;
         }
