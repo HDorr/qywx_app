@@ -692,6 +692,9 @@ public class QyhOrdersServiceImpl implements QyhOrdersService {
         String newBarCode = productVo.getProductBarCode();
 
         if ("".equals(oldBarCode) || null == oldBarCode) {
+            if (StringUtils.isNotBlank(newBarCode) && newBarCode.length() == 20) {
+                newBarCode = newBarCode.substring(5);
+            }
             productVo.setProductBarCodeTwenty(newBarCode);
         }
 
