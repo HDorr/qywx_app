@@ -64,7 +64,7 @@
 				wf_nickname = #{wfNickName},
 			</if>
 			<if test="unionId != null and unionId != ''">
-				unionid = #{unionId}
+				unionid = #{unionId},
 			</if>
             <if test="followAt != null">
                 follow_at = #{followAt},
