@@ -40,8 +40,7 @@ public class GrantPointController {
   @ResponseBody
   public Result install(@RequestBody PointForm form){
     try {
-      grantPointService.grantOrderInstallPoint(form.getUserId(),form.getOrdersCode(),form.getOrderType(),
-              getProductName(form.getOrdersCode()),form.getCreateTime());
+      grantPointService.grantOrderFinish(form.getUserId(),form.getOrdersCode(),form.getOrderType(),form.getCreateTime());
     }catch (Exception e){
       logger.error("积分发放失败 原因",e);
     }
@@ -51,8 +50,7 @@ public class GrantPointController {
   @ResponseBody
   public Result filter(@RequestBody PointForm form){
     try {
-      grantPointService.grantOrderFilterPoint(form.getUserId(),form.getOrdersCode(),form.getOrderType(),
-              getProductName(form.getOrdersCode()),form.getCreateTime());
+      grantPointService.grantOrderFinish(form.getUserId(),form.getOrdersCode(),form.getOrderType(),form.getCreateTime());
     }catch (Exception e){
       logger.error("积分发放失败 原因",e);
     }
@@ -63,8 +61,7 @@ public class GrantPointController {
   @ResponseBody
   public Result wash(@RequestBody PointForm form){
     try {
-      grantPointService.grantFinishWash(form.getUserId(),form.getOrdersCode(),form.getOrderType(),
-              getProductName(form.getOrdersCode()),form.getCreateTime());
+      grantPointService.grantOrderFinish(form.getUserId(),form.getOrdersCode(),form.getOrderType(),form.getCreateTime());
     }catch (Exception e){
       logger.error("积分发放失败 原因",e);
     }
@@ -75,28 +72,12 @@ public class GrantPointController {
   @ResponseBody
   public Result repair(@RequestBody PointForm form){
     try {
-      grantPointService.grantFinishRepair(form.getUserId(),form.getOrdersCode(),form.getOrderType(),
-              getProductName(form.getOrdersCode()),form.getCreateTime());
+      grantPointService.grantOrderFinish(form.getUserId(),form.getOrdersCode(),form.getOrderType(),form.getCreateTime());
     }catch (Exception e){
       logger.error("积分发放失败 原因",e);
     }
     return BaseResult.Success(true);
   }
 
-    /**
-     * 拿到工单中所有产品的name
-     * @param ordersCode
-     * @return
-     */
-  private StringBuilder getProductName(String ordersCode){
-    StringBuilder productName = new StringBuilder();
-    List<ProductVo> productVos = productService.selectByOrdersCode(ordersCode);
-    for (int i = 0; i < productVos.size(); i++) {
-      productName.append(productVos.get(i).getProductName());
-      if(i < productVos.size() - 1){
-        productName.append(",");
-      }
-    }
-    return productName;
-  }
+
 }

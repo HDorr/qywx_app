@@ -14,25 +14,9 @@ import java.util.Date;
 public interface GrantPointService {
 
 
-  void grantOrderInstallPoint(String userId, String orderCode, Integer orderType, StringBuilder productName, String createTime);
-
-  void grantOrderFilterPoint(String userId,String orderCode,Integer orderType,StringBuilder productName, String createTime);
-
   void grantOrderComment(String userId, String orderCode, Integer orderType, ServiceComment serviceComment);
 
-  /**
-   * 维修单正常完工发送积分
-   * @param userId
-   * @param orderCode
-   */
-  void grantFinishRepair(String userId,String orderCode,Integer orderType,StringBuilder productName, String createTime);
-
-  /**
-   * 保养单（清洗、换芯）正常完工发送积分
-   * @param userId
-   * @param orderCode
-   */
-  void grantFinishWash(String userId,String orderCode,Integer orderType,StringBuilder productName, String createTime);
+  void grantOrderFinish(String userId,String orderCode,Integer orderType,String createTime);
 
 
 }

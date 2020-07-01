@@ -85,6 +85,8 @@ public class WechatOrdersServiceImpl implements WechatOrdersService {
     public WechatQyhUserService wechatQyhUserService;
     @Autowired
     private SmsSendRecordService smsSendRecordService;
+    @Autowired
+    private  GrantPointService grantPointService;
 
     @Value("${template.msg.url}")
     private String msgUrl;
@@ -115,6 +117,8 @@ public class WechatOrdersServiceImpl implements WechatOrdersService {
 
     @Autowired
     private WechatUserService wechatUserService;
+
+    private static final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
 
 
@@ -921,6 +925,7 @@ public class WechatOrdersServiceImpl implements WechatOrdersService {
           try {
             String strDate = DateUtil.DateToString(wechatOrders.getOrderTime(), "yyyy-MM-dd HH:mm:ss");
             sendOrderFinishTemplateMsg(wechatOrders.getOrdersCode(),wechatOrders.getUserId(),strDate);
+            grantPointService.grantOrderFinish(wechatOrders.getUserId(),wechatOrders.getOrdersCode(),wechatOrders.getOrderType(),sdf.format(wechatOrders.getCreateTime()));
           } catch (Exception e) {
             LOG.error("400发送完工评价提醒失败：",e);
           }

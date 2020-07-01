@@ -1,10 +1,12 @@
 package com.ziwow.scrmapp.wechat.service.impl;
 
+import com.ziwow.scrmapp.common.bean.vo.ProductVo;
 import com.ziwow.scrmapp.common.constants.Constant;
 import com.ziwow.scrmapp.tools.utils.HttpClientUtils;
 import com.ziwow.scrmapp.tools.utils.MD5;
 import com.ziwow.scrmapp.common.persistence.entity.ServiceComment;
 import com.ziwow.scrmapp.wechat.service.GrantPointService;
+import com.ziwow.scrmapp.wechat.service.ProductService;
 import com.ziwow.scrmapp.wechat.service.WechatUserService;
 import net.sf.json.JSONObject;
 import org.apache.commons.lang3.StringUtils;
@@ -18,6 +20,7 @@ import org.springframework.stereotype.Service;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -32,6 +35,8 @@ public class GrantPointServiceImpl implements GrantPointService {
   private static final Logger LOG = LoggerFactory.getLogger(GrantPointServiceImpl.class);
   @Autowired
   private WechatUserService wechatUserService;
+  @Autowired
+  private ProductService productService;
 
   @Value("${miniapp.point.orderInstall}")
   private String orderInstallUrl;
@@ -48,27 +53,22 @@ public class GrantPointServiceImpl implements GrantPointService {
 
 
   /**
-   * 发送安装工单积分
+   * 完工发积分
    * @param userId 用户id
    * @param orderCode 工单号
    */
   @Async
   @Override
-  public void grantOrderInstallPoint(String userId, String orderCode,Integer orderType,StringBuilder productName, String createTime) {
+  public void grantOrderFinish(String userId, String orderCode,Integer orderType, String createTime) {
+      String url="";
+      switch (orderType){
+        case 1:url=orderInstallUrl;break;
+        case 2:url=orderRepairUrl;break;
+        case 3:url=orderFilterUrl;break;
+        case 4:url=orderWashUrl;break;
+      }
     //调用商城发积分接口
-    awardPoint(orderInstallUrl,userId,orderCode,orderType,productName,createTime);
-
-  }
-
-  /**
-   * 发送保养工单积分
-   * @param userId 用户id
-   * @param orderCode 工单号
-   */
-  @Async
-  @Override
-  public void grantOrderFilterPoint(String userId, String orderCode,Integer orderType,StringBuilder productName, String createTime) {
-    awardPoint(orderFilterUrl,userId,orderCode,orderType,productName,createTime);
+    awardPoint(url,userId,orderCode,orderType,getProductName(orderCode),createTime);
   }
 
   /**
@@ -82,16 +82,22 @@ public class GrantPointServiceImpl implements GrantPointService {
     awardPoint(orderCommentUrl,userId,orderCode,orderType,serviceComment);
   }
 
-  @Async
-  @Override
-  public void grantFinishRepair(String userId, String orderCode,Integer orderType,StringBuilder productName, String createTime) {
-    awardPoint(orderRepairUrl,userId,orderCode,orderType,productName,createTime);
-  }
 
-  @Async
-  @Override
-  public void grantFinishWash(String userId, String orderCode,Integer orderType,StringBuilder productName, String createTime) {
-    awardPoint(orderWashUrl,userId,orderCode,orderType,productName,createTime);
+  /**
+   * 拿到工单中所有产品的name
+   * @param ordersCode
+   * @return
+   */
+  private StringBuilder getProductName(String ordersCode){
+    StringBuilder productName = new StringBuilder();
+    List<ProductVo> productVos = productService.selectByOrdersCode(ordersCode);
+    for (int i = 0; i < productVos.size(); i++) {
+      productName.append(productVos.get(i).getProductName());
+      if(i < productVos.size() - 1){
+        productName.append(",");
+      }
+    }
+    return productName;
   }
 
 
