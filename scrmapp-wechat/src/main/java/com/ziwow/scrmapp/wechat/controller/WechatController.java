@@ -634,6 +634,7 @@ public class WechatController {
                 wechatOrdersService.dispatchCompleteOrder(dispatchOrderParam);
                 sendMallShare(dispatchOrderParam.getAcceptNumber(), dispatchOrderParam.getRemarks());
             } else {
+                dispatchOrderParam.setFinishNumber("在线完工");
                 wechatOrdersService.dispatchCompleteOrder(dispatchOrderParam);
                 sendMallShare(dispatchOrderParam.getAcceptNumber(), dispatchOrderParam.getFinishNumber());
             }
