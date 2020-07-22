@@ -1,0 +1,1 @@
+ALTER TABLE t_wechat_orders ADD inside_code int DEFAULT 1 NULL COMMENT '预约服务内部识别码，1常规预约滤芯，2包年预约滤芯';

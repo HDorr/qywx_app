@@ -71,6 +71,8 @@ public class WechatOrders {
 
     private String scOrderNo;
 
+    private Integer insideCode; // 预约服务内部识别码
+
     public String getDepartmentName() {
         return departmentName;
     }
@@ -302,4 +304,12 @@ public class WechatOrders {
 	public void setContactsTelephone(String contactsTelephone) {
 		this.contactsTelephone = contactsTelephone;
 	}
+
+    public Integer getInsideCode() {
+        return insideCode;
+    }
+
+    public void setInsideCode(Integer insideCode) {
+        this.insideCode = insideCode;
+    }
 }

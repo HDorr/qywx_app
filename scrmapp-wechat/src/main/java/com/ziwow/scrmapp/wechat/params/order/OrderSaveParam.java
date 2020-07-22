@@ -63,6 +63,11 @@ public class OrderSaveParam extends CenterServiceParam {
   /** 服务子类型2 */
   private String kindName2;
 
+  /**
+   * 预约服务内部识别码
+   */
+  private Integer insideCode;
+
   public String getContacts() {
     return contacts;
   }
@@ -205,5 +210,13 @@ public class OrderSaveParam extends CenterServiceParam {
 
   public void setKindName2(String kindName2) {
     this.kindName2 = kindName2;
+  }
+
+  public Integer getInsideCode() {
+    return insideCode;
+  }
+
+  public void setInsideCode(Integer insideCode) {
+    this.insideCode = insideCode;
   }
 }

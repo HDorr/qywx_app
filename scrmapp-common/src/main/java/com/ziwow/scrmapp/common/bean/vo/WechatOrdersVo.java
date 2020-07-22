@@ -30,6 +30,7 @@ public class WechatOrdersVo {
     private String installPartRecord;
     private String qyhUserId;
     private int btnHidden;
+    private Integer insideCode;
 
     private List<WechatOrdersRecordVo> wechatOrdersRecordList;
     private List<Filter> filterList;
@@ -309,5 +310,13 @@ public class WechatOrdersVo {
 
     public void setQyhUserPhone(String qyhUserPhone) {
         this.qyhUserPhone = qyhUserPhone;
+    }
+
+    public Integer getInsideCode() {
+        return insideCode;
+    }
+
+    public void setInsideCode(Integer insideCode) {
+        this.insideCode = insideCode;
     }
 }

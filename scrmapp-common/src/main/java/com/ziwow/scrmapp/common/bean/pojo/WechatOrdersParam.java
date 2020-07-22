@@ -92,6 +92,11 @@ public class WechatOrdersParam {
      */
     private String kindName2;
 
+    /**
+     * 预约内部识别码，1默认常规换芯，2包年换芯
+     */
+    private Integer insideCode = 1;
+
     public String getOrderNo() {
         return orderNo;
     }
@@ -358,5 +363,13 @@ public class WechatOrdersParam {
 
     public void setContactsTelephone(String contactsTelephone) {
         this.contactsTelephone = contactsTelephone;
+    }
+
+    public Integer getInsideCode() {
+      return insideCode;
+    }
+
+    public void setInsideCode(Integer insideCode) {
+      this.insideCode = insideCode;
     }
 }

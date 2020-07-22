@@ -61,6 +61,7 @@
         <result column="contactsTelephone" property="contactsTelephone" jdbcType="VARCHAR"/>
         <result column="faultImage" property="faultImage" jdbcType="VARCHAR"/>
         <result column="qyhUserId" property="qyhUserId" jdbcType="VARCHAR"/>
+        <result column="inside_code" property="insideCode" jdbcType="INTEGER"/>
     </resultMap>
 
     <sql id="Base_Column_List">
@@ -178,6 +179,9 @@
             <if test="departmentName != null">
                 department_name,
             </if>
+            <if test="insideCode != null">
+                inside_code,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="ordersCode != null">
@@ -257,6 +261,9 @@
             </if>
             <if test="departmentName != null">
                 #{departmentName},
+            </if>
+            <if test="insideCode != null">
+                #{insideCode},
             </if>
         </trim>
     </insert>
@@ -378,6 +385,7 @@
             o.buyFilter,
             o.description,
             o.qyhUserId,
+            o.inside_code,
             CASE o.orderType
         WHEN 1 THEN
             '安装单'

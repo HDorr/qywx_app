@@ -29,6 +29,7 @@ import com.ziwow.scrmapp.tools.utils.MD5;
 import com.ziwow.scrmapp.tools.utils.StringUtil;
 import com.ziwow.scrmapp.wechat.constants.WeChatConstants;
 import com.ziwow.scrmapp.wechat.enums.BuyChannel;
+import com.ziwow.scrmapp.wechat.enums.OrderServiceType;
 import com.ziwow.scrmapp.wechat.params.order.ConfirmOrderParam;
 import com.ziwow.scrmapp.wechat.persistence.entity.WechatFans;
 import com.ziwow.scrmapp.wechat.persistence.entity.WechatUser;
@@ -173,6 +174,14 @@ public class WechatOrdersServiceImpl implements WechatOrdersService {
         acceptanceFormParam.setFrom_type(wechatOrdersParam.getDeliveryType().getCode());
         acceptanceFormParam.setKind_name(wechatOrdersParam.getKindName());
         acceptanceFormParam.setKind_name2(wechatOrdersParam.getKindName2());
+        // 主要是区分包年预约滤芯相关
+        if(wechatOrdersParam.getInsideCode() != null) {
+          OrderServiceType serviceType = OrderServiceType.of(wechatOrdersParam.getInsideCode());
+          acceptanceFormParam.setKind_name(serviceType.getKindName());
+          acceptanceFormParam.setKind_name2(serviceType.getKindName2());
+          acceptanceFormParam.setKind_id(serviceType.getKindId());
+          acceptanceFormParam.setKind_id2(serviceType.getKinkId2());
+        }
         String orderTime = wechatOrdersParam.getOrderTime();
         if (StringUtils.isBlank(orderTime)){
             acceptanceFormParam.setAppeal_content(wechatOrdersParam.getDescription());

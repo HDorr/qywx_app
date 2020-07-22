@@ -37,6 +37,16 @@ public class AcceptanceFormParam implements java.io.Serializable {
 	//服务子类型2
 	private String kind_name2;
 
+	/**
+	 * 服务类型id1
+	 */
+	private String kind_id;
+
+	/**
+	 * 服务类型id2
+	 */
+	private String kind_id2;
+
 	public String getKind_name() {
 		return kind_name;
 	}
@@ -164,4 +174,20 @@ public class AcceptanceFormParam implements java.io.Serializable {
 	public void setIs_wxtd(String is_wxtd) {
 		this.is_wxtd = is_wxtd;
 	}
+
+  public String getKind_id() {
+    return kind_id;
+  }
+
+  public void setKind_id(String kind_id) {
+    this.kind_id = kind_id;
+  }
+
+  public String getKind_id2() {
+    return kind_id2;
+  }
+
+  public void setKind_id2(String kind_id2) {
+    this.kind_id2 = kind_id2;
+  }
 }
