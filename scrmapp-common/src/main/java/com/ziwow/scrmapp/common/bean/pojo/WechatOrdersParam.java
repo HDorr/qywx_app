@@ -95,7 +95,7 @@ public class WechatOrdersParam {
     /**
      * 预约内部识别码，1默认常规换芯，2包年换芯
      */
-    private Integer insideCode = 1;
+    private Integer insideCode;
 
     public String getOrderNo() {
         return orderNo;

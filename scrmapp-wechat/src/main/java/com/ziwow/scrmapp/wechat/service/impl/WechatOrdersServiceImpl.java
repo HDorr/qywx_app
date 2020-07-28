@@ -175,7 +175,9 @@ public class WechatOrdersServiceImpl implements WechatOrdersService {
         acceptanceFormParam.setKind_name(wechatOrdersParam.getKindName());
         acceptanceFormParam.setKind_name2(wechatOrdersParam.getKindName2());
         // 主要是区分包年预约滤芯相关
-        if(wechatOrdersParam.getInsideCode() != null) {
+        if(wechatOrdersParam.getInsideCode() != null
+                && wechatOrdersParam.getOrderType() == 3
+                && wechatOrdersParam.getMaintType() == 2) {
           OrderServiceType serviceType = OrderServiceType.of(wechatOrdersParam.getInsideCode());
           acceptanceFormParam.setKind_name(serviceType.getKindName());
           acceptanceFormParam.setKind_name2(serviceType.getKindName2());

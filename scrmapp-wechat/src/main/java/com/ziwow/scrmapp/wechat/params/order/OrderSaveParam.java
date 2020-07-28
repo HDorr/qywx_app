@@ -66,7 +66,7 @@ public class OrderSaveParam extends CenterServiceParam {
   /**
    * 预约服务内部识别码
    */
-  private Integer insideCode;
+  private Integer insideCode = 1;
 
   public String getContacts() {
     return contacts;
