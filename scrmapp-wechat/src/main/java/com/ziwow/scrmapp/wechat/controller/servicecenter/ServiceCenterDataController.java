@@ -1,5 +1,6 @@
 package com.ziwow.scrmapp.wechat.controller.servicecenter;
 
+import com.alibaba.fastjson.JSON;
 import com.ziwow.scrmapp.common.bean.pojo.WechatOrdersParam;
 import com.ziwow.scrmapp.common.bean.pojo.ext.WechatOrdersParamExt;
 import com.ziwow.scrmapp.common.bean.vo.ProductVo;
@@ -559,6 +560,7 @@ public class ServiceCenterDataController extends BaseController {
    * @return {@link Result}
    */
   private Result generateOrderFromCsm(WechatOrdersParamExt wechatOrdersParamExt) {
+    log.info("生成受理单参数：{}", JSON.toJSONString(wechatOrdersParamExt));
     // 查询产品信息
     List<ProductVo> productVos =
         wechatOrdersService.getProductInfoById(wechatOrdersParamExt.getProductIds());

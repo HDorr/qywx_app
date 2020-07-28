@@ -172,17 +172,20 @@ public class WechatOrdersServiceImpl implements WechatOrdersService {
         acceptanceFormParam.setCounty_name(wechatOrdersParam.getArea());
         acceptanceFormParam.setAppeal_kind_id(wechatOrdersParam.getOrderType());
         acceptanceFormParam.setFrom_type(wechatOrdersParam.getDeliveryType().getCode());
-        acceptanceFormParam.setKind_name(wechatOrdersParam.getKindName());
-        acceptanceFormParam.setKind_name2(wechatOrdersParam.getKindName2());
         // 主要是区分包年预约滤芯相关
         if(wechatOrdersParam.getInsideCode() != null
-                && wechatOrdersParam.getOrderType() == 3
+                && wechatOrdersParam.getOrderType() == SystemConstants.MAINTAIN
                 && wechatOrdersParam.getMaintType() == 2) {
           OrderServiceType serviceType = OrderServiceType.of(wechatOrdersParam.getInsideCode());
           acceptanceFormParam.setKind_name(serviceType.getKindName());
           acceptanceFormParam.setKind_name2(serviceType.getKindName2());
           acceptanceFormParam.setKind_id(serviceType.getKindId());
           acceptanceFormParam.setKind_id2(serviceType.getKinkId2());
+        } else {
+          acceptanceFormParam.setKind_name("");
+          acceptanceFormParam.setKind_name2("");
+          acceptanceFormParam.setKind_id("");
+          acceptanceFormParam.setKind_id2("");
         }
         String orderTime = wechatOrdersParam.getOrderTime();
         if (StringUtils.isBlank(orderTime)){
