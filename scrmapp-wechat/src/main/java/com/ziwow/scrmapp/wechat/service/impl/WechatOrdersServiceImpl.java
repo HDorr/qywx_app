@@ -10,6 +10,7 @@ import com.ziwow.scrmapp.common.bean.vo.csm.ProductAppealVo;
 import com.ziwow.scrmapp.common.bean.vo.csm.ProductItem;
 import com.ziwow.scrmapp.common.constants.Constant;
 import com.ziwow.scrmapp.common.constants.SystemConstants;
+import com.ziwow.scrmapp.common.enums.DeliveryType;
 import com.ziwow.scrmapp.common.exception.ParamException;
 import com.ziwow.scrmapp.common.pagehelper.Page;
 import com.ziwow.scrmapp.common.persistence.entity.*;
@@ -172,20 +173,25 @@ public class WechatOrdersServiceImpl implements WechatOrdersService {
         acceptanceFormParam.setCounty_name(wechatOrdersParam.getArea());
         acceptanceFormParam.setAppeal_kind_id(wechatOrdersParam.getOrderType());
         acceptanceFormParam.setFrom_type(wechatOrdersParam.getDeliveryType().getCode());
-        // 主要是区分包年预约滤芯相关
-        if(wechatOrdersParam.getInsideCode() != null
+        if(wechatOrdersParam.getDeliveryType() == DeliveryType.NORMAL){
+          // 主要是区分包年预约滤芯相关
+          if(wechatOrdersParam.getInsideCode() != null
                 && wechatOrdersParam.getOrderType() == SystemConstants.MAINTAIN
                 && wechatOrdersParam.getMaintType() == 2) {
-          OrderServiceType serviceType = OrderServiceType.of(wechatOrdersParam.getInsideCode());
-          acceptanceFormParam.setKind_name(serviceType.getKindName());
-          acceptanceFormParam.setKind_name2(serviceType.getKindName2());
-          acceptanceFormParam.setKind_id(serviceType.getKindId());
-          acceptanceFormParam.setKind_id2(serviceType.getKinkId2());
-        } else {
-          acceptanceFormParam.setKind_name("");
-          acceptanceFormParam.setKind_name2("");
-          acceptanceFormParam.setKind_id("");
-          acceptanceFormParam.setKind_id2("");
+            OrderServiceType serviceType = OrderServiceType.of(wechatOrdersParam.getInsideCode());
+            acceptanceFormParam.setKind_name(serviceType.getKindName());
+            acceptanceFormParam.setKind_name2(serviceType.getKindName2());
+            acceptanceFormParam.setKind_id(serviceType.getKindId());
+            acceptanceFormParam.setKind_id2(serviceType.getKinkId2());
+          } else {
+            acceptanceFormParam.setKind_name("");
+            acceptanceFormParam.setKind_name2("");
+            acceptanceFormParam.setKind_id("");
+            acceptanceFormParam.setKind_id2("");
+          }
+        }else {
+          acceptanceFormParam.setKind_name(wechatOrdersParam.getKindName());
+          acceptanceFormParam.setKind_name2(wechatOrdersParam.getKindName2());
         }
         String orderTime = wechatOrdersParam.getOrderTime();
         if (StringUtils.isBlank(orderTime)){
