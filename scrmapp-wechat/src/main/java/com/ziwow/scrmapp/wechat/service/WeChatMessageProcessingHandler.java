@@ -254,7 +254,8 @@ public class WeChatMessageProcessingHandler {
                         // 菜单点击事件
                         LOG.info("菜单点击事件=[" + requestStr + "]");
                     }
-                } else if ("text".equals(inMessage.getMsgType())) {
+                }
+                else if ("text".equals(inMessage.getMsgType())) {
                     boolean isPushToCallCenter = dealWithText(inMessage, response);//关键词回复
 
                     //从redis判断聊天状态
@@ -480,7 +481,8 @@ public class WeChatMessageProcessingHandler {
               .append("\n")
               .append("\n")
               .append("其他咨询,请输入文字\"人工客服\"\n");
-        }else if (content.contains("滤芯")){
+        }
+        else if (content.contains("滤芯")){
           msgsb.append("您好,小沁在此为您服务,建议您通过官方渠道选购您需要的滤芯,谢谢！\n")
               .append("\n")
               .append("未购滤芯：\n")
@@ -503,7 +505,8 @@ public class WeChatMessageProcessingHandler {
               .append("' data-miniprogram-path='pages/selectProduct?appointmentType=filter'>【预约滤芯】</a>")
               .append("\n")
               .append("其他咨询,请输入文字\"人工客服\"\n");
-        }else if (content.contains("预约")){
+        }
+        else if (content.contains("预约")){
           msgsb.append("您好,小沁在此为您服务！\n")
               .append("\n")
               .append("机器安装,请点击")
@@ -525,7 +528,8 @@ public class WeChatMessageProcessingHandler {
               .append("\n")
               .append("\n")
               .append("其他咨询,请输入文字\"人工客服\"\n");
-        }else if (content.contains("安装")){
+        }
+        else if (content.contains("安装")){
           msgsb.append("您好,小沁在此为您服务！\n")
               .append("\n")
               .append("机器安装,请点击")
@@ -534,7 +538,8 @@ public class WeChatMessageProcessingHandler {
               .append("' data-miniprogram-path='pages/selectProduct?appointmentType=install'>【预约安装】</a>")
               .append("\n")
               .append("其他咨询,请输入文字\"人工客服\"\n");
-        }else if (content.contains("更换")){
+        }
+        else if (content.contains("更换")){
           msgsb.append("您好,小沁在此为您服务！\n")
               .append("\n")
               .append("已购滤芯：\n")
@@ -558,7 +563,8 @@ public class WeChatMessageProcessingHandler {
               .append("\n")
               .append("\n")
               .append("其他咨询,请输入文字\"人工客服\"\n");
-        }else if (content.contains("维修")){
+        }
+        else if (content.contains("维修")){
           msgsb.append("您好,小沁在此为您服务！\n")
               .append("\n")
               .append("机器维修,请点击")
@@ -567,7 +573,8 @@ public class WeChatMessageProcessingHandler {
               .append("' data-miniprogram-path='pages/selectProduct?appointmentType=maintain'>【预约维修】</a>")
               .append("\n")
               .append("其他咨询,请输入文字\"人工客服\"\n");
-        }else if (content.contains("保养")){
+        }
+        else if (content.contains("保养")){
           msgsb.append("您好,小沁在此为您服务！\n")
               .append("\n")
               .append("机器清洗,请点击")
@@ -576,9 +583,11 @@ public class WeChatMessageProcessingHandler {
               .append("' data-miniprogram-path='pages/selectProduct?appointmentType=clean'>【预约清洗】</a>")
               .append("\n")
               .append("其他咨询,请输入文字\"人工客服\"\n");
-        }else if (content.contains("投诉")){
+        }
+        else if (content.contains("投诉")){
           msgsb.append("您好,非常抱歉给您带来的不便！\n您可以直接输入投诉问题,我们会尽快给您受理的哦\n全国服务热线：400 111 1222\n在线工作时间：8:00AM-22:00PM");
-        }else if (content.contains("人工客服")){
+        }
+        else if (content.contains("人工客服")){
             final boolean inWorkTime=CallCenterOssUtil.checkIsInCallCenterWorkingTime(Calendar.getInstance());
             boolean isPushToCallCenter=false;
             if (!limitCallCenterWorkingTime || inWorkTime) {
@@ -594,13 +603,17 @@ public class WeChatMessageProcessingHandler {
             }
             replyMessage(inMessage, response, msgsb);
             return isPushToCallCenter;
-        }else if (filterkeyWord.contains(content)){
+        }
+        else if (filterkeyWord.contains(content)){
             return false;
-        }else if (content.equals("appV")){
+        }
+        else if (content.equals("appV")){
             msgsb.append("version:"+appVersion);
-        }else if (content.equals("国庆大礼包")){
+        }
+        else if (content.equals("国庆大礼包")){
             msgsb.append("<a href='https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx66c97d1778ea9bd3&redirect_uri=http%3A%2F%2Fwx.qinyuan.cn%2Fwx%2FcheckUserRegister%3FH5Url%3Dhttps%3A%2F%2Fs.wcd.im%2Fv%2F58j7kZsr%2F%3Fslv%3D1%26sid%3D8lbf%26v%3DoosnVwmV0N2GxRcqi-ToAqSzWQrg%26from%3Dgroupmessage&response_type=code&scope=snsapi_userinfo&state=wx66c97d1778ea9bd3&component_appid=wxcfdd10039499d368#wechat_redirect'>沁园国庆大礼包</a>");
-        } else if("除菌去味一步到位".contains(content)||"除菌去味一喷到位".contains(content)||"卫宝".contains(content)){
+        }
+        else if("除菌去味一步到位".contains(content)||"除菌去味一喷到位".contains(content)||"卫宝".contains(content)){
             WechatRegister register = new WechatRegister();
             register.setOpenId(inMessage.getFromUserName());
             register.setContent(inMessage.getContent());
@@ -613,7 +626,8 @@ public class WeChatMessageProcessingHandler {
             }
             return  false;
 
-        }else {
+        }
+        else {
 
             boolean isInChat=checkChatStatus(inMessage.getFromUserName());
             if (isInChat){
