@@ -13,7 +13,7 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * 延保卡
+ * 延保卡 对应表 t_ew_card
  * @author songkaiqi
  * @since 2019/06/12/下午5:13
  */

@@ -59,6 +59,7 @@ public class EwCardServiceController {
                            @RequestParam("time_stamp") String timeStamp,
                            @RequestParam("phone") String phone){
         Result result = new BaseResult();
+        //根据手机号查询该用户是否有延保卡发放
         final List<GrantEwCardRecord> grantEwCardRecords = grantEwCardRecordService.selectRecordByPhone(phone);
         if (CollectionUtils.isEmpty(grantEwCardRecords)) {
             result.setReturnCode(Constant.FAIL);
@@ -76,10 +77,12 @@ public class EwCardServiceController {
             cardInfoVo.setReceive(record.getRecevice());
             cardInfoVo.setMask(record.getMask());
 
-            //如果已经领取，查询相关使用信息
+            //如果已经领取，查询相关使用信息(已经领取，说明延保卡已经绑定了相关产品)
             if (record.getRecevice()) {
+                //根据手机号查询延保卡号
                 final String cardNo = ewCardActivityService.selectCardNoByPhone(record.getPhone());
                 cardInfoVo.setEwCardNo(cardNo);
+                //根据延保卡号查询延保信息
                 final EwCard ewCard = ewCardService.selectEwCardByNo(cardNo);
                 cardInfoVo.setBarcode(ewCard.getProductBarCodeTwenty());
                 cardInfoVo.setValidTime(ewCard.getValidTime()/365+"年卡");
