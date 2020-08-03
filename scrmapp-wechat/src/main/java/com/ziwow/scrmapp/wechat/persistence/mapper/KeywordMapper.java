@@ -9,6 +9,6 @@ import org.apache.ibatis.annotations.Select;
  * @Date: Create in 下午4:48 20-7-31
  */
 public interface KeywordMapper {
-    @Select("select content from t_wechat_keyword where keyword=#{keyword}")
+    @Select("select content from t_wechat_keyword where keyword=#{keyword} and archive = false")
     public String findReplyByKeyword(String keyword);
 }
