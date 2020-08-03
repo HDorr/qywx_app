@@ -4,6 +4,7 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.annotation.Resource;
 
@@ -122,7 +123,9 @@ public class CityController {
             }
 
             List<WechatArea> areaLst = wechatCityService.getArea(cityId);
-            areaLst = filterList(areaLst,"市辖区","areaName");
+            //todo 改为stream过滤
+//            areaLst = filterList(areaLst,"市辖区","areaName");
+            areaLst = areaLst.stream().filter(l -> l.getAreaName().equals("市辖区")).collect(Collectors.toList());
             if (areaLst != null && !areaLst.isEmpty()) {
                 result.setReturnMsg(Constant.OK);
                 result.setReturnCode(Constant.SUCCESS);
